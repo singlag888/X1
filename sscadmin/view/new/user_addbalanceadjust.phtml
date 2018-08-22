@@ -1,0 +1,109 @@
+<?php $this->import("head"); ?>
+<script>
+	//AJAX取得用户信息
+	function getUser()
+	{
+		if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+			$('#tip1').html('用户账号输入不规范');
+			$('input[name=username]').css('border', 'solid 1px red');
+			return false;
+		}
+
+		$.post(
+            '?c=user&a=addBalanceAdjust',
+            {sa:'showRealName', username: $('input[name=username]').val()},
+            function (json_data) {
+                if (json_data.user_id == '') {
+                    $('#tip1').html('您输入的账号有误，请再次确认');
+                    $('input[name=realname]').val('');
+                } else {
+                    $('input[name=realname]').val(json_data.real_name);
+                    $('#tip1').html('');
+                }
+            },
+            "json"
+        );
+	}
+
+	function checkform(ob) {
+		var msg = "";
+		if (ob.username.value == '' || ob.username.value.length < 4) {
+			msg = "用户名输入不规范";
+		}
+		if (ob.amount.value == '' || parseInt(ob.amount.value) <= 0) {
+			msg = "请输入操作正数金额 ";
+		}
+		if (ob.remark.value == '') {
+			msg = '请输入备注';
+		}
+		if (msg != "") {
+			alert(msg);
+			return false;
+		}
+		return true;
+	}
+
+	function checkAmount() {
+		var amount = parseFloat($('input[name=amount]').val());
+//		console.log(amount);
+		if (amount > 0) {
+			$('#tip2').html('');
+		} else {
+			$('#tip2').html('金额必须为正数');
+		}
+
+	}
+</script>
+<div class="list-div" id="addDiv">
+    <form name="form1" id="form1" action="" method="post" onsubmit="return checkform(this)">
+        <table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <tr>
+                <td colspan="2" class="rowTitle">新增调额申请</td>
+            </tr>
+            <tr>
+                <td width="10%">客户账号</td>
+                <td width="90%">
+                    <input type="text" name="username" value="" onchange="getUser()" /><span id="tip1"></span>
+                </td>
+            </tr>
+			<tr>
+                <td width="10%">真实姓名</td>
+                <td width="90%">
+                    <input type="text" name="realname" value="" disabled />
+                </td>
+            </tr>
+			<tr>
+                <td width="10%">调整原因</td>
+                <td width="90%">
+                    <select name="reason">
+						<option value="1">存款 (deposit)</option>
+						<option value="2">取款 (withdraw)</option>
+						<option value="3">其他 (others)</option>
+					</select>
+                </td>
+            </tr>
+			<tr>
+                <td width="10%">调整金额</td>
+                <td width="90%">
+                    <select name="type">
+						<option value="1">-- 减少 --</option>
+						<option value="2">-- 增加 --</option>
+					</select>
+					<input type="text" name="amount" value="" onchange="checkAmount()" /><span id="tip2"></span>
+                </td>
+            </tr>
+			<tr>
+                <td width="10%">备注</td>
+                <td width="90%"><textarea name="remark" rows="4" cols="20" placeholder="可在此输入原因"></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <input type="hidden" name="op" value="addBalanceAdjust" />
+                    <input type="submit" class="submit" name="submit" value="提交" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

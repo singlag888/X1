@@ -1,0 +1,99 @@
+<!DOCTYPE HTML> <!--平台活动 -->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+        <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+        <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+        <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+        <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+        <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+    </head>
+
+    <body>
+        <div class="operate_middle_page">
+              <!--/*头部*/-->
+            <header class="headerbg">
+                <a class="headbox01" href="?a=login"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+                <p class="headtetle">活动</p>
+                <?php if($domainType): ?>
+                    <a class="headboxright" href='?a=marketReg'>注 册</a>
+                <?php endif; ?>
+            </header>
+            <div class="notice_activity martop1875">
+            <?php foreach($activities as $v): ?>
+                <?php if($v['m_thumb_img'] == '' || $v['m_main_img'] == '') continue; ?>
+             <div class="notice_activity_box">
+                <a class="promo_main">
+                    <div class="slide">
+                    <img class="batplay" src="<?php echo $imgCdnUrl ?>/<?php echo $v['m_thumb_img'] ?>">
+                    </div>
+                    <div class="info">
+                        <p class="t_i">
+                        <img src="<?php echo $imgCdnUrl ?>/<?php echo $v['m_main_img'] ?>">
+                        </p>
+                   </div>
+                </a>
+                </div>
+            <?php endforeach; ?>
+                <!--优惠详情展开-->
+                <script type="text/javascript">
+                $(function(){
+                    $(".promo_main").eq(0).find(".info").height(".info");
+                    $(".promo_main").eq(0).find(".batplay").html("+展开查看详情");
+                    $(".promo_main").each(function(){
+                        $(this).find(".batplay").click(function(){
+                              var oindex = $(this).parent(".slide").siblings(".info");
+                                if(oindex.height()==0){
+                                    var curHeight = oindex.height();
+                                    var autoHeight = oindex.css("height","auto").height();
+                                    oindex.height(curHeight);
+                                    oindex.animate({height:autoHeight},500);
+                                    //$(this).html("-收起");
+                                }
+                                else{
+                                    oindex.animate({height:"0"});
+                                    //$(this).html("+展开查看详情");
+                                }
+                             })
+
+                     })
+                   // $(".t_i img").eq(2).attr('usemap','#planetmap');
+                   //   var questionnaireUrl ='<map name="planetmap"><area href="https://wj.qq.com/s/1583642/9d15" shape="rectangle" coords="33,226,52,267">Sun</a></map>'
+                   //  $(".t_i").eq(2).append(questionnaireUrl);
+                    })
+                </script>
+            </div>
+            <div class="rechargeBoxBox DisplayNone">
+
+
+            <footer class="dtbg">
+                <div class="FootMain"><a href="?a=login2"><i class="footimg01"><img
+                                    src="<?php echo $imgCdnUrl ?>/images/mobile/footimg01-f.png"></i>
+                        <p>首页</p></a></div>
+                <div class="FootMain"><a href="?a=login2"><i class="footimg02"><img
+                                    src="<?php echo $imgCdnUrl ?>/images/mobile/footimg02.png"></i>
+                        <p>立即存款</p></a></div>
+                <div class="FootMain"><a href="?c=fake&a=lobby"><i class="footimg04"><img
+                                    src="<?php echo $imgCdnUrl ?>/images/mobile/footimg04.png"></i>
+                        <p>购彩大厅</p></a></div>
+                <div class="FootMain"><a href="?a=login2"><i class="footimg05"><img
+                                    src="<?php echo $imgCdnUrl ?>/images/mobile/footimg05.png"></i>
+                        <p>投注记录</p></a></div>
+                <div class="FootMain"><a href="?a=login2"><i class="footimg03"><img
+                                    src="<?php echo $imgCdnUrl ?>/images/mobile/footimg03.png"></i>
+                        <p>会员中心</p></a></div>
+            </footer>
+        </div>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(function(){
+    //准备数据
+    var json_users = <?php echo $json_users; ?>;
+    var json_lotterys = <?php echo $json_lotterys; ?>;
+    var json_methods = <?php echo $json_methods; ?>;
+    var tmp = '';
+//        $('select').click(function(){
+//            alert(this.innerHTML);
+//        });
+    $('#form1').submit(function(){
+        var flag = true;
+        // 这种做法return false;只是退出匿名函数，对submit()段不起作用:)
+        $('select').each(function(i){
+            if ($(this).val() == 0) {
+                flag = false;
+            }
+        });
+        if (flag == false) {
+            alert('所有下拉框均须有值');
+        }
+        return flag;
+    });
+
+    //所有用户选择框
+    $.each(json_users, function(i,v){
+        tmp = '<option value=' + v.user_id + '>' + v.username + '</option>';
+        $('select[name=user_id]').append(tmp);
+    });
+    //彩种选择框
+    $.each(json_lotterys, function(i,v){
+        tmp = '<option value=' + v.lottery_id + '>' + v.name + '</option>';
+        $('select[name=lottery_id]').append(tmp);
+    });
+    $('select[name=lottery_id]').change(function(){
+        $('select[name=method_id]').empty().append('<option value="0">请选择</option>');
+        if ($('select[name=lottery_id]').val() == 0) {
+            return;
+        }
+        //以下也可改成动态读取，都差不多
+        $.each(json_methods[$('select[name=lottery_id]').val()], function(i,v){
+            tmp = '<option value="' + v.mg_name + '" style="color:#00f;">' + v.mg_name + '</option>';//玩法组没有method_id
+            $('select[name=method_id]').append(tmp);
+            $.each(v.childs, function(ii,vv){
+                tmp = '<option value="' + vv.method_id + '">&nbsp;&nbsp;' + vv.cname + '</option>';
+                $('select[name=method_id]').append(tmp);
+            });
+        });
+
+        getIssue();
+        getUPGID();
+    });
+
+    $('select[name=user_id]').change(getUPGID);
+
+    //动态读取彩种奖期
+    function getIssue()
+    {
+        $.post(
+            '?c=game&a=getIssue',
+            {'lottery_id':$('select[name=lottery_id]').val(), 'start_time':$('#start_time').val()},
+            function(json_data) {
+                $('select[name=issue]').empty().append('<option value="">请选择</option>');
+                $.each(json_data, function(i,v){
+                    tmp = '<option value="' + v.issue + '">' + v.issue + '（' + v.code + '）' +' (' + v.start_sale_time + '~' + v.end_sale_time + ')</option>';
+                    $('select[name=issue]').append(tmp);
+                });
+                //预选中奖期
+                $('select[name=issue]').val('<?php echo $issue; ?>');
+        }, 'json');
+    }
+
+    //动态读取用户奖金组
+    function getUPGID()
+    {
+        if ($('select[name=user_id]').val() == 0 || $('select[name=lottery_id]').val() == 0) {
+            $('select[name=pg_id]').empty().append('<option value="0">请选择</option>');
+            return false;
+        }
+        $.post(
+            '?c=draw&a=testJudgePrize',
+            {'user_id':$('select[name=user_id]').val(), 'lottery_id':$('select[name=lottery_id]').val(), 'op':'getUPGID'},
+            function(json_data) {
+                $('select[name=pg_id]').empty().append('<option value="0">请选择</option>');
+                $.each(json_data, function(i,v){
+                    tmp = '<option value="' + v.pg_id + '">' + v.pg_name + '</option>';
+                    $('select[name=pg_id]').append(tmp);
+                });
+                //预选中奖期
+                $('select[name=pg_id]').val('<?php echo $pg_id; ?>');
+        }, 'json');
+    }
+
+    //设置默认值
+    $('select[name=user_id]').val('<?php echo $user_id; ?>');
+    $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+    $('select[name=method_id]').val('<?php echo $method_id; ?>');
+    $('select[name=modes]').val('<?php echo $modes; ?>');
+    $('input[name=code]').val('<?php echo $code; ?>');
+});
+</script>
+<form name="form1" id="form1" action="?c=draw&a=<?php echo ACTION; ?>" method="POST">
+游戏名称<select name="lottery_id"><option value="0">请选择</option></select>
+游戏玩法<select name="method_id"><option value="0">请选择</option></select>
+游戏奖期<select name="issue"><option value="">请选择</option></select>
+投注模式<select name="modes"><option value="0">请选择<option value="1">元</option><option value="0.1">角</option><option value="0.01">分</option></select>
+<br/>
+所属用户<select name="user_id"><option value="0">请选择</option></select>
+所属用户奖金组<select name="pg_id"><option value="0">请选择</option></select>
+需要判断的号码<input name="code" size="50"/> &nbsp;
+
+<input type="submit" name="submit" class="submit" value="中奖判断"/>
+</form>
+<br/>
+<h4>中奖判断结果：<?php echo $prize; ?></h4>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <!-- 中间选择游戏部分 -->
+    <div class="GameBoxall">
+        <!-- 系统消息样式 -->
+        <div class="sub_ContBox_NoNav" >
+            <img class="toolTipBoxImg" src="<?php echo $imgCdnUrl ?>/images/mobile/toolTipBox.png">
+            <h3>提示</h3>
+            <div class="MsgBoxCont">
+                <div class="MsgBoxMid">
+                    <p class="<?php if ($msg_type > 0): ?>Ok<?php else: ?>Sigh<?php endif; ?> Tipicon"><?php echo $msg_detail; ?>
+                         <?php foreach ($links as $link): ?>
+                            <a href="<?php
+                                if($diy){
+                                    echo $link['url'];
+                                } else {
+                                    echo "".$link['url']."";
+                                } 
+                                ?>"><?php echo $link['title']; ?></a>
+                        <?php endforeach; ?>
+                    </p><!-- 感叹号图标样式用“Sigh”，勾勾图标用“Ok” -->
+                </div>
+                <div class="MsgBoxBtn">
+                    <input type="button" onclick="javascript:history.go(-1);parent.layer.closeAll();" value="返回" name="返回" />
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //准备数据
+        var json_lotterys = <?php echo $json_lotterys; ?>;
+        var json_methods = <?php echo $json_methods; ?>;
+        //彩种选择框
+        var tmp_lotterys ='',tmp_methods ='';
+
+        $.each(json_lotterys, function(i, v) {
+            tmp_lotterys += '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+        });
+        $.each(json_methods, function(i, v) {
+            tmp_methods += '<option value=' + v.method_id + '>' + v.cname + '</option>';
+        });
+
+        $('select[name=lottery_id]').append(tmp_lotterys);
+        $('select[name=method_id]').append(tmp_methods);
+        //设置默认值
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>');
+        $('select[name=method_id]').val('<?php echo $method_id; ?>');
+        $('select[name=rankType]').val('<?php echo $rankType; ?>');
+        $('input[name=limit]').val('<?php echo $limit; ?>');
+        $('#start_time').val('<?php echo $start_time; ?>');
+        $('#end_time').val('<?php echo $end_time; ?>');
+        $('select[name=lottery_id]').change(function(){
+            $('select[name=method_id]').empty();
+            //var json_methods = <?php echo $json_methods; ?>;
+            var tmp_methods ='<option value="-1">请选择</option>';
+            var lottery_id = $(this).val();
+            $.each(json_methods, function(i, v) {
+                if(lottery_id === v.lottery_id){
+                    tmp_methods += '<option value=' + v.method_id + '>' + v.cname + '</option>';
+                }
+            });
+            $('select[name=method_id]').append(tmp_methods);
+        });
+        var subFunc = function(botton){
+            $("input[name="+botton+"]").val(1);
+            $("form").submit();
+        };
+        $('.sale').click(function(){
+            subFunc('sale');
+        });
+        $('.prize').click(function(){
+            subFunc('prize');
+        });
+    });
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+     游戏名称<select name="lottery_id"><option value="-1">请选择</option></select>
+     玩法名称<select name="method_id"><option value="-1">请选择</option></select>
+    <select name="rankType">
+        <option value="1">降序</option>
+        <option value="2">升序</option>
+    </select>
+    排行总数<input name="limit" size="10" id="limit" value="100"/>
+    游戏时间<input name="start_time" id="start_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>到
+    <input name="end_time" id="end_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+    <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="hidden" name="sale"  value=-1/>
+    <input type="hidden" name="prize"  value=-1/>
+    <input type="button"  class="sale" value="按销量"/>
+    <input type="button"  class="prize" value="按盈亏"/>
+</form>
+    
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>排行</td>
+                <td>奖期</td>
+                <td>资金数目</td>
+            </tr>
+        </thead>
+        <?php if ($issues): ?>
+            <?php foreach ($issues as $k => $v): ?>
+                <tr>
+                    <td width="50">
+                        <?php echo $k + 1; ?>
+                    </td>
+                    <td width="400">
+                        <?php echo $v['cname'] . ' ' . $v['issue'] . ' (有效订单数：' . $v['total_count'] . ')'; ?>
+                    </td>
+                    <td style="text-align: right;"><?php echo number_format($v['total_amount'], 2); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="11" class="no-records">没有数据！</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+
+<?php $this->import("foot"); ?>

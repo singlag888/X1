@@ -1,0 +1,46 @@
+             /*右侧栏开始*/
+        	#thisIssueNumUL .pendingNum_poker em{position: relative;left: 1px;top: -3px;}
+        	.poker_kj_num .poker_meih{border: 1px solid black;}
+        	.fix li:nth-child(3){margin-left:60px;} 
+        	.fix li:nth-child(2){margin-left: 28px;}   
+        	#todayIssuesBody .fix{height: 56px;}         
+        	.poker_mei div{background: url(../images/light_blue/poker_icon.png) no-repeat;}
+        	.poker_kj_num {border:1px solid lightseagreen}
+        	#todayIssuesBody .width_poker .poker_kj_num {height: 21px;}
+        	/*右侧栏结束*/
+        	/*投注区开始*/
+            .lotteryNumber .pokerBig, .lotteryNumber ul {background: none;width: 600px;}        	  
+        	#field_1  li div{background: url(../images/light_blue/poker_icon.png) no-repeat;background-position: -108px -107px;box-shadow: 0 4px 6px #dfe7fb;}	
+            #field_1 .poker_th .hua{background-position: -3px -2px;height: 93px;}
+            #field_1 .poker_sz .hua{background-position: -3px -102px;height: 93px;}
+            #field_1 .poker_ths .hua{background-position: -3px -203px;height: 93px;}
+            #field_1 .poker_bz .hua{background-position: -3px -304px;height: 93px;}
+            #field_1 .poker_dz .hua{background-position: -104px 0;height: 93px;}
+            .poker3 li div span{background: url(../images/light_blue/poker_icon.png) no-repeat;background-position: -136px -122px;}
+        	#field_1  li .hua{background: url(../images/light_blue/poker_icon.png) no-repeat;}  
+            .pokerBig li:hover div { border: 2px solid #869fde; box-shadow: 0 0 15px #869fde; margin-top: 10px;}
+        	#field_1 li div{box-shadow: 0 4px 6px #dfe7fb;}
+        	.lotteryTodayContent ul li{height: 22px;}
+        	/*全选清除按钮*/
+        	.SelectControl {position: absolute;top: 26px;right: 104px;}
+            .SelectControl .QuickChoose dd {width: 44px;height: 21px;}
+
+        	/*投注区结束*/       	
+        	/*开奖区开始*/
+        	.pendingNum_poker .poker_kj_num {background: none;border: 2px solid red;border-radius:50px ;}
+            .pendingNum_poker{width: 70px;display: inline-block;}
+            .pendingNum_poker em{font-size: 20px;}
+            #thisIssueNumUL .pendingNum_poker{margin-right: 18px;} 
+            .pendingNum_poker i{font-size: 25px;width: 31px;height: 32px;display: inline-block;}            
+            .poker_hongt i,.poker_heit i,.poker_meih i,.poker_fangk i{background:url(../images/light_blue/poker_repeat_a961154.png) no-repeat;}
+            .poker_hongt i { width: 31px;height: 32px; background-position: -569px -270px }
+			.poker_heit i { width: 31px;height: 32px; background-position: -570px -227px;}
+			.poker_meih i { width: 31px;height: 32px; background-position: -571px -314px;}
+			.poker_fangk i { width: 31px;height: 32px;background-position: -569px -367px; }
+			/*div旋转*/
+			.poker_kj_step1 .poker_kj_wait1 {transition-duration: 4s;transform: rotateY(720deg) }
+			.poker_kj_step2 .poker_kj_wait2 {transition-duration: 4s;transform: rotateY(720deg) }
+			.poker_kj_step3 .poker_kj_wait3 {transition-duration: 4s;transform: rotateY(1440deg) }
+        	/*开奖区结束*/
+        	/*投注记录*/
+        	#todayBuyBody .fix li{margin: 0;}

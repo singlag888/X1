@@ -1,0 +1,401 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jqueryui.js"></script>
+
+        <style type="text/css">
+        #turnplatewrapper{height:592px;width:592px;background:url('images/turnplate/plate_06.png') top left no-repeat;left:0px;top:0px;position:absolute;-moz-user-select:none;user-select:none;}
+        #turnplate{height:592px;width:592px;background:url('images/turnplate/plate_05.png') top left no-repeat;}
+        #turnplate #awards{position:absolute;width:100%;height:100%;background:url('images/turnplate/plate_03.png') top left no-repeat;}
+        #platebtn{position:absolute;top:218px;left:218px;background:url('images/turnplate/plate_04.png') top left no-repeat;height:155px;width:155px;cursor:pointer;}
+        #platebtn.hover{background-position:0 -155px }
+        #turnplate #platebtn.click{background-position:0 -310px }
+        #msg{position:absolute;display:none;top:130px;left:195px;border-radius:5px;color:#333;border:3px solid #FED33f;box-shadow:2px 2px 2px rgba(0,0,0,0.6);background:#fffcf2;width:200px;padding:10px;text-align:center;}
+        #init{position:absolute;top:50%;left:50%;width:100px;height:30px;border-radius:5px;color:#333;border:3px solid #FED33f;box-shadow:2px 2px 2px rgba(0,0,0,0.6);background:#fffcf2;width:250px;padding:10px;margin-top:-30px;margin-left:-138px;text-align:center;opacity:0.9;filter:alpha(opacity=90);}
+        </style>
+    </head>
+<body>
+<!---------------------------- 信息弹出层  ----------------------------- -->
+<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-draggable ui-dialog-buttons" tabindex="-1" role="dialog" aria-labelledby="ui-id-2"
+style="outline: 0px; z-index: 1002; height: auto; width: 500px; top: 134.5px; left: 420.5px; display: none;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span id="ui-id-2" class="ui-dialog-title">获奖信息</span>
+        <a href="http://index.html#" class="ui-dialog-titlebar-close ui-corner-all" role="button">
+        <span class="ui-icon ui-icon-closethick">close</span>
+        </a>
+    </div>
+
+    <div id="lotteryMsg" class="dn ui-dialog-content ui-widget-content" style="display: block; width: auto; min-height: 0px; height: 235px;" scrolltop="0" scrollleft="0">
+    	<p class="msg">您抽中了： </p>
+    	<p class="tips">中奖说明<a href="http://www.17sucai.com/" target="_blank">点击查看</a>。</p>
+    	<hr class="sp">
+    	<p class="mv5" style="margin-bottom:5px">继续打流水每次都中奖</p>
+    	<div class="content mv5">
+    		<span class="option">今天抽中了继续攒人品，手气太差了，幸运指数0颗星！</span>
+    	</div>
+    </div>
+
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonset">
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+            <span class="ui-button-text">发微博领5M空间</span>
+            </button>
+        </div>
+    </div>
+</div>
+<!---------------------------- End 信息弹出层  ----------------------------- -->
+
+<!---------------------------- 这里显示流水信息----------------------------- -->
+<div style="margin:30px auto 15px auto;width: 800px;height:200px;border:1px solid black;">
+                     这里显示流水信息：<br>
+                    您今日的总流水为：<?php echo $water['totalWater']; ?>  <br>
+                    已用流水为：<?php echo $water['usedWater']; ?>  <br>
+                    剩余流水为：<?php echo $water['remainWater']; ?>  <br>
+</div>
+
+<hr><!---------------------------- 这里显示抽奖转盘 ----------------------------- -->
+
+<div style="margin:30px auto 15px auto;width: 800px;height:200px;border:1px solid black;">这里显示抽奖转盘：
+    <!---------------------------- 转盘 ----------------------------- -->
+    <div id="header">
+    	<div id="turnplatewrapper" onselectstart="return false;" class="bgfix" style="background-position: 0px 0px;">
+    		<div id="turnplate" class="bgfix" style="background-position: 0px -3552px;">
+    			<div id="awards" class="bgfix"></div>
+    			<div id="platebtn" class="bgfix"></div>
+    			<p id="msg"></p>
+    			<p id="init" class="dn" style="display: none;">初始化中，请稍后<span>~</span></p>
+    		</div>
+    	</div>
+    </div>
+    <!---------------------------- End 转盘 ----------------------------- -->
+</div>
+
+<hr><!---------------------------- 这里滚动显示全体中奖信息 ----------------------------- -->
+<div id='allLotteryMsg' style="margin:30px auto 15px auto;width: 800px;height:200px;border:1px solid black;overflow:auto;">
+这里滚动显示全体中奖信息：<br>
+    <ul>
+        <?php foreach ($allLotteryRows as $k => $v) : ?>
+            <li><span class="listpart">恭喜 <em class="org"><?php echo $v['username']; ?></em>
+            <strong><?php echo date('m月d日 H:i', strtotime($v['plan_time'])); ?></strong>，喜中
+            <em class="org"><?php echo userGiftsRoulette::getLevelToPrizeString($v['plan_level']); ?></em>
+            </span><span class="time">&nbsp;</span></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<hr><!---------------------------- 这里显示您的中奖记录 ----------------------------- -->
+
+<div style="margin:30px auto 15px auto;width: 800px;height:200px;border:1px solid black;overflow:auto;">
+                    这里显示您当日的中奖记录：<br>
+    <ul class="recordsContent">
+    <?php foreach ($lotteryRows as $v): ?>
+        <li class="Rline W130px"><?php echo date('m月d日 H:i', strtotime($v['plan_time'])); ?>
+                      获得<?php echo userGiftsRoulette::getLevelToPrizeString($v['plan_level']); ?></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+
+<script type="text/javascript">
+var turnplate = {
+	turnplateBox : $('#turnplate'),
+	turnplateBtn : $('#platebtn'),
+	lightDom : $('#turnplatewrapper'),
+	freshLotteryUrl : 'http://huodong.kuaipan.cn/ajaxTurnplate/freshLottery/',
+	msgBox : $('#msg'),
+	lotteryUrl : 'index.jsp?&c=user&a=userGifts&option=roulette',  //后台请求URL
+	height : '592', //帧高度
+	lightSwitch : 0, //闪灯切换开关. 0 和 1间切换
+	minResistance : 5, //基本阻力
+	Cx : 0.01, //阻力系数 阻力公式：  totalResistance = minResistance + curSpeed * Cx;
+	accSpeed : 15, //加速度
+	accFrameLen : 40, //加速度持续帧数
+	maxSpeed : 250, //最大速度
+	minSpeed : 20, //最小速度
+	frameLen : 10, //帧总数
+	totalFrame : 0, //累计帧数,每切换一帧次数加1
+	curFrame : 0, //当前帧
+	curSpeed : 20, //上帧的速度
+	lotteryTime : <?php echo $runLotteryCounts?>, //抽奖次数
+	lotteryIndex : undefined, //奖品index
+	errorIndex : 0, //异常时的奖品指针
+	initBoxEle : $('#turnplate #init'),
+	progressEle : $('#turnplate #init span'),
+	initProgressContent : '~~~^_^~~~', //初始化进度条的内容
+	initFreshInterval : 500, //进度条刷新间隔
+	virtualDistance : 10000, //虚拟路程,固定值，速度越快，切换到下帧的时间越快: 切换到下帧的时间 = virtualDistance/curSpeed
+	isStop : false, //抽奖锁,为true时，才允许下一轮抽奖
+	timer2 : undefined, //计时器
+	initTime : undefined,
+	showMsgTime : 2000, //消息显示时间
+
+	lotteryErr : {
+		4001 : '您的流水不足',
+		4002 : '请您不要着急，过1分钟再抽奖',
+		4003 : '查不到您的用户名，请您联系管理员',
+		'default' : "网络中断，请您刷新页面， 如果没有进行抽奖则不会减少可抽奖次数。\n 如果已经抽奖则在中奖记录中能够看到抽奖结果和奖品与抽奖时间。",
+	},
+
+	lotteryList : [
+		'6 元奖金',
+		'16 元奖金',
+		'26 元奖金',
+		'36 元奖金',
+		'166 元奖金',
+		'366 元奖金',
+		'666 元奖金',
+		'2888 元奖金',
+		'6000 元奖金',
+		'10000 元奖金',
+	],
+
+	lotteryDes : [
+		'手气一般般，幸运指数半颗星！',
+		'手气不错呢，幸运指数3颗星！',
+		'手气无敌了，幸运指数4颗星！',
+		'手气很好呢，幸运指数3颗星！',
+		'手气很好呢，幸运指数3颗星！',
+		'手气还凑合，幸运指数1颗星！',
+		'手气太差了，幸运指数0颗星！',
+		'手气太好了，幸运指数5颗星！',
+		'手气还可以，幸运指数2颗星！',
+		'手气爆棚了，幸运指数5颗星！'
+	],
+
+	//初始化
+	init : function() {
+		this.initAnimate()
+		this.freshLottery();
+		this.turnplateBtn.click($.proxy(function(){
+			this.click();
+		},this));
+	},
+
+	//初始化动画
+	initAnimate : function() {
+		this.initBoxEle.show();
+		clearTimeout(this.initTimer);
+		var curLength = this.progressEle.text().length,
+			totalLength = this.initProgressContent.length;
+
+		if (curLength < totalLength) {
+			this.progressEle.text(this.initProgressContent.slice(0, curLength + 1));
+		}else{
+			this.progressEle.text('');
+		}
+		this.initTimer = setTimeout($.proxy(this.initAnimate, this), this.initFreshInterval);
+	},
+
+	//停止初始化动画
+	stopInitAnimate : function() {
+		clearTimeout(this.initTimer);
+		this.initBoxEle.hide();
+	},
+
+	freshLotteryTime : function() {
+		//$('#top-menu').find('.lottery-times').html(this.lotteryTime);
+		alert('更新剩余流水和刷新，写入页面元素抽奖次数=' + this.lotteryTime);
+	},
+
+	//更新抽奖次数
+	freshLottery : function() {
+		this.stopInitAnimate();
+		this.setBtnHover();
+		this.isStop = true;
+		this.freshLotteryTime();
+	},
+
+	//设置按钮三态
+	setBtnHover : function() {
+		//按钮三态
+		$('#platebtn').hover(function(){
+			$(this).addClass('hover');
+		},function() {
+			$(this).removeClass('hover click');
+		}).mousedown(function(){
+			$(this).addClass('click');
+		}).mouseup(function(){
+			$(this).removeClass('click');
+		});
+	},
+
+	//获取奖品
+	lottery : function() {
+		this.lotteryIndex = undefined;
+		if(this.lotteryTime <= 0) {
+			alert('您的流水不足');
+			//return false;
+		}
+		this.lotteryTime--;
+		this.freshLotteryTime();
+		this.totalFrame = 0;
+		this.curSpeed = this.minSpeed;
+		this.turnAround();
+		//获取奖品等级
+		//如果Ajax没返回则一直在最慢速度，匀速跑。直到超时返回一个数
+		this.ajaxGetLotteryIndex();
+	},
+
+	//后台获取奖品等级
+	ajaxGetLotteryIndex : function() {
+
+		$.ajax({
+            type: "POST",
+            url: turnplate.lotteryUrl,
+            data: {'type': 'lottery'},
+            dataType: "json", //返回奖等和错误号
+            cache : false,
+            async : true,
+            timeout : 5000,   //超时5千毫秒
+            success: function(opData) {
+                if (opData && opData.errno == '' && opData.plan_level !== '') { //无错返回奖等
+                	turnplate.lotteryIndex = opData.plan_level;
+                }
+                else {
+                    //异常时中奖指针停下的位置
+                	turnplate.lotteryIndex = turnplate.errorIndex;
+                	//反馈给客户的出错语言
+                	var errStr = turnplate.lotteryErr['default'];
+                	if(opData.errno != '') {
+                    	if(typeof(turnplate.lotteryErr[opData.errno]) != 'undefined') {
+                    		errStr = turnplate.lotteryErr[opData.errno] + "(" + opData.errno + ")";
+                    	}
+                	}
+                	alert("此处处理返回错误时弹出框显示内容，与转盘停止时显示的冲突\n" + errStr);
+                }
+            },
+            error: function() {
+            	turnplate.lotteryIndex = turnplate.errorIndex;
+            }
+        });
+	},
+
+	//点击抽奖
+	click : function() {
+		//加锁时
+		if(this.isStop == false) {
+			this.showMsg('现在还不能抽奖哦');
+			return;
+		}
+		this.lottery();
+	},
+
+	//更新当前速度
+	freshSpeed : function() {
+		var totalResistance = this.minResistance + this.curSpeed * this.Cx;
+		var accSpeed = this.accSpeed;
+		var curSpeed = this.curSpeed;
+		if(this.totalFrame >= this.accFrameLen) {
+			accSpeed = 0;
+		}
+		curSpeed = curSpeed - totalResistance + accSpeed;
+
+		if(curSpeed < this.minSpeed){
+			curSpeed = this.minSpeed;
+		}else if(curSpeed > this.maxSpeed){
+			curSpeed = this.maxSpeed;
+		}
+
+		this.curSpeed  = curSpeed;
+	},
+
+	//闪灯,切换到下一张时调用
+	switchLight : function() {
+		this.lightSwitch = this.lightSwitch === 0 ? 1 : 0;
+		var lightHeight = -this.lightSwitch * this.height;
+		this.lightDom.css('backgroundPosition','0 ' + lightHeight.toString() + 'px');
+	},
+
+	//旋转,trunAround,changeNext循环调用
+	turnAround : function() {
+		//加锁
+		this.isStop = false;
+		var intervalTime = parseInt(this.virtualDistance/this.curSpeed);
+		this.timer = window.setTimeout('turnplate.changeNext()', intervalTime);
+	},
+
+	//弹出奖品
+	showAwards : function(){
+		$('#lotteryMsg').dialog('open');
+	},
+
+	//显示提示信息
+	showMsg : function(msg, isFresh) {
+		isFresh = typeof isFresh == 'undefined' ? false : true;
+		if(typeof msg != 'string'){
+			msg = '今天已经抽过奖了，明天再来吧';
+		}
+		var msgBox = this.msgBox;
+		var display = msgBox.css('display');
+
+		msgBox.html(msg);
+
+		window.clearTimeout(this.timer2);
+		msgBox.stop(true,true).show();
+		var fadeOut = $.proxy(function() {
+			this.msgBox.fadeOut('slow');
+		}, this);
+		this.timer2 = window.setTimeout(fadeOut, this.showMsgTime);
+	},
+
+
+	//切换到下帧
+	changeNext : function() {
+		//判断是否应该停止
+		if(this.lotteryIndex !== undefined && this.curFrame == this.lotteryIndex && this.curSpeed <= this.minSpeed+10 && this.totalFrame > this.accFrameLen) {
+			this.isStop = true;
+			this.showAwards();
+			return;
+		}
+
+		var nextFrame =  this.curFrame+1 < this.frameLen ? this.curFrame+1 : 0;
+		var bgTop = - nextFrame * this.height;
+		this.turnplateBox.css('backgroundPosition','0 ' + bgTop.toString() + 'px');
+		this.switchLight();
+		this.curFrame = nextFrame;
+		this.totalFrame ++;
+		this.freshSpeed();
+		this.turnAround();
+	}
+}
+</script>
+
+<script type="text/javascript">
+$('#lotteryMsg').dialog({
+	modal: true,
+	width: 500,
+	height: 350,
+	resizable: false,
+	title: '获奖信息',
+	autoOpen: false,
+	open: function(){
+			var showMsg = '您抽中了： ' + turnplate.lotteryList[turnplate.lotteryIndex] /*+ ' (来自:' + turnplate.lotteryChannel + ')'*/;
+			var options = '今天抽中了' + turnplate.lotteryList[turnplate.lotteryIndex] + '，' + turnplate.lotteryDes[turnplate.lotteryIndex];
+			$('#lotteryMsg').find('.msg').html(showMsg);
+			$('#lotteryMsg').find('.option').html(options);
+	},
+	buttons: [{
+		text:'知道啦',
+		click: function() {
+			$(this).dialog('close');
+		}
+	}]
+});
+
+$(function() {
+	//抽奖初始化
+	turnplate.init();
+
+	$("#allLotteryMsg").Scroll({line: 1, speed: 500, timer: 2000});
+});
+
+</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

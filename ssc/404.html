@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<style type="text/css">
+::-webkit-scrollbar{width:6px;height:6px;background-color:#dadada;}
+::-webkit-scrollbar:hover{background-color:#bfbfbf;}
+::-webkit-scrollbar-thumb{min-height:5px;min-width:5px;-webkit-border-radius:20px;border:0px solid #888;::-webkit-border-radius:1px;background-color: #888;}
+::-webkit-scrollbar-thumb:hover{min-height:5px;min-width:5px;-webkit-border-radius:20px;border:0px solid #444;background-color: #666;}
+::-webkit-scrollbar-thumb:active{-webkit-border-radius:20px;border:0px solid #444;background-color: #666;}
+.Main,.Main img{width:100%;}
+.Main{position:relative;padding-bottom:60px;}
+.Main p{width:100%;position:absolute;left:0;top:30%;text-align:center;font-size:14px;color:#43c6fe;}
+.Main p a{color:#236aba;vertical-align:top;}
+.Main p a:hover{color:#e40000;}
+.Footer { width:100%; height:70px;border-top:1px solid #b2b2b1; background-color:#dcdee3;clear:both; overflow:hidden; text-align:center;position:fixed;bottom:0;left:0;}
+.FooterPosition { text-align:center; width:100%; position:relative; top:33%; color:#666; font-size:14px;}
+</style>
+</head>
+<body>
+<div class="Main">
+    <img id="img_Bg" src="images/404Bg.jpg" />
+    <p>很遗憾，您访问的页面出错了...<br>您可以 <a onclick='showHome();return false;' href="javascript:void(0);">返回首页</a> 继续您的赚钱之旅 或者 <a onclick='showOnlineHelp();return false;' href='javascript:void(0);'>联系客服</a></p>
+</div>
+<div class="Footer">
+    <div class="FooterPosition">Copyright © 2016－2016  Entertainment.  版权所有</div>
+</div>
+<script type="text/javascript">
+document.getElementById("img_Bg").src='http://'+window.location.host+'/images/404Bg.jpg';
+function createLink(cssURL,faviconURL){
+    var head = document.getElementsByTagName('head')[0],
+        linkTag1 = null,
+        linkTag2 = null,
+        cssURL = 'http://'+window.location.host+'/css/global_reset.css',
+        faviconURL = 'http://'+window.location.host+'/images/favicon.ico',
+        isIE = function(){
+            var version = 0, userAgent = navigator.userAgent.toLowerCase();
+            if (/(msie)\D+(\d[\d.]*)/.test(userAgent)) {
+                version = RegExp.$2;
+            }
+            version = parseInt(version,10);
+                return version;
+        }();
+        if(!cssURL || !faviconURL){
+            return false;
+        }
+    if(isIE && isIE < 9){
+        linkTag1 = document.createStyleSheet(cssURL);
+        linkTag2 = document.createStyleSheet(faviconURL);
+    }
+    else{
+        linkTag1 = document.createElement('link');
+        linkTag1.href = cssURL;
+        head.insertBefore(linkTag1,head.childNodes[8]);
+        linkTag2 = document.createElement('link');
+        linkTag2.href = faviconURL;
+        head.insertBefore(linkTag2,head.childNodes[8]);
+    }
+        linkTag1.setAttribute('rel','stylesheet');
+        linkTag1.setAttribute('type','text/css');
+        linkTag2.setAttribute('rel','shortcut icon');
+        linkTag2.setAttribute('type','images/x-icon');
+}
+createLink();
+function showOnlineHelp() {
+    window.open('', '_blank', 'height=445,width=725,scrollbars=0,location=0,menubar=0,resizable=0,status=0');
+}
+function showHome() {
+    window.location.replace('http://'+window.location.host+'/index.jsp');
+}
+</script>
+</body>
+</html>

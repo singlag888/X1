@@ -1,0 +1,96 @@
+#user_loglist_form {
+	position: absolute;
+    left: 30px;
+    top: 50px;
+	width: 95%;
+    height: 60px;
+    background-color: rgba(242, 242, 242, 1);
+}
+#user_condition_login_start {
+	position: absolute;
+    left: 18px;
+    top: 20px;
+}
+#user_condition_login_start img {
+	position: absolute;
+    left: 175px;
+    top: 0px;
+}
+#user_condition_login_end {
+	position: absolute;
+    left: 215px;
+    top: 20px;
+}
+#user_condition_login_end img {
+	position: absolute;
+    top: 0px;
+    left: 135px;
+}
+#user_login_start {
+	position: absolute;
+    left: 64px;
+    top: -3px;
+    width: 105px;
+}
+#user_login_end {
+	position: absolute;
+    left: 25px;
+    top: -3px;
+    width: 105px;
+}
+#user_login_username {
+	position: absolute;
+    left: 337px;
+    top: 19px;
+    width: 285px;
+    height: 25px;
+}
+#login_user_name {
+	position: absolute;
+    top: -2px;
+    left: 175px;
+}
+#user_login_ip {
+	position: absolute;
+    left: 630px;
+    top: 19px;
+    width: 285px;
+    height: 25px;
+}
+#login_user_ip {
+	position: absolute;
+    top: -2px;
+    left: 160px;
+}
+#user_login_button {
+	position: absolute;
+	right: 150px;
+	top: 15px;
+	width: 50px;
+    height: 25px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    box-shadow: none;
+    line-height: 25px;
+    color: #169BD5;
+    cursor: pointer;
+}
+#user_login_gird {
+	position: absolute;
+    top: 120px;
+    left: 30px;
+    width: 1190px;
+    height: 670px
+}
+#user_login_button:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+
+
+
+

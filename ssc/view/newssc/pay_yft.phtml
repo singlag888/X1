@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>跳转中</title>
+</head>
+<body>
+<a>正在加载，请勿离开页面或者刷新页面</a>
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="merchantOutOrderNo"		  value="<?php echo $postFields['merchantOutOrderNo'] ?>" />
+    <input type="hidden" name="merid" value="<?php echo $postFields['merid'] ?>" />
+    <input type="hidden" name="noncestr"     value="<?php echo $postFields['noncestr'] ?>"/>
+    <input type="hidden" name="notifyUrl"      value="<?php echo $postFields['notifyUrl'] ?>"/>
+    <input type="hidden" name="orderMoney"  value="<?php echo $postFields['orderMoney'] ?>"/>
+    <input type="hidden" name="orderTime"  value="<?php echo $postFields['orderTime'] ?>"/>
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+    <input type="submit" value="启动 支付宝/微信 支付" />
+</form>
+</body>
+</html>

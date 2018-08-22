@@ -1,0 +1,153 @@
+<?php $this->import("head"); ?>
+<style>
+    .domains { 
+        /*width:170px;*/
+        border:0px solid #f00;
+        float:left;
+        padding:2px;
+    }
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   if ("<?php echo ACTION; ?>" == "editUser") {
+       $("input[name=user_id]").val("<?php echo $user['user_id']; ?>");
+       $("input[name=username]").val("<?php echo $user['username']; ?>");
+       $("input[name=pwd]").val("<?php echo $user['pwd']; ?>");
+       $("textarea[name=nick_name]").val("<?php echo $user['nick_name']; ?>");
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.username.value == "") {
+        msg = "请输入用户名";
+    }
+    var checkName = /[A-Z]+/;
+    if (checkName.test(ob.username.value)) {
+        msg = "用户名不可以大写";
+    }
+    if(checkName.test(ob.nickname.value)){
+        msg = "昵称不可以大写";
+    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="list-div form-top" id="addDiv">
+<form name="form1" id="form1" action="./?c=user&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered addTop" cellpadding="0" cellspacing="0" style="width:100%;">
+    <tr>
+        <td class="fb" width="10%">用户名</td>
+        <td><input class="input-md form-control" name="username"/></td>
+    </tr>
+    <tr>
+        <td class="fb" width="10%">昵称</td>
+        <td><input class="input-md form-control" name="nickname"/></td>
+    </tr>
+    <tr>
+        <td class="fb">是否推广用户</td>
+        <td>
+            <input type="radio" name="tg_user" value="on" checked/>内部推广总代
+            <input type="radio" name="tg_user" value=""/>外部总代
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">登录密码</td>
+        <td><input class="input-md form-control" type="password" name="pwd"/></td>
+    </tr>
+    <tr>
+        <td class="fb">确认密码</td>
+        <td><input class="input-md form-control" type="password" name="pwd2"/></td>
+    </tr>
+
+    <tr>
+        <td class="fb">返点</td>
+        <td>
+            <select class="input-md form-control" name="prize_mode">
+                <?php foreach ($aPrizeModes as $prizeMode => $rebate):?>
+                    <option value="<?php echo $prizeMode; ?>"><?php echo $prizeMode.'/'.$rebate; ?></option>
+                <?php endforeach;?>
+            </select>
+        </td>
+    </tr>
+
+   <!--   <tr>
+        <td class="fb">分配域名</td>
+        <td>（<font color="red">红色</font>表示已分配）<br/>
+            <?php foreach ($domains as $k => $v): ?>
+                <div class="domains"> <input type="checkbox" name="domainIds[]" value="<?php echo $v['domain_id']; ?>" id="domainIds_<?php echo $v['domain_id']; ?>"/>
+                    <label for="domainIds_<?php echo $v['domain_id']; ?>"><?php if ($v['status'] == 8): ?><font color="red"><?php echo $v['name']; ?></font><?php else: ?><?php echo $v['name']; ?><?php endif; ?></label>
+                </div>
+            <?php endforeach; ?>
+
+        </td>
+    </tr>--> 
+    <tr>
+        <td class="fb">日工资</td>
+        <td>
+            <div class="form-inline">
+                <select class="input-md form-control" name="day_salary">
+                <option value="0">0%</option>
+                <option value="0.001">0.1%</option>
+                <option value="0.002">0.2%</option>
+                <option value="0.003">0.3%</option>
+                <option value="0.004">0.4%</option>
+                <option value="0.005">0.5%</option>
+                <option value="0.006">0.6%</option>
+                <option value="0.007">0.7%</option>
+                <option value="0.008">0.8%</option>
+                <option value="0.009">0.9%</option>
+                <option value="0.01">1%</option>
+            </select>有效流水必须过<?php echo $salaryStandard['day_standard'] ?>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">周工资</td>
+        <td>
+            <div class="form-inline">
+                <select class="input-md form-control" name="week_salary">
+                <option value="0">0%</option>
+                <option value="0.001">0.1%</option>
+                <option value="0.002">0.2%</option>
+                <option value="0.003">0.3%</option>
+                <option value="0.004">0.4%</option>
+                <option value="0.005">0.5%</option>
+                <option value="0.006">0.6%</option>
+                <option value="0.007">0.7%</option>
+                <option value="0.008">0.8%</option>
+                <option value="0.009">0.9%</option>
+                <option value="0.01">1%</option>
+            </select>有效流水必须过<?php echo $salaryStandard['week_standard'] ?>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">月工资</td>
+        <td>
+            <div class="form-inline">
+                <select class="input-md form-control" name="month_salary">
+                <option value="0">0%</option>
+                <option value="0.001">0.1%</option>
+                <option value="0.002">0.2%</option>
+            </select>有效流水必须过<?php echo $salaryStandard['month_standard'] ?>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3">
+            <div style="width:50%;margin:0 auto;text-align:center;">
+                <input class="btn btn-info submit" type="submit" style="width: 65px;"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button"  style="width: 65px;"  onclick="javascript:history.go(-1);" value="返回"/>
+                <input type="hidden" name="user_id" value="" />
+            </div>
+        </td>
+
+</table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

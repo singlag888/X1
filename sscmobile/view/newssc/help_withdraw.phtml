@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>   <!-- 服务中心下提现相关 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+
+        <div class="help_center_content">
+           <div class="latestnew_cont_title help_center_title">提现相关</div>
+           <div class="help_center_txt">
+              <p>提现正常情况下5分钟内到账</p>
+              <span class="help_center_subtitle">1、提现时间</span>
+              <p>中彩网目前支持工行、建行、农行、招行、中信、浦发、民生、交通银行的提现业务，每天早9点至第二天凌晨2点的工作时间内，均可进行提现。</p>
+              <p>正常情况下，提款到账时间在5分钟内，具体参照不同银行的系统时间为准。</p>
+              <span class="help_center_subtitle">2、提现限额</span>
+              <p>单次最低提现额度为100元，最高为100,000元，提现次数不限。</p>
+              <p>温馨提示：投注额需满足充值金额的30%，即可提现（活动期间根据实际情况而定）。</p>
+              <span class="help_center_subtitle">3、提现手续费</span>
+              <p>中彩网提现无须缴纳任何手续费，全免。</p>
+           </div>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

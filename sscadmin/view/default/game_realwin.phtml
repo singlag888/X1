@@ -1,0 +1,88 @@
+<?php $this->import("head"); ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script> 
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+        $('#username').val('<?php echo $username; ?>');
+
+    });
+</script>
+<div class="sub_ContBox">
+
+    <!-- 搜索栏 -->
+    <div class="SearchBar">
+        <form name="form1" id="form1" action="" method="GET">
+            <label>用户名：</label>
+            <input size="12" name="username" id="username"  class=" txtStyle w85px"/>
+            <label>统计时间：</label>
+            <input size="12" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+            <em>到</em>
+            <input size="12" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+            <input type="hidden" name="c" value="game"/>
+            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+            <input type="submit" value="查询" name="submit" class="btnStyle m010">
+<!--            <input type="submit" value="查询下级" name="submit"  class="btnStyle4">-->
+        </form>
+    </div>
+    <!-- 列表数据 -->
+    <div class="clear"></div>
+    <div class="list-div" id="listDiv">
+        <table class="mainList" width="80%">
+            <tr>
+                <?php if (isset($showUsername)): ?><th>用户</th><?php endif; ?>
+                <th>统计周期</th>
+                <th>起始余额</th>
+                <th>结算余额</th>
+                <th>充值量</th>
+                <th>提款量</th>
+                <th>投注额</th>
+                <th title="实际盈亏 = 结算余额 - 起始余额 + 提款量 - 存款量">实际盈亏[？]</th>
+            </tr>
+            <?php foreach ($teamReport as $v): ?>
+                <tr>
+                    <?php if (isset($showUsername)): ?><td><?php echo $v['username']; ?></td><?php endif; ?>
+                    <td><?php echo $v['belong_date']; ?></td>
+                    <td><?php echo number_format($v['last_team_balance'], 4); ?></td>
+                    <td><?php echo number_format($v['team_balance'], 4); ?></td>
+                    <td><?php echo number_format($v['deposit_amount'], 2); ?></td>
+                    <td><?php echo number_format($v['withdraw_amount'], 2); ?></td>
+                    <td><?php echo number_format($v['buy_amount'], 2); ?></td>
+                    <td>  
+                        <?php if ($v['real_win'] > 0): ?>
+                            <span class="red"><?php echo number_format($v['real_win'], 4); ?></span>
+                        <?php else: ?>
+                            <?php echo number_format($v['real_win'], 4); ?>
+                        <?php endif; ?>
+                    </td> 
+                </tr>
+            <?php endforeach; ?>
+            <tr>
+                <?php if (isset($showUsername)): ?><td></td><?php endif; ?>
+                <td>合计:</td>
+                <td><?php echo number_format($totalInfo['last_team_balance'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['team_balance'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['deposit_amount'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['withdraw_amount'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['buy_amount'], 2); ?></td>
+                <td>  
+                    <?php if ($totalInfo['real_win'] > 0): ?>
+                        <font color="red"><?php echo number_format($totalInfo['real_win'], 4); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format($totalInfo['real_win'], 4); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </table>
+        <!-- 分页 -->
+        <div class="listTip">注：可以查询65天以内的数据</div>
+        <!-- 分页end --> 
+
+    </div>
+</div>
+<?php echo $pageList; ?>
+
+<?php $this->import("foot"); ?>

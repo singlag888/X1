@@ -1,0 +1,400 @@
+<?php $this->import("head"); ?>
+<!--/************snow 引入 下载进度css*****************-->
+<link rel="stylesheet" href="/css/ui.css">
+<!--/************snow 引入 下载进度css*****************-->
+<!--/************** snow 引入 下载进度 js 文件********************/-->
+<script src="/js/progress.js"></script>
+<!--/************** snow 引入 下载进度 js 文件********************/-->
+    <style type="text/css">
+    #start_time,#end_time{width: 160px;}
+    /**
+    //>>添加左边距
+    */
+    #export_excel_data{margin-left: 15px;}
+    .code{
+        /*overflow:hidden;*/
+        /*text-overflow:ellipsis;*/
+        /*width: 100px;*/
+        /*/!*display: inline-block;*!/*/
+        /*white-space: nowrap;*/
+    }
+    /*.code:hover{*/
+        /*text-overflow:inherit;*/
+        /*overflow: visible;*/
+        /*white-space: pre-line;*/
+        /*color: red;*/
+    /*}*/
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script src="/js/layer-v2.4/layer.js"></script>
+<script>
+    $(function () {
+        //准备数据
+        var json_topUsers = <?php echo $json_topUsers; ?>;
+        var json_lotterys = <?php echo $json_lotterys; ?>;
+        var json_methods = <?php echo $json_methods; ?>;
+        var tmp = '';
+        //彩种选择框
+        $.each(json_lotterys, function (i, v) {
+            tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+            $('select[name=lottery_id]').append(tmp);
+        });
+        $('select[name=lottery_id]').change(function () {
+            $('select[name=method_id]').empty().append('<option value="0">请选择</option>');
+            $('select[name=issue]').empty().append('<option value="">请选择</option>');
+            if ($('select[name=lottery_id]').val() == '0') {
+                return;
+            }
+            //以下也可改成动态读取每个彩种的玩法，都差不多
+            $.each(json_methods[$('select[name=lottery_id]').val()], function (i, v) {
+                tmp = '<option value="' + v.mg_name + '" style="color:#00f;">' + v.mg_name + '</option>';//玩法组没有method_id
+                $('select[name=method_id]').append(tmp);
+                $.each(v.childs, function (ii, vv) {
+                    tmp = '<option value="' + vv.method_id + '">&nbsp;&nbsp;' + vv.cname + '</option>';
+                    $('select[name=method_id]').append(tmp);
+                });
+            });
+
+            getIssue();
+        });
+        $('select[name=date]').change(function () {
+            if ($('select[name=date]').val() == '') {
+                return;
+            }
+            getIssue();
+        });
+
+        //动态读取彩种奖期
+        function getIssue()
+        {
+            if ($('select[name=lottery_id]').val() == 0) {
+                return;
+            }
+            $.post(
+                    '?c=game&a=getIssue',
+                    {'lottery_id': $('select[name=lottery_id]').val(), 'start_time': $('select[name=date]').val()},
+            function (json_data) {
+                $('select[name=issue]').empty().append('<option value="">请选择</option>');
+                $.each(json_data, function (i, v) {
+                    tmp = '<option value="' + v.issue + '">' + v.issue + '（' + v.code + '）' + ' (' + v.start_sale_time + '~)</option>';
+                    $('select[name=issue]').append(tmp);
+                });
+                //预选中奖期
+                $('select[name=issue]').val('<?php echo $issue; ?>');
+            }, 'json');
+        }
+
+
+        //设置默认值
+        $('select[name=sort]').val('<?php echo $sort; ?>');
+        $('input[name=win_money]').val('<?php echo empty($win_money)?'':$win_money; ?>');
+        $('input[name=bet_money]').val('<?php echo empty($bet_money)?'':$bet_money; ?>');
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('select[name=date]').val('<?php echo $date; ?>').change();
+        $('select[name=method_id]').val('<?php echo $method_id; ?>');
+        $('select[name=is_test]').val('<?php echo $is_test; ?>');
+        $('select[name=top_username]').val('<?php echo $top_username; ?>');
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+        $('#start_time').val('<?php echo $start_time; ?>');
+        $('#end_time').val('<?php echo $end_time; ?>');
+        $('select[name=modes]').val('<?php echo $modes; ?>');
+        $('select[name=cancel_status]').val('<?php echo $cancel_status; ?>');
+        $('input[name=wrap_id]').val('<?php echo $wrap_id; ?>');
+
+        $(".pid").click(function(){
+            var pid = $(this).data('pid');
+            var fun = 'easyPackageDetail';
+            if($(this).data('trace') == 1){
+                fun = 'easyTraceDetail';
+            }
+            layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '投注内容',
+                closeBtn: 1,
+                shade: [0.3, '#000'],
+                border: [0],
+                offset: ['80px', ''],
+                area: ['824px','250px'],
+                content: ['?c=game&a='+fun+'&wrap_id='+pid]
+            });
+            $('div.xubox_title', document).addClass('layui-layer-title');
+
+        });
+        /*************************jacky 添加投注内容显示层****************************************************/
+
+        // 投注号码鼠标移上显示完整号码
+        $('.code').mouseover(function(){
+            var $this = $(this);
+            layer.tips($this.data('code'), '#'+$this.data('id'), {
+                tips: [4, '#78BA32'],
+                area: ['auto','40px']
+            });
+        });
+/*************************** snow 添加 点击事件 ,弹出iframe 层显示完整注单内容************************************************/
+
+        $('.code').click(function(){
+            var pid = $(this).data('snow_id');
+            var fun = 'easyPackageDetail';
+            if($(this).data('snow_trace') == 1){
+                fun = 'easyTraceDetail';
+            }
+
+            layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '投注内容',
+                closeBtn: 1,
+                shade: [0.3, '#000'],
+                border: [0],
+                offset: ['80px', ''],
+                area: ['824px','250px'],
+                content: ['?c=game&a='+fun+'&wrap_id='+pid]
+            });
+            $('div.xubox_title', document).addClass('layui-layer-title');
+        })
+
+        })
+
+    function checkSubmit(){
+        var startTime = $('#start_time').val(),
+            endTime = $('#end_time').val(),
+            pattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+        if( !pattern.test(startTime)  || !pattern.test(endTime) ){
+            alert('游戏时间格式不对');
+            return false;
+        }
+        return true;
+    }
+</script>
+
+    <!------------------ author snow引入搜索相关文件--------------------------->
+
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+<form name="form1" id="form1" class="form-top" action="" method="GET" onsubmit="return checkSubmit();">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label>游戏时间:</label>
+            <input class="input-md form-control Wdate" type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text"  name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>订单编号:</label>
+        <input class="input-md form-control tl" style="width: 104px;" name="wrap_id" size="20"/>
+
+    </div>
+    <div class="form-inline mt15">
+        <label>游戏名称:</label>
+        <select class="input-md form-control" name="lottery_id"><option value="0">请选择</option></select>
+        <label>日期:</label>
+        <select class="input-md form-control" name="date">
+            <option value="">请选择</option>
+            <?php foreach ($dates as $v): ?>
+                <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>玩法:</label>
+        <select class="input-md form-control" name="method_id"><option value="0">请选择</option></select>
+        <label>奖期:</label>
+        <select class="input-md form-control" name="issue"><option value="">请选择</option></select>
+
+        <label>元角模式:</label>
+        <select class="input-md form-control" name="modes">
+            <option value="0">请选择</option>
+            <option value="1">2元</option>
+            <option value="0.5">1元</option>
+            <option value="0.1">2角</option>
+            <option value="0.05">1角</option>
+            <option value="0.01">2分</option>
+            <option value="0.001">2厘</option>
+        </select>
+        <label>订单状态:</label>
+        <select class="input-md form-control" name="cancel_status">
+            <option value="-1">请选择</option>
+            <option value="0">未撤单</option>
+            <option value="1">用户撤单</option>
+            <option value="2">追中撤单</option>
+            <option value="3">出号撤单</option>
+            <option value="4">未开撤单</option>
+            <option value="9">管理员撤单</option>
+        </select>
+    </div>
+    <div class="form-inline mt15">
+
+         <label>是否测试账号:</label>
+        <select class="input-md form-control" name="is_test">
+            <option value="-1">请选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+        </select>
+        <input type="radio" name="name_style" id="radio1" value="1"/>
+        <label for="radio1">所属总代:</label>
+        <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+            <option value="">请选择…</option>
+            <?php foreach ($json_topUsers as $k => $v): ?>
+                <option value="<?=$v['username']?>"><?=$v['username']?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>或</label>
+        <input type="radio" name="name_style" value="2" id="radio2"/>
+        <label for="radio2">用户名:</label>
+        <input class="input-md form-control" name="username" size="10"/>
+        <input type="checkbox" name="include_childs" id="include_childs" value="1" />
+        <label  for="include_childs">包含下级</label>
+        <input type="hidden" name="c" value="game"/>
+        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+         <label>&nbsp;&nbsp;排序:</label>
+        <select class="input-md form-control" name="sort">
+            <option value="-1">请选择</option>
+            <option value="1">按投注金额</option>
+            <option value="2">按中奖金额</option>
+        </select>
+        <label>投注金额:</label>
+        <input class="input-md form-control" name="bet_money" size="10"/>
+        <label>中奖金额:</label>
+        <input class="input-md form-control" name="win_money" size="10"/>
+        <input class="btn btn-info submit"  type="submit" name="submit"  value="查询" style="width:90px" />
+
+    </div>
+    <div class="form-inline mt15">
+        <input class="btn btn-info submit"  type="button" id="export_excel_data" name="export_excel_data" data-urlData="&c=game&a=snowExportGameListGetData" data-urlCount="&c=game&a=snowExportGameListGetTotalCount" value="导出到excel" style="width:90px " /><span style="color: red;margin-left: 20px">必须先查询后才可以导出</span>
+    </div>
+</form>
+
+<div class="list-div mt15" id="listDiv">
+    <table class="table table-responsive table-bordered mainList">
+        <thead>
+            <tr>
+                <td style=" width: 15%;">订单编号</td>
+                <td>用户</td>
+                <td>IP</td>
+                <td>彩种</td>
+                <td>奖期</td>
+                <td>单倍注数</td>
+                <td>倍数</td>
+                <td>模式</td>
+                <td>投注金额</td>
+                <td>购买时间</td>
+                <td>奖期截止时间 </td>
+                <td>投注内容</td>
+                <td>开奖号</td>
+                <td>中奖状态</td>
+                <td>奖金</td>
+                <td>派奖状态</td>
+                <td>撤单状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php if ($packages): ?>
+            <?php foreach ($packages as $key => $v): ?>
+                <tr>
+                    <td>
+                        <i class="pid" data-pid='<?php echo $v['wrap_id']; ?>' data-trace='<?php echo $v['trace_id'] == 0 ? 0 : 1; ?>' style='cursor:pointer'><?php echo $v['xgame'] ? '(信)' : ''; ?><?php echo $v['wrap_id']; ?></i>&nbsp;&nbsp;<a target="_blank" href="?c=game&a=packageDetail&wrap_id=<?php echo $v['wrap_id']; ?>">详情</a>
+                        <?php if ($v['trace_id']): ?>
+                            <font color="#000"><?php if ($v['trace_id'] % 2 == 1): ?>♂<?php else: ?>♀<?php endif; ?></font>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a href="?c=game&a=gameList&user_id=<?php echo $v['user_id']; ?>&username=<?php echo $v['username']; ?>"><?php echo $v['username']; ?></a>
+                        <?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                        <?php if ($v['user_status'] == 0): ?><b style="color:red">[已删除]</b>
+                        <?php elseif ($v['user_status'] == 1): ?><b style="color:red">[已冻结]</b>
+                        <?php elseif ($v['user_status'] == 5): ?><b style="color:red">[已回收]</b>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $v['user_ip']; ?></td>
+                    <td><?php echo $lotterys[$v['lottery_id']]['cname']; ?></td>
+                    <td><?php echo $v['issue']; ?></td>
+                    <td><?php echo $v['single_num']; ?></td>
+                    <td><?php echo $v['multiple']; ?></td>
+                    <td><?php echo $GLOBALS['cfg']['modes'][strval(floatval($v['modes']))]; ?></td>
+                    <td><?php echo $v['amount']; ?></td>
+                    <td><?php echo $v['create_time']; ?></td>
+                    <td><?php echo $lotteryIssues[$v['lottery_id']][$v['issue']]['end_sale_time']; ?></td>
+<!--                    ************************** snow 修改显示内容为超过15个字符 后面显示省略号***********************************************-->
+
+                    <td id="code_<?php echo $v['package_id']; ?>" data-id="code_<?php echo $v['package_id']; ?>" class="code" data-code="<?php echo $v['code']; ?>"   data-snow_id='<?php echo $v['wrap_id']; ?>' data-snow_trace='<?php echo $v['trace_id'] == 0 ? 0 : 1; ?>'>
+                       <a style="cursor:pointer " ><?php echo  strlen($v['code']) >= 15 ? substr($v['code'],0,15) . '‧‧‧‧‧‧' : $v['code'];?></a>
+                    </td>
+<!--                    ************************** snow 修改显示内容为超过15个字符 后面显示省略号***********************************************-->
+                    <td><?php
+                    if($v['lottery_id'] != 15){
+                        echo $lotteryIssues[$v['lottery_id']][$v['issue']]['code'] != '' ? $lotteryIssues[$v['lottery_id']][$v['issue']]['code'] : '<font color=red>未开</font>'; 
+                    } else {
+                        echo '-';
+                    }
+                    ?></td>
+                    <td><?php if ($v['check_prize_status'] == 0): ?>未判断<?php elseif ($v['check_prize_status'] == 1): ?><font color="red">中奖</font><?php elseif ($v['check_prize_status'] == 2): ?>没中<?php endif; ?></td>
+                    <td><?php if ($v['prize'] > 0) echo $v['prize']; ?></td>
+                    <td>
+                        <?php if ($v['check_prize_status'] == 1): ?>
+                            <?php if ($v['send_prize_status'] == 0): ?>未派奖<?php elseif ($v['send_prize_status'] == 1): ?><font color="red">已派奖</font><?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($v['cancel_status'] == 0): ?>
+                        <?php else: ?><b>
+                                <span title="撤单时间：<?php echo $v['cancel_time']; ?>">
+                                    <?php if ($v['cancel_status'] == 1): ?>用户撤单
+                                    <?php elseif ($v['cancel_status'] == 2): ?>追中撤单
+                                    <?php elseif ($v['cancel_status'] == 3): ?>出号撤单
+                                    <?php elseif ($v['cancel_status'] == 4): ?>未开撤单
+                                    <?php elseif ($v['cancel_status'] == 9): ?>系统撤单
+                                    </span></b>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if(($v['check_prize_status'] == 0) && ($v['send_prize_status'] == 0) && ($v['cancel_status'] == 0 && !empty($lotteryIssues[$v['lottery_id']][$v['issue']]['code']))):?>
+                        <a href="javascript:;" data-id = "<?php echo $v['wrap_id'];?>" onclick="openPrize(this)">人工派奖</a>
+                           <?php else:?>
+                            --
+                        <?php endif;?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="18" class="no-records">所选查选条件的数据为空，请输入订单号或用户名或投注金额(该值是大于等于)或中奖金额(该值是大于等于)后才能查询！</td>
+
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<div class="pageTal" style="width: 100%;"><?php echo $pageList; ?> <div>本页投注金额小计：<?php echo $totalAmount; ?> &nbsp; 中奖金额小计：<?php echo $totalPrize; ?> &nbsp; 投注金额总计：<?php echo $packagesAll['amounts']; ?> &nbsp; 中奖金额总计：<?php echo $packagesAll['prizes']; ?>&nbsp; </div></div>
+    <script>
+        function openPrize(obj) {
+            var that = $(obj);
+            var wrap_id = that.data('id');
+            if(wrap_id == '')
+            {
+               layer.msg('参数异常,请联系客服!');
+               return false;
+            }
+            $.post('?c=game&a=thePrizeAjax',{wrap_id:wrap_id},function (data) {
+               var data  = eval('('+data+')');
+               if(data.code === 1)
+               {
+                   layer.msg(data.msg,{icon:2,time:2500});
+                   return false;
+               }
+               if(data.code == 0)
+               {
+                   layer.msg('派奖成功!',{icon:1,time:1500});
+                   window.setTimeout(function () {
+                       window.location.reload();
+                   },1500)
+               }
+            });
+        }
+    </script>
+<?php $this->import("foot"); ?>

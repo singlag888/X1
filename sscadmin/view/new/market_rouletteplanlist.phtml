@@ -1,0 +1,122 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $(".del").click(function(){
+            var obj = $(this);
+            $.ajax({
+                    type: "GET",
+                    url: "/?c=market&a=roulettePlanList&op=del",
+                    data: "id=" + obj.attr("val"),
+                    dataType: "text", //返回1和2
+                    success: function (msg) {
+                        switch (msg) {
+                            case "1":
+                                alert("删除成功！");
+                                obj.parent().fadeOut(500);
+                                break;
+                            case "2":
+                                alert("删除失败！");
+                                break;
+                            default:
+                                alert("网络异常！");
+                                break;
+                        }
+                    },
+                    error: function () {
+                        alert("提交异常");
+                    }
+                });
+        });
+
+        $('select[name=prizeLevel]').val('<?php echo $prizeLevel; ?>');
+        $('input[name=start_time]').val('<?php echo substr($start_time, 0, 10); ?>');
+        $('input[name=end_time]').val('<?php echo substr($end_time, 0, 10); ?>');
+        $('select[name=time_section]').val('<?php echo $time_section; ?>');
+        $('select[name=plan_type]').val('<?php echo $plan_type; ?>');
+        $('select[name=sort]').val('<?php echo $sort; ?>');
+
+
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="get">
+奖品<select name="prizeLevel">
+    <option value="-1" selected="selected">不限</option>
+    <?php foreach ($prizeLevels as $k => $v): ?>
+        <option value=<?php
+        echo $k;
+        ?>><?php echo $v; ?></option>
+     <?php endforeach; ?>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+开奖日期<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+开奖时间段<select name="time_section">
+    <option value=0>不限</option>
+    <option value=3>00:00至15:59</option>
+    <option value=4>16:00至23:59</option>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+计划类别<select name="plan_type">
+    <option value=''>不限</option>
+    <option value=1>原始计划</option>
+    <option value=2>追加计划</option>
+</select>
+<input type="hidden" name="c" value="market"/>
+<input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+排序规则<select name="sort">
+    <option value=1>按计划开奖时间逆序</option>
+    <option value=2>按奖品金额逆序</option>
+</select>
+<input type="submit" name="sub"  style="width:90px" value="查询"/>
+</form>
+
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>计划开奖时间</td>
+                <td>奖品</td>
+                <td>计划类别</td>
+                <td>计划创建时间</td>
+                <td>创建人</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php if($plans) : ?>
+        <?php foreach($plans as $v):?>
+        <tr class="plansList">
+            <td><?php echo $v['plan_time'];  ?></td>
+            <td><?php echo $prizeLevels[$v['plan_level']];  ?></td>
+            <td>
+                <?php if($v['plan_type']==1):  ?>
+                原始计划
+                <?php elseif($v['plan_type']==2):  ?>
+                追加计划
+                <?php else:  ?>
+                临时计划
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo $v['create_time'] ; ?></td>
+            <td><?php echo $admins[$v['create_admin_id']]['username']; ?></td>
+            <td class="<?php if(strtotime($v['plan_time']) > (time()+600)): ?>del<?php endif; ?>" val="<?php echo $v['ugr_id']; ?>"><?php if(strtotime($v['plan_time']) > (time()+600)): ?>删除<?php endif; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tr class="noneData">
+            <td colspan="6">暂无数据！</td>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

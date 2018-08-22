@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type='hidden' name='amount' value='<?php echo $postFields['amount']; ?>'>
+    <input type='hidden' name='bank' value='<?php echo $postFields['bank']; ?>'>
+    <input type='hidden' name='merchantId' value='<?php echo  $postFields['merchantId']; ?>'>
+    <input type='hidden' name='orderNo' value='<?php echo $postFields['orderNo']; ?>'>
+    <input type='hidden' name='gsNum' value='<?php echo $postFields['gsNum']; ?>'>
+    <input type='hidden' name='gsName' value='<?php echo $postFields['gsName']; ?>'>
+    <input type='hidden' name='gsDesc' value='<?php echo $postFields['gsDesc']; ?>'>
+    <input type='hidden' name='sign' value='<?php echo $postFields['sign']; ?>'>
+    <input type='hidden' name='extend1' value='<?php echo $postFields['extend1']; ?>'>
+    <input type='hidden' name='extend2' value='<?php echo $postFields['extend2']; ?>'>
+    <input type='hidden' name='extend3' value='<?php echo $postFields['extend3']; ?>'>
+    <input type='hidden' name='extend4' value='<?php echo $postFields['extend4']; ?>'>
+    <input type='hidden' name='extend5' value='<?php echo $postFields['extend5']; ?>'>
+</form>
+</body>
+</html>

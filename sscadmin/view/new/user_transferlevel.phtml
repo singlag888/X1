@@ -1,0 +1,121 @@
+<?php $this->import("head"); ?>
+<script>
+$(function(){
+    //准备数据
+    var json_topUsers = <?php echo $json_topUsers; ?>;
+    var tmp = '';
+
+    //总代选择框
+    $.each(json_topUsers, function(i,v){
+        tmp = '<option value=' + v.username + '>' + v.username + '</option>';
+        $('select[name=top_username]').append(tmp);
+    });
+
+    //设置默认值
+    $('select[name=top_username]').val('<?php echo $top_username; ?>');
+    $('input[name=username]').val('<?php echo $username; ?>');
+
+    $('#checkBtn').click(function(){
+        if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+            alert('用户名输入不规范');
+            return false;
+        }
+
+        $.post(
+            '?c=user&a=transferLevel',
+            {sa:'checkUser', username: $('input[name=username]').val()},
+            function(json_data) {
+                if (!json_data || json_data.user_id == '') {
+                    $('#userInfo').html('没有这个用户！');
+                } else {
+                    $('#userInfo').html('user_id=' + json_data.user_id + ' 级别=' + (json_data.level > 0 ? json_data.level + "级" : "总代") + "<br/>返点情况：" + json_data.rebate_info);
+                }
+            }, "json");
+    });
+
+    $('select[name=top_username]').change(function(){
+        if ($(this).val() == -1) {
+            return false;
+        }
+
+        $.post(
+            '?c=user&a=transferLevel',
+            {sa:'checkUser', username: $(this).val()},
+            function(json_data) {
+                if (json_data.user_id == '') {
+                    $('#targetUserInfo').html('没有这个用户');
+                } else {
+                    $('#targetUserInfo').html('user_id=' + json_data.user_id + ' 级别=' + (json_data.level > 0 ? json_data.level + "级" : "总代") + "<br/>返点情况：" + json_data.rebate_info);
+                }
+            }, "json");
+    });
+
+    $('select[name=gaps]').val('-1');
+});
+</script>
+
+<div class="list-div add-main" id="addDiv">
+<form name="form1" class="form-top" id="form1" action="?c=user&a=transferLevel" method="post">
+    <table class="table table-responsive table-bordered mt10" style="width: 60%;" >
+        <tr>
+            <td colspan="2" class="rowTitle">
+                <b>层级互转</b>
+            </td>
+        </tr>
+        <tr>
+            <td>用户名</td>
+            <td style="vertical-align: middle;">
+                <div class="form-inline">
+                    <input class="input-md form-control " type="text" name="username" value=""/>
+                    <input class="btn btn-default" type="button" id="checkBtn" value="检测用户"/>
+                <div id="userInfo"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>执行的操作</td>
+            <td>
+                <div class="form-inline">
+                    <select class="input-md form-control " name="transferType">
+                    <option value="1">总代 =》 一代</option>
+                    <option value="2">一代 =》 新总代</option>
+                </select>
+                （总代层数达上限的不允许转成一代）
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>降级：转移成目标总代的一代</td>
+            <td>
+                <select class="input-md form-control " name="top_username"><option value="-1">请选择</option></select>
+                <div id="targetUserInfo"></div>
+            </td>
+        </tr>
+        <!--
+        <tr>
+            <td>指定返点</td>
+            <td>
+                <select name="gaps">
+                    <option value="-1">请选择</option>
+                    <?php for ($i=0; $i<count($gaps); $i++): ?>
+                    <option value="<?php echo $gaps[$i]['rebate']; ?>"><?php echo $gaps[$i]['prize']; ?> (<?php echo $gaps[$i]['rebate']; ?>)</option>
+                    <?php endfor; ?>
+                </select>
+                （显然要低于目标总代）
+            </td>
+        </tr>
+        -->
+        <tr>
+            <td colspan="2">
+                <div style="width:60%;margin:0 auto;text-align:center;">
+                    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" /><input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />
+                    <input type="hidden" name="sa" value="transfer" />
+                    <input class="btn btn-info submit" style="width: 100px;" type="button"  name="submitBtn" value="确认操作" onclick="if(confirm('确定要转移层级吗？请慎重操作！')) {if(confirm('请再次确认：确定要转移层级吗？'))this.form.submit();}"/>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+</form>
+</div>
+<?php $this->import("foot"); ?>

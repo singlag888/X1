@@ -1,0 +1,37 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+    <script src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("input[name=username]").val("<?php echo $username; ?>");
+            $("input[name=tranAmount]").val("<?php echo $tranAmount; ?>");
+            $("select[name=tranFrom]").val("<?php echo $tranFrom; ?>");
+            $("select[name=tranTo]").val("<?php echo $tranTo; ?>");
+        });
+    </script>
+    <form name="form1" id="form1" class="form-top" action="./" method="GET">
+        <div class="form-inline mt15">
+            <input type="hidden" name="c" value="egame"/>
+            <input type="hidden" name="a" value="transfer"/>
+            <label for="radio2">用户名</label>
+            <input title="username" class="input-md form-control" name="username" size="10" />
+            <label for="radio2">金额</label>
+            <input title="tranAmount" class="input-md form-control" name="tranAmount" size="10" />
+            <select class="input-md form-control" name="tranFrom">
+                <?php foreach ($GLOBALS['cfg']['gameTypes'] as $k => $v): ?>
+                    <option value="<?php echo $k;?>"><?php echo $v;?></option>
+                <?php endforeach; ?>
+            </select>
+            <label for="radio2">转到</label>
+            <select class="input-md form-control" name="tranTo">
+                <?php foreach ($GLOBALS['cfg']['gameTypes'] as $k => $v): ?>
+                    <option value="<?php echo $k;?>"><?php echo $v;?></option>
+                <?php endforeach; ?>
+            </select>
+            <input type="hidden" title="action" class="input-md form-control" name="action" value="transfer" />
+            <input class="btn btn-info submit" type="submit" name="submit" value="转换" style="width:90px"/>
+        </div>
+    </form>
+    <div class="list-div mt15" id="listDiv">
+    </div>
+<?php $this->import('foot'); ?>

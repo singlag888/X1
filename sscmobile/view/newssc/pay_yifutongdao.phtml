@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>跳转中</title>
+</head>
+<body>
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' method='get'>
+    <input type='hidden' name='requestNo' value='<?php echo $postFields['requestNo']; ?>'>
+    <input type='hidden' name='version' value='<?php echo $postFields['version']; ?>'>
+    <input type='hidden' name='productId' value='<?php echo  $postFields['productId']; ?>'>
+    <input type='hidden' name='transId' value='<?php echo $postFields['transId']; ?>'>
+    <input type='hidden' name='merNo' value='<?php echo $postFields['merNo']; ?>'>
+    <input type='hidden' name='orderDate' value='<?php echo $postFields['orderDate']; ?>'>
+    <input type='hidden' name='orderNo' value='<?php echo $postFields['orderNo']; ?>'>
+    <input type='hidden' name='frontUrl' value='<?php echo $postFields['frontUrl']; ?>'>
+    <input type='hidden' name='notifyUrl' value='<?php echo $postFields['notifyUrl']; ?>'>
+    <input type='hidden' name='transAmt' value='<?php echo $postFields['transAmt']; ?>'>
+    <input type='hidden' name='commodityName' value='<?php echo $postFields['commodityName']; ?>'>
+    <input type='hidden' name='signature' value='<?php echo $postFields['signature']; ?>'>
+    <input type="submit" value="启动 支付宝/微信 支付" />
+</form>
+</body>
+</html>

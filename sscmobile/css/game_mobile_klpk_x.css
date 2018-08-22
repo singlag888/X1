@@ -1,0 +1,49 @@
+        html,body{width: 100%;height: 100%;    position: absolute;}        
+        #total{width:100%;height:100%;background:rgba(0,0,0,0);position: absolute;top:4.3rem;display: none;z-index:99999;}
+        .QuickChoose{height: 0rem;}
+        #selectCodeBtn{font-size: 0.6rem;}
+        .GameText{font-size: 0.6rem;}
+        .fix dt,.fix dd{position: fixed;}
+        .fix dd{top: 7.5rem;}
+        .NumberBox5 .GameName{padding-top: 0.2rem;margin-left: 3.5rem;}
+        .lotteryNum{margin-left: 3.4rem;}
+        .poker_tao span,.poker_xin span,.poker_mei  span,.poker_fang span{font-size: 0.6rem !important;margin: -0.1rem !important;}
+        .poker_tao img,.poker_xin img,.poker_mei img{width: 1.4rem;position: relative;left: -0.2rem;}
+        .poker_fang img{width: 1.4rem;position: relative;top: -0.3rem;position: relative;left: -0.2rem;}
+        .poker_sz img,.poker_th img,.poker_ths img,.poker_bz img,.poker_dz img{position: relative;left: -0.45rem;top: -0.9rem;width: 4rem;}
+        .pokerBig .poker_sz,.pokerBig .poker_th,.pokerBig .poker_ths,.pokerBig .poker_bz,.pokerBig .poker_dz{width: 4.2rem;height: 6rem;}
+        .ball_Selected{border: 0.05rem solid #FF3232 !important;}
+        .pokerBig li div b{font-size: 0.49rem;}
+        .pokerBig li div{width: 3rem;}
+        .pokerBig li{width: 3rem;height: 4rem;}
+        .pokerBig .poker_ths b{position: relative;left: -0.3rem;}
+        .poker_kj_num em{font-size: 0.6rem;position: absolute;top: 0.28rem;left: 0.2rem;}
+        .pendingNum_poker{border: 1px solid red;border-radius: 20rem;width: 1.5rem;margin-left: 0.2rem;height: 1.5rem; display: inline-block;}
+        .pendingNum_poker  i{z-index: 9999999; position: relative;right: 0.28rem;width: 0.5rem;height: 0.5rem;padding-left:0.5rem; background: url(../images/mobile/small/ls-small.png) no-repeat;background-position: 1rem 0.5rem;background-size: 0.5rem 3.8rem;}     
+        .lotteryNumber li ul li em{position: relative; top: 0.5rem; margin-left: 0.4rem; width: 2.2rem;height: 2rem;display: inline-block;}
+        .lotteryNumber li ul li {background: #fff; margin: 0.5rem; border-radius: 0.2rem;border: 1px solid #bfbfbf;float: left;font-size: 0.7rem;padding: 0.05rem 0.5rem 0;}
+        .pokerRx li div{position: relative;    top: -1.2rem;left: -0.7rem;}
+        .pokerRx li img{height: 2.5rem;position: relative;top: -2.4rem;left: 0.5rem;}
+        .pokerRx li{text-align: center;line-height: 4rem;height: 4rem;width: 3rem;}
+        .poker_th li{line-height: 5rem;height: 5rem;width: 3rem;}
+        .poker3 li{height: 4rem;width: 3rem;}
+        .poker_img{height: 2.5rem;position: relative;left: -0.5rem;top: -0.3rem;}
+        .poker_heit i{background-position: 0rem 0.4rem;}
+        .poker_hongt i{background-position: 0rem -0.6rem;}
+        .poker_meih  i{background-position: 0rem -1.8rem;}
+        .poker_fangk i{background-position: 0rem -2.9rem;}
+        .lotteryTodayTitle li, #todayIssuesHead li{margin: 0 1.5rem 0 1rem !important;position: relative;}
+        #todayIssuesBody{position: absolute;} 
+        #todayIssuesBody ul{position: relative;display: block;width: 12rem !important;}        
+       /*全选清除按钮*/
+        .SelectControl {position: relative;left: 1rem;top: 1rem;display: none;}
+        .lotteryNumber .navSub{width: 7rem;height: 0rem;}
+        .navSub dd{text-align: center;line-height: 1rem; background-color: #fff;border-radius: 0.2rem;border: 1px solid #bfbfbf;font-size: 0.55rem;display: inline-block;margin-left: 1rem;background: #fff;height: 2rem;width: 3rem;margin: 0.2rem;line-height: 2rem;}        
+        #pendingText span{padding-left: 4rem;position: relative;top: 0.3rem;}
+        .active{display: block;}
+        .hidden{display: none;}
+        .theme-popover-mask{background: rgba(90, 46, 46, 0.9);}       
+       .gameTZbtn{float: left;margin-right: 0;}
+        .poker_kj_step1 .poker_kj_wait1 {transition-duration: 4s;transform: rotateY(720deg) }
+		.poker_kj_step2 .poker_kj_wait2 {transition-duration: 4s;transform: rotateY(720deg) }
+		.poker_kj_step3 .poker_kj_wait3 {transition-duration: 4s;transform: rotateY(1440deg) }

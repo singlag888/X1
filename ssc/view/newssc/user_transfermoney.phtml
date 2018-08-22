@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>      <!-- 会员管理下面代充功能 -->
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    </head>
+
+    <body>
+      <div class="daichong_page_part">
+          <form name="form1" id="form1" action="" method="post">
+             <div class="form_group">
+                  <label class="control_label">用户名：</label>
+                  <div class="col_sm_10">
+                       <?php echo $user['username']; ?>
+                  </div>
+            </div>
+            <div class="form_group">
+                  <label for="amount" class="control_label">充值金额：</label>
+                  <div class="col_sm_10">
+                        <input type="text"  class="form_control" name="amount" id="amount" value=""/>
+                  </div>
+            </div>
+            <div class="form_group">
+                  <label for="amount1" class="control_label">确认金额：</label>
+                  <div class="col_sm_10">
+                        <input type="text" class="form_control" name="amount1" id="amount1" value=""/>
+                  </div>
+            </div>
+            <!-- snow 把安全码修改成资金密码 -->
+           <div class="form_group">
+                  <label for="secpwd" class="control_label">资金密码：</label>
+                  <div class="col_sm_10">
+                        <input type="password" name="secpwd" id="secpwd" class="form_control">
+                  </div>
+            </div>
+               <!-- snow 把安全码修改成资金密码 -->
+            <div class="close_order_layer">
+                <input type="hidden" name="op" value="doTransfer" />
+                <input type="submit" class="default_blue_btn" name="submitBtn" value="转帐"/>
+                 <a href="javascript:;" class="default_gray_btn closeDialogBtn">返回</a>
+            </div>
+          </form>
+      </div>
+
+     <div class="daichong_explain_title">代充说明</div>
+     <div class="daichong_explain_cont">
+         最低代充金额为10元，请确定充值金额再进行充值；如因自身原因导致的问题，平台概不负责，请妥善保管安全密码。
+     </div>
+
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script>
+    $(function() {
+      $('a.closeDialogBtn').on('click', function(){
+            var index = parent.layer.getFrameIndex(window.name);      //获取当前窗口索引
+            parent.layer.close(index);
+        });
+    });
+</script>
+    </body>
+</html>

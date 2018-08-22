@@ -1,0 +1,57 @@
+<?php $this->import("head"); ?>
+<script>
+function checkSiblings(obj) {
+    console.info($(":checkbox", $(obj).parent().parent().nextAll()));
+    console.info($(obj).attr("checked"));
+    $(":checkbox", $(obj).parent().parent().nextAll()).attr("checked", $(obj).prop("checked"));
+}
+$(function(){
+
+});
+</script>
+
+<div id="addDiv">
+<form name="form1" id="form1" action="./?c=adminGroup&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0">
+    <tr>
+    	<td width="120" align="center">父菜单</td>
+        <td colspan="10" align="center">权限列表</td>
+    </tr>
+    <?php foreach ($allMenus as $k => $v): ?>
+    <tr>
+        <td rowspan="<?php echo count($v['childs']); ?>"><label for="menu_<?php echo $v['menu_id']; ?>" title="<?php echo $v['description']; ?>">
+                <input type="checkbox" name="menus[]" id="menu_<?php echo $v['menu_id']; ?>" value="<?php echo $v['menu_id']; ?>" <?php if (in_array($v['menu_id'], $privs)): ?>checked<?php endif; ?>><?php echo $v['title']; ?>
+            </label>
+        </td>
+        <?php foreach ($v['childs'] as $kk => $vv): ?>
+        <td width="100">
+            <label for="menu_<?php echo $vv['menu_id']; ?>" title="<?php echo $vv['description']; ?>">
+                <input type="checkbox" name="menus[]" id="menu_<?php echo $vv['menu_id']; ?>" value="<?php echo $vv['menu_id']; ?>" onclick="checkSiblings(this);"
+                    <?php if (in_array($vv['menu_id'], $privs)): ?>checked<?php endif; ?>><?php echo $vv['title']; ?></label>
+        </td>
+        <td>
+            <?php foreach ($vv['childs'] as $kkk => $vvv): ?>
+            <div style="width:120px;float:left;padding:5px;">
+            <label for="menu_<?php echo $vvv['menu_id']; ?>" title="<?php echo $vvv['description']; ?>">
+                <input type="checkbox" name="menus[]" id="menu_<?php echo $vvv['menu_id']; ?>" value="<?php echo $vvv['menu_id']; ?>" <?php if (in_array($vvv['menu_id'], $privs)): ?>checked<?php endif; ?>><?php echo $vvv['title']; ?></label>
+            </div>
+            <?php endforeach; ?>
+        </td>
+        </tr>
+        <?php endforeach; ?>
+
+    <?php endforeach; ?>
+    <tr>
+    	<td colspan="3" align="center"><label for="ca"><input type="checkbox" name="ca" id="ca" onclick="checkAll('ca')" />全选</label></td>
+    </tr>
+</table>
+<div style="width: 100%;margin: 0 auto;text-align: center;">
+    <input type="hidden" name="group_id" value="<?php echo $group['group_id']; ?>">
+    <input class="btn btn-info submit" type="submit" name="submit"  value="提交" />
+    <input class="btn btn-info submit" type="reset"  value="重置" />
+    <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/>
+</div>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

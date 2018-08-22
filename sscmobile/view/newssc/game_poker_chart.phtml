@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="no-cache" http-equiv="Pragma">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+     <link href="<?php echo $imgCdnUrl ?>/css/chart.css" rel="stylesheet" type="text/css" />
+     <script language="JavaScript">
+         window.onload = function () {
+            //显示遗漏
+            $("#no_miss").click(function () {
+                var checked = $(this).attr("checked");
+                if (checked == 'checked') {
+                    $('.miss').css('display', 'none');
+                } else {
+                    $('.miss').css('display', 'block');
+                }
+            });
+        };
+    </script>
+
+</head>
+<body>
+    <div id="rightcon_k3">
+<style>
+    esun\:*{behavior:url(#default#VML)}
+    #num{position: relative;index-x:8;background: #DA8028;width:14px;height:14px;
+         -moz-border-radius: 5px;
+         -webkit-border-radius: 5px;border:1px solid #fff;color: #fff;display: block;
+         top:-30px;left:13px;line-height: 14px;text-align:center;
+    }
+    .hrc_list,table{margin:0px auto;display:block}
+    #rightcon_k3 {  display: block;  width: 100%; }
+</style>
+        <div class="rc_con history">
+            <div class="rc_con_lt"></div>
+            <div class="rc_con_rt"></div>
+            <div class="rc_con_lb"></div>
+            <div class="rc_con_rb"></div>
+            <div class="rc_con_to">
+            <div class="rc_con_ti">
+                <div class="history_code" >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tm">
+                        <tbody>
+                            <tr>
+                                <td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> <font color="#FF0000"><?php echo $lottery['cname']; ?>：</font> 基本走势 </strong></td>
+                                <td align="left">
+                                    <div class="Tabfixed">
+                                        <form method="POST">
+                                            <span>
+                                                <label for="no_miss">
+                                                    <input type="checkbox" id="no_miss" value="checkbox" name="checkbox"/>
+                                                    不带遗漏
+                                                </label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <label for="no_miss"> 显示期数：
+                                                <select name='issueNum' id='issueNum'>
+                                                <option value='50' <?php echo ($issueNum == 50) ? 'selected' : ''; ?> >50 &nbsp;&nbsp;期</option>
+                                                <option value='100' <?php echo ($issueNum == 100) ? 'selected' : ''; ?> >100 期</option>
+                                                <option value='200' <?php echo ($issueNum == 200) ? 'selected' : ''; ?> >200 期</option>
+                                                </select>
+                                            </label>
+                                            </span>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hrc_list">
+                    <div class="hrl_list">
+                        <table width="90%" border="0" cellspacing="1" cellpadding="0" id="chartsTable">
+                            <tbody>
+                                <tr class="th">
+                                    <td rowspan="2"><div style="width:auto;">期号</div></td>
+                                    <td colspan="6" rowspan="2">开奖号码</td>
+                                    <td colspan="13" >号码分布</td>
+                                    <td colspan="6">号码形态走势</td>
+                                    <td colspan="4">花色走势</td>
+                                </tr>
+                                <tr class="th">
+                                    <?php foreach ($vaildnum as $num) : ?>
+                                        <td class="wdh"><?php if($num == 'T'): echo 10;else: echo $num;endif; ?></td>
+                                    <?php endforeach; ?>
+
+                                    <?php foreach ($forms as $form) : ?>
+                                        <td width="45" class="wdh"><?php echo $form; ?></td>
+                                <?php endforeach; ?>
+                                <?php foreach ($colorForms as $colorForm) : ?>
+                                        <td width="45" class="wdh"><?php echo $colorForm; ?></td>
+                                <?php endforeach; ?>
+                                </tr>
+
+                                <?php foreach ($codes as $k => $v) : ?>
+                                    <tr>
+                                        <td class="issue"><div><?php echo $v['issue']; ?></div></td>
+
+                                                <?php foreach ($v['openNumber'] as $num): ?>
+                                            <td align="center"><div class="pork_wth">
+                                                    <span class="poker_kj_num
+                                                    <?php
+                                                    switch ($num[1]) {
+                                                        case 'h':
+                                                            echo 'poker_hongt';
+                                                            break;
+                                                        case 'c':
+                                                            echo 'poker_meih';
+                                                            break;
+                                                        case 's':
+                                                            echo 'poker_heit';
+                                                            break;
+                                                        case 'd':
+                                                            echo 'poker_fangk';
+                                                            break;
+                                                    }
+                                                    ?>"><i></i></span>
+                                                </div>
+                                            </td>
+                                            <td align="center"><div class="pork_wth" style="color:<?php
+                                                if ($num[1] == 'h' || $num[1] == 'd') {
+                                                    echo 'red';
+                                                }
+                                                if ($num[1] == 'c' || $num[1] == 's') {
+                                                    echo 'black';
+                                                }
+                                                ?>"><?php if ($num[0] == 'T'): echo 10;else: echo $num[0];endif; ?></div>
+                                            </td>
+                                        <?php endforeach; ?>
+
+                                        <?php
+                                        foreach ($vaildnum as $val):
+                                            $i = 0;
+                                            foreach ($v['openNumber'] as $num):
+                                                if ($val == $num[0]) {
+                                                    $i ++;
+                                                }
+                                            endforeach;
+                                            if ($i):
+                                                ?>
+                                                <td align="center" class="charball">
+                                                    <div class="tenthousand">
+                                                        <div class="ball01" ><?php if ($val == 'T'): echo 10;else: echo $val;endif; ?></div>
+                                                <?php if ($i > 1): ?>
+                                                            <em id="num"><?php echo $i; ?></em>
+                                                <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                                <?php else: ?>
+                                                <td align="center" class="wdh">
+                                                    <div class="tenthousand">
+                                                        <div class="miss"><?php if (isset($v['miss_info'][$val])) echo $v['miss_info'][$val];
+                                                        else echo ''; ?></div>
+                                                    </div>
+                                                </td>
+                                                    <?php endif;endforeach;?>
+
+                                                <!--形态-->
+                                                <?php foreach ($forms as $v4):
+                                                    if ($v4 == $v['form']):
+                                                ?>
+                                                <td align="center" class="charball">
+                                                    <div class="tenthousand_pork" style="background-color: #CCACDF!important;">
+                                                        <div class="tenthousand_pork1" style="background:
+                                                        <?php
+                                                        switch ($v['form']) {
+                                                            case '散牌':
+                                                                echo '#999';
+                                                                break;
+                                                            case '对子':
+                                                                echo '#ae7a47';
+                                                                break;
+                                                            case '豹子':
+                                                                echo '#20BE3A';
+                                                                break;
+                                                            case '同花':
+                                                                echo '#339999';
+                                                                break;
+                                                            case '顺子':
+                                                                echo '#339999';
+                                                                break;
+                                                            case '同花顺':
+                                                                echo '#BE2032';
+                                                                break;
+                                                        }
+                                                        ?>" ><?php echo $v['form']; ?></div></div>
+                                                </td>
+
+                                            <?php else : ?>
+                                                <td align="center" class="wdh">
+                                                    <div class="tenthousand_pork" style="background-color: #CCACDF!important;">
+                                                        <div class="miss"><?php if (isset($v['miss_poker']['form'][$v4])): echo $v['miss_poker']['form'][$v4];else: echo '';endif; ?> </div>
+                                                    </div>
+                                                </td>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                        <!--形态end-->
+                                        <!--花色走势-->
+                                            <?php
+                                            foreach (array('h', 'c', 's', 'd') as $color):
+                                                $i = 0;
+                                                foreach ($v['openNumber'] as $val):
+                                                    if ($color == $val[1]):
+                                                        $i ++;
+                                                    endif;
+                                                endforeach;
+                                                if ($i):
+                                             ?>
+                                                <td align="center" class="charball">
+                                                    <div class="tenthousand_pork" style="background-color: #ACDFB2!important;">
+                                                        <div class="pork_form" ><span class="poker_kj_num
+                                                            <?php
+                                                            switch ($color) {
+                                                                case 'h':
+                                                                    echo 'poker_hongt';
+                                                                    break;
+                                                                case 'c':
+                                                                    echo 'poker_meih';
+                                                                    break;
+                                                                case 's':
+                                                                    echo 'poker_heit';
+                                                                    break;
+                                                                case 'd':
+                                                                    echo 'poker_fangk';
+                                                                    break;
+                                                            }
+                                                            ?>"><i></i></span></div>
+                                                <?php if ($i > 1): ?>
+                                                            <em id="num"><?php echo $i; ?></em>
+                                            <?php endif; ?>
+                                                    </div>
+                                                </td>
+                                            <?php else: ?>
+                                                <td align="center" class="wdh">
+                                                    <div class="tenthousand_pork" style="background-color: #ACDFB2!important;">
+                                                        <div class="miss"><?php if (isset($v['miss_poker']['color'][$color])): echo $v['miss_poker']['color'][$color];else: echo '';endif; ?></div>
+                                                    </div>
+                                                </td>
+                                            <?php endif;endforeach; ?>
+                                        <!--花色走势end-->
+                                    </tr>
+                                    <?php endforeach; ?>
+
+                                    <tr class="th">
+                                        <td rowspan="2"><div style="width:200px; margin: 0 auto; text-align: center;">期号</div></td>
+                                        <td colspan="6" rowspan="2">开奖号码</td>
+                                        <?php foreach ($vaildnum as $num) : ?>
+                                        <td class="wdh"><?php if($num == 'T'): echo 10;else: echo $num;endif; ?></td>
+                                        <?php endforeach; ?>
+
+                                        <?php foreach ($forms as $form) : ?>
+                                        <td width="45" class="wdh"><?php echo $form; ?></td>
+                                        <?php endforeach; ?>
+                                        <?php foreach ($colorForms as $colorForm) : ?>
+                                        <td width="45" class="wdh"><?php echo $colorForm; ?></td>
+                                        <?php endforeach; ?>
+
+                                    </tr>
+                                    <tr class="th">
+                                        <td colspan="13" rowspan="2">号码分布</td>
+                                        <td colspan="6">号码形态走势</td>
+                                        <td colspan="4">花色走势</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    	<script type="text/javascript">
+	    $("#issueNum").change(function(i){
+	    	window.location = "index.jsp?c=game&a=chart&lottery_id=<?php echo $lottery['lottery_id']; ?>&issueNum=" + $(this).val();
+	    });
+    </script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

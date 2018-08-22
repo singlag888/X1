@@ -1,0 +1,310 @@
+<?php $this->import("head"); ?>
+    <style>
+        table.tablesorter thead tr .tablesorter-header {
+            background-image: url(../images/bg.gif);
+            background-repeat: no-repeat;
+            background-position: center right;
+            cursor: pointer;
+            display: inline-block;
+            width: 30px;
+            height: 10px;
+        }
+
+        table.tablesorter thead tr .headerSortUp {
+            background-image: url(../images/asc.gif);
+            background-repeat: no-repeat;
+            background-position: center right;
+            cursor: pointer;
+            display: inline-block;
+            width: 30px;
+            height: 10px;
+        }
+
+        table.tablesorter thead tr .headerSortDown {
+            background-image: url(../images/desc.gif);
+            background-repeat: no-repeat;
+            background-position: center right;
+            cursor: pointer;
+            display: inline-block;
+            width: 30px;
+            height: 10px;
+        }
+
+        #startDate, #endDate, #startDeposit, #endDeposit {
+            width: 150px;
+        }
+
+        /*    table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+                background-color: #8dbdd8;
+            }*/
+    </style>
+    <script src="js/jedate/jedate.js"></script>
+    <script>
+        $(function () {
+            $('input[name=startDate]').val('<?php echo $startDate; ?>');
+            $('input[name=endDate]').val('<?php echo $endDate; ?>');
+            $('input[name=startDeposit]').val('<?php echo $startDeposit; ?>');
+            $('input[name=endDeposit]').val('<?php echo $endDeposit; ?>');
+            $('input[name=lastStartDate]').val('<?php echo $lastStartDate; ?>');
+            $('input[name=lastEndDate]').val('<?php echo $lastEndDate; ?>');
+            $('select[name=has_deposited]').val('<?php echo $has_deposited; ?>');
+            $('select[name=status]').val('<?php echo $status; ?>');
+            $('select[name=online]').val('<?php echo $online; ?>');
+            $('select[name=is_test]').val('<?php echo $is_test; ?>');
+            $('input[name=username]').val('<?php echo $username; ?>');
+            $('input[name=reg_ip]').val('<?php echo $reg_ip; ?>');
+            $('input[name=real_name]').val('<?php echo $real_name; ?>');
+            $('input[name=mobile]').val('<?php echo $mobile; ?>');
+            $('input[name=qq]').val('<?php echo $qq; ?>');
+            $('input[name=email]').val('<?php echo $email; ?>');
+            $('input[name=depositAmount]').val('<?php echo $depositAmount; ?>');
+            $('select[name=parent_id]').val(<?php echo $parent_id; ?>);
+
+
+
+        });
+
+
+    </script>
+<!------------------author snow 引入搜索相关文件--------------------------->
+
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+<!------------------ author snow引入搜索相关文件--------------------------->
+    <div id="query" class="mt10">
+        <h4 class="f14 red">注意:选择“是否存过款”时查询的是历史上是否存款记录，不关联到“存款时间”和“起存金额”等条件</h4>
+        <form name="form1" id="form1" action="./" method="get">
+            <input type="hidden" id="sortKey" name="sortKey" value="<?php echo $sortKey; ?>">
+            <input type="hidden" id="sortDirection" name="sortDirection" value="<?php echo $sortDirection ?>"/>
+
+            <div class="form-inline mt10">
+                <div class="form-group has-default has-feedback">
+                    <label>注册时间:</label>
+                    <input name="startDate" type="text"
+                           onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                           class="input-md form-control tl" id="startDate" value="" size="21"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <div class="form-group has-default has-feedback">
+                    <label>到</label>
+                    <input class="input-md form-control tl" type="text" name="endDate"
+                           onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" id="endDate"
+                           value="" size="21"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <div class="form-group has-default has-feedback ">
+                    <label>存款时间:</label>
+                    <input name="startDeposit" type="text"
+                           onclick="jeDate({dateCell:'#startDeposit',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                           class="input-md form-control tl" id="startDeposit" value="" size="21"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <div class="form-group has-default has-feedback">
+                    <label>到</label>
+                    <input name="endDeposit" type="text"
+                           onclick="jeDate({dateCell:'#endDeposit',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                           class="input-md form-control tl" id="endDeposit" value="" size="21"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+
+
+            </div>
+            <div class="form-inline mt10">
+                <label>起存金额:</label>
+                <input class="input-md form-control" name="depositAmount" size="8" value="0"/>
+                <label class="">是否存过款:</label>
+                <select class="input-md form-control" name="has_deposited">
+                    <option value="-1">请选择</option>
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+                <label>状态:</label>
+                <select class="input-md form-control" name="status">
+                    <option value="-1">请选择</option>
+                    <option value="8">正常</option>
+                    <option value="1">冻结</option>
+                    <option value="0">已删除</option>
+                </select>
+                <input type="radio" name="name_style" id="radio1" value="1"/>
+                <div class="form-group snow-parent-id">
+                    <label>所属总代:&nbsp;&nbsp;</label>
+                    <select id="lunch" class="selectpicker snow-topUser-search" name="parent_id" id="parent_id" data-live-search="true" title="请选择 ...">
+                        <option value="-1">请选择…</option>
+                        <?php foreach ($topUsers as $k => $v): ?>
+                            <option value="<?=$v['user_id']?>"><?=$v['username']?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <label>或</label>
+                <input type="radio" name="name_style" value="2" id="radio2"/>
+                <label for="radio2">用户名:</label>
+                <input class="input-md form-control" name="username" style="width:60px;"size="10" value=""/>
+            </div>
+            <div class="form-inline mt10">
+
+                <label>使用的IP:</label>
+                <input class="input-md form-control" style="width:60px;" name="reg_ip" size="10"/>
+                <label>真实姓名:</label>
+                <input class="input-md form-control" style="width:60px;" name="real_name" size="8"/>
+                <label>手机:</label>
+                <input class="input-md form-control" style="width:60px;" name="mobile" size="8"/>
+                <label>QQ</label>
+                <input class="input-md form-control" style="width:60px;" name="qq" size="8"/>
+                <label>Email</label>
+                <input class="input-md form-control" style="width:60px;" name="email" size="10"/>
+                <label>是否测试:</label>
+                <select class="input-md form-control " name="is_test">
+                    <option value="-1">请选择</option>
+                    <option value="0">非测试帐号</option>
+                    <option value="1">测试帐号</option>
+                </select>
+                <label>是否在线:</label>
+                <select class="input-md form-control " name="online">
+                    <option value="-1">请选择</option>
+                    <option value="1">在线</option>
+                    <option value="0">不在线</option>
+                </select>
+                <label>排序:</label>
+                <select class="input-md form-control " name="sort">
+                    <option value="0">不限</option>
+                    <option value="1" <?php if($sort==1) echo 'selected="selected"'?> >注册时间升序</option>
+                    <option value="2" <?php if($sort==2) echo 'selected="selected"'?> >注册时间降序</option>
+                    <option value="3" <?php if($sort==3) echo 'selected="selected"'?> >会员级别升序</option>
+                    <option value="4" <?php if($sort==4) echo 'selected="selected"'?> >会员级别降序</option>
+                </select>
+                <input class="btn btn-info" style="width: 40px;" type="submit" value="查 询"/>
+                <input type="hidden" name="c" value="user"/>
+                <input type="hidden" name="a" value="userList"/>
+                <input type="hidden" name="recursive" value="0"/>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div class="list-div form-top mt10" id="listDiv">
+        <table class="table table-responsive table-bordered  mainList tablesorter" width="100%">
+            <thead>
+            <tr>
+                <td>user_id</td>
+                <td>用户名</td>
+<!--                    添加一行显示会员上级名称 by snow  2017-08-30 16:10-->
+                <td>用户上级</td>
+                <td onclick="javascript:switch_sort('level');">类型
+                    <i class="<?php if ($sortKey == 'level' && $sortDirection == 1): ?>headerSortUp<?php elseif ($sortKey == 'level' && $sortDirection == -1): ?>headerSortDown<?php else: ?>tablesorter-header<?php endif; ?>"></i>
+                </td>
+                <td onclick="javascript:switch_sort('balance');">余额
+                    <i class="<?php if ($sortKey == 'balance' && $sortDirection == 1): ?>headerSortUp<?php elseif ($sortKey == 'balance' && $sortDirection == -1): ?>headerSortDown<?php else: ?>tablesorter-header<?php endif; ?>"></i>
+                </td>
+                <td>充值</td>
+                <td>提款</td>
+                <td onclick="javascript:switch_sort('reg_time');">注册时间
+                    <i class="<?php if ($sortKey == 'reg_time' && $sortDirection == 1): ?>headerSortUp<?php elseif ($sortKey == 'reg_time' && $sortDirection == -1): ?>headerSortDown<?php else: ?>tablesorter-header<?php endif; ?>"></i>
+                </td>
+                <td>注册IP</td>
+                <td onclick="javascript:switch_sort('last_time');">最近登录时间
+                    <i class="<?php if ($sortKey == 'last_time' && $sortDirection == 1): ?>headerSortUp<?php elseif ($sortKey == 'last_time' && $sortDirection == -1): ?>headerSortDown<?php else: ?>tablesorter-header<?php endif; ?>"></i>
+                </td>
+                <td>最近登录IP</td>
+                <td>状态</td>
+                <td>在线状态</td>
+                <td style="width: 12%;">操作</td>
+            </tr>
+            </thead>
+            <?php foreach ($finalUsers as $v): ?>
+                <tr>
+                    <td><?php echo $v['user_id']; ?></td>
+                    <td><a href="?c=user&a=userList&parent_id=<?php echo $v['user_id']; ?>"
+                           title="点击查看下级用户"><?php echo $v['username']; ?><b
+                                    style="color:red"><?php if ($v['is_test']): ?>[测试]<?php elseif ($v['type']): ?>
+                                [推广]</b><?php endif; ?></a></td>
+<!--                    添加一行显示会员上级名称 by snow  2017-08-30 16:10-->
+                    <td><a href="?c=user&a=userList&parent_id=<?php echo $v['parent_id']; ?>"
+                           title="点击查看下级用户"><?php echo $v['level'] == 0 ? '-' : $v['parent_name']; ?><b
+                                style="color:red"><?php if ($v['parent_is_test']): ?>[测试]<?php elseif ($v['parent_type']): ?>
+                                [推广]</b><?php endif; ?></a></td>
+<!--                    <td>--><?php //echo $v['parent_name'] ; ?><!--</td>-->
+                    <td><?php echo $v['level'] != 100 ? $v['level'] . '代' : '会员'; ?></td>
+                    <td>￥<?php echo $v['balance']; ?></td>
+                    <td>￥<?php echo $v['deposit']; ?></td>
+                    <td>￥<?php echo $v['withdraw']; ?></td>
+                    <td title="<?php echo $v['reg_time']; ?>"><?php echo $v['reg_time']; ?></td>
+                    <td><?php echo ip::loc($v['reg_ip']); ?></td>
+                    <td title="<?php echo $v['last_time']; ?>"><?php echo $v['last_time']; ?></td>
+
+                    <td><?php echo ip::loc($v['last_ip']); ?></td>
+                    <td>
+                        <?php if ($v['status'] == 0): ?><b><font color="red">已删除</font></b>
+                        <?php elseif ($v['status'] == 1): ?><b><font color="red">已冻结</font></b>
+                        <?php elseif ($v['status'] == 5): ?><b><font color="red">已回收</font></b>
+                        <?php elseif ($v['status'] == 8): ?>正常
+                        <?php endif; ?>
+                        <?php if ($v['islock'] == 1): ?><br/><b><font color="red">已锁定</font></b>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $v['online'] ? '<font style="color: #ff0000">在线</font>' : '已下线'; ?></td>
+                    <td>
+                        <?php if ($canViewUser): ?><a class="btn btn-mini btn-info" target="_blank"
+                                                      href="?c=user&a=viewUser&user_id=<?php echo $v['user_id']; ?>">
+                                查看</a>&nbsp;<?php endif; ?>
+<!--                        --><?php //if ($canEditRealName): ?><!--<a class="btn btn-mini btn-info"-->
+<!--                                                          href="?c=user&a=editRealName&user_id=--><?php //echo $v['user_id']; ?><!--&parent_id=--><?php //echo $parent_id; ?><!--">-->
+<!--                                姓名</a>&nbsp;--><?php //endif; ?>
+                        <?php if ($canEditRebate): ?><a class="btn btn-mini btn-info"
+                                                        href="?c=user&a=editRebate&user_id=<?php echo $v['user_id']; ?>&parent_id=<?php echo $v['parent_id']; ?>">
+                                返点</a>&nbsp;<?php endif; ?>
+                        <?php if ($canKillMmc): ?><a class="btn btn-mini btn-info"
+                                                     href="?c=user&a=editKillMmc&user_id=<?php echo $v['user_id']; ?>">
+                                杀率</a>&nbsp;<?php endif; ?>
+                        <?php if ($v['status'] == 8): ?>
+                            <?php if ($canEditQuota): ?><a class="btn btn-mini btn-info"
+                                                           href="?c=user&a=editQuota&user_id=<?php echo $v['user_id']; ?>">
+                                    配额</a>&nbsp;<?php endif; ?>
+                            <?php if ($canEditPwd): ?><a class="btn btn-mini btn-info"
+                                                         href="?c=user&a=editPwd&user_id=<?php echo $v['user_id']; ?>">
+                                    密码</a>&nbsp;<?php endif; ?>
+                            <?php if ($canFreezeUser): ?><a class="btn btn-mini btn-info"
+                                                            href="?c=user&a=freezeUser&user_id=<?php echo $v['user_id']; ?>">
+                                    冻结</a>&nbsp;<?php endif; ?>
+                            <?php if ($cansendMsg): ?><a href="?c=user&a=sendMsg&user_id=<?php echo $v['user_id']; ?>">
+                                    发送消息</a>&nbsp;<?php endif; ?>
+                            <?php if ($canDeleteUser): ?><a class="btn btn-mini btn-info"
+                                                            href="?c=user&a=deleteUser&user_id=<?php echo $v['user_id']; ?>"
+                                                            onclick="return confirm('真的要删除吗？该操作不可恢复！');">
+                                    删除</a>&nbsp;<?php endif; ?>
+                        <?php elseif ($v['status'] == 0): ?>
+
+                        <?php elseif ($v['status'] == 1): ?>
+                            <?php if ($canUnfreezeUser): ?><a class="btn btn-mini btn-info"
+                                                              href="?c=user&a=unFreezeUser&user_id=<?php echo $v['user_id']; ?>">
+                                    解冻</a>&nbsp;<?php endif; ?>
+                        <?php elseif ($v['status'] == 5): ?>
+
+                        <?php endif; ?>
+                        <a class="btn btn-mini btn-info"
+                           href="?c=user&a=batchSendMessage&user_id=<?php echo $v['user_id']; ?>">消息</a>&nbsp;
+                        <!--<a href="./?c=lottery&a=deleteLottery&user_id=<?php echo $v['user_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>&nbsp; -->
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="pageTal">
+        <span>用户在线数：<?php echo $totalCount; ?></span>
+
+        <?php echo $pageList; ?>
+    </div>
+
+    <script>
+        function switch_sort(key) {
+            var old_key = $('#sortKey').val();
+            if (key == old_key) {
+                $('#sortDirection').val(-1 * $('#sortDirection').val());
+            } else {
+                $('#sortDirection').val(-1);
+                $('#sortKey').val(key);
+            }
+            //submit
+            $('#form1').submit();
+        }
+    </script>
+<?php $this->import("foot"); ?>

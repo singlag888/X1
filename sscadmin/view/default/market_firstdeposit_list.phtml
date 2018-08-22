@@ -1,0 +1,31 @@
+<?php $this->import("head"); ?>
+
+<style>
+    body{text-align: center}
+    table,tbody{display:block;}
+    table{width: 60%;border: solid 1px #000}
+    tr{width:100%;clear:both}
+    th{background: #81c0c0;border-left: solid 1px #ffffff;width: 15%;text-align:center;vertical-align: middle; }
+    td{width: 15%;border-left: solid 1px #eee;text-align:center;vertical-align: middle;}
+</style>
+<table class="table table-responsive table-bordered mt20">
+    <tr>
+        <th>用户ID</th>
+        <th>用户名</th>
+        <th>注册时间</th>
+        <th>首存时间</th>
+        <th>首存金额</th>
+        <th>同名用户数</th>
+    </tr>
+    <?php foreach ($deposits as $v): ?>
+        <tr>
+            <td><?php echo $v['user_id']; ?></td>
+            <td><?php echo $v['username']; ?></td>
+            <td><?php echo $v['reg_time']; ?></td>
+            <td><?php echo $v['create_time']; ?></td>
+            <td><?php echo $v['amount']; ?></td>
+            <td><?php echo $v['real_name_num']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php $this->import("foot"); ?>

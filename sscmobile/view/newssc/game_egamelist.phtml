@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>游戏记录</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href="index.jsp?c=game&a=packageList">个人投注明细</a></li>
+                            <li><a href="index.jsp?c=game&a=packageTeamList">团队投注明细</a></li>
+                            <li><a href="index.jsp?c=game&a=traceList">追号记录</a></li>
+                           <!-- <li><a href="index.jsp?c=game&a=egameList" class="subcur">休闲游戏记录</a></li> -->
+                            <?php if ($user['level'] == 10) : ?>
+                            <li><a href="index.jsp?c=game&a=memberReport">游戏报表</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <!-- 搜索栏 -->
+                            <div class="SearchBar">
+                                <form name="form1" id="form1" action="" method="GET">
+                                    <ul>
+                                        <li style="display:none">
+                                            <label>用户名：</label>
+                                            <input name="username" class="txtStyle" type="text"/>
+                                        </li>
+                                        <li>
+                                            <label>游戏时间：</label>
+                                            <div class="MutiTxt">
+                                                <input size="12" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                                <em>到</em>
+                                                <input size="12" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <input type="hidden" name="c" value="game"/>
+                                            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                                            <input type="hidden" id="sortKey"  name="sortKey" value=""/>
+                                            <input type="hidden" id="sortDirection" name="sortDirection" value="1"/>
+                                            <input type="submit" value="查询" class="btnStyle m010">
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <div class="TabMutiScroll scrollbar">
+                            <table id="dataTable" class="tab01"  border="0" cellspacing="0" cellpadding="0">
+				                <tr class="intro2">
+				                  <th>用户名</th>
+				                  <th>投注总额</th>
+				                  <th>中奖金额</th>
+				                  <th>游戏盈亏</th>
+				                </tr>
+					                <tr class="recordsContent intro1">
+					                	<td><?php echo $username; ?></td>
+					                    <td><?php echo number_format(empty($childReport['pt_buy_amount'])?'0':$childReport['pt_buy_amount'], 2); ?></td>
+					                    <td><?php echo number_format(empty($childReport['pt_prize'])?'0':$childReport['pt_prize'], 2); ?></td>
+					                    <td><?php echo number_format(empty($childReport['pt_game_win'])?'0':$childReport['pt_game_win'], 2); ?></td>
+					                </tr>
+					            	<tr class="intro2">
+					            		<th colspan="4">注：可以查询35天以内的数据</th>
+					            	</tr>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script>
+            $(function() {
+                //设置默认值
+                $('input[name=username]').val('<?php echo $username; ?>');
+                $('#startDate').val('<?php echo $startDate; ?>');
+                $('#endDate').val('<?php echo $endDate; ?>');
+            });
+        </script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

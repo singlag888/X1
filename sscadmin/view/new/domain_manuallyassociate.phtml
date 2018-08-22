@@ -1,0 +1,84 @@
+<?php $this->import("head"); ?>
+
+<script>
+function checkform(ob) {
+        var msg = "";
+
+        if ($('input[name=domain]').val() === '') {
+            msg = '请输入域名！';
+        }
+
+        if (msg !== "") {
+            alert(msg);
+            return false;
+        }
+
+        return true;
+}
+
+function checkDomain() {
+    $('input[name=submit]').attr('disabled','true');
+
+    $.ajax({
+        type:"POST",
+        url:"?c=domain&a=manuallyAssociate",
+        dataType:"json",
+        data:"check_domain=1&domain=" + $('input[name=domain]').val(),
+        success:function(response) {
+            if (response.errno === 0) {
+                $('b[name=domain_description]').css('color', 'green');
+                $('input[name=submit]').removeAttr('disabled');
+            }
+            else{
+                $('b[name=domain_description]').css('color', 'red');
+            }
+
+            $('b[name=domain_description]').text(response.errstr);
+        },
+        error:function(data)
+        {
+            alert('调用 ajax 出错：' + data.toString());
+            return false;
+        }
+    });
+}
+</script>
+<div class="list-div add-main mt20" id="addDiv">
+    <form name="form1" id="form1" class="form-top" action="./?c=domain&a=manuallyAssociate" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive  table-bordered " cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td class="rowTitle" colspan="2">
+                    <b>推广域名手动分配</b><b style="color:red">（仅供推广域名绑定推广用户使用，输入以后需要先检测才能提交）</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%">推广域名</td>
+                <td>
+                    <input class="input-md form-control" type="text" name="domain" onchange="checkDomain();" />
+                    <input class="btn btn-info submit" name="check" value="检测域名是否可用" onclick="checkDomain();" />
+                    <b name="domain_description" style="color:red"></b>
+                </td>
+            </tr>
+            <tr>
+                <td>总代</td>
+                <td>
+                    <select class="input-sm form-control" name="top_id">
+                    <?php foreach ($tops as $v): ?>
+                    <option value="<?php echo $v['user_id']; ?>"><?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;margin:0 auto;text-align:center;">
+                        <input class="btn btn-info submit" style="width: 60px;" type="submit"  name="submit" value="提交" disabled=true />
+                        <input class="btn btn-info submit" style="width: 60px;"  type="button"  onclick="javascript:history.go(-1);" value="返回" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

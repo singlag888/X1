@@ -1,0 +1,42 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="listDiv">
+<form name="form1" class="form-top" id="form1" action="?c=method&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>" method="post">
+    <table class="table table-responsive  table-bordered mainList mt20" width="100%">
+        <thead>
+            <tr class="trhead">
+                <td>所属彩种</td>
+                <td>mg_id</td>
+                <td>玩法组名称</td>
+                <td>说明</td>
+                <td>排序</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+            <?php foreach ($groups as $v): ?>
+            <tr>
+                <td><?php echo $lottery['name']; ?></td>
+                <td><?php echo $v['mg_id']; ?></td>
+                <td><?php echo $v['name']; ?></td>
+                <td><?php echo $v['description']; ?></td>
+                <td>
+                    <input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['mg_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"/></td>
+                <td>
+                    <a class="btn btn-mini btn-info" href="./?c=method&a=methodList&mg_id=<?php echo $v['mg_id']; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>">玩法</a>&nbsp;
+                    <a class="btn btn-mini btn-info" href="./?c=method&a=editGroup&mg_id=<?php echo $v['mg_id']; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>">修改</a>&nbsp;
+                    <!--<a href="./?c=method&a=deleteGroup&group_id=<?php echo $v['group_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>-->
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+                <td>
+                    <input class="submit btn btn-default" style="width: 50px;"  type="submit" name="submit"  value="保存"/>
+                </td>
+                <td></td>
+            </tr>
+    </table>
+    <input type="hidden" name="sa" value="saveSort"/>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

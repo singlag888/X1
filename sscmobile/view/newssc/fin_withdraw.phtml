@@ -1,0 +1,168 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+        <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+        <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+        <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+        <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+        <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    </head>
+    <body>
+        <!-- 中间选择游戏部分 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="passwordNeir">
+                    <form id="form1">
+                        <table class="moneyBank moneyBankBJ">
+                            <tr>
+                                <th>银行名称：</th>
+                                <td>
+                                    <?php echo $withdrawBankList[ $userBindCard['bank_id'] ]; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php echo $userBindCard['bank_username']; ?>：</th>
+                                <td class="card_default">
+                                    <span><?php echo $userBindCard['card_num']; ?></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="moneyBank">
+                            <td class="card_default TextAlignC" colspan="2";>
+                            </td>
+                        </table>
+                        <table class="moneyBank">
+                            <tr>
+                                 <li class="ImportText MarginTop10" >
+                                    <label for="password" class="control_label">提款金额：</label>
+                                    <input class="textBank" name="withdraw_amount" type="text" id="withdraw_amount" />
+                                </li>
+                            </tr>
+                            <tr>
+                                 <li class="ImportText MarginTop10" >
+                                    <label for="password" class="control_label">资金密码：</label>
+                                    <input class="textBank" type="password" name="secpassword" id="secpassword">
+                                </li>
+                            </tr>
+                            <div class="remind">
+                               <img class="remind_02" src="<?php echo $imgCdnUrl ?>/images/mobile/point_01.png"/>
+                                <p>单日最大提款限额<?php echo $dayMax ?>元</p>
+                            </div>
+                            <tr>
+                                <th></th>
+                                <td>
+                                    <div class="doubleBankBtn">
+                                        <input class="Button_red" type="button" id="submitBtn" value="确认提交" name="submitBtn" >
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('input[name=secpassword]').val('');
+            });
+            function checkform(ob) {
+                msg = '';
+                if (!/^[1-9]\d*(\.\d{1,2})*$/.test(parseFloat(ob.withdraw_amount.value))) {
+                    msg = "请输入正确的金额,保留两位小数";
+                }
+                else if(ob.secpassword.value == "" ){
+                    msg = "资金密码不能为空";
+                }
+                else if (ob.withdraw_amount.value < 10) {
+                    msg = "提款金额不能小于10元";
+                }
+                else if (ob.withdraw_amount.value > 100000) {
+                    msg = "提款金额不能大于100000元";
+                }
+                if (msg != "") {
+                    top.layer.alert(msg + "！",{icon:7});
+                    return false;
+                }
+
+                return true;
+            }
+            var Flag=0;
+            $("#submitBtn").click(function(){
+                var msg = '';
+                var amount = $("#withdraw_amount").val();
+                var pwd = $("#secpassword").val();
+				var min = <?php echo $min ;?>;
+				var max = <?php echo $max ;?>;
+                if (!/^[1-9]\d*(\.\d{1,2})*$/.test(parseFloat(amount))) {
+                    msg = "请输入正确的金额,保留两位小数";
+                }
+                else if( pwd == "" ){
+                    msg = "资金密码不能为空";
+                }
+                else if (amount < min) {
+                    msg = "提款金额不能小于<?php echo $min ;?>元";
+                }
+                else if (amount > max) {
+                    msg = "提款金额不能大于<?php echo $max ;?>元";
+                }
+                if (msg != "") {
+                    top.layer.alert(msg + "！",{icon:7});
+                    return false;
+                }
+                Flag+=1;
+		            if(Flag==1){
+                $.ajax({
+                        url: "?c=fin&a=withdraw",
+                        type: "POST",
+                        data: {
+                            "op": "doWithdraw",
+                            "bind_card_id" : 0,
+                            "withdraw_amount" : amount,
+                            "secpassword" : pwd,
+                            "flag" : 'ajax'
+                        },
+                        cache: false,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.errno == 0) {
+                                top.layer.alert('提款金额：' + amount + ','+response.errstr,{icon:1});
+                                var btn = $(window.top.document).find(".xubox_yes").get(0);
+                                $(btn).live('click',function(){
+                                    top.layer.closeAll();
+                                });
+                                $.post('?c=fin&a=withdraw',{flag:"ip_chk",op:"doWithdraw"},function(){});
+                            } else {
+                                top.layer.alert("错误号:"+response.errno+","+response.errstr,{icon:7});
+                                if(response.errno == 10){
+                                    $.post('?c=fin&a=withdraw',{flag:"ip_chk",op:"doWithdraw"},function(){});
+                                }
+                                return false;
+                            }
+                        }
+                    })
+                    var disonckick=setInterval(function(){
+                    				Flag=0;
+                    				if(Flag==0){
+                    					clearInterval(disonckick);
+                    				}
+                    			},3000)
+                  }
+                });
+        </script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

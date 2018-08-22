@@ -1,0 +1,41 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=unFreezeUser" method="post">
+<table>
+    <tr>
+        <td width="40%">用户id</td>
+        <td width="60%"><?php echo $user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td width="40%">用户名</td>
+        <td width="60%"><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td>目前状态</td>
+        <td>
+            <?php if ($user['status'] == 0): ?>已删除
+            <?php elseif ($user['status'] == 1): ?>冻结不可登录
+            <?php elseif ($user['status'] == 8): ?>正常
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td width="40%">历史备注</td>
+        <td width="60%"><?php echo $user['remark']; ?></td>
+    </tr>
+    <tr>
+        <td>解冻原因</td>
+        <td><textarea  name="reason" value=""></textarea></td>
+    </tr>
+    <tr>
+        <td>是否连带解冻其下级？</td>
+        <td><input type="checkbox" name="includeChild" value="1" /></td>
+    </tr>
+</table>
+    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" /><input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />
+    <input type="hidden" name="op" value="doUnFreezeUser" />
+    <input type="button" class="submit" name="submitBtn" value="确认操作" onclick="if(confirm('确定要解冻该用户吗？')) {this.form.submit();}"/>
+</form>
+</div>
+<?php $this->import("foot"); ?>

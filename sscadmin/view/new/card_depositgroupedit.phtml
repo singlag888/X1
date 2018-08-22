@@ -1,0 +1,59 @@
+<?php $this->import("head"); ?>
+
+<script>
+    $(document).ready(function () {
+        let $action = '<?php echo ACTION; ?>';
+        if ($action === 'depositGroupUpdate') {
+            $("input[name=cdg_id]").val("<?php echo $data['cdg_id']; ?>");
+            $("input[name=group_name]").val("<?php echo $data['group_name']; ?>");
+            $("input[name=fee_rate]").val("<?php echo $data['fee_rate']; ?>");
+            $("input[name=sort]").val("<?php echo $data['sort']; ?>");
+            $("input[name=status]").attr("<?php if ($data['status'] == 1) {
+                echo 'checked';
+            } else {
+                echo '';
+            } ?>", "");
+
+        }
+    });
+</script>
+<div class="list-div add-main mt20" id="addDiv">
+    <form name="form1" id="form1" class="form-top" action="./?c=card&a=<?php echo ACTION; ?>" method="post"
+          onsubmit="return checkform(this)">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:60%;">
+
+            <tr>
+                <td class="fb">充值类别名称</td>
+                <td><input class="input-md form-control" name="group_name" maxlength="20"/></td>
+            </tr>
+
+            <tr>
+                <td class="fb">充值优惠比率(例如千分之五 填写 0.005)</td>
+                <td><input class="input-md form-control" name="fee_rate" /></td>
+            </tr>
+
+            <tr>
+                <td class="fb">启用</td>
+                <td><input type="checkbox" name="status" value="1"></td>
+            </tr>
+            </tr>
+            <tr>
+                <td class="fb">卡组的优先级（越大越靠前）</td>
+                <td><input class="input-md form-control" name="sort" value="100"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:40%;margin:0 auto;text-align:center;">
+                        <input class="btn btn-info submit" style="width: 60px;" type="submit" name="submit"
+                               value="<?php if (ACTION == 'depositGroupAdd'): ?>提交<?php else: ?>更新<?php endif; ?>"/>
+                        <input class="btn btn-info submit" style="width: 60px;" type="button"
+                               onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="cdg_id" value=""/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

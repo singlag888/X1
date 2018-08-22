@@ -1,0 +1,39 @@
+@charset "utf-8";
+.content{width:100%;min-width:1200px;position:relative;background-color:#e9e9e9}
+.main{width:1000px;position:relative;margin:0 auto;z-index:2}
+.banner{width:100%;text-align:center;overflow:hidden;position:absolute;top:0}
+.banner img{display:block;position:relative;left:50%;margin-left:-950px}
+.bannerMain{width:560px;height:394px;background:url(../images/register/banner.png) no-repeat center;position:absolute;left:50%;top:0;margin-left:-280px;z-index:1}
+.giftFoot{width:100%;height:270px;background:url(../images/register/footBg.jpg) no-repeat center bottom #e9e9e9;position:absolute;bottom:-270px}
+.giftPopup{width:360px;position:fixed;top:200px;left:50%;margin-left:-180px;z-index:9;background-color:#fff;display:none}
+.giftPopup h3{font:400 14px/36px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;background-color:#236aba;color:#fff;padding-left:20px}
+.giftPopup .giftPopMain{min-height:100px;display:table}
+.giftPopup .giftPopMain .giftPopText{display:table-cell;vertical-align:middle;padding:14px 50px}
+.giftPopup .giftPopMain .giftPopText p{font:400 14px/22px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;color:#333;text-justify:inter-ideograph;text-align:justify}
+.giftPopup .giftPopBtn{padding:10px 20px}
+.giftPopup .giftPopBtn a{width:60px;height:24px;font:400 14px/22px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;border-radius:6px;background-color:#236aba;color:#fff;text-align:center;display:block;float:right;margin-left:10px}
+.giftPopup .giftPopBtn a:hover{background-color:#488ad4}
+.PopBg{width:100%;position:absolute;left:0;top:0;background-color:#666;filter:Alpha(opacity=50);opacity:.5;-moz-opacity:.5;z-index:8;display:none}
+
+.main{width:1020px;}
+.regRedbag{width:848px;margin:0 auto;padding-top:128px;}
+.regRedbagTop{height:380px;background:url(../images/register/redbag.png) no-repeat center;}
+.regRedbagmain{height:380px;border-radius:0 0 6px 6px;background-color:#f02425;box-shadow:0px 6px 6px rgba(0,0,0,.25);}
+.regRedbagmain{text-align:center;}
+.regRedbagmain .regRedbagTime{text-align:center;color:#fff;padding:50px 0;font-size:18px;}
+.regRedbagBtn{position:relative;z-index:5;}
+.regRedbagBtn li{width:245px;height:144px;display:inline-block;margin:0 60px;}
+.regRedbagBtn li a{height:100%;display:block;background:url(../images/register/registered.png) no-repeat 0 0;}
+.regRedbagBtn li a:hover{background-position:0 -144px;}
+.regRedbagBtn li a label,.regRedbagBtn li a span{display:block;text-indent:-5px;cursor:pointer;}
+.regRedbagBtn li a label{font-size:18px;color:#891212;text-align:center;padding:24px 0 20px 0;}
+.regRedbagBtn li a label em{font-weight:normal;}
+.regRedbagBtn li a span{font-size:22px;color:#ee4d28;text-align:center;font-weight:bold;}
+.regRedbagBtn li a span strong{font-size:40px;margin:0 10px;line-height:30px;}
+.regRedbagRule{background:url(../images/register/mainBg.jpg) repeat-y center top;padding:130px 0 80px 0;}
+.RuleTitle{width:190px;border-left:6px solid #f02425;border-right:6px solid #f02425;margin:0 auto 40px auto;}
+.RuleTitle h3{border-left:6px solid #fff;border-right:6px solid #fff;background-color:#f02425;text-align:center;color:#fff;font-size:24px;line-height:44px;text-indent:18px;}
+.RuleText{padding:0 40px;}
+.RuleText p{min-height:45px;font-size:18px;color:#863a3a;background:url(../images/register/registered.png) no-repeat -262px 0;padding:10px 0 0 50px;margin-bottom:10px;text-justify:inter-ideograph;text-align:justify;}
+.banner img.paper{position:absolute;left:50%;top:50px;margin-left:-335px;z-index:3;}
+.main img.papermoney{position:absolute;left:50%;top:24px;margin-left:-440px;z-index:4;}

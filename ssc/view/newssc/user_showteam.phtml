@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+        <?php $this->import('public_cssjs') ?>
+    </head>
+
+    <body>
+    <?php $this->import('public_header') ?>
+        <!-- 中间选择游戏部分 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>团队</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_ContBox NoFloatCent">
+                        <div class="subContCent">
+                            <div class="FormTab2 w60b FromInfo">
+                                <ul>
+                                    <li>
+                                        <label class="w100px">用户名：</label><div class="must">&nbsp;</div><span class="mail_info"><strong class="user-cc-news01" id="spanRealName"><?php echo $user['username']; ?></strong></span>
+                                    </li>
+                                    <li>
+                                        <label class="w100px">上级代理：</label><div class="must">&nbsp;</div><span class="mail_info"><strong class="user-cc-news01" id="spanRealName"><?php echo $parent['username']; ?></strong></span>
+                                    </li>
+                                    <li>
+                                        <label class="w100px">该用户团队余额：</label><div class="must">&nbsp;</div><span class="mail_info"><strong class="user-cc-news01" id="spanRealName"><?php echo $balance; ?>元</strong></span>
+
+                                    </li>
+                                    <li>
+                                        <label class="w100px">&nbsp;</label>
+                                        <div class="must">&nbsp;</div>
+                                        <input type="button" onclick="javascript:history.go(-1);"  class="btnStyle locate15px" value="返回" name="返回">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--公用foot-->
+            <?php $this->import('public_foot') ?>
+            <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+            <script src="js/My97DatePicker/WdatePicker.js"></script>
+            <script>
+                                    $(function() {
+
+                                        //设置默认值
+                                        $('input[name=username]').val('<?php echo $username; ?>');
+                                        $('#startDate').val('<?php echo $startDate; ?>');
+                                        $('#endDate').val('<?php echo $endDate; ?>');
+                                        $('#sortDirection').val('<?php echo $sortDirection ?>');
+
+                                        $('thi').has('div.caret_point').hover(function() {
+                                            $(this).find('p:eq(0)').addClass('caret_up');
+                                            $(this).find('p:eq(1)').addClass('caret_down');
+                                        }, function() {
+                                            $(this).find('p:eq(0)').removeClass('caret_up');
+                                            $(this).find('p:eq(1)').removeClass('caret_down');
+                                        });
+                                        <?php if ($sortKey): ?>
+                                            $('#sortKey').val('<?php echo $sortKey; ?>');
+                                        <?php endif; ?>
+                                    });
+                                    function switch_sort(key) {
+                                        var old_key = $('#sortKey').val();
+                                        if (key == old_key) {
+                                            $('#sortDirection').val(-1 * $('#sortDirection').val());
+                                        } else {
+                                            $('#sortDirection').val(-1);
+                                            $('#sortKey').val(key);
+                                        }
+                                        //submit
+                                        $('#form1').submit();
+                                    }
+        </script>
+    </body>
+</html>

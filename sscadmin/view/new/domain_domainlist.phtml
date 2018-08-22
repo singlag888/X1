@@ -1,0 +1,259 @@
+<?php $this->import("default_top"); ?>
+<?php $this->import("default_left"); ?>
+<link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/view/new/css/domain.css" />
+
+<script type="text/html" id="domain_list_toolbar" >
+  <div class="domain-promotion-code" lay-event="promotionCode"><span>推广码</span></div>
+  <div class="domain-edit-info" lay-event="edit"><span>编辑</span></div>
+  <div class="domain-unbind-user" lay-event="unlock"><span>解绑</span></div>
+</script>
+
+<div class="dc-right-body custom-defind-common dc-body-common-div">
+	<div class="dc-user-management-top">
+	  <div class="dc-user-management_title"><span>域名管理</span></div>
+	  <div id="domain_management_bind" class="domain-management-button" onclick="bindDomain4Users()"><span>域名绑定</span></div>
+   	  <div id="domain_management_addNews" class="domain-management-button" onclick="addDomainList()"><span>新增域名</span></div>
+	</div>
+	
+	<div id="domain_management_form">
+	  <div id="domain_form_proxy_acct" >
+  	    <p><span>代理账号：</span></p>
+  	    <input type="text" name="" class="user-condition-input" />
+  	  </div>
+  	  <div id="domain_form_proxy_domain" >
+  	    <p><span>代理域名：</span></p>
+  	    <input type="text" name="" class="user-condition-input" />
+  	  </div>
+  	  <div id="domain_form_select" class="domain-management-button">
+	    <span>查询</span>
+	  </div>
+	    <div id="domain_form_reset" class="domain-management-button" >
+	    <span>重置</span>
+	  </div>
+	</div>
+	<div id="domain_list_export" ><span>导出</span></div>
+	  <div id="domain_grid_div" >
+	    <table lay-filter="loadDomainData">
+	      <thead>
+  	        <tr>
+  	          <th lay-data="{field: 'porxyAcct', width:125, align:'center'}">代理账号</th>
+  	          <th lay-data="{field: 'proxyDomain', align:'center', width:300}">代理域名</th>
+  	          <th lay-data="{field: 'modifyDate', align:'center', width: 200}">修改时间</th>
+  	          <th lay-data="{field: 'remark', align:'center', width: 100}">备注</th>
+  	          <th lay-data="{field: 'status', align:'center', width: 100}">状态</th>
+  	          <th lay-data="{field: 'operation', align:'center', width: 358, toolbar: '#domain_list_toolbar'}">操作</th>
+  	        </tr>
+  	    </thead>
+  	    <tbody>
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	          
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	      <tr>
+  	        <td>小强</td>
+  	        <td>www.8888888.com</td>
+  	        <td>2018-1-1 6:15:55</td>
+  	        <td>模拟模拟</td>
+  	        <td>启用</td>
+  	        <td>
+  	        </td>
+  	      </tr> 
+  	    </tbody>
+	    </table>
+	  </div>
+</div>

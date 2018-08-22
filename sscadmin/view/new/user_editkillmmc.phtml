@@ -1,0 +1,47 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=editKillMmc" method="post">
+<table class="table table-responsive table-bordered" style="width:50%;">
+    <tr>
+        <td class="rowTitle" colspan="2">
+            <b>修改杀率</b>
+        </td>
+    </tr>
+    <tr>
+        <td width="20%">用户id</td>
+        <td><?php echo $user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td>用户名</td>
+        <td><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td>用户类型</td>
+        <td>
+            <?php if ($user['level'] == 0): ?>总代
+            <?php elseif ($user['level'] == 1): ?>一代
+            <?php elseif ($user['level'] < 10): ?>代理
+            <?php else: ?>会员
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>秒秒彩杀率</td>
+        <td>
+            <input class="input-md form-control" style="width: 45%;"  type="text" name="kill_mmc" value="<?php echo $user['kill_mmc']; ?>">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="text-align:center;">
+                <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" />
+                <input type="hidden" name="op" value="doEditKill" />
+                <input class="btn btn-info submit" type="button" style="width: 100px;"  name="submitBtn" value="修改" onclick="if(confirm('确定要修改该用户的秒秒彩杀率吗？')) {this.form.submit();}"/>
+            </div>
+        </td>
+    </tr>
+</table>
+    
+</form>
+</div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $apiUrl; ?>' method='post'>
+    <input type="hidden" name="outOrderId"		  value="<?php echo $postFields['outOrderId'] ?>" />
+    <input type="hidden" name="merchantCode" value="<?php echo $postFields['merchantCode'] ?>" />
+    <input type="hidden" name="totalAmount"     value="<?php echo $postFields['totalAmount'] ?>"/>
+    <input type="hidden" name="merchantOrderTime"      value="<?php echo $postFields['merchantOrderTime'] ?>"/>
+    <input type="hidden" name="notifyUrl"  value="<?php echo $postFields['notifyUrl'] ?>"/>
+    <input type="hidden" name="randomStr"  value="<?php echo $postFields['randomStr'] ?>"/>
+    <input type="hidden" name="payWay" value="<?php echo $postFields['payWay'] ?>"/>
+    <input type="hidden" name="sign"    value="<?php echo $postFields['sign'] ?>">
+</form>
+</body>
+</html>

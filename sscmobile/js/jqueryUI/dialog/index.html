@@ -1,0 +1,93 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<title>锁屏对话框插件——天若有情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="../../jquery.js"></script>
+<script type="text/javascript" src="../../common.js"></script>
+<link rel="Stylesheet" href="css/jquery.dialog.css" type="text/css"/>
+<script type="text/javascript" src="js/jquery.dialog.js"></script>
+<script>
+$(function(){
+    //document.onselectstart = new Function('return false');
+    $('button[name=btn]').click(function(){
+        //$("#dialog").dialog({
+        $('<div id="dialog2">这里是内容<br/>这里是内容<br/>这里是内容<br/></div>').dialog({
+            bgiframe:true,
+            width:300,
+            buttons:{
+                "确认":function(){
+                    $(this).dialog("close");       //关闭这个对话框
+                    return true;
+                },
+                "取消": function(){
+                    $("#dialog").dialog("close");       //关闭这个对话框
+                    return true;
+                }
+            }
+        });
+    });
+    
+});
+</script>
+</head>
+<body>
+
+<button name="btn">弹出对话框</button>
+<div id="dialog" title="VIP设置" style="display:none">
+    <div id="curLevel"></div>
+    设置VIP等级：
+    <select name="vipLevel">
+        <option value="0">无</option>
+        <option value="1">特邀VIP</option>
+        <option value="2">黄金VIP</option>
+        <option value="3">白金VIP</option>
+        <option value="4">钻石VIP</option>
+    </select>
+    <br/>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+    <br/>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+    <br/>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+</div>
+    <!-- 以下是对话框html结构
+    <div id="ui-dialog" style="outline: 0px none; top: 188px; left: 246px; display: block; height: auto; width: 400px; z-index: 1002;" class="ui-dialog" tabindex="-1">
+        <div class="ui-dialog-titlebar">
+            <span class="ui-dialog-title" id="ui-dialog-title">VIP设置</span>
+        </div>
+        <div id="dialog" class="ui-dialog-content">
+            <div id="curLevel">目前等级：<b>特邀VIP</b></div>
+            设置VIP等级：
+            <select name="vipLevel">
+                <option value="0">无</option>
+                <option value="1">特邀VIP</option>
+                <option value="2">黄金VIP</option>
+                <option value="3">白金VIP</option>
+                <option value="4">钻石VIP</option>
+            </select>
+            <br>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+            <br>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+            <br>注：特邀VIP是指有可能成为正式VIP的客户，在前台并不显示。
+        </div>
+        <div class="ui-dialog-button ui-helper-clearfix">
+            <div class="ui-dialog-buttonset">
+                <button type="button" class="ui-button" role="button" aria-disabled="false">
+                    <span class="ui-button-text">确认</span></button>
+                <button type="button" class="ui-button" role="button" aria-disabled="false">
+                    <span class="ui-button-text">取消</span></button>
+            </div>
+        </div>
+    </div>
+    <div class="ui-widget-overlay" style="width: 1187px; height: 2482px; z-index: 1001;"></div>
+    -->
+    <div style="width:2000px;height:300px;border:1px solid #f00;"><h1>测试文本</h1></div>
+    <select><option value="asdf">asdfasdfasdfasdf</option></select>
+    <div style="width:2000px;height:300px;border:1px solid #f00;"><h1>测试文本</h1></div>
+    <div style="width:2000px;height:300px;border:1px solid #f00;"><h1>测试文本</h1></div>
+    <div style="width:2000px;height:300px;border:1px solid #f00;"><h1>测试文本</h1></div>
+</body>
+</html>

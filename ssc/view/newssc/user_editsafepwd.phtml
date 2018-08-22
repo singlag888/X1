@@ -1,0 +1,103 @@
+<!DOCTYPE HTML> <!--  安全码修改 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>中彩网</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<!-- 顶部导航信息部分 -->
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <div class="safemiddle_modify_layer">
+            <form name="form2" id="form2" onsubmit="return false;">
+                <?php if($existSafePwd): ?>
+                <div class="form_group">
+                    <label for="old_safe_pwd" class="control_label">当前安全码：</label>
+                    <div class="col_sm_10">
+                        <input type="password" class="form_control two_hundred_width" name="old_safe_pwd" id="old_safe_pwd">
+                    </div>
+                    <span class="help_block">未设定安全码的用户，此行为空。</span>
+                </div>
+                <?php endif; ?>
+                <div class="form_group">
+                    <label for="safe_pwd" class="control_label">新的安全码：</label>
+                    <div class="col_sm_10">
+                        <input type="password" class="form_control two_hundred_width" name="safe_pwd" id="safe_pwd">
+                    </div>
+                    <span class="help_block">安全码必须是6-12位字母数字混合。</span>
+                </div>
+                <div class="form_group">
+                    <label for="safe_pwd2" class="control_label">确认安全码：</label>
+                    <div class="col_sm_10">
+                        <input type="password" class="form_control two_hundred_width" name="safe_pwd2" id="safe_pwd2">
+                    </div>
+                    <span class="help_block">再次输入并牢记安全码，切勿透露他人。</span>
+                </div>
+                <div class="form_group msgsend_btn_layer">
+                    <input type="submit" id="safePwdBtn" name="submit" class="default_navyblue_btn modify_btn" value="确定修改">
+                </div>
+            </form>
+        </div>
+        <div class="notice_txt">
+            <p><strong>温馨提示：</strong><br>“安全码”是每一个账户最为重要的密码，它相当于是您账户的<span>密码保护</span>，<br>修改登陆密码、资金密码都必须使用安全码进行修改，输入新的登录密码或者资金密码，修改密码只需输入安全码，即可完成密码修改操作。</p>
+        </div>
+    </div>
+
+</div>
+
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+
+<script>
+    var formUrl = 'index.jsp?c=user&a=<?php echo ACTION; ?>';
+
+   $(function(){
+       $('#safePwdBtn').on('click',function(){
+           var safe_pwd = $('input[name=safe_pwd]').val(),
+               old_safe_pwd = $('input[name=old_safe_pwd]').val(),
+               safe_pwd2 = $('input[name=safe_pwd2]').val();
+           if (safe_pwd.length == 0) {
+               top.layer.alert('请输入新的安全码');
+               return false;
+           }
+           if(safe_pwd!= safe_pwd2 ){
+               top.layer.alert('您输入的新的安全码和确认安全码不相同');
+               return false;
+           }
+
+           var re1 = /^[A-Za-z]+$/;
+           var re2 = /^\d+$/;
+           var re3 = /^\w{6,12}$/;
+           if(!re3.test(safe_pwd) || re2.test(safe_pwd) || re1.test(safe_pwd)){
+               top.layer.alert("安全码必须是6-12位字母数字混合，且不能为全是数字或全是字母");
+               return false;
+           }
+
+           $.ajax({
+               type: "POST",
+               url: formUrl,
+               data: {'submit':1,old_safe_pwd:old_safe_pwd,safe_pwd2:safe_pwd2,safe_pwd:safe_pwd},
+               dataType: "json", //返回0和1
+               success: function(data) {
+                   if(data.errno == 0){
+                       top.layer.alert(data.errstr,1);
+                       $('#form2').trigger('reset');
+                   }else if(data.errno > 0){
+                       top.layer.alert(data.errstr);
+                   }
+               }
+           });
+
+       });
+   });
+</script>
+</body>
+</html>

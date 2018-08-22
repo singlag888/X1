@@ -1,0 +1,154 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+function checkform(ob) {
+    var msg = "";
+    if (ob.username.value == '') {
+        msg = '请输入客户帐号';
+    }
+    else if (ob.deposit_bank_id.value <= 0) {
+        msg = '请选择支付渠道';
+    }
+    else if (ob.deposit_bank_id.value != 203 && ob.card_name_0.value == '') {
+        msg = '请输入汇款户名';
+    }
+    else if (ob.amount_0.value <= 0) {
+        msg = '请输入存款金额';
+    }
+    else if (ob.order_num_0.value == '') {
+        msg = '请输入订单号';
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+function changeBank(obj) {
+    if (obj.value == 203) {
+        $('input[name=card_name_0]').val('');
+        $('input[name=card_name_0]').parents("tr").hide();
+    } else {
+        $('input[name=card_name_0]').parents("tr").show();
+    }
+}
+
+function checkUsername(){
+    if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+        $('#tip1').html('您输入的账号有误');
+        $('input[name=username]').css('border', 'solid 1px red');
+        return false;
+    }
+
+    $.post(
+        '?c=deposit&a=addManualDeposit',
+        {sa:'checkUsername', username: $('input[name=username]').val()},
+        function (json_data) {
+            if (json_data.user_id == '') {
+                $('#tip1').html('您输入的账号有误');
+            } else {
+                $('#tip1').html('');
+            }
+        },
+        "json"
+    );
+}
+
+$(document).ready(function(){
+    if ($("#deposit_bank_id").val() == '203') {
+        $('input[name=card_name_0]').val('');
+        $('input[name=card_name_0]').parents("tr").hide();
+    }
+})
+
+</script>
+
+    <!------------------author snow 引入搜索相关文件 snow 更改input 长度,对齐--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件 snow 更改input 长度,对齐--------------------------->
+<div class="list-div add-main" id="addDiv">
+<form name="form1" class="form-top" id="form1" action="?c=deposit&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+        <tr>
+            <td colspan="2" class="rowTitle"><b>客服录入信息</b></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-inline">
+                    <span style="color: red">*</span>
+                    客户帐号
+                </div> 
+            </td>
+            <td><input class="input-md form-control" type="text" name="username" value="" onchange="checkUsername()" size="32"/> <span id="tip1"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-inline">
+                    <span style="color: red">*</span>
+                    支付渠道 
+                </div>
+            </td>
+            <td>
+                <!------------------ author snow 修改成可搜索------------------------------>
+                <select class="selectpicker deposit_bank_id" name="deposit_bank_id" id="deposit_bank_id" data-live-search="true" title="请选择 ...">
+                    <option value="-1">请选择…</option>
+                    <?php foreach ($banks as $k => $v): ?>
+                        <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <!------------------ author snow 修改成可搜索------------------------------>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-inline">
+                    <span style="color: red">*</span>
+                    汇款户名
+                </div>
+            </td>
+            <td>
+            <input class="input-md form-control" name="card_name_0" maxlength="19"  size="32"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-inline">
+                    <span style="color: red">*</span>
+                    存款金额 
+                </div>
+            </td>
+            <td><input class="input-md form-control" name="amount_0"  size="32"/></td>
+        </tr>
+        <tr>
+            <td>
+                <div class="forminline">
+                    <span style="color: red">*</span>
+                    订单号
+                </div>
+            </td>
+            <td><input class="input-md form-control" name="order_num_0" size="32"/></td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td>
+                <textarea class="input-md form-control" name="remark_0">客服手工添加</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="width:100%;margin:0 auto;text-align:center;">
+                    <input class="btn btn-info submit" type="submit" style="width: 60px;" name="submit" value="提 交" />
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

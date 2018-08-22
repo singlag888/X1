@@ -1,0 +1,192 @@
+<?php $this->import("head"); ?>
+<script>
+    $(function() {
+        $('#form1 :button').click(function() {
+            $('input[name=lottery_id]').val($(this).attr('id2'));
+        });
+        $('#form2').submit(function() {
+            var code = $('input[name=code]').val();
+
+            if (!/^([2-9]|[ATJQK])[sdch]\s([2-9]|[ATJQK])[sdch]\s([2-9]|[ATJQK])[sdch]$/.test(code)) {
+                alert('格式不正确，如2s 3d 9d');
+                return false;
+            }
+
+            var codes = code.split(" ");
+            var hash = new Array;
+            //判断唯一性
+            for(var i in codes){
+               if($.inArray(codes[i], hash) >= 0){
+                    alert('请保持号码的唯一性');
+                    return false;
+                }
+                hash.push(codes[i]);
+            }
+
+            var codeMap={},colorMap={};
+            codeMap["A"]=1;
+            codeMap["2"]=2;
+            codeMap["3"]=3;
+            codeMap["4"]=4;
+            codeMap["5"]=5;
+            codeMap["6"]=6;
+            codeMap["7"]=7;
+            codeMap["8"]=8;
+            codeMap["9"]=9;
+            codeMap["T"]=10;
+            codeMap["J"]=11;
+            codeMap["Q"]=12;
+            codeMap["K"]=13;
+            colorMap["s"]=1;
+            colorMap["h"]=2;
+            colorMap["c"]=3;
+            colorMap["d"]=4;
+            //判断升序
+            var newCode = new Array,newColor = new Array;
+
+            for(var j = 0; j < 3; j++){
+                newCode.push(codes[j].slice(0,1));
+                newColor.push(codes[j].slice(1,2));
+            }
+
+            if(codeMap[newCode[0]] > codeMap[newCode[1]] || codeMap[newCode[1]] > codeMap[newCode[2]] || codeMap[newCode[0]] > codeMap[newCode[2]]){
+                alert('请保持开奖号码升序，如2s 3d 9d');
+                return false;
+            }
+            if(codeMap[newCode[0]] == codeMap[newCode[1]] && colorMap[newColor[0]] > colorMap[newColor[1]]){
+                alert('请保持开奖花色升序，如3s 3d 9d');
+                return false;
+            }
+            if(codeMap[newCode[1]] == codeMap[newCode[2]] && colorMap[newColor[1]] > colorMap[newColor[2]]){
+                alert('请保持开奖花色升序，如3s 3d 9d');
+                return false;
+            }
+            if(codeMap[newCode[0]] == codeMap[newCode[2]] && colorMap[newColor[0]] > colorMap[newColor[2]]){
+                alert('请保持开奖花色升序，如3s 3d 9d');
+                return false;
+            }
+            if(codeMap[newCode[0]] == codeMap[newCode[1]] == codeMap[newCode[2]]){
+                if(colorMap[newColor[0]] > colorMap[newColor[2]] || colorMap[newColor[0]] > colorMap[newColor[1]] || colorMap[newColor[1]] > colorMap[newColor[2]] ){
+                    alert('请保持开奖花色升序，如3s 3d 9d');
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        //预选中
+        $('#lottery_<?php echo $lottery['lottery_id']; ?>').css('background', '#ea39e0');
+        $('#lottery_<?php echo $lottery['lottery_id']; ?>').css('border', 'none');
+    });
+</script>
+<form name="form1" id="form1" action="" method="GET">
+    <input type="hidden" name="c" value="draw"/><input type="hidden" name="a" value="klpk"/>
+    <input type="hidden" name="lottery_id" value=""/>
+    <table class="table table-responsive table-bordered gameBtn mt20">
+        <tr>
+            <?php foreach ($lotterys as $v): ?>
+                <td class="tl">
+                    <button class="btn btn-info" name="btn" id="lottery_<?php echo $v['lottery_id']; ?>" id2="<?php echo $v['lottery_id']; ?>"><?php echo $v['cname']; ?></button>
+                </td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</form>
+<?php if ($lastNoDrawIssue): ?>
+    <form name="form2" id="form2" action="?c=draw&a=klpk" method="POST">
+        <input type="hidden" name="lottery_id" value="<?php echo $lastNoDrawIssue['lottery_id']; ?>"/>
+        <table class="table table-bordered table-responsive gameTable mt20">
+            <tr>
+                <td>游戏：<?php echo $lottery['name']; ?></td>
+                <td>奖期：<?php echo $lastNoDrawIssue['issue']; ?></td>
+                <td>销售时间：<?php echo $lastNoDrawIssue['start_sale_time']; ?> ~ <?php echo $lastNoDrawIssue['end_sale_time']; ?></td>
+                <td>状态：<?php if ($lastNoDrawIssue['status_fetch'] == 0): ?>Pending<?php elseif ($lastNoDrawIssue['status_fetch'] == 1): ?>Processing<?php else: ?>Finished<?php endif; ?></td>
+                <td>当前权值/达标权值：<?php echo $lastNoDrawIssue['rank']; ?>/<?php echo $least_rank; ?></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <div class="form-inline">
+                        <label>可手工开奖奖期:</label>
+                        <select class="input-md form-control" name="issue_id">
+                            <?php foreach ($noDrawIssues as $v): ?>
+                            <option value="<?php echo $v['issue_id']; ?>" <?php if ($lastNoDrawIssue['issue_id'] == $v['issue_id']): ?> selected="selected"<?php endif; ?>><?php echo $v['issue']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <label>开奖号码：</label>
+                        <input class="input-md form-control" name="code" value=""/>
+                        <input type="hidden" name="lottery_id" value="<?php echo $lottery['lottery_id']; ?>"/>
+                        <input class="btn btn-info" type="submit"  name="submit" value="提交"/>
+                        <label>开号示例:5c 7h 8h,扑克号码: A 2 3 4 5 6 7 8 9 T J Q K,花色:'s' => '黑桃', 'h' => '红桃', 'c' => '梅花', 'd' => '方块'</label>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+<?php endif; ?>
+<div class="list-div mt20" id="listDiv">
+    <table class="table table-responsive table-bordered table-hover mainList">
+        <thead>
+            <tr >
+                <td rowspan="2">奖期</td>
+                <td rowspan="2">销售截止时间</td>
+                <td rowspan="2">最早录号时间</td>
+                <td rowspan="2">开奖号码</td>
+                <td rowspan="2">录入者</td>
+                <td rowspan="2">录号时间</td>
+                <td rowspan="2">审核者</td>
+                <td rowspan="2">审核时间</td>
+                <td rowspan="2">权值</td>
+                <td rowspan="2">开奖状态</td>
+                <td colspan="4">状态</td>
+            </tr>
+            <tr>
+                <td>返点</td>
+                <td>中奖</td>
+                <td>派奖</td>
+            </tr>
+        </thead>
+        <?php foreach ($issues as $v): ?>
+            <tr>
+                <td><?php echo $v['issue']; ?></td>
+                <td><?php echo $v['end_sale_time']; ?></td>
+                <td><?php echo $v['earliest_input_time']; ?></td>
+                <td><?php if ($v['status_code'] == 2) echo $v['code']; ?></td>
+                <td><?php echo $admins[$v['input_admin_id']]['username']; ?></td>
+                <td><?php echo $v['input_time']; ?></td>
+                <td><?php if ($v['verify_admin_id'] > 0): ?><?php echo $admins[$v['verify_admin_id']]['username']; ?><?php endif; ?></td>
+                <td><?php if ($v['verify_admin_id'] > 0): ?><?php echo $v['verify_time']; ?><?php endif; ?></td>
+
+                <td><?php echo $v['rank']; ?></td>
+                <td>
+                    <?php if ($v['status_code'] == 0): ?><b>未写入</b>
+                    <?php elseif ($v['status_code'] == 1): ?>写入待验证
+                    <?php elseif ($v['status_code'] == 2): ?>已验证
+                    <?php elseif ($v['status_code'] == 3): ?><font color="red"><b>官方未开奖</b></font>
+                    <?php endif; ?>
+                </td>
+
+                <td>
+                    <?php if ($v['status_rebate'] == 0): ?>未开始
+                    <?php elseif ($v['status_rebate'] == 1): ?>进行中
+                    <?php elseif ($v['status_rebate'] == 2): ?><img src="./images/yes.gif">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['status_check_prize'] == 0): ?>未开始
+                    <?php elseif ($v['status_check_prize'] == 1): ?>进行中
+                    <?php elseif ($v['status_check_prize'] == 2): ?><img src="./images/yes.gif">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['status_send_prize'] == 0): ?>未开始
+                    <?php elseif ($v['status_send_prize'] == 1): ?>进行中
+                    <?php elseif ($v['status_send_prize'] == 2): ?><img src="./images/yes.gif">
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

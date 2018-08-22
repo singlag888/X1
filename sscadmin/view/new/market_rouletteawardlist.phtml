@@ -1,0 +1,103 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('select[name=planLevel]').val('<?php echo $planLevel; ?>');
+        $('input[name=start_time]').val('<?php echo substr($start_time, 0, 10); ?>');
+        $('input[name=end_time]').val('<?php echo substr($end_time, 0, 10); ?>');
+        $('select[name=time_section]').val('<?php echo $time_section; ?>');
+        $('select[name=plan_type]').val('<?php echo $plan_type; ?>');
+        $('select[name=status]').val('<?php echo $status; ?>');
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=sort]').val('<?php echo $sort; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="get">
+奖品<select name="planLevel">
+    <option value="-1" selected="selected">不限</option>
+    <?php foreach ($planLevels as $k => $v): ?>
+        <option value=<?php
+        echo $k;
+        ?>><?php echo $v; ?></option>
+     <?php endforeach; ?>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+开奖日期<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+开奖时间段<select name="time_section">
+    <option value=''>不限</option>
+    <option value=3>00:00至15:59</option>
+    <option value=4>16:00至23:59</option>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+计划类别<select name="plan_type">
+    <option value=''>不限</option>
+    <option value=1>原始计划</option>
+    <option value=2>追加计划</option>
+</select><br>
+是否中奖<select name="status">
+    <option value=''>不限</option>
+    <option value=1>是</option>
+    <option value=0>否</option>
+</select>
+中奖客户<input type="text" name="username" value=""/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+排序规则<select name="sort">
+    <option value=1>按计划开奖时间逆序</option>
+    <option value=2>按奖品金额逆序</option>
+</select>
+<input type="hidden" name="c" value="market"/>
+<input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+<input type="submit" name="sub"  style="width:90px" value="查询"/>
+</form>
+
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>计划开奖时间</td>
+                <td>奖品</td>
+                <td>计划类别</td>
+                <td>是否中奖</td>
+                <td>中奖客户</td>
+                <td>中奖时间</td>
+            </tr>
+        </thead>
+        <?php if ($awards): ?>
+        <?php foreach ($awards as $v):?>
+        <tr class="awardList">
+            <td><?php echo $v['plan_time'];  ?></td>
+            <td><?php echo $planLevels[$v['plan_level']];  ?></td>
+            <td>
+                <?php if ($v['plan_type'] == 1):  ?> 原始计划
+                <?php elseif ($v['plan_type'] == 2):  ?> 追加计划
+                <?php else:  ?> 临时计划
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php if ($v['status'] == 0): ?> 未中奖
+                <?php elseif ($v['status'] == 1): ?> 已中奖
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php echo empty($v['username']) ? '&nbsp;' : $v['username']; ?>
+            </td>
+            <td><?php echo ($v['status'] == 0) ? '&nbsp;' : $v['ts']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tr class="noneData">
+            <td colspan="6">暂无数据！</td>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

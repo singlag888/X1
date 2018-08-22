@@ -1,0 +1,50 @@
+<?php $this->import("head"); ?>
+
+<div class="top_man" style="position: relative;left: 20%">
+    <div class="content_main" style="width: 90%" >
+        <div id="query" style="text-align: center;margin-bottom: 10px">
+            <div class="form-inline mt15" style="width: 60%" >
+<!--                <a href="javascript:history.go(-1);" class="" style="float: left">&nbsp;&nbsp;返回</a>-->
+                <div class="form-group has-default has-feedback">
+                    <label>开始时间:</label><span><?php echo($startDate) ?></span>
+                </div>
+                <div class="form-group has-feedback has-default">
+                    <label>结束时间:</label>
+                    <span><?php echo($endDate) ?></span>
+                </div>
+            </div>
+        </div>
+        <div class="list-div mt18" id="listDiv" style="border:0px">
+            <table class="table  table-responsive table-bordered mainList tablesorter" id='myTable'  style="width:60%;">
+                <thead>
+                <tr>
+                    <td>彩种名称</td>
+                    <td>投注</td>
+                    <td>中奖</td>
+                    <td>损益</td>
+                </tr>
+                </thead>
+                <?php foreach ($dayData as $lottery_id => $v): ?>
+                    <tr>
+                        <td><?php echo $v['lottery_name']; ?></td>
+                        <td><?php echo number_format($v['sum_amount'], 2) ?></td>
+                        <td><?php echo number_format($v['sum_prize'], 2) ?></td>
+                        <td><font color="<?php echo $v['sum_win'] < 0 ? 'red' : '#000000' ?>"><?php echo number_format($v['sum_win'], 2) ?></font></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tfoot>
+                <tr style="background-color: #404040;color: #FFFFFF">
+                    <td>本页小计</td>
+                    <td><?php echo number_format($total['total_sum_amount'], 2); ?> </td>
+                    <td><?php echo number_format($total['total_sum_prize'], 2); ?> </td>
+                    <td><font color="<?php echo $total['total_sum_win'] < 0 ? 'red' : '#ffffff' ?>"><?php echo number_format($total['total_sum_win'], 2) ?></font></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<?php $this->import("foot"); ?>

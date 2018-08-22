@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/view/new/layui/css/layui.css" />
+  <link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/view/new/css/home.css" />
+  <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/view/new/js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/view/new/layui/layui.js"></script>
+  <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/view/new/js/default.js"></script>
+  <script>
+	layui.use('element', function(){
+	  var element = layui.element;
+	});
+</script>
+
+</head>
+<body>
+<div class="layui-header">
+	<div class="dc-system-logo">
+	  <img src="<?php echo $imgCdnUrl ?>/view/new/img/logo2.png" onclick="javascript:window.location.href='?a=main';" >
+	</div>
+		<ul class="layui-nav" lay-filter="" style="position: absolute;left: 390px;top: 0px;font-size: 9px;height: 50px;background-color:#23262E;" >
+			<li class="layui-nav-item"><a href="?a=main">首页</a></li>
+			<li class="layui-nav-item">
+			  <a href="#">应用</a>
+			  <dl class="layui-nav-child"> 
+		      <dd id="dc_nav_user_tools" class="dc-nav-text-style" onclick="javascript:window.location.href='?a=userManagementTools&c=user';">
+		        <span>用户管理工具</span>
+		      </dd>
+		      <dd id="dc_nav_finance_tools" class="dc-nav-text-style" onclick="javascript:;" >
+		        <span>财务管理工具</span>
+		      </dd>
+		      <dd id="dc_nav_report_tools" class="dc-nav-text-style" onclick="javascript:;" >
+		        <span>报表管理工具</span>
+		      </dd>
+		      <dd id="dc_nav_species_tools" class="dc-nav-text-style" onclick="javascript:;" >
+		        <span>彩种管理工具</span>
+		      </dd>
+		      <dd id="dc_nav_market_tools" class="dc-nav-text-style" onclick="javascript:;" >
+		        <span>市场管理工具</span>
+		      </dd>
+		      <dd id="dc_nav_data_statistics" class="dc-nav-text-style" onclick="javascript:;" >
+		        <span>数据统计概览</span>
+		      </dd>
+    		  </dl>
+		    </li>
+			<li class="layui-nav-item">
+			  <a href="">系统</a>
+			  <dl class="layui-nav-child"> 
+		      <dd><a href="">权限管理</a></dd>
+		      <dd><a href="">权限分配</a></dd>
+		      <dd><a href="">用户权限管理</a></dd>
+		      <dd><a href="">用户分组管理</a></dd>
+		      <dd><a href="">配置管理</a></dd>
+    		  </dl>
+			</li>
+			<li class="layui-nav-item"><a href="javascript:;">移动应用</a></li>
+		  	<li class="layui-nav-item"><a href="">帮助中心</a></li>
+		</ul>
+	  
+  	<div id="dc_head_userpic" class="custom-defind-common icon" style="cursor: pointer;">
+	  <img id="dc_head_user_pic" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/user_picture.png" onclick="clickUserPic()" />
+	</div>
+	<div id="dc_head_email" class="custom-defind-common icon" style="cursor: pointer;">
+	   <img class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/user_message.png"/>
+	</div>
+	<div id="dc_head_exitsys" class="custom-defind-common icon" style="cursor: pointer;">
+	   <a href="./?a=logout"><img class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/user_exit.png"/></a>
+	</div>
+  </div>
+</body>

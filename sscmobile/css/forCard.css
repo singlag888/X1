@@ -1,0 +1,105 @@
+/* 初始化 */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {margin:0; padding:0;}
+ul, ol, li, img, input {border:0 none;}
+input{outline:none}
+address, caption, cite, code, dfn, em, th, var {font-style:normal; font-weight:normal;}
+ol, ul {list-style: outside none none;}
+caption, th {text-align:left;}
+h1, h2, h3, h4, h5, h6 {font-size:100%;font-weight:normal;}
+body{font-family: "Microsoft Yahei",Helvetica,Arial,sans-serif;font-size: 12px;}
+.fix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.fix{display:inline-block;}
+* html .fix{height:1%;}
+.fix{display:block;}
+.right{float:right;}
+.left{float:left;}
+.clear{clear:both;}
+.relative{position:relative; width:100%; }
+.cardSelected{margin-top:-10px; box-shadow:2px 10px 7px #C5C4C2;}
+table{border-collapse:collapse;border-spacing:0;table-layout:fixed;}
+
+/* 主题区域*/
+#topContainer{background:url('../images/light_blue/kapai/top.gif') no-repeat top center; width:100%; min-width:1324px;height:1445px;}
+#bottomContainer{background:url('../images/light_blue/kapai/bottom.png') no-repeat top center; width:100%; height:822px}
+.main{width:1348px;margin: 0 auto;}
+
+/*上层 */
+/* 顶部区域 */
+#headerArea{line-height:50px; letter-spacing:2px;float:right;padding-top:20px;padding-right: 230px;}
+#headerArea .count{font-size:16px; color:white; }
+#headerArea .count em{font-size:22px}
+#headerArea .remainWater{font-size:18px; color:#982134; margin-left:12px}
+
+/* 抽奖区域 */
+#lotteryArea{background:url('../images/light_blue/kapai/lotteryarea.png') no-repeat scroll top left; width:100%; height: 923px;box-sizing:border-box;padding-top:96px;margin-top:-36px;}
+#lotteryArea ul{float:left;padding:20px 0 21px 130px;}
+#lotteryArea ul li{float:left; width:92px; height:132px; margin-left:8px; cursor:pointer;position: relative;}
+#lotteryArea ul li img{width:92px; height:132px;position:absolute; zoom: 1; -webkit-transition: margin-top .2s, box-shadow .2s, border .2s; -moz-transition: margin-top .2s, box-shadow .2s, border .2s; -ms-transition: margin-top .2s, box-shadow .2s, border .2s; -o-transition: margin-top .2s, box-shadow .2s, border .2s; transition: margin-top .2s, box-shadow .2s, border .2s }
+#myCardArea ul li.cardSelected{margin-top: -10px}
+#lotteryArea .bottomScroll{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -180px; height:35px; width:48px; display:block; cursor:pointer; margin:30px 0 0 654px;animation:maig 0.5s ease infinite;}
+@keyframes maig{
+	0%{margin:30px 0 0 654px;}
+	50%{margin:35px 0 0 654px;}
+	100%{margin:30px 0 0 654px;}
+}
+#lotteryArea .bottomScroll:hover{margin:35px 0 0 654px;animation:none;}
+
+/* 我的卡牌 */
+#myCardArea{background:url('../images/light_blue/kapai/mycardarea.png') no-repeat scroll 0 0; width:1348px; height: 479px;padding:138px 0 0 62px;margin-top:-60px;box-sizing:border-box;}
+#myCardArea .cardList{width:1140px; height:170px; padding:35px 30px 0; overflow-y:auto; overflow-x:hidden;}
+#myCardArea .cardList li{float:left; height:132px; margin:0 0 30px 10px; cursor:pointer; position:relative;z-index: 3}
+#myCardArea .cardList li p{width:70px;padding:6px 0;border:1px solid #dfdfdf;background-color:#fecb50;position:absolute;left:50%;bottom:40px;margin-left:-36px;text-align:center;white-space:nowrap;z-index:2;display:none;pointer-events:none;}
+#myCardArea .cardList li img{zoom: 1; -webkit-transition: margin-top .2s, box-shadow .2s, border .2s; -moz-transition: margin-top .2s, box-shadow .2s, border .2s; -ms-transition: margin-top .2s, box-shadow .2s, border .2s; -o-transition: margin-top .2s, box-shadow .2s, border .2s; transition: margin-top .2s, box-shadow .2s, border .2s }
+#myCardArea .cardList .cardSelected{margin-top: -10px;}
+#myCardArea .exchange{margin-top:20px; text-align:center; position:relative;font-size:16px;}
+#myCardArea .exchange p{position:absolute;right:90px;top:-10px;}
+#myCardArea .exchangeButton{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -52px; width:138px; height: 38px; cursor:pointer;}
+#myCardArea .exchangeButton:hover{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -93px;}
+
+#myCardArea .checkAll{position:absolute; left:510px; top:10px; }
+#myCardArea .checkAll #checkAll{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -24px; height:19px; width:18px; display:inline-block;cursor:pointer;}
+#myCardArea .checkAll #checkAll.selected{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 0;}
+#myCardArea .checkAll em{display:block; margin:-26px -60px 0 0}
+
+/* 抽奖记录 */
+#recordArea{background:url('../images/light_blue/kapai/record.png') no-repeat scroll 0 0; height:809px; width:1324px;padding:130px 0 0 0;margin:0 auto;box-sizing:border-box;}
+#recordArea .recordList{width:1185px;font-size:16px;margin:0 auto;}
+#recordArea .listmain{height:570px;overflow-y:auto;overflow-x:hidden;}
+#recordArea .recordList table{width:100%;}
+#recordArea .recordList table tr td{text-align:center;height:38px; line-height:38px; color:#929292;}
+#recordArea .recordList table.listHeader tr td{background-color:#9B2034; color:white;}
+#recordArea .recordList .listmain table tr.odd td{background-color:#F2F2F2;}
+#recordArea .recordList .listmain table tr.even td{background-color:#FEFEFE;}
+#recordArea .recordList table tr td a{color:#9B2034;text-decoration:none;}
+
+/* 抽中卡牌后的弹层 */
+.shelter{position:absolute; top:0; left:0; width:100%; height:3000px; background-color: #7E7A79; z-index:8;opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50);}
+
+#awardWindow{width:580px; height:490px; position:fixed;left:50%;top:50px;margin-left:-290px;z-index:9;display:none;}
+#awardWindow .awardBg{background:url('../images/light_blue/kapai/awardbg.png') no-repeat scroll 0 0; height:424px; width:544px;margin:0 auto;}
+#awardWindow .crossBg{position:absolute; bottom:118px; left:50%; margin-left:-284.5px; background:url('../images/light_blue/kapai/crossBg.png') no-repeat scroll 0 0; height:162px; width:569px;}
+#awardWindow .crossBg strong{color:#b52212;font-size:28px;font-weight:bold;text-align:center;display:block;padding-top:14px;}
+#awardWindow .crossBg p{color:#b52212;font-size:16px;font-weight:bold;text-align:center;padding-top:10px;}
+#awardWindow .awardPic{position:absolute; top:18px; left:50%;margin-left:-118px; height:333px; width:236px;}
+#awardWindow .awardConfirm{position:absolute; bottom:60px; left:50%;margin-left:-69px; background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -249px; height:37px; width:138px;cursor:pointer;}
+#awardWindow .awardConfirm:hover{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -290px;}
+
+/*查看明细弹窗*/
+#detailed{width:1164px;height:435px;background:url('../images/light_blue/kapai/exchangeDetail.png') no-repeat center;position:fixed;top:80px;left:50%;margin-left:-582px;z-index:9;box-sizing:border-box;padding:54px 0 10px 0;display:none;}
+#detailed p{font-size:16px;padding:0 0 20px 30px;}
+#detailed p b{font-size:30px;color:#b52212;padding:0 10px;}
+.dedcard{width:1108px;height:177px;padding:10px 0;box-sizing:border-box;overflow-y:auto;overflow-x:hidden;margin:0 auto;}
+.dedcard ul li{float:left;margin:0 7px 14px 0;}
+.dedcardfoot{padding-top:40px;}
+.dedcardtime{float:left;}
+.dedcardtime p{padding:0 0 10px 30px;}
+.dedcardBtn a{float:right;background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -249px; height:37px; width:138px;text-indent:-99999px;margin:20px 50px 0 0;}
+.dedcardBtn a:hover{background:url('../images/light_blue/kapai/button.png') no-repeat scroll 0 -290px;}
+
+/*查看活动规则*/
+.geDetailed{width:40px;padding:20px 14px 14px 14px;background-color:#a40000;position:fixed;top:100px;right:20px;box-sizing:border-box;border-radius:8px;box-shadow:1px 1px 2px #585858;}
+.geDetailed a{color:#fff;text-decoration:none;}
+.geDetailed a:hover{color:#e9e9e9;}
+.geDetailed .geDetclose{width:14px;height:14px;display:block;text-align:center;line-height:14px;position:absolute;top:4px;right:4px;font-size:14px;color:#f4d061;}
+.geDetimg{position:fixed;top:100px;left:50%;margin-left:-500px;z-index:11;display:none;}
+

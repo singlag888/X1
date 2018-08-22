@@ -1,0 +1,89 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    function checkform(ob) {
+        if($("input[name=title]").val() == ''){
+            $("input[name=title]").focus();
+            alert('标题不能为空');
+            return false;
+        }
+        if($("input[name=target]").val() == ''){
+            $("input[name=target]").focus();
+            alert('活动对象不能为空');
+            return false;
+        }
+        if($("input[name=content]").val() == ''){
+            $("input[name=content]").focus();
+            alert('活动内容不能为空');
+            return false;
+        }
+
+        return true;
+    }
+</script>
+<div class="list-div" id="addDiv">
+    <form  class="form-inline " role="form" name="form1" id="form1" action="./?c=market&a=<?php echo ACTION; ?>" onsubmit="return checkform(this)" method="post" enctype ="multipart/form-data">
+        <h3>注意：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h3>
+        <table class="table table-responsive table-bordered" style="width:60%;">
+            <tr>
+                <td>活动标题:</td>
+                <td><input class="form-control" name="title" size="50" placeholder="请输入活动标题" /></td>
+            </tr>
+            <tr>
+                <td>活动对象:</td>
+                <td><input class="form-control" name="target" size="50" placeholder="请输入活动对象" /></td>
+            </tr>
+            <tr>
+                <td>活动内容:</td>
+                <td><input class="form-control" name="content" size="50" placeholder="请输入活动表述" /></td>
+            </tr>
+            <tr>
+                <td>活动开始时间:</td>
+                <td>
+                    <input class="input-md form-control Wdate" style="height:34px;" type="text" name="start_time" value="<?php echo date('Y-m-d 00:00:00') ?>" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr>
+                <td>活动到期时间:</td>
+                <td>
+                <input class="input-md form-control Wdate" style="height:34px;" type="text" name="end_time" value="<?php echo date('Y-m-d 23:59:59') ?>" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr>
+                <td>PC活动轮播图</td>
+                <td><input class="input-sm form-control" name="banner_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td>PC活动简介图</td>
+                <td><input class="input-sm form-control" name="thumb_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td>PC活动图</td>
+                <td><input class="input-sm form-control" name="main_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td>手机活动轮播图</td>
+                <td><input class="input-sm form-control" name="m_banner_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td>手机活动简介图</td>
+                <td><input class="input-sm form-control" name="m_thumb_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td>手机活动图</td>
+                <td><input class="input-sm form-control" name="m_main_img" type="file"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                        <input name="add" type="hidden" value="1" />
+                        <button type="submit" class="btn btn-info  submit" name="submit">提交</button>
+                        <button type="button" class="btn btn-info submit" onclick="javascript:history.go(-1);" value="返回">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

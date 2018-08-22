@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+    <body>
+        <!-- 中间选择游戏部分 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>团队</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_ContBox NoFloatCent">
+                        <div class="subContCent">
+                            <div class="FormTab2 w60b FromInfo">
+                                <ul>
+                                    <li>
+                                        <label class="w100px">用户名</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanRealName"><?php echo $user['username']; ?></strong></span>
+
+                                    </li>
+                                    <li>
+                                        <label class="w100px">上级代理</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanRealName"><?php echo $parent['username']; ?></strong></span>
+
+                                    </li>
+                                    <li>
+                                        <label class="w100px">该用户团队余额</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanRealName"><?php echo $balance; ?>元</strong></span>
+
+                                    </li>
+                                    <li>
+                                        <label class="w100px">&nbsp;</label>
+                                        <div class="must">&nbsp;</div>
+                                        <input type="button" onclick="javascript:history.go(-1);"  class="btnStyle locate15px" value="返回" name="返回"> 
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div> 
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>用户管理</title>
+        <link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#mainbox").height($(document).height()-$("#topbox").height());
+                $("#leftbox").height($("#mainbox").height());
+                $(window).resize(function(){
+                    $("#mainbox").height($(document).height()-$("#topbox").height());
+                    $("#leftbox").height($("#mainbox").height());
+                });
+                $("#userDragbox").click(function(){
+                    if( $(this).attr("src") == "<?php echo $imgCdnUrl ?>/images/arrow_left.gif" ){
+                        $("#leftbox").css({width:"160px"}).show();
+                        $(this).attr("src","<?php echo $imgCdnUrl ?>/images/arrow_right.gif");
+                    }else{
+                        $("#leftbox").css({width:"0px"}).hide();
+                        $(this).attr("src","<?php echo $imgCdnUrl ?>/images/arrow_left.gif");
+                    }
+                });
+            });
+        </script>
+        <style>
+            tr,td {
+                font-size:11px;
+                border:1px solid #fff;
+                padding:0px;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="table table-responsive "  border="0" cellpadding="0" cellspacing="0" style="width:100%;height:100%;">
+            <tr>
+                <td style="width:160px; height:100%; background: #eee;" valign="top" id="leftbox">
+                    <!--左侧用户树形列表-->
+                    <iframe name="userLeftFrame" id="userLeftFrame" frameborder="0" width="100%" height="100%" scrolling="auto" src="./?c=card&a=allocGroup&sa=leftTree"></iframe>
+                    <!--左侧用户树形列表结束-->
+                </td>
+
+                <td style="width:3px; height:100%; background:#ccc;cursor:pointer;border:0px solid #f00;" valign="middle" id="userDragbox"></td>
+
+                <td id="mainbox" valign="top" style="height:100%;">
+                    <!--内容主窗口-->
+                    <iframe name="userMainFrame" id="userMainFrame" frameborder="0" width="100%" height="100%" src="./?c=card&a=allocGroup&sa=rightList"></iframe></td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,136 @@
+<?php $this->import("head"); ?>
+<p class="mt10">
+    说明：权限管理的实现基于控制器和行为来限定。
+</p>
+<div id="listDiv">
+    <form name="form1" class="form-top" id="form1" action="?c=adminMenu&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered mainList" width="100%">
+            <thead>
+                <tr>
+                    <td>menu id</td>
+                    <td>名称</td>
+                    <td>说明</td>
+                    <td>控制器</td>
+                    <td>行为</td>
+                    <td>是否启用</td>
+                    <td>是否记录日志</td>
+                    <td>排序</td>
+                    <td>下级菜单</td>
+                    <td>更新时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+    <?php foreach ($menus as $v): ?>
+    <tr>
+        <td><?php echo $v['menu_id']; ?></td>
+        <td><?php echo $v['title']; ?></td>
+        <td><?php echo $v['description']; ?></td>
+        <td><?php echo $v['control']; ?></td>
+        <td><?php echo $v['action']; ?></td>
+        <td><?php if ($v['is_enabled']): ?>启用<?php else: ?>禁用<?php endif; ?></td>
+        <td><?php if ($v['is_log']): ?>记录<?php else: ?>不记录<?php endif; ?></td>
+        <td><input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['menu_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"/></td>
+        <td>
+            <?php if ($v['is_menu'] == 1): ?>
+                <a class="btn btn-info" href="./?c=adminMenu&a=menuList&parent_id=<?php echo $v['menu_id']; ?>&prev_id=<?php echo $parent_id; ?>">下级菜单</a>
+            <?php else: ?>
+                无
+            <?php endif; ?>
+        </td>
+        <td><?php echo $v['ts']; ?></td>
+        <td>
+            <?php if ($v['is_menu'] == 1): ?>
+                <a class="btn btn-mini btn-info " href="./?c=adminMenu&a=addMenu&parent_id=<?php echo $v['menu_id']; ?>">增加</a>
+            <?php else: ?>
+                &nbsp;
+            <?php endif; ?>
+            <a class="btn btn-mini btn-info" href="./?c=adminMenu&a=editMenu&menu_id=<?php echo $v['menu_id']; ?>&prev_id=<?php echo $v['parent_id']; ?>">编辑</a>
+            <a class="btn btn-mini btn-info" href="./?c=adminMenu&a=deleteMenu&menu_id=<?php echo $v['menu_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="7">&nbsp;</td>
+        <td>
+            <input class="btn btn-mini btn-default" type="submit" name="submit" class="submit" value="保存"/>
+        </td>
+        <td>
+            <?php if ($parent_id > 0): ?>
+                <input class="btn btn-mini btn-default submit" type="button" name="button" value="上级" onclick="window.location.href='./?c=adminMenu&a=menuList&parent_id=<?php echo $prev_id; ?>';">
+            <?php endif; ?>
+        </td>
+        <td colspan="2"></td>
+    </tr>
+</table>
+    <input type="hidden" name="prev_id" value="<?php echo $prev_id; ?>"/>
+    <input type="hidden" name="sa" value="saveSort"/>
+        <!--<div class="row">
+            <table class="table table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <td>menu id</td>
+                        <td>名称</td>
+                        <td>说明</td>
+                        <td>控制器</td>
+                        <td>行为</td>
+                        <td>是否启用</td>
+                        <td>是否记录日志</td>
+                        <td>排序</td>
+                        <td>下级菜单</td>
+                        <td>更新时间</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <?php foreach ($menus as $v): ?>
+    <tr>
+        <td><?php echo $v['menu_id']; ?></td>
+        <td><?php echo $v['title']; ?></td>
+        <td><?php echo $v['description']; ?></td>
+        <td><?php echo $v['control']; ?></td>
+        <td><?php echo $v['action']; ?></td>
+        <td><?php if ($v['is_enabled']): ?>启用<?php else: ?>禁用<?php endif; ?></td>
+        <td><?php if ($v['is_log']): ?>记录<?php else: ?>不记录<?php endif; ?></td>
+        <td><input type="text" name="sort_ids[<?php echo $v['menu_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"/></td>
+        <td>
+            <?php if ($v['is_menu'] == 1): ?>
+                <a href="./?c=adminMenu&a=menuList&parent_id=<?php echo $v['menu_id']; ?>&prev_id=<?php echo $parent_id; ?>">下级菜单</a>
+            <?php else: ?>
+                无
+            <?php endif; ?>
+        </td>
+        <td><?php echo $v['ts']; ?></td>
+        <td>
+            <?php if ($v['is_menu'] == 1): ?>
+                <a href="./?c=adminMenu&a=addMenu&parent_id=<?php echo $v['menu_id']; ?>">增加</a>
+            <?php else: ?>
+                &nbsp;
+            <?php endif; ?>
+            <a href="./?c=adminMenu&a=editMenu&menu_id=<?php echo $v['menu_id']; ?>&prev_id=<?php echo $v['parent_id']; ?>">编辑</a>
+            <a href="./?c=adminMenu&a=deleteMenu&menu_id=<?php echo $v['menu_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="7">&nbsp;</td>
+        <td>
+            <input type="submit" name="submit" class="submit" value="保存"/>
+        </td>
+        <td>
+            <?php if ($parent_id > 0): ?>
+                <input type="button" name="button" class="submit" value="上级" onclick="window.location.href='./?c=adminMenu&a=menuList&parent_id=<?php echo $prev_id; ?>';">
+            <?php endif; ?>
+        </td>
+        <td colspan="2"></td>
+    </tr>
+</table>
+    <input type="hidden" name="prev_id" value="<?php echo $prev_id; ?>"/>
+    <input type="hidden" name="sa" value="saveSort"/>--> 
+            </table>
+
+    </form>
+</div>
+
+
+
+  
+<?php $this->import("foot"); ?>

@@ -1,0 +1,934 @@
+
+.layui-form-pane .layui-form-label {
+	width: 90px;
+}
+input {
+	box-sizing: border-box;
+    border-width: 1px;
+    border-radius: 5px;
+    box-shadow: none;
+}
+input:focus{
+	border-color: #169BD5;
+}
+#dc_user_tools_management {
+	position: absolute;
+    left: 433px;
+    top: 74px;
+    width: 1260px;
+    height: 860px;
+}
+#dc_user_tools_tab {
+	font-size: 16px;
+    color: #3366FF;
+    font-family: "Arial Negreta", "Arial Normal", Arial;
+    font-weight: 600;
+}
+#dc_user_tools_tab li {
+    width: 190px;
+    height: 25px;
+    text-align: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
+#user_tools_tab_manager{
+    position: absolute;
+    left: 171px;
+    top: 20px;
+    width: 9px;
+    height: 15px;
+    color: red;
+}
+#user_tools_tab_domain{
+    position: absolute;
+    left: 171px;
+    top: 59px;
+    width: 9px;
+    height: 15px;
+    color: red;
+}
+#user_tools_tab_level{
+    position: absolute;
+    left: 171px;
+    top: 99px;
+    width: 9px;
+    height: 15px;
+    color: red;
+}
+#user_tools_tab_loninlog{
+    position: absolute;
+    left: 171px;
+    top: 139px;
+    width: 9px;
+    height: 15px;
+    color: red;
+}
+#dc_user_tab1_title {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 37px;
+	background-color: rgba(242, 242, 242, 1);
+}
+#dc_user_tab1_title_text {
+	position: absolute;
+	top:10px;
+	left:10px;
+	width: 65px;
+	height: 19px;
+}
+.dc-user-tab1-button {
+	background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #169BD5;
+}
+#dc_user_tab1_adduser {
+	position: absolute;
+	left: 30px;
+	top: 155px;
+	width: 40px;
+    height: 25px;
+}
+.dc-user-tab1-button a{
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    color: rgba(22, 155, 213, 1);
+}
+#dc_user_tab1_clock {
+	position: absolute;
+	left: 70px;
+	top: 155px;
+	width: 40px;
+    height: 25px;
+}
+#dc_user_tab1_unclock {
+	position: absolute;
+	left: 120px;
+	top: 155px;
+	width: 40px;
+    height: 25px;
+}
+#user_getdata_condition {
+	position: absolute;
+    left: 30px;
+    top: 50px;
+    width: 1200px;
+    height: 100px;
+    background-color: rgba(242, 242, 242, 1);
+}
+.user-condition-input {
+	height: 22px;
+    font-family: 'Arial Normal', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    text-decoration: none;
+    color: #000000;
+    text-align: left;
+    color: rgb(153, 153, 153);
+}
+#user_condition_username {
+	position: absolute;
+    left: 950px;
+    top: 20px;
+}
+#user_condition_nickname {
+	position: absolute;
+    left: 20px;
+    top: 70px;
+}
+#user_condition_phone_no {
+	position: absolute;
+    left: 240px;
+    top: 70px;
+}
+#user_condition_bank_no {
+	position: absolute;
+    left: 485px;
+    top: 70px;
+}
+#user_condition_isonline {
+	position: absolute;
+    left: 850px;
+    top: 70px;
+}
+#user_condition_regdate_start {
+	position: absolute;
+    left: 18px;
+    top: 20px;
+}
+#user_condition_regdate_start img {
+	position: absolute;
+    left: 175px;
+    top: 0px;
+}
+#user_condition_regdate_end {
+	position: absolute;
+    left: 215px;
+    top: 20px;
+}
+#user_condition_regdate_end img {
+    position: absolute;
+    top: 0px;
+    left: 135px;
+}
+#user_condition_usertype {
+	position: absolute;
+    left: 410px;
+    top: 20px;
+}
+#user_name {
+	position: absolute;
+    left: 70px;
+    top: -3px;
+    width: 130px;
+}
+#user_nickname {
+	position: absolute;
+    left: 62px;
+    top: -3px;
+    width: 105px;
+}
+#user_phone_no {
+	position: absolute;
+    left: 63px;
+    top: -3px;
+    width: 120px;
+}
+#user_bank_no {
+	position: absolute;
+    left: 63px;
+    top: -3px;
+    width: 250px;
+}
+#user_regdate_start {
+	position: absolute;
+    left: 64px;
+    top: -3px;
+    width: 105px;
+}
+#user_regdate_end {
+	position: absolute;
+    left: 25px;
+    top: -3px;
+    width: 105px;
+}
+#user_select_usertype {
+    position: absolute;
+    top: -3px;
+    left: 63px;
+    width: 75px;
+    height: 22px;
+}
+#user_select_userlive {
+	position: absolute;
+    top: -3px;
+    left: 142px;
+    width: 100px;
+    height: 22px;
+}
+#user_select_proxy {
+	position: absolute;
+    top: 2px;
+    left: 0px;
+}
+#user_select_isonline {
+    position: absolute;
+    top: -2px;
+    left: 70px;
+    width: 100px;
+    height: 22px;
+}
+#dc_user_tab1_select {
+	position: absolute;
+	top: 63px;
+	left: 1050px;
+	width: 40px;
+    height: 25px;
+}
+#dc_user_tab1_reset {
+	position: absolute;
+	top: 63px;
+	left: 1100px;
+	width: 40px;
+    height: 25px;
+}
+#dc_user_tab1_grid {
+	position: absolute;
+	top: 175px;
+	left: 30px;
+	width: 1200px;
+	height: 740px;;
+}
+#dc_user_data_pageset {
+	position: absolute;
+    left: 18px;
+    top: 936px;
+}
+#dc_user_adduser {
+	width: 900px;
+    height: 500px;
+    position: absolute;
+    left: 55px;
+}
+#add_user_usertype {
+	width: 400px;
+    position: absolute;
+    left: 450px;
+    top: 50px;
+}
+#add_user_usertype i {
+	position: absolute;
+    top: 17px;
+    left: 170px;
+	border-width: 6px;
+    border-top-color: #c2c2c2;
+    border-top-style: solid;
+    -webkit-transition: all .3s;
+    border-style: dashed;
+}
+#add_user_password {
+	width: 400px;
+    position: absolute;
+    left: 450px;
+    top: 103px;
+}
+#add_user_password_again {
+	width: 400px;
+    position: absolute;
+    left: 450px;
+    top: 156px;
+}
+#add_user_remark {
+	width: 400px;
+    position: absolute;
+    left: 450px;
+    top: 209px;
+}
+#add_user_email {
+	width: 400px;
+    position: absolute;
+    left: 100px;
+    top: 209px;
+}
+#add_user_email input {
+	width: 190px;
+}
+#add_user_nickname {
+	width: 400px;
+    position: absolute;
+    left: 100px;
+    top: 50px;
+}
+#add_user_username {
+	width: 400px;
+    position: absolute;
+    left: 100px;
+    top: 103px;
+}
+#add_user_phoneno {
+	width: 400px;
+    position: absolute;
+    left: 100px;
+    top: 156px;
+}
+#add_user_phoneno input {
+	width: 190px;
+}
+#add_user_submit {
+    position: absolute;
+    left: 300px;
+    top: 400px;
+    width: 100px;
+}
+#add_user_back {
+    position: absolute;
+    left: 450px;
+    top: 400px;
+    width: 100px;
+}
+.user-info-config {
+	position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 76px;
+    height: 20px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 12px;
+    color: #169BD5;
+    cursor: pointer;
+}
+.user-info-config h {
+	position: absolute;
+    left: 13px;
+    top: -4px;
+}
+.user-lock {
+	position: absolute;
+    left: 5px;
+    top: 35px;
+    width: 76px;
+    height: 20px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 12px;
+    color: #169BD5;
+    cursor: pointer;
+}
+
+#user_config_info {
+	width: 1040px;
+    height: 668px;
+}
+#user_config_info h4 {
+	position: absolute;
+    bottom: 5px;
+    font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+    font-weight: 700;
+    font-style: normal;
+    font-size: 20px;
+}
+#user_config_info_lc {
+	width: 1065px;
+    height: 730px !important;
+    font-family: 'Arial Normal', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+}
+#config_info_baseinfo {
+	position: absolute;
+	top: 70px;
+	left: 40px;
+	width: 980px;	
+	height: 240px;
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: silver;
+}
+#config_info_nameinfo {
+	position: absolute;
+	top: 320px;
+	left: 40px;
+	width: 980px;	
+	height: 130px;
+	border-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: silver;
+}
+#config_info_moneyinfo {
+	position: absolute;
+	top: 460px;
+	left: 40px;
+	width: 980px;	
+	height: 130px;
+	border-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: silver;
+}
+#config_info_levelinfo {
+	position: absolute;
+	top: 600px;
+	left: 40px;
+	width: 980px;	
+	height: 130px;
+}
+.user-config-tab1 {
+	background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(161, 161, 161, 1);
+    border-radius: 5px;
+    box-shadow: none;
+    text-align: left;
+}
+#info_baseinfo_nickname {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 65px;
+}
+#tab1_user_nickname {
+	line-height: 40px;
+    position: absolute;
+    left: 50px;
+}
+#tab1_user_poassword {
+	position: absolute;
+    left: 340px;
+    line-height: 40px;
+}
+#info_baseinfo_password {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 83px;
+}
+#tab1_user_phoneno {
+	position: absolute;
+    left: 650px;
+    line-height: 40px;
+}
+#info_baseinfo_phoneno {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 83px;
+}
+#tab1_user_email {
+	line-height: 40px;
+    position: absolute;
+    top: 60px;
+    left: 50px;
+}
+#info_baseinfo_email {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 65px;
+}
+#tab1_user_isproxy {
+	line-height: 40px;
+    position: absolute;
+    top: 60px;
+    left: 340px;
+}
+#info_baseinfo_isproxy {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 83px;
+}
+#tab1_user_status {
+	line-height: 40px;
+    position: absolute;
+    top: 60px;
+    left: 650px;
+}
+#info_baseinfo_status {
+	width: 180px;
+    height: 38px;
+    position: absolute;
+    top: 0px;
+    left: 83px;
+}
+#info_baseinfo_remark {
+	position: absolute;
+    top: 0px;
+    left: 65px;
+    width: 800px;
+}
+#tab1_user_remark {
+	position: absolute;
+    top: 120px;
+    left: 50px;
+    line-height: 40px;
+}
+.info_baseinfo_save {
+    width: 85px;
+    height: 33px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    box-shadow: none;
+    font-size: 16px;
+    color: #169BD5;
+    cursor: pointer;
+}
+.info_baseinfo_save1 {
+	position: absolute;
+    left: 828px;
+    top: 165px;
+}
+.info_baseinfo_save2 {
+	position: absolute;
+    left: 828px;
+    top: 40px;
+}
+.info_baseinfo_save span{
+	position: absolute;
+    top: 4px;
+    left: 10px;
+}
+#tab1_user_realname {
+	position: absolute;
+    top: 40px;
+    left: 50px;
+    line-height: 40px;
+}
+#info_baseinfo_realname {
+	position: absolute;
+    top: 0px;
+    left: 83px;
+    width: 200px;
+}
+#tab1_user_moneypass {
+	position: absolute;
+    top: 40px;
+    left: 50px;
+    line-height: 40px;
+}
+#info_baseinfo_moneypass {
+	position: absolute;
+    top: 0px;
+    left: 83px;
+    width: 200px;
+}
+#info_baseinfo__userlive {
+	position: absolute;
+    top: 0px;
+    left: 83px;
+    width: 200px;
+    height: 38px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(161, 161, 161, 1);
+    border-radius: 5px;
+    box-shadow: none;
+    text-align: left;
+}
+#tab1_user_userlevel {
+	position: absolute;
+    top: 40px;
+    left: 50px;
+    line-height: 40px;
+}
+#user_config_bank_table {
+	position: absolute;
+	left: 50px;
+    top: 100px;
+    border: 1px solid;
+    width: 960px;
+    height: auto;
+    text-align: center;
+    line-height: 30px;
+    border-color: rgba(188, 188, 188, 1);
+}
+#user_config_bank_table thead {
+	background: inherit;
+    background-color: rgba(67, 67, 67, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0px;
+    box-shadow: none;
+    font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+#user_config_bank_table thead th {
+	border: 1px solid;
+    border-color: rgba(188, 188, 188, 1);
+}
+##user_config_bank_table tbody{
+	background: inherit;
+    background-color: rgba(242, 242, 242, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(188, 188, 188, 1);
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 14px;
+}
+#user_config_bank_table tbody td {
+	border: 1px solid;
+    border-color: rgba(188, 188, 188, 1);
+}
+#user_config_bank_table tbody td span {
+    color: #3366FF;
+    font-size: 14px;
+	cursor: pointer;
+}
+#div_display_control ul {
+	margin: 30px; 
+	margin-left: 80px;
+}
+#div_display_control ul li {
+	padding: 20px;
+    line-height: 25px;
+}
+#div_display_control span {
+	font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+}
+#div_display_control input {
+ 	height: 30px;
+ }
+#bank_config_save {
+	position: absolute;
+    left: 110px;
+    top: 490px;
+    width: 85px;
+    height: 33px;
+    line-height: 30px;
+    text-align: center;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 16px;
+    color: #169BD5;
+    cursor: pointer;
+}
+#user_proze_group {
+	position: absolute;
+    left: 100px;
+    top: 100px;
+}
+#user_proze_group select {
+	width: 140px;
+    height: 30px;
+}
+#user_proze_group span {
+	box-shadow: none;
+    font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+}
+#prize_group_save {
+	position: absolute;
+    left: 460px;
+    top: 98px;
+    width: 85px;
+    height: 33px;
+    line-height: 30px;
+    text-align: center;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(22, 155, 213, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 16px;
+    color: #169BD5;
+    cursor: pointer;
+}
+#user_statistics {
+	margin: 20px;
+    margin-left: 100px;
+}
+#user_statistics li {
+	padding: 20px;
+}
+#user_statistics li span {
+	font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+}
+#user_statistics li input {
+	height: 30px;
+}
+#user_funds_div {
+	position: absolute;
+	left: 130px;
+	top: 90px;
+}
+#user_info_specise {
+	position: absolute;
+    top: 70px;
+    left: 70px;
+	font-size: 14px;
+}
+#user_bet_time_start {
+	position: absolute;
+    top: 48px;
+    left: 300px;
+	font-size: 14px;
+}
+#user_bet_time_start span {
+	position: absolute;
+    top: 24px;
+    left: -70px;
+}
+#bet_time_start {
+	position: absolute;
+    left: 0px;
+    top: 22px;
+    width: 80px;
+}
+#user_bet_time_start img {
+	position: absolute;
+    left: 82px;
+    top: 24px;
+}
+#user_bet_time_end {
+	position: absolute;
+    top: 48px;
+    left: 430px;
+}
+#user_bet_time_end span {
+	position: absolute;
+    top: 22px;
+    left: -30px;
+}
+#user_bet_time_end img {
+	position: absolute;
+    top: 24px;
+    left: 80px;
+}
+#bet_time_end {
+    position: absolute;
+    top: 21px;
+	width: 80px;
+}
+#user_stat_bet_issue {
+	position: absolute;
+    top: 65px;
+    left: 560px;
+}
+#user_stat_bet_issue span {
+	position: absolute;
+    left: 0px;
+    top: 6px;
+    width: 42px;
+	font-size: 14px;
+}
+#user_bet_issue {
+	position: absolute;
+    left: 40px;
+    top: 4px;
+	width: 100px;
+}
+#user_bet_info_status {
+	position: absolute;
+    top: 69px;
+    left: 745px;
+}
+#user_bet_info_status span {
+    position: absolute;
+    left: 0px;
+    top: 1px;
+    width: 42px;
+	font-size: 14px;
+}
+#user_bet_status {
+    position: absolute;
+    top: 0px;
+    left: 40px;
+}
+#user_bet_inquire {
+	position: absolute;
+	top: 66px;
+	left: 890px;
+	width: 40px;
+    height: 25px;
+}
+#user_bet_reset {
+	position: absolute;
+	top: 66px;
+	left: 930px;
+	width: 40px;
+    height: 25px;
+}
+#user_bet_inquire span {
+    position: absolute;
+    left: 6px;
+    top: -7px;
+    color: rgba(22, 155, 213, 1);
+}
+#user_bet_reset span {
+    position: absolute;
+    left: 6px;
+    top: -7px;
+    color: rgba(22, 155, 213, 1);
+}
+#user_order_list_div {
+	position: absolute;
+    top: 105px;
+    left: 60px;
+    width: 930px;
+    height: auto;
+}
+#user_config_save1:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#user_config_save2:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#user_config_save3:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#user_config_save4:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#bank_config_save:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#prize_group_save:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#user_bet_inquire:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+#user_bet_reset:hover {
+	background-color: rgba(228, 228, 228, 1);
+}
+
+
+
+
+
+
+
+
+
+

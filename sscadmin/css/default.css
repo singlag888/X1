@@ -1,0 +1,593 @@
+/* 常用背景色 #E8ECA0 #e8dC90 #888C40 */
+body {
+    margin: 0px;
+    padding: 0px;
+    color: #000;
+    border: 0px solid #f00;
+    background: #fff; /*url(../images/bg.jpg);*/
+    font: 13px "sans-serif", "Arial", "Verdana";
+}
+
+iframe {
+    border: 0px solid red;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+
+/* #E8ECA0 #e8dC90 #888C40 */
+table {
+    padding: 0px;
+    border-spacing: 0px;
+    margin: 0px 0px 0px 0px;
+    border: 0px solid #f00;
+    /* border-collapse: collapse; */
+}
+
+/*table thead {
+    background-color: #D3DCE3;
+}*/
+
+/*	font-size:13px;
+    border-right:1px solid #fff;
+    border-top:1px solid #eee;
+    padding:3px;
+}*/
+
+h2 {
+    background: none repeat scroll 0 0 #F5F5EF;
+    border: 1px solid #399677;
+    color: #9CACAF;
+    height: 22px;
+    margin: 0 0 6px;
+    overflow: hidden;
+    padding: 5px 5px;
+    font-size: 13px;
+}
+
+h4 {
+    color: #000;
+    font-size: 12px;
+    margin: 5px 0 0px;
+    padding: 0px 5px;
+}
+
+input, textarea, select {
+    font: 13px "courier new";
+    color: #000;
+    margin: 1px 2px;
+    padding: 1px 8px;
+}
+
+a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+a:link {
+    /*color: #000;*/
+    text-decoration: none;
+    font-size: 16px;
+
+}
+
+a:hover {
+    color: #EB8A3D;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #EB8A3D;
+    text-decoration: underline;
+}
+
+a:link, a:visited {
+    /*text-decoration: underline;*/
+    cursor: hand;
+}
+
+img {
+    border: 0px;
+}
+
+form, select, a {
+    font-size: 13px;
+}
+
+textarea {
+    font-size: 12px;
+}
+
+input, select, textarea {
+    vertical-align: middle;
+    padding: 0px;
+    margin: 1px 1px 1px 5px;
+    font-size: 13px;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+#leftFrame {
+    overflow: auto;
+}
+
+#mainFrame {
+    overflow: auto;
+    border: 0px solid #f00;
+}
+
+#userLeftFrame {
+    overflow: auto;
+}
+
+#userMainFrame {
+    overflow: auto;
+    border: 0px solid #f00;
+}
+
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* 整个页面内容 */
+#container {
+    padding: 2px 5px 10px 0px;
+    border: 0px solid #f00;
+}
+
+/* 主列表 */
+/*#listDiv {
+    margin:10px 0px 10px 0px;
+    padding:0px;
+    width:100%;
+    border:1px solid #888C40;
+}*/
+#listDiv td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+}
+
+#listDiv thead th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/*#listDiv label{font-weight: normal;}*/
+#listDiv thead td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;
+}
+
+#listDiv thead tr {
+    background: #383838;
+    color: #fff;
+
+}
+
+#addDiv {
+    margin: 20px 0px 10px 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+#addDiv table {
+    margin: 0px;
+}
+
+#addDiv label {
+    font-weight: normal;
+}
+
+#addDiv td {
+    vertical-align: middle;
+}
+
+.mainList_table {
+    border: 1px solid #cccccc;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+/* 主表格 */
+.mainList {
+    width: 100%;
+}
+
+.indecator {
+    width: 100%;
+    /*background-color: #E8ECA0;*/
+}
+
+.submit {
+    width: auto;
+    padding: 1px 2px 1px 5px;
+    /* letter-spacing:2px; */
+    background: button;
+}
+
+.hand {
+    cursor: pointer;
+}
+
+.rowTitle {
+    background: #c8cCA0;
+    text-indent: 0.5rem;
+}
+
+#pageList {
+    float: right;
+}
+
+.clear {
+    clear: both;
+    float: none;
+    font-size: 0px;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+#rightLink {
+    float: right;
+    border: 0px solid #ff0000;
+    width: 10%;
+    height: 100%;
+    background-color: #DCE4F3;
+    margin: 0px;
+    padding: 0px;
+}
+
+#vipLevel sup {
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/*h2 .rightSpan a {
+    border-color:#2F7B63;
+    border-style:solid;
+    border-width:1px 2px 2px 1px;
+    color:#fff;
+    display:block;
+    font-size:12px;
+    font-weight:400;
+    padding:2px 5px 2px 10px;
+    text-decoration:none;
+}*/
+h2 .rightSpan {
+    float: right;
+    padding: 0px 5px 0px 5px;
+}
+
+h2 .leftSpan {
+    color: #FF5151;
+    float: left;
+    margin-top: 3px;
+}
+
+h2 a {
+    font-size: 12px;
+}
+
+h2 a:link {
+    color: black;
+}
+
+h2 a:visited {
+    color: black;
+}
+
+/* 没有查询条件 */
+.no-records {
+    color: #666666;
+    padding: 15px;
+    text-align: center;
+}
+
+/* 针对活动页面 */
+.leftContainer {
+    padding: 0;
+    border: 1px solid #f00;
+    background-color: #ccc;
+    width: 130px
+}
+
+.leftContainer ul {
+    padding-left: 10px;
+}
+
+.leftContainer ul li {
+    margin-top: 10px
+}
+
+.leftContainer ul a {
+    text-decoration: none;
+    color: #050505;
+    font-weight: bold;
+}
+
+.leftContainer ul a:hover {
+    text-decoration: none;
+    color: #ff5151;
+}
+
+.rightContainer {
+    margin-left: 140px
+}
+
+/*按钮组*/
+#listDiv a {
+    height: 25px;
+    line-height: 25px;
+    margin: 2px auto;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0 2px;
+}
+
+#query .form-control {
+    height: 25px;
+    font-size: 12px;
+    text-align: left;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+#query .btn {
+    height: 25px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+}
+
+.form-top .btn {
+    height: 25px;
+    line-height: 25px;
+    padding: 0 5px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px 2px;
+}
+
+/*输入框*/
+.form-top .form-control {
+    height: 25px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+}
+
+/*label字体大小设置*/
+.form-top label {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#query label {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+/*修改玩法组输入框*/
+#count_1_name, #field_1_nums, #count_1_expand_num, #field_1_max_selected, #field_1_prompt {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+#field_detail input {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+/*增加页按钮*/
+#addDiv .btn {
+    padding: 0 5px;
+}
+
+#field_detail label {
+    font-weight: normal;
+}
+
+/*增加总代输入框*/
+.addTop .form-control {
+    width: 15%;
+}
+
+/*#addDiv .form-control{width: 35%;text-align: left;}*/
+/*开奖管理输入框*/
+.gameTable .form-control {
+    height: 25px;
+    text-align: left;
+    font-size: 12px;
+    padding: 0;
+}
+
+/*开奖管理按钮*/
+.gameTable .btn {
+    height: 25px;
+    line-height: 14px;
+}
+
+/*开奖管理字体大小*/
+.gameTable label {
+    font-weight: normal;
+}
+
+/*开奖管理游戏按钮*/
+.gameBtn td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/*抓号历史*/
+#form1 label {
+    font-weight: normal;
+}
+
+/*抓号监视*/
+#shopsListHeader td {
+    text-align: center;
+}
+
+#first_title td {
+    text-align: center;
+}
+
+/*增加输入框*/
+.add-main .form-control {
+    width: auto;
+    text-align: left;
+}
+
+/*开奖管理-抓号监视页mianList*/
+.mainList td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.mainList th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tablediv table {
+    width: 100%;
+}
+
+.tablediv table tr td, .tablediv table tr th {
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/*页码样式*/
+.pageTal {
+    width: 100%;
+    border: 1px solid #ddd;
+    height: 40px;
+    line-height: 40px;
+}
+
+#pageList {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+}
+
+#pageList span {
+    display: inline-block;
+    padding: 0 14px;
+    border-right: 1px solid #ddd;
+    height: 40px;
+    line-height: 40px;
+}
+
+#pageList a {
+    display: inline-block;
+    padding: 0 14px;
+    height: 40px;
+    line-height: 40px;
+    border-right: 1px solid #ddd;
+    color: #383838;
+}
+
+#pageList a:hover {
+    color: red;
+}
+
+#pageList span.curPage {
+    color: red;
+    background: rgba(211, 211, 211, 0.3)
+}
+
+#pageList label {
+    padding: 0 4px;
+    height: 40px;
+    line-height: 40px;
+    border-right: 1px solid #ddd;
+
+}
+
+#pageList em {
+    padding: 0 8px;
+    height: 40px;
+    line-height: 40px;
+    margin-left: -1px;
+    display: inline-block;
+    border-right: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#pageList em:hover {
+    color: red;
+    background: rgba(211, 211, 211, 0.4);
+}
+
+/*彩种管理-奖金组*/
+#listDiv .priceTd {
+    text-align: left;
+    padding: 0 3px;
+}
+
+#listDiv .priceTd .form-inline {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/*日期控件样式*/
+.form-inline span.glyphicon {
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+}
+
+.form-inline .input-md.form-control.key {
+    height: 64px;
+    width: 500px
+}
+
+/*新增银行卡*/
+.important-text {
+    color: red;
+}
+
+.fileinput-button {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.fileinput-button input{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+}

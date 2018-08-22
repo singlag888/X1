@@ -1,0 +1,71 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+$(document).ready(function(){
+    $("input[name=startDate]").val("<?php echo $startDate; ?>");
+    $("input[name=endDate]").val("<?php echo $endDate; ?>");
+    $("select[name=is_test]").val("<?php echo $is_test; ?>");
+    $("input[name=show1]").attr('checked', <?php if ($show1 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show2]").attr('checked', <?php if ($show2 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show3]").attr('checked', <?php if ($show3 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+});
+</script>
+<div class="list-div" id="addDiv">
+    <form name="form1" class="form-top" id="form1" action="" method="get" onsubmit="return checkform(this)">
+        <div class="form-inline">
+            <input type="hidden" name="c" value="test"/>
+            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+            <div class="form-group has-feedback has-default">
+                <label>开始时间：</label>
+                <input class="input-md form-control" type="text" name="startDate" id="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback has-default">
+                <label>结束时间</label>
+                <input class="input-md form-control"  type="text" name="endDate" id="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+                <span class="glyphicon  glyphicon-calendar form-control-feedback"></span>
+            </div>
+            
+            <label class="ml10">测试账号：</label>
+            <select class="input-md form-control" name="is_test">
+                <option value="-1">所有帐号</option>
+                <option value="0">非测试帐号</option>
+                <option value="1">测试帐号</option>
+            </select>
+            <label class="ml10" for='show1' style='color:#0033CC;'><input type="checkbox" id="show1" name="show1" value="1"/>用户总数</label>
+            <label class="ml10" for='show2' style='color:#FF0000;'><input type="checkbox" id="show2" name="show2" value="1"/>参与游戏用户数</label>
+            <label class="ml10" for='show3' style='color:#00FF00;'><input type="checkbox" id="show3" name="show3" value="1"/>中奖用户数</label>
+            <input class="btn btn-info button ml10" style="width: 60px;" type="submit" value="查看"  />
+        </div>
+    </form>
+    <!--
+    <input type="hidden" name="c" value="test"/>
+    <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    开始时间: <input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+    结束时间: <input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+    测试帐号<select name="is_test">
+        <option value="-1">所有帐号</option>
+        <option value="0">非测试帐号</option>
+        <option value="1">测试帐号</option>
+    </select>
+    <label for='show1' style='color:#0033CC'><input type="checkbox" id="show1" name="show1" value="1"/>用户总数</label>&nbsp;&nbsp;
+    <label for='show2' style='color:#FF0000'><input type="checkbox" id="show2" name="show2" value="1"/>参与游戏用户数</label>&nbsp;&nbsp;
+    <label for='show3' style='color:#00FF00'><input type="checkbox" id="show3" name="show3" value="1"/>中奖用户数</label>&nbsp;&nbsp;
+    <input type="submit" value="查看" class="button" />-->
+
+<table class="table table-responsive table-bordered " style="margin-top: 15px;" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="100%" height="280" id="chart" >
+                <param name="movie" value="js/chart.swf?" />
+                <param name="FlashVars" value='&dataURL=?c=test%26a=userStat%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show1=<?php echo $show1; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26is_test=<?php echo $is_test; ?>'>
+                <param name="quality" value="high" />
+                <embed src="js/chart.swf?" flashVars='&dataURL=?c=test%26a=userStat%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show1=<?php echo $show1; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26is_test=<?php echo $is_test; ?>' quality="high" width="100%" height="280" name="chart" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+            </object>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

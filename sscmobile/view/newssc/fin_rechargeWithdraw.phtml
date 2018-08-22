@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>   <!--  团队提现明细 -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+
+
+    <!--/****************************** 添加 js事件,实现跳转***************************************/-->
+    <script type="text/javascript">
+        $(function(){
+
+
+            //>>设置跳转
+            var mobileHtml = ' </div><div style="width: 100%"><div class="snow-page-div" style="width:45%;margin: 10px auto;">第<input type="text" name="upPage" value="1" style=" width: 45px;height: 20px;display: inline;margin-left: 8px; margin-bottom: 4px;border: 1em; border: solid 1px #B8B8B8;border-radius: 2px; vertical-align: baseline; line-height: 24px; background-color: #e9e9e9; text-align: center;" class="snow-input "/> 页<input class="btn-sm  btn-info upPage" style=" margin-bottom: 3px;margin-left: 5px; font-size: 13px; line-height: 1.5;border-radius: 3px; color: #fff; background-color: #D22018; border-color: #46b8da;cursor: pointer;"  type="button" value=">>确定<<"/></div></div>'
+
+            $('#pageList').after(mobileHtml);
+
+            //>>设置分页条换行
+            $('.upPage').on('click',function(){
+                //>>获取跳转地址
+                //>>获取最大值
+                var maxStr = $('#pageList label').html();
+                maxStr = maxStr.substring(1,maxStr.lastIndexOf(']'));
+                var maxPage = maxStr.substring((parseInt(maxStr.indexOf('/')) + 1));
+                //>>如果有输出就使用输出
+                <?php if(isset($maxPge)) : ?>
+                maxPage = '<?php echo $maxPage ?>' == '' ? 1 : '<?php echo $maxPage ?>';
+                <?php endif ?>
+                if(parseInt($('.snow-input').val()) > parseInt(maxPage)){
+                    //>>更改为最大值,并提示
+                    $('.snow-input').val(maxPage);
+
+                    return false;
+                }else{
+                    //>>没有超过最大页码值, 跳转到相应页码
+                    var url = window.location.href;
+                    var page = $('input[name=upPage]').val();
+                    if(url.indexOf('&curPage') != -1 && url.indexOf('&curPage')  > 0){
+                        url = url.substring(0,url.indexOf('&curPage'));
+                        url += '&curPage=' + page;
+                    }else  if(url.indexOf('&upPage') != -1 && url.indexOf('&upPage')  > 0){
+                        url = url.substring(0,url.indexOf('&upPage'));
+                        url += '&upPage=' + page;
+                    }else{
+                        url += '&upPage=' + page + '&curPage=' + page;
+                    }
+                    window.location.href = url;
+                    window.event.returnValue=false;  //>解决跳转失效问题
+                }
+            })
+        })
+    </script>
+    <!--/****************************** 添加 js事件,实现跳转***************************************/-->
+</head>
+
+<body>
+<div class="operate_middle_page">
+  <!--/*头部*/-->
+        <header class="headerbg">
+            <a class="headbox01" href="javascript:history.back(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+            <p class="headtetle">
+                <?php
+                if($key === 'recharge')
+                {
+                    echo '个人充值';
+                }elseif($key === 'withdraw')
+                {
+                    echo '个人提款';
+                }
+                    ?>
+              </p>
+        </header>
+        <div class="defoperate_record_tablist">
+            <ul class="defoperate_record_tabtitleUl4">
+                <li>订单号</li>
+                <li>订单状态</li>
+                <li>备注</li>
+                <li>提交时间</li>
+            </ul>
+
+            <?php
+            $arrStatus=['未处理','已受理','已审核','机器正在受理','需要人工干预','--','--','--','已成功','因故取消'];
+            $pageAmount = 0;
+            if($list):
+                foreach ($list as $v):
+                    $pageAmount += $v['amount'];
+                    ?>
+        <ul class="defoperate_record_tabtitleUL4">
+
+            <li><?php echo $v['local_order_num']; ?></li>
+            <li><?php echo $arrStatus[$v['status']];?></li>
+            <li><?php if(empty($v['remark'])){echo '--';}else{echo $v['remark'];}?></li>
+            <li><?php echo $v['create_time']; ?></li>
+        </ul>
+                    <?php
+                endforeach;
+            else:
+                ?>
+            <li class="text_center" colspan="8">没有符合条件的记录，请更改查询条件</li>
+            <?php endif;?>
+
+        </div>
+        <div>
+        <?php echo $pageList; ?>
+        </div>
+    </div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+<script>
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+        $('#subform').submit();
+    }
+    $(function() {
+        //设置默认值
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+        $('select[name=include_childs]').val('<?php echo $include_childs; ?>').change();
+
+    });
+        $(".defoperate_record_tabtitleUL4").each(function(i){
+       $(".defoperate_record_tabtitleUL4").eq(i).click(function(){
+           $(".OrderbyDiv").eq(i).addClass("DisplayBlock").siblings().removeClass("DisplayBlock");
+        })
+    })
+    $(".OrderbyDivX").click(function(){
+        $(".OrderbyDiv").removeClass("DisplayBlock");
+    })
+</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

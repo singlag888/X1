@@ -1,0 +1,70 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="listDiv">
+
+    <div id="query">
+        <form name="form1" action="./" method="get">
+            <div class=" form-inline mt20 mb10">
+                <label style="font-weight: normal;">留言者IP/用户名：</label>
+                <input class="form-control" name="username" size="15" id="username" value="<?php echo $username; ?>"/>
+                <label class="ml30" style="font-weight: normal;">处理类型：</label>
+                <select class="input-md form-control" name="status">
+                    <option value="0" <?php if($status==0) echo 'selected'; ?>>全部</option>
+                    <option value="1" <?php if($status==1) echo 'selected'; ?>>未读</option>
+                    <option value="2" <?php if($status==2) echo 'selected'; ?>>已读</option>
+                    <option value="3" <?php if($status==3) echo 'selected'; ?>>已处理</option>
+                    <option value="4" <?php if($status==4) echo 'selected'; ?>>已删除</option>
+                </select>
+                <input type="hidden" name="c" value="guestBook"/><input type="hidden" name="a" value="guestBookList"/>
+         　　     <input class="btn btn-mini btn-info" type="submit" name="submit" value=">> 查 询 <<"/>
+            <hr>
+            </div> 
+            <form class="form-top">
+                <table class="table  table-responsive table-bordered ">
+                <thead>
+                    <tr>
+                        <td>gb_id</td>
+                        <td>当班客服</td>
+                        <td>标题</td>
+                        <td>用户</td>
+                        <td>联系QQ</td>
+                        <td>电话</td>
+                        <td>处理记录</td>
+                        <td>IP</td>
+                        <td>创建时间</td>
+                        <td>操作</td>
+                    </tr>
+                </thead>
+                <?php foreach ($guestBooks as $key => $v): ?>
+                    <tr>
+                        <td><?php echo $v['gb_id']; ?></td>
+                        <td><?php echo htmlspecialchars($v['kefu']); ?></td>
+                        <td><?php echo htmlspecialchars($v['title']); ?></td>
+                        <td><?php echo htmlspecialchars($v['username']); ?></td>
+                        <td><?php echo htmlspecialchars($v['qq']); ?></td>
+                        <td><?php echo htmlspecialchars($v['tel']); ?></td>
+                        <td><?php if ($v['status'] == '1'): ?>
+                                <font color=red>未读</font>
+                            <?php elseif($v['status'] == '2'): ?>
+                                <font color=#AF7817>已读未处理</font>
+                            <?php elseif($v['status'] == '3'): ?>
+                                <font color=green>已处理</font>
+                            <?php elseif($v['status'] == '4'): ?>
+                                <font color=blue>已删除</font>                        
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo ip::loc($v['client_ip']); ?></td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td>
+                            <?php if ($canView): ?>
+                                <a class="btn btn-mini btn-info" href="./?c=guestBook&a=viewGuestBook&gb_id=<?php echo $v['gb_id']; ?>">查看详情</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+            </form>
+        </form>     
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

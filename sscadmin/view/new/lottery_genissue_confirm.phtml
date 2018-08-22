@@ -1,0 +1,62 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(document).ready(function(){
+   $("input[name=lottery_id]").val("<?php echo $lottery['lottery_id']; ?>");
+});
+</script>
+<div class="list-div mt20" id="addDiv">
+<form name="form1" id="form1" action="./?c=lottery&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>" method="post">
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">所属彩种:</td>
+            <td><?php echo $lottery['name']; ?></td>
+        </tr>
+        <?php foreach ($lottery['settings'] as $k => $v): ?>
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">分段销售时间<?php echo $k+1; ?></td>
+            <td>
+                开始时间：<?php echo $v['start_time']; ?><br/>
+                结束时间：<?php echo $v['end_time']; ?><br/>
+                游戏周期：<?php echo $v['cycle']; ?>秒<br/>
+                停售时间：<?php echo $v['end_sale']; ?>秒之前<br/>
+                撤单时间：<?php echo $v['drop_time']; ?>秒之前<br/>
+                开奖号码录入时间：<?php echo $v['code_time']; ?>秒之后<br/>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">休市日期</td>
+            <td>
+                <?php echo $lottery['yearly_start_closed']; ?> 至 <?php echo $lottery['yearly_end_closed']; ?>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">信息确认</td>
+            <td>
+                <font color=#669900>目前已生成从 <?php echo $intersectDates['startday']; ?> 到 <?php echo $intersectDates['endday']; ?> 的奖期。<br/>
+                即将生成从 <?php echo $date1; ?> 到 <?php echo $date2; ?> 之间的奖期 </font><font color=red>(包括<?php echo $date2; ?>当天)</font>
+                <input type="hidden" name="startDate" value="<?php echo $date1; ?>" /><input type="hidden" name="endDate" value="<?php echo $date2; ?>" />
+            </td>
+        </tr>
+        <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;" class="narrow-label">奖期生成开始奖期</td>
+        <td><?php if ($firstDate): ?>第&nbsp;<?php echo $firstDate; ?> &nbsp;期<?php else: ?>未指定<?php endif; ?> <input type="hidden" name="firstDate"  size="11" value="<?php echo $firstDate; ?>"></td>
+        </tr>
+        <?php if ($intersectDates['intersect_startday']): ?>
+        <tr>
+            <td class="narrow-label">提示</td>
+            <td><font color="red">从 <?php echo $intersectDates['intersect_startday']; ?> 到 <?php echo $intersectDates['intersect_endday']; ?> 的奖期已存在，并将重新生成！</font></td>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <td></td>
+            <td colspan="2"><input type="submit" class="submit" name="submit" value="<?php if ($sa == ""): ?>批量生成奖期<?php else: ?>确认生成奖期<?php endif; ?>" />
+                <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/><input type="hidden" name="sa" value="addItem">
+                <input type="hidden" name="lottery_id" value="" />
+        </tr>
+    </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

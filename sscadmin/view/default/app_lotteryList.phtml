@@ -1,0 +1,117 @@
+<?php $this->import("head"); ?>
+    <script>
+        function checkform(ob) {
+            $('.submit').html('正在提交数据');
+            $('.submit').attr('disabled',true);
+            return true;
+        }
+    </script>
+
+<style>
+    .bt{
+        background: #3B8FB2;
+        color: #fff;
+    }
+    table tr{
+        text-align: center;
+    }
+    input{
+        text-align: left;
+    }
+    .chk_box_li{
+        width:20%;float:left;text-align:left;
+    }
+</style>
+
+    <div class="list-div" id="addDiv">
+        <form class="form-inline " role="form" name="form1" id="form1" action="./?c=app&a=<?php echo ACTION; ?>"
+              onsubmit="return checkform(this)" method="post" enctype="multipart/form-data">
+            <table class="table table-responsive table-bordered" style="width:60%;">
+                <?php foreach($loteryList as $item):?>
+                    <input type="hidden" name="lotteryList[<?php echo $item['list_id']?>][list_id]" value="<?php echo $item['list_id']?>">
+                    <tr>
+                        <td width="20%">是否开启</td>
+                        <td>
+                            <div class="switch">
+                                <input type="hidden" name="lotteryList[<?php echo $item['list_id']?>][is_use]"
+                                    <?php if (isset($item['is_use'])): ?>
+                                        value="<?php if ($item['is_use'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                                    <?php else: ?>
+                                        value=1
+                                    <?php endif; ?> />
+                                <div class="btn_fath clearfix
+                        <?php if (isset($item['is_use'])): ?>
+                            <?php if ($item['is_use'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                        <?php else: ?>
+                            on
+                        <?php endif; ?>
+                        " id="switch" onclick="toogle(this)">
+                                    <div class="move"></div>
+                                    <div class="btnSwitch btn1">开</div>
+                                    <div class="btnSwitch btn2">关</div>
+                                </div>
+                            </div>
+                        </td>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="20%">列表名称</td>
+                        <td>
+                            <input  class="input-md form-control" style="float: left;" type="text" name="lotteryList[<?php echo $item['list_id']?>][name]" value="<?php echo $item['name'];?>">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="20%">列表显示彩种</td>
+                        <td>
+                            <?php
+                            $k=1;
+                            foreach ($lotterys as $lottery):?>
+                                <span class="chk_box_li">
+                                    <input type="checkbox"
+                                           <?php if(in_array($lottery['lottery_id'],$item['lotteryList']))echo 'checked="checked"';?>
+                                           name="lotteryList[<?php echo $item['list_id']?>][lotteryList][]" value="<?php echo $lottery['lottery_id']?>" id="1_<?php echo $lottery['lottery_id']?>">
+                                <label for="1_<?php echo $lottery['lottery_id']?>"><?php echo $lottery['cname']?></label>
+                                </span>
+
+                                <?php if($k%5==0) {
+                                    echo '<br>';
+                                }
+                                $k++;
+                                ?>
+                            <?php endforeach;?>
+                        </td>
+                    </tr>
+                    <tr style="height: 4px">
+                    </tr>
+                <?php endforeach;?>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <input name="ua_id" type="hidden"
+                                   value="<?php if ($item) echo $item['ua_id']; ?>"/>
+                            <button type="submit" class="btn btn-info submit" name="submit">提交</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        function toogle(th) {
+            let ele = $(th).children(".move");
+            if ($(th).hasClass('on')) {
+                ele.animate({left: "1px"}, 300, function () {
+                });
+                $(th).removeClass("on").addClass("off");
+                $(th).prev('input').val(0);
+            } else {
+                ele.animate({left: '35px'}, 300, function () {
+                });
+                $(th).removeClass("off").addClass("on");
+                $(th).prev('input').val(1);
+            }
+        }
+    </script>
+<?php $this->import("foot"); ?>

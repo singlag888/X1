@@ -1,0 +1,217 @@
+<?php $this->import("head"); ?>
+
+<script>
+    /*
+     * array(
+     array(
+     'nums'  => '0 1 2 3 4 5 6 7 8 9',   //号码列表
+     'max_selected' => 1,   //最多可选多少个号
+     'prompt'    => '百位',    //前导提示符
+     'has_filter_btn' => 1,  //是否显示筛选按钮
+     ),
+     )
+     */
+    $(document).ready(function() {
+        //转直注数
+        $("#levels").change(function() {
+            var i = ($(this).val());
+            var str = '';
+            for (j = 1; j <= i; j++) {
+                str = str + "<input type='checkbox' name='count[" + j + "][is_use]' id='count_" + j + "_is_use' value='1'>" + j + "等奖转直注数:<input  type='text' name='count[" + j + "][expand_num]' id='count_" + j + "_expand_num' size='5'>&nbsp;&nbsp;&nbsp;奖级名称:<input type='text' id='count_" + j + "_name' name='count[" + j + "][name]' value=''><br/>"
+            }
+            $("#expands").html(str);
+        });
+        //选号区定义
+        $("#field_num").change(function() {
+            var i = ($(this).val());
+            if (i < 0) {
+                return false;
+            }
+            var str = '';
+            for (j = 1; j <= i; j++) {
+                str = str + '可选号码<input name="field[' + j + '][nums]" id="field_' + j + '_nums" ' +
+                    'value="0 1 2 3 4 5 6 7 8 9" size="40">（以空格分隔）<br/>' +
+                    '最大选择数量<input name="field[' + j + '][max_selected]" id="field_' + j + '_max_selected" value="10" size="2">' +
+                    '&nbsp;&nbsp;前导提示符<input name="field[' + j + '][prompt]" id="field_' + j + '_prompt" value="" size="8">' +
+                    '&nbsp;&nbsp;<input type="checkbox" name="field[' + j + '][has_filter_btn]" id="field_' + j + '_has_filter_btn" value="1"><label for="field_' + j + '_has_filter_btn">显示筛选按钮</label><br/>';
+            }
+
+            $("#field_detail").html(str);
+
+        });
+
+        var action = "<?php echo ACTION; ?>";
+        if (action == 'editMethod') {
+            $("input[name=method_id]").val("<?php echo $method['method_id']; ?>");
+            $("select[name=mg_id]").val("<?php echo $method['mg_id']; ?>");
+            $("input[name=name]").val("<?php echo $method['name']; ?>");
+            $("input[name=cname]").val("<?php echo $method['cname']; ?>");
+            $("textarea[name=description]").val("<?php echo $method['description']; ?>");
+            $("input[name=max_comb]").val("<?php echo $method['max_comb']; ?>");
+            $("input[name=max_money]").val("<?php echo $method['max_money']; ?>");
+            $("input[name=expand_num]").val("<?php echo $method['expand_num']; ?>");
+            $("input[name=levels]").val("<?php echo $method['levels']; ?>");
+            $("input[name=status][value=<?php echo $method['status']; ?>]").attr("checked", true);
+            $("input[name=is_lock][value=<?php echo $method['is_lock']; ?>]").attr("checked", true);
+            $("select[name=method_property]").val("<?php echo $method['method_property']; ?>");
+            $("input[name=sort]").val("<?php echo $method['sort']; ?>");
+            $("input[name=field_num]").val("<?php echo count($method['field_def']); ?>");
+            $("input[name=can_input][value=<?php echo $method['can_input']; ?>]").attr("checked", true);
+
+            var data =<?php if ($json_method)  echo $json_method; else echo '{ }';  ?>;
+            //对号码奖级进行描述
+            $("#levels").change();
+            i = $("#levels").val();
+            for (j = 1; j <= i; j++) {
+                $("#count_" + j + "_expand_num").val(data.expands[j].expand_num);
+                if ($("#pid").val() > 0)
+                {
+                    //$("#count_"+j+"_count").attr("disabled",true);
+                }
+                $("#count_" + j + "_name").val(data.expands[j].name);
+                if ($("#pid").val() > 0)
+                {
+                    //$("#count_"+j+"_name").attr("disabled",true);
+                }
+                $("#count_" + j + "_is_use").attr("checked", data.expands[j].is_use == 1);
+            }
+
+            //对选号区进行描述
+            $("#field_num").change();
+            i = $("#field_num").val();
+            for (j = 1; j <= i; j++) {
+                $("#field_" + j + "_nums").val(data.field_def[j].nums);
+                $("#field_" + j + "_max_selected").val(data.field_def[j].max_selected);
+                $("#field_" + j + "_prompt").val(data.field_def[j].prompt);
+                $("#field_" + j + "_has_filter_btn").attr('checked', data.field_def[j].has_filter_btn == 1);
+            }
+        }
+        else {
+            $("select[name=mg_id]").val("<?php echo $mg_id; ?>");
+        }
+
+        $('#form1').submit(function() {
+            if ($("select[name=mg_id]").val() == '0') {
+                alert('请选择所属玩法组;');
+                return false;
+            }
+
+            return true;
+        });
+    });
+</script>
+<div class="list-div add-main" id="addDiv">
+    <form name="form1" class="form-top" id="form1" action="./?c=method&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>&mg_id=<?php echo $mg_id; ?>" method="post">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 60%;">
+            <tr>
+                <td class="rowTitle" colspan="2">
+                    <b>玩法</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">所属彩种</td>
+                <td><?php echo $lottery['name']; ?></td>
+            </tr>
+            <tr>
+                <td>所属玩法组</td>
+                <td>
+                    <select class="input-md form-control" name="mg_id">
+                        <option value="0">请选择</option>
+                        <?php foreach ($groups as $v): ?>
+                            <option value="<?php echo $v['mg_id']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>中文名称</td>
+                <td><input class="input-md form-control" name="cname"/></td>
+            </tr>
+            <tr>
+                <td>玩法名称缩写（不能重复）</td>
+                <td><input class="input-md form-control" name="name"/></td>
+            </tr>
+            <tr>
+                <td>描述</td>
+                <td><textarea style="height: 100px;" class="input-md form-control" name="description" cols="60"></textarea></td>
+            </tr>
+            <tr>
+                <td>全包注数</td>
+                <td><input class="input-md form-control" name="max_comb"/></td>
+            </tr>
+            <tr>
+                <td>所属全包金额<br/>
+                    <b>（全包金额除以转直注数就是理论奖金）</b>
+                </td>
+                <td><input class="input-md form-control" name="max_money"/></td>
+            </tr>
+            <tr>
+                <td>奖级个数</td>
+                <td><input class="input-md form-control" name="levels" id="levels"/></td>
+            </tr>
+            <tr>
+                <td>转直注数</td>
+                <td><span id="expands" name="expands"></span></td>
+            </tr>
+            <tr>
+                <td>风险封锁</td>
+                <td><input type="radio" name="is_lock" value="1" checked/>启用&nbsp;<input type="radio" name="is_lock" value="0"/>禁用&nbsp;</td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td><input type="radio" name="status" value="8" checked/>启用&nbsp;<input type="radio" name="status" value="0"/>禁用&nbsp;</td>
+            </tr>
+            <tr>
+                <td>玩法属性</td>
+                <td>
+                <select class="input-md form-control" name="method_property">
+                    <option value=0>无属性</option>
+                    <option value=1>直选</option>
+                    <option value=2>组选</option>
+                    <option value=3>趣味</option>
+                    <option value=4>特殊</option>
+                    <option value=5>定位</option>
+                    <option value=6>不定位</option>
+                    <option value=7>任二</option>
+                    <option value=8>任三</option>
+                    <option value=9>任四</option>
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <td>排序（越小越靠前）</td>
+                <td><input class="input-md form-control" name="sort" value="100"/></td>
+            </tr>
+            <tr>
+                <td class="rowTitle" colspan="2">
+                    <b>选号区参数</b>
+                </td>
+            </tr>
+            <tr>
+                <td>几个号码区段</td>
+                <td><input class="input-md form-control" name="field_num" id="field_num" onclick="this.focus();
+                        this.select();"/></td>
+            </tr>
+            <tr>
+                <td>各区段定义</td>
+                <td><span id="field_detail" name="field_detail"></span></td>
+            </tr>
+            <tr>
+                <td>显示手工录号按钮</td>
+                <td><input type="checkbox" name="can_input" id="can_input" value="1"/><label for="can_input">允许</label></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 60%;margin:0 auto;text-align: center;">
+                        <input class="btn btn-info  submit" style="width: 60px;" type="submit"  name="submit" value="<?php if (ACTION == "addMethod"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                        <input class="btn btn-info submit" type="button" style="width: 60px;"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="method_id" value="" />
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,29 @@
+/* 整个对话框 */
+.ui-dialog { overflow: hidden; padding: 0.2em; position: absolute; font: 12px "sans-serif", "Arial", "Verdana"; color: #333333; background:#FFF;border:1px solid #1582c3; 
+border-radius:3px; -moz-border-radius: 3px; -webkit-border-radius:3px; font-size:12px; }
+/* 标题栏 */
+.ui-dialog-titlebar { cursor: move; padding: 0.4em 1em; position: relative; /* .ui-widget-header */ 
+border-bottom:1px solid #1582c3;font-weight: bold;border-radius:3px; -moz-border-radius: 3px; -webkit-border-radius:3px;  }
+/* 内容栏 */
+.ui-dialog .ui-dialog-content { background: none repeat scroll 0 0 transparent; border: 0 none; overflow: auto; padding: 0.5em 1em; position: relative; }
+/* 底部按钮栏 */
+.ui-dialog .ui-dialog-button { background-image: none; border-width: 1px 0 0; margin:6px 8px 4px 7px; text-align: left; }
+.ui-dialog .ui-dialog-button .ui-dialog-buttonset { float: right; }
+/* 按钮 */
+.ui-button { cursor: pointer; display: inline-block; margin-right: 0.1em; overflow: visible; padding: 0; margin: 0 0.3em; position: relative; text-align: center; text-decoration: none !important; /* .ui-state-default */ background-color:#1582c3; border: 1px solid #1582c3;
+ color:#FFF; font-weight: bold;border-radius:3px; height:28px; line-height:28px; text-align:center; }
+/* 按钮上的文字 */
+.ui-button .ui-button-text { display: block; line-height:19px; height:19px; text-align:center; width:45px; color:#FFF !important; }
+/* 设置float过后的样式 */
+.ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
+.ui-helper-clearfix:after { clear: both; }
+/* 四周呈现圆角，只在FF下有用 */
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 4px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 4px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { -moz-border-radius-topright: 4px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { -moz-border-radius-topleft: 4px; }
+/* 遮罩层 */
+.ui-widget-overlay { height: 100%; left: 0; position: absolute; top: 0; width: 100%; /*background: url("../images/ui-bg_diagonals-thick_20_666666_40x40.png") repeat scroll 50% 50% #666666;*/ background: #000; opacity: 0.5; filter: alpha(opacity=50);}
+/* 用于追号层 */
+.ui-widget-overlay2 { height: 100%; left: 0; position: absolute; top: 0; width: 100%; /*background: url("../images/ui-bg_diagonals-thick_20_666666_40x40.png") repeat scroll 50% 50% #666666;*/ background: #000; opacity: 0.5; filter: alpha(opacity=50);}
+.color-8c8c8c{ background-color:#8c8c8c; border:1px solid #FFF; color:#333;}

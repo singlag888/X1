@@ -1,0 +1,124 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="addDiv">
+    <table cellpadding="0" cellspacing="0" width="50%" border="0">
+        <tr>
+            <td class="narrow-label">当班客服</td>
+            <td><?php echo htmlspecialchars($guestbook['kefu']); ?></td>
+        </tr>
+        <tr>
+            <td class="narrow-label">标题</td>
+            <td><?php echo htmlspecialchars($guestbook['title']); ?></td>
+        </tr>
+        <tr>
+            <td>内容</td>
+            <td><?php echo htmlspecialchars($guestbook['content']); ?></td>
+        </tr>
+        <tr>
+            <td class="narrow-label">用户</td>
+            <td><?php echo $guestbook['username']; ?> <a target="_blank" href="?c=user&a=viewUser&user_id=<?php echo $guestbook['user_id']; ?>">详情</a></td>
+        </tr>
+        <tr>
+            <td>IP</td>
+            <td><?php echo ip::loc($guestbook['client_ip']); ?></td>
+        </tr>
+        <tr>
+            <td>域名</td>
+            <td><?php echo $guestbook['domain']; ?></td>
+        </tr>
+        <tr>
+            <td>创建时间</td>
+            <td><?php echo $guestbook['create_time']; ?> </td>
+        </tr>
+        <tr>
+            <td>QQ</td>
+            <td><?php echo htmlspecialchars($guestbook['qq']); ?></td>
+        </tr>
+        <tr>
+            <td>电话</td>
+            <td><?php echo htmlspecialchars($guestbook['tel']); ?></td>
+        </tr>
+    </table>
+    <?php if ($guestbook['status'] == 2 ): ?>
+    <form name="form1" id="form2" action="./?c=guestBook&a=replyGuest" method="post" >
+        <table cellpadding="0" cellspacing="0" width="50%" border="0" style="margin-top:20px">
+            <tr><td>状态</td><td>已读未处理</td></tr>
+            <tr><td>处理时间</td><td></td></tr>
+            <tr><td>处理人</td><td></td></tr>
+            <tr>
+                <td>标题</td>
+                <td><input name="title" value=""/></td>
+            </tr>
+            <tr>
+                <td>回复内容</td>
+                <td><textarea name="content" cols="50" rows="5" ></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2">                    
+                    <input type="hidden" name="gb_id" value="<?php echo $guestbook['gb_id']; ?>"/>
+                    <input type="hidden" name="to_user_id" value="<?php echo $guestbook['user_id']; ?>"/>
+                    <input type="submit" class="submit"  value="留言回复"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <?php endif; ?>
+
+    <?php if ($guestbook['status'] == 3): ?>
+    <form name="form1" id="form2" action="./?c=guestBook&a=deleteGuestBook&gb_id=<?php echo $guestbook['gb_id']; ?>" method="post" >
+        <table cellpadding="0" cellspacing="0" width="50%" border="0" style="margin-top:20px">
+            <tr>
+                <td>状态</td>
+                <td>已处理</td>
+            </tr>
+            <tr>
+                <td>处理时间</td>
+                <td><?php echo $guestbook['deal_time']; ?></td>
+            </tr>
+            <tr>
+                <td>处理人</td>
+                <td><?php echo htmlspecialchars($guestbook['deal_admin_username']); ?></td>
+            </tr>
+            <tr>
+                <td>标题</td>
+                <td><?php echo $msg['title']; ?></td>
+            </tr>
+            <tr>
+                <td>回复内容</td>
+                <td><?php echo $msg['content']; ?></td>
+            </tr>
+            <tr>
+                <td colspan="2">                                                            
+                    <input type="submit" class="submit" name="submit" value="删除这条留言" onclick="return confirm('真的删除？该操作不可恢复！');" /> 
+                </td>
+            </tr>
+        </table>
+    </form>
+    <?php endif; ?>
+
+    <?php if ($guestbook['status'] == 4): ?>
+        <table cellpadding="0" cellspacing="0" width="50%" border="0" style="margin-top:20px">
+            <tr>
+                <td>状态</td>
+                <td>已删除</td>
+            </tr>
+            <tr>
+                <td>处理时间</td>
+                <td><?php echo $guestbook['deal_time']; ?></td>
+            </tr>
+            <tr>
+                <td>处理人</td>
+                <td><?php echo htmlspecialchars($guestbook['deal_admin_username']); ?></td>
+            </tr>
+            <tr>
+                <td>标题</td>
+                <td><?php echo $msg['title']; ?></td>
+            </tr>
+            <tr>
+                <td>回复内容</td>
+                <td><?php echo $msg['content']; ?></td>
+            </tr>
+        </table>
+    <?php endif; ?>
+</div>
+
+<?php $this->import("foot"); ?>

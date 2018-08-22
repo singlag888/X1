@@ -1,0 +1,124 @@
+<?php $this->import("head"); ?>
+<script>
+function doReset()
+{
+    if ($('#lotteryId').val() == 0) {
+        alert('请选择彩种');
+        return false;
+    }
+
+    if (!$('#reset_issue').val()) {
+        alert('请输入奖期');
+        return false;
+    }
+
+    $.ajax({
+        type:"POST",
+        url:"?c=draw&a=resetDrawIssue",
+        dataType:"json",
+        data:"reset_lottery_id=" + $('#reset_lottery_id').val() + "&reset_issue=" + $('#reset_issue').val(),
+        success:function(response) {
+            if (response.errno) {
+                alert('重置出错。\nDebug信息：'+response.errstr);
+            }
+            else {
+                alert('重置成功!');
+            }
+        },
+        error:function(data)
+        {
+            alert('调用ajax出错' + data.toString());
+            return false;
+        }
+    });
+}
+
+$(function(){
+    $('input[name=lottery_id]').click(function(){
+        $('#form1').submit();
+    });
+    $('input[name=lottery_id][value=<?php echo $lottery_id; ?>]').attr('checked', true);
+});
+</script>
+
+<?php if ($canResetDrawIssue): ?>
+<div id="query" style="padding: 5px; margin: 5px 0pt; border: 1px solid rgb(57, 150, 119); background: none repeat scroll 0% 0% rgb(255, 255, 255);">
+<form class="form-inline form-inline" onsubmit="return false;">
+    <div class="form-inline">
+        <label>彩种：</label>
+        <select class="input-md form-control" name="reset_lottery_id" id="reset_lottery_id">
+            <option value="0">请选择</option>
+            <?php foreach ($typeLotterys as $v): ?>
+            <?php foreach ($v as $vv): ?>
+            <option value="<?php echo $vv['lottery_id']; ?>"><?php echo $vv['name']; ?></option>
+            <?php endforeach; ?>
+            <?php endforeach; ?>
+        </select>
+        <label>奖期:</label>
+        <input class="input-md form-control" type="text" value="" name="reset_issue" id="reset_issue">
+        <input class="btn btn-info button" type="button" onclick="doReset()" value="清除奖期开号标记" > <b style="color:red">此功能仅为方便测试使用，线上系统禁止使用！</b>
+    </div>
+</form>
+</div>
+<?php endif; ?>
+
+<form name="form1" id="form1" action="?c=draw&a=drawHistory" method="POST">
+<table class="table   table-hover mt20">
+    <tr>
+        <?php foreach ($types as $k => $v): ?>
+        <tr>
+            <td width="15%"><?php echo $v; ?></td>
+            <?php foreach ($typeLotterys[$k] as $vv): ?>
+            <td>
+            <input type="radio" name="lottery_id" id="<?php echo $vv['lottery_id']; ?>" value="<?php echo $vv['lottery_id']; ?>"/>
+                <label for="<?php echo $vv['lottery_id']; ?>"><?php echo $vv['cname']; ?></label>
+            </td>
+            <?php endforeach; ?>
+        </tr>
+        <?php endforeach; ?>
+    </tr>
+</table>
+</form>
+
+<div class="list-div mt20" id="listDiv">
+<table class="table table-responsive table-bordered  mainList">
+    <thead>
+        <tr>
+        	<td>奖期</td>
+            <td>权重</td>
+            <td>最早录号时间</td>
+            <?php foreach ($sources as $v): ?>
+            <td>
+            <?php echo $v['name']; ?>（<?php echo $v['rank']; ?>）
+            </td>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <?php foreach ($histories as $issue => $v): ?>
+    <tr>
+    	<td><?php echo $issue; ?></td>
+        <td><?php echo $v['total_rank']; ?></td>
+        <td><?php echo $issues[$issue]['earliest_input_time']; ?></td>
+        <?php foreach ($sources as $source): ?>
+        <td style="text-align: center;vertical-align: middle;">
+            <?php foreach ($v['detail'] as $history): ?>
+                <?php if ($history['ds_id'] == $source['ds_id']): ?>
+                    <?php if ($history['number']): ?>
+                        <?php echo $history['number']; ?>
+                    <?php else: ?>
+                        <b style="color:red">No result（<?php if ($issues['status_fetch'] == 2): ?>Finished<?php else: ?>processing<?php endif; ?>）</b>
+                <?php endif; ?>
+                <br/>
+                （<?php if ($history['retry'] > 0): ?>
+                    <b style="color:red"><?php echo $history['retry']+1; ?></b><?php else: ?><?php echo $history['retry']+1; ?><?php endif; ?> 次，<?php echo $history['His']; ?>）
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </td>
+        <?php endforeach; ?>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

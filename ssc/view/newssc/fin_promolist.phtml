@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(function(){
+    //设置默认值
+    $('#startDate').val('<?php echo $startDate; ?>');
+    $('#endDate').val('<?php echo $endDate; ?>');
+});
+</script>
+
+<ul class="title"><li>优惠记录</li></ul>
+<div class="recordsBox">
+    <div class="recordsBox2">
+
+        <div class="lotteryDIV">
+            <ul class="mgUL">
+                <li id="dw_1" class="lotteryLI" onclick="location.href='index.jsp?c=fin&a=depositList';">充值记录</li>
+                <li id="dw_2" class="lotteryLI" onclick="location.href='index.jsp?c=fin&a=withdrawList';">提款记录</li> 
+                <li id="dw_4" class="lotteryLI Change-point" onclick="location.href='index.jsp?c=fin&a=promoList';">优惠记录</li>
+            </ul>
+        </div>
+
+        <ul class="recordsInput noUnderLine">
+          <form name="form1" id="form1" action="" method="GET">
+          <li><span>申请时间：</span><span><input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+              </span><span>到</span><span><input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/></span>
+                <input type="hidden" name="c" value="fin"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                <input type="submit" name="submit" class="btnOne" value="查询"/>
+          </li>
+          </form>
+       </ul>
+
+        <ul class="recordsTop">
+            <li class="Rline W189px">编号</li>
+            <li class="Rline W189px">优惠类型</li>
+            <li class="Rline W234px">优惠金额(元)</li>
+            <li class="Rline W234px">优惠时间</li>
+        </ul>
+        <?php foreach ($promos as $v): ?>
+            <ul class="recordsContent">
+                <li class="Rline W189px"><?php echo $v['wrap_id']; ?></li>
+                <li class="Rline W234px">
+                    <?php if ($v['type'] == 4): ?>首存优惠
+                    <?php elseif ($v['type'] == 5): ?>再存优惠
+                    <?php elseif ($v['type'] == 6): ?>其他优惠(<?php echo $v['notes']; ?>)
+                    <?php elseif ($v['type'] == 7): ?>洗码优惠
+                    <?php endif; ?>
+                </li>
+                <li class="Rline W234px"><?php echo $v['amount']; ?>元</li>
+                <li class="Rline W234px"><?php echo $v['create_time']; ?></li>
+            </ul>
+        <?php endforeach; ?>
+
+        <div class="nextPage">
+            <?php echo $pageList; ?>
+        </div>
+
+        <div class="listTip">注：只显示7天以内的数据</div>
+    </div>
+</div>
+
+<?php $this->import("foot"); ?>

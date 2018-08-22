@@ -1,0 +1,188 @@
+<!DOCTYPE HTML> <!-- 投注记录 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<!-- 顶部导航信息部分 -->
+<?php $this->import('public_header') ?>
+<!-- End 顶部导航条 -->
+<div class="operate_middle_page">
+    <!-- <?php  ?> --><!-- $this->import("top_quick_bar"); -->
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <div class="default_record_search">
+            <form method="get" action="" id="form1" name="form1">
+                <ul>
+                    <li>
+                        <label class="search_record_gamelab">游戏：</label>
+                        <select class="default_common_input" name="lottery_id">
+                            <option value="0">请选择</option>
+                            <?php foreach ($lotterys as $v): ?>
+                                <option value="<?php echo $v['lottery_id']; ?>"><?php echo $v['cname']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="search_record_datelab">时间：</label>
+                        <div class="record_date_range">
+                            <input class="default_common_input datepicker85" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" my97mark="false" id="start_time" name="startDate" size="16" value="<?php echo $startDate; ?>">
+                            <em>到</em>
+                            <input class="default_common_input datepicker85" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" my97mark="false" id="end_time" name="endDate" size="16" value="<?php echo $endDate; ?>">
+                        </div>
+                    </li>
+                    <li>
+                        <label class="search_record_statuslab">状态：</label>
+                        <select class="default_common_input" name="check_prize_status">
+                            <option value="-1">请选择</option>
+                            <option value="100">正常</option>
+                            <option value="0">未开奖</option>
+                            <option value="2">未中奖</option>
+                            <option value="1">已中奖</option>
+                            <option value="65535">已撤单</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="submit" value="搜索" class="default_record_searchbtn" name="submit">
+                    </li>
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+                <input type="hidden" value="game" name="c">
+                <input type="hidden" value="packageList" name="a">
+            </form>
+        </div>
+
+        <table  class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="17%">订单号</th>
+                <th width="12%">投注时间</th>
+                <th width="8%">游戏类别</th>
+                <th width="11%">期号</th>
+                <th width="6%">状态</th>
+                <th width="6%">是否追号</th>
+                <th width="10%">投注金额</th>
+                <th width="10%">中奖金额</th>
+                <th width="8%">盈亏</th>
+                <th width="6%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--  页面测试数据 -->
+            <?php if ($packages): ?>
+                <?php foreach ($packages as $v): ?>
+                    <tr>
+                        <td>
+                            <a class="orderNumberBtn blue_font_href" id="aaa" href="javascript:;"><?php echo $v['wrap_id']; ?></a>
+                            <input type="hidden" name="xgame" value="<?php echo $v['xgame']; ?>">
+                        </td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php echo $lotterys[$v['lottery_id']]['cname']; ?><?php echo $v['xgame'] ? '(信)' : ''; ?></td>
+                        <td><?php echo $v['issue']; ?></td>
+
+                        <td class="gray_black_font betOrderStatus" id="status_<?php echo $v['wrap_id']; ?>">
+                            <?php if ($v['cancel_status'] == 0): ?>
+                                <?php if ($v['check_prize_status'] == 0): ?>未开奖
+                                <?php elseif ($v['check_prize_status'] == 1): ?><font color="green">已中奖</font>
+                                <?php else: ?>未中奖
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?php if ($v['cancel_status'] == 1): ?>个人撤单
+                                <?php elseif ($v['cancel_status'] == 2): ?>追中撤单
+                                <?php elseif ($v['cancel_status'] == 3): ?>出号撤单
+                                <?php elseif ($v['cancel_status'] == 4): ?>未开撤单
+                                <?php elseif ($v['cancel_status'] == 9): ?>系统撤单
+                                <?php endif; ?>
+                            <?php endif; ?>
+
+                        </td>
+                        <td><?php if ($v['trace_id'] > 0): ?>是<?php else: ?>否<?php endif; ?></td>
+                        <td><?php echo $v['amount'];?></td>
+                        <td><?php echo $v['prize'];?></td>
+                        <td><?php echo $v['profit']?></td>
+                        <td>
+                      <?php if ($v['show_cancel']): ?>
+                          <input type="button" class="blue_font_href buttonCanle" name="<?php echo $v['wrap_id']; ?>" value="撤单" />
+                      <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <th colspan="10" class="bom">暂无数据显示</th>
+                </tr>
+            <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 页面统计 -->
+    <?php $this->import("common_operate_count"); ?>
+</div>
+<?php $this->import('public_foot') ?>
+
+<script src="<?php echo $imgCdnUrl ?>/js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<script>
+    $(function() {
+
+        //设置默认值
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('input[name=wrap_id]').val('<?php echo $wrap_id; ?>');
+        $('select[name=check_prize_status]').val('<?php echo $check_prize_status; ?>').change();
+
+        $('a.orderNumberBtn').on('click', function(){
+            var xgame = parseInt($(this).siblings('input[name=xgame]').val());
+            var str_xgame = xgame ? '信用玩法':'普通玩法';
+            layer.open({
+                type: 2,
+                shadeClose: true,
+                title: str_xgame+'&nbsp;&nbsp;订单编号：' + $(this).text(),
+                closeBtn: 0,
+                shade: [0.3, '#000'],
+                border: [0],
+                offset: ['80px', ''],
+                area: ['824px','550px'],
+                content: ['index.jsp?c=game&a=packageDetail&wrap_id='+$(this).text()]
+            });
+            $('div.xubox_title', document).addClass('layui-layer-title');
+        });
+
+        $('.buttonCanle').click(function(){
+          var obj = $(this),
+              name = obj.attr('name');
+          layer.confirm('您真的要撤单吗？',{icon:7},function(i) {
+            $.post(
+                'index.jsp?c=game&a=cacelPackage',
+                {
+                    'wrap_id': name
+                },
+                function(response){
+                    if(response.errno　== 0){
+                        obj.hide();
+                        obj.closest("tr").find('td.betOrderStatus').html('个人撤单');
+                    }
+                    layer.alert(response.errstr,{icon:1});
+                }, 'json');
+          });
+        });
+    });
+</script>
+</body>
+</html>

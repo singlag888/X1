@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.dingyiPay.submit();">
+<form name='dingyiPay' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+    <input type="hidden" name="parter"		  value="<?php echo $postFields['parter'] ?>" />
+    <input type="hidden" name="type" value="<?php echo $postFields['type'] ?>" />
+    <input type="hidden" name="value"     value="<?php echo $postFields['value'] ?>"/>
+    <input type="hidden" name="orderid"  value="<?php echo $postFields['orderid'] ?>"/>
+    <input type="hidden" name="callbackurl" value="<?php echo $postFields['callbackurl'] ?>"/>
+</form>
+</body>
+</html>
+

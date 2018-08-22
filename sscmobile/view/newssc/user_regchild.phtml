@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>   <!-- 新增会员 -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+<div class="operate_middle_page">
+  <!--/*头部*/-->
+        <header class="headerbg">
+            <a class="headbox01" href="javascript:history.go(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+            <p class="headtetle">新增会员</p>
+        </header>
+    <div class="common_pages add_menbers_page" style="margin-top: 1.875rem;">
+        <form name="form1"  id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+            <div class="addmenber_userinfo">
+                <div class="form_group ImportText new_user01">
+                    <label for="username" class="control_label" style="text-align: center;"><h2>代理开户</h2></label>
+                </div>
+                <div class="form_group ImportText">
+                    <label for="username" class="control_label">用户名：</label>
+                        <input class="form_control two_hundred_width" type="text" name="username" id="username">
+                </div>
+                <div class="form_group ImportText">
+                    <label for="password" class="control_label">密码：</label>
+                        <input class="form_control two_hundred_width" type="password" name="password" id="password" >
+                </div>
+                <div class="form_group ImportText">
+                    <label for="password2" class="control_label">确认密码：</label>
+                        <input class="form_control two_hundred_width" type="password" name="password2" id="password2"  >
+                </div>
+                <div class="form_group ImportText">
+                    <label for="userFandian" class="control_label">用户返点：</label>
+                        <select class="selectForm two_hundred_width" name="rebate">
+                            <?php foreach ($aPrizeMode as $prizeMode=>$rebate): ?>
+                                <option placeholder="<?php echo $prizeMode ?>" value="<?php echo $rebate;?>"><?php echo $rebate;?></option>
+                            <?php endforeach; ?>
+                        </select>
+                </div>
+                <div class="form_group ImportText">
+                    <label for="bonus" class="control_label">奖金/赔率：</label>
+                        <input class="form_control two_hundred_width" type="text" name="prize_mode_alias" placeholder="" readonly="true">
+                        <input type="hidden" type="text" name="prize_mode" value="<?php echo $key;?>">
+                </div>
+                <div class="form_group" style="text-align: center;">
+                    <input type="submit" name="submit" class="default_navyblue_btn two_hundred_width modify_btn" value="确定开户">
+                </div>
+                 <div class="form_group ImportText new_user01">
+                    <label for="username" class="control_label" style="text-align: center;"><h2>会员注册链接</h2></label>
+                </div>
+                <div class="form_group ImportText new_user01">
+                    <input  type="hidden" name="tgtype" value="4">
+                    <label for="bonus" class="control_label">推广类型：</label>
+                    <input id="tgtype_pc" type="radio" name="flag" value=1>电脑
+                    <input type="radio" name="flag" value=2 checked="checked">手机
+<!--                    --><?php //if($user['type']): ?><!--<input type="radio" name="flag" value=3>微信--><?php //endif; ?>
+                </div>
+                <div class="form_group ImportText new_user03" id="coo">
+                    <label for="bonus" class="control_label">返点选择：</label>
+                    <select class="form_control fandian_sel" name="prizemode" id="prizemode">
+                    <?php foreach ($aLinkPrizeMode as $prizeMode=>$rebate): ?>
+                        <option value="<?php echo $prizeMode;?>"><?php echo $prizeMode;?>/<?php echo $rebate;?></option>
+                    <?php endforeach; ?>
+                </select>
+                    <div class="form_group ImportText new_user02" id="coo2">
+                        <label for="bonus" class="control_label" style="float: left;margin-left: -19px;">推广码：</label>
+                        <input class="form_control linkurl_txt" style="clear: both;"  id="market_code" type="text" name="market_code"  value="<?php echo isset($marketLinkInfo['market_code'])?$marketLinkInfo['market_code']:'';?>">
+                        <br/><label style="color: red">* 3-10位数字与字母组成</label>
+
+                    </div>
+                <div class="form_group ImportText new_user02">
+                    <label for="bonus" class="control_label" style="width: 5.2em;display: inline-block;  text-align: right;">推广链接：  </label>
+                    <label id="result"><?php echo isset($marketLinkInfo['link'])?$marketLinkInfo['link']:''?></label>
+                    <br/><br/><a href="javascript:void(0)"  class="default_common_btn create_link_btn" id="create">生成链接</a>
+                </div>
+
+                <div class="form_group" id="qrcode_layer" >
+                    <label for="bonus" class="control_label">微信二维码&nbsp;&nbsp;&nbsp;：</label>
+                    <a href="javascript:void(0)" id="generate_qrcode_btn">生成微信二维码</a>
+                    <div style="width: 100px; height: 100px" id="qrcode"></div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/clipboard.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.qrcode.min.js"></script>
+
+<script>
+    $(function() {
+
+        $("#coo2").on('keyup','#market_code',function () {
+            var vo = $(this).val();
+            if(vo.length > 10)
+            {
+                $(this).val(vo.substring(0,10))
+            }
+        })
+
+        $("#create").click(function() {
+            var market_code =$("input[name='market_code']").val();
+            var prize_mode=$('#prizemode').find("option:selected").val();
+            if(market_code === '')
+            {
+                layer.msg('请先填写邀请码!',{icon:2,time:2000});
+                return false;
+            }else if(prize_mode == 'undefined' || prize_mode =='')
+            {
+                layer.msg('出现异常,请联系开发人员!',{icon:2,time:2000});
+                return false;
+            }
+            var reg = /^[0-9a-zA-Z]{3,10}$/
+            if(!reg.test(market_code))
+            {
+                layer.msg('推广码格式不正确!',{icon:2,time:2000});
+                return false;
+            }
+
+
+            $.post(
+                '?c=user&a=regChild',
+                {'market_code':market_code,'op': "createCode","prize_mode":prize_mode},
+                function(json_data) {
+                    if (json_data['errno'] == 0) {
+                        $('#result').text('');
+                        $('#result').text(json_data['url']);
+                        $("#qrcode").empty();
+                    }
+                    else {
+                        parent.layer.alert(json_data.errstr);
+                    }
+
+                }, 'json');
+
+
+        });
+
+        $("select[name=rebate]").change(function(){
+            var prize_mode = $(this).children('option:selected').attr('placeholder');
+            $("input[name=prize_mode_alias]").val(prize_mode + '/' + prize_mode/2);
+            $("input[name=prize_mode]").val(prize_mode);
+        });
+
+
+        $('#copy_save_btn').mouseover(function() {
+            move_swf(this, $('.linkurl_txt').val());
+            curBtn = this;
+        });
+
+        $(".select-area .select-value").each(function(){
+            if( $(this).next("select").find("option:selected").length != 0 ){
+                $(this).text( $(this).next("select").find("option:selected").text() );
+            }
+        });
+
+        $(".select-area select").change(function(){
+            var value = $(this).find("option:selected").text();
+            $(this).parent(".select-area").find(".select-value").text(value);
+        });
+
+//        $("#create").click(function() {
+//            $.post(
+//                '?c=user&a=regChild',
+//                {'op': "createCode", 'tgtype': $('input[name=tgtype]').val(), 'prizemode':  $('#prizemode option:selected').val(), 'flag':$('input:radio[name="flag"]:checked').val(), 'regType': 2},
+//                function(json_data) {
+//                    if (json_data['errno'] == 0) {
+//                        $('#result').val(json_data['url']);
+//                    }
+//                    else {
+//                        parent.layer.alert(json_data.errstr);
+//                    }
+//
+//                }, 'json');
+//
+//        });
+
+        var clipboard = new Clipboard('#copy_button');
+
+        clipboard.on('success', function(e) {
+            layer.alert("复制成功：" + $('.linkurl_txt').val());
+            e.clearSelection();
+        });
+
+        clipboard.on('error', function(e) {
+            layer.alert("复制失败");
+        });
+
+        $("#generate_qrcode_btn").click(function() {
+            $('#qrcode').empty();
+            if($('#market_code').val() =='')
+            {
+                layer.msg('请输入推广码!',{icon:2,time:2000});
+                return false;
+            }
+            var link = $('#result').text();
+            if(link == '')
+            {
+                layer.msg('请生成链接!',{icon:2,time:2000});
+                return false;
+            }
+            $.post('?c=user&a=regChild',{
+                    'op': "createWeixinCode",
+                    'link': link,
+                    'flag':$('input:radio[name="flag"]:checked').val()
+                },
+            function(json_data) {
+                if (json_data['errno'] == 0) {
+                    $('#qrcode').qrcode({
+                        width: 100,
+                        height: 100,
+                        text: json_data['url']
+                    });
+
+                    var canvas = $('#qrcode canvas');
+                    var img = canvas[0].toDataURL("image/png");
+                    $('#qrcode').html("<img style=\"width:100px; height:100px\" src='" + img + "'>");
+                }
+                else {
+                    parent.layer.alert(json_data.errstr);
+                }
+            }, 'json');
+        });
+
+        $('[name=flag]').click(function(){
+           if($('#tgtype_pc').attr('checked') == 'checked') {
+                $('#qrcode_layer').hide();
+           } else {
+                $('#qrcode_layer').show();
+           }
+        });
+
+        $('#coo').on('change','#prizemode',function () {
+            $('#qrcode').empty();
+            var id = $(this).find('option:selected').val();
+            var url="?c=user&a=getMarketCodeAjax";
+            $.post(url,{"id":id},function (response) {
+                var data = eval('('+response+')');
+                if(data.code === 0)
+                {
+                    layer.msg('参数错误!',{icon:2,time:1500});
+                }
+                if(data.code === 400)
+                {
+                    $("input[name='market_code']").val('');
+                    $('#result').text('');
+                    $('#coo2').css({"display":"block"});
+                }
+
+                if(data.code === 200)
+                {
+                    $("input[name='market_code']").val(data.data.market_code);
+                    $("input[name='market_code_old']").val(data.data.market_code);
+                    $('#result').text(data.data.link);
+                    $('#coo2').css({"display":"block"})
+                }
+            });
+        })
+    });
+</script>
+
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

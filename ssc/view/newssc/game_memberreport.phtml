@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>游戏记录</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href="index.jsp?c=game&a=packageList">订单查询</a></li>
+                            <li><a href="index.jsp?c=game&a=traceList">追号记录</a></li>
+                            <!--<li><a href="index.jsp?c=game&a=egameList">休闲游戏记录</a></li>-->
+                            <?php if ($user['level'] == 10) : ?>
+                            <li><a href="index.jsp?c=game&a=memberReport">游戏报表</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <!-- 搜索栏 -->
+                            <div class="SearchBar">
+                                <form name="form1" id="form1" action="" method="GET">
+                                    <ul>
+                                        <li>
+                                            <label>用户名：<?php echo $user['username']; ?></label>
+                                        </li>
+                                        <li>
+                                            <label>游戏时间：</label>
+                                            <div class="MutiTxt">
+                                                <input size="12" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                                <em>到</em>
+                                                <input size="12" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <input type="hidden" name="c" value="game"/>
+                                            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                                            <input type="hidden" id="sortKey"  name="sortKey" value=""/>
+                                            <input type="hidden" id="sortDirection" name="sortDirection" value="1"/>
+                                            <input type="submit" value="查询" class="btnStyle m010">
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <div class="TabMutiScroll scrollbar">
+                <table id="dataTable" style="width:100%;" class="tab01 mutith"  border="0" cellspacing="0" cellpadding="0">
+            	<tr id='th_01'>
+                  <th rowspan="2"><span class="Orderby">余额</span></th>
+                  <th rowspan="2"><span class="Orderby">充值量</span></th>
+                  <th rowspan="2"><span class="Orderby">提款量</span></th>
+                  <th colspan="4">彩票</th>
+                 <!-- <th colspan="3">休闲游戏</th>-->
+                </tr>
+                <tr id='th_02'>
+                  <th  onclick="javascript:switch_sort('total_amount');"><span class="Orderby"> 购买量</span></th>
+                  <th  onclick="javascript:switch_sort('total_rebate');"><span class="Orderby">返点</span></th>
+                  <th  onclick="javascript:switch_sort('total_prize');"><span class="Orderby">中奖金额</span></th>
+                  <th  onclick="javascript:switch_sort('profit_and_lost');"><span class="Orderby">投注盈亏</span></th>
+                  <th  onclick="javascript:switch_sort('pt_buy_amount');"><span class="Orderby">购买量</span></th>
+                  <th  onclick="javascript:switch_sort('pt_prize');"><span class="Orderby">中奖金额</span></th>
+                  <th  onclick="javascript:switch_sort('pt_game_win');"><span class="Orderby">游戏盈亏</span></th>
+                </tr>
+                <?php foreach ($childReport as $v): ?>
+                <tr>
+                    <td><?php echo $v['user_balance']; ?></td>
+                    <td><?php echo number_format($totalDeposits[$v['user_id']]['total_deposit'], 2); ?></td>
+                    <td><?php echo number_format($totalWithdraws[$v['user_id']]['total_withdraw'], 2); ?></td>
+                    <td><?php echo number_format($v['total_amount'], 2); ?></td>
+                    <td><?php echo number_format($v['total_rebate'], 4); ?></td>
+                    <td><?php echo number_format($v['total_prize'], 2); ?></td>
+                    <td><?php echo number_format($v['total_rebate'] + $v['total_prize'] - $v['total_amount'], 2); ?></td>
+
+                    <td><?php echo number_format(empty($v['pt_buy_amount'])?'0':$v['pt_buy_amount'], 2); ?></td>
+                    <td><?php echo number_format(empty($v['pt_prize'])?'0':$v['pt_prize'], 2); ?></td>
+                    <td><?php echo number_format(empty($v['pt_game_win'])?'0':$v['pt_game_win'], 2); ?></td>
+                </tr>
+                <?php endforeach; ?>
+                </table>
+                            </div>
+                            <div class="listTip">注：可以查询35天以内的数据</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script src="js/My97DatePicker/WdatePicker.js"></script>
+        <script>
+        $(function() {
+            //设置默认值
+            $('#startDate').val('<?php echo $startDate; ?>');
+            $('#endDate').val('<?php echo $endDate; ?>');
+        });
+        </script>
+
+    </body>
+</html>

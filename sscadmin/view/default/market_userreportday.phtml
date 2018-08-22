@@ -1,0 +1,93 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    .jedatehms{display: none!important;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('input[name=min]').val('<?php echo $min; ?>');
+        $('input[name=max]').val('<?php echo $max; ?>');
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+        $('#countDays').text('<?php echo $countDays; ?>');
+    });
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label class="ml10">游戏时间：</label>
+            <input class="input-md form-control" type="text" name="startDate" id="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text" name="endDate" id="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>最小投注：</label>
+        <input class="input-md form-control" name="min" size="10" id="min" value="100"/>
+        <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit ml10" type="submit" name="submit" style="width: 60px;" value="查询"/>
+    </div>
+
+    <!--最小投注<input name="min" size="10" id="min" value="100"/>
+    最大投注<input name="max" size="10" id="max" value="100000"/>
+    游戏时间<input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate"/>到
+    <input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate"/>
+    <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="submit" class="submit" value="查询"/>-->
+</form>
+<div class="mt15"> <b>注：日统计按照当日的00:00:00到23:59:59为准</b>  </div>
+<div class="form-inline mt15">
+    <b>当前统计天数：<font style="color: #FF5151;" id="countDays">1</font>天</b>  <input  
+
+    class="btn btn-info excel" type="button" table=".mainList" excelFile="用户日投注"  value="导出Excel"/>
+</div> 
+<div class="list-div mt10" id="listDiv">
+
+    <table class="table table-responsive table-bordered mainList">
+        <thead>
+            <tr>
+                <td>用户</td>
+                <td><?php echo $min; ?>-<?php echo $max; ?>天数</td>
+                <?php foreach ($totalDay as $v): ?>
+                    <td><?php echo $v; ?></td>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <?php if ($totalInfo): ?>
+            <?php foreach ($totalInfo as $k => $v): ?>
+                <tr>
+                    <td>
+                        <?php echo $totalDes[$k]['username']; ?><?php if ($totalDes[$k]['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                    </td>
+                    <td>
+                        <?php echo $v; ?>
+                    </td>
+
+                    <?php foreach ($totalDay as $v1): ?>
+                        <td >
+                            <?php if (isset($totalDes[$k][$v1])): ?>
+                                <?php if ($totalDes[$k][$v1] >= $min && $totalDes[$k][$v1] <= $max): ?>
+                                    <font style="color:red;"><?php echo$totalDes[$k][$v1]; ?></font>
+                                <?php else: ?>
+                                    <?php echo$totalDes[$k][$v1]; ?>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?php echo '0'; ?>
+                            <?php endif; ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="<?php echo count($totalDay) + 2; ?>" class="no-records">没有数据！</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+
+
+<?php $this->import("foot"); ?>

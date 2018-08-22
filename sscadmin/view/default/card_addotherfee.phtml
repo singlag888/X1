@@ -1,0 +1,124 @@
+<?php $this->import("head"); ?>
+
+<script>
+var tmpUsage = {};
+function checkform(ob) {
+    var msg = "";
+    if (ob.card_id.value == "0") {
+        msg = "请选择银行卡";
+    }
+    /*
+    else if (ob.player_card_name.value == "") {
+        msg = "请输入卡户名";
+    }
+    else if (ob.player_pay_time.value == "" || (!/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value) && !/\d{4}年\d{2}月\d{2}日 \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value))) {
+        msg = "请输入正确的付款时间";
+    }
+    else if (ob.order_num.value == "") {
+        msg = "请输入订单号，24位";
+    }
+    */
+    else if (ob.amount.value == "" && ob.amount2.value == "") {
+        msg = "请输入正确的金额，2位小数";
+    }
+    else if (ob.order_type.value == "0") {
+        msg = "请选择帐变类型";
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+$(document).ready(function(){
+    $("#type").change(function(){
+        str = "<option value=0>请选择</option>";
+        $("#card_id").html(str);
+        <?php foreach ($typeCards as $k => $v): ?>
+        if ($("#type").val() == "<?php echo $k; ?>") {
+            <?php foreach ($v as $kk => $vv): ?>
+                str = str + "<option value=<?php echo $vv['card_id']; ?> style='<?php if ($vv['status'] == 0) echo 'color:red;'; ?><?php if ($vv['type'] == 2) echo 'background:#ccc;'; ?>'><?php echo $bankList[$vv['bank_id']]; ?>&nbsp;<?php echo $vv['card_name']; ?>&nbsp;<?php echo $vv['card_num']; ?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?></option>";
+            <?php endforeach; ?>
+            $("#card_id").html(str);
+        }
+        <?php endforeach; ?>
+    });
+
+    //预设查询值
+    $('#type').val('<?php echo $type; ?>').change();
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=card&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-hover " cellpadding="0" cellspacing="0" style="width: 50%;">
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">银行卡类型</td>
+        <td style="vertical-align: middle;">
+            <select class="input-md form-control" name="type" id="type">
+                <option value="0">请选择</option>
+                <option value="1">收款卡</option>
+                <option value="2">付款卡</option>
+                <option value="3">备用金卡</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">银行卡</td>
+        <td style="vertical-align: middle;">
+            <select class="input-md form-control" name="card_id" id="card_id"></select>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">卡帐变类型</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <select class="input-md form-control" name="order_type" id="order_type" />
+                <option value="0">请选择</option>
+                <?php foreach ($cardOrderTypes as $k => $v): ?>
+                <?php if ($k >= 10): ?>
+                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+            <font color="red">*</font>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">费用金额</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <input class="input-md form-control" name="amount" value=""/>大于0
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">手续费支出<br/>（因网转操作所产生的手续费用）</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <input class="input-md form-control" name="my_fee" value=""/>大于0，无手续费填0
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;font-size: 16px;text-align: left;vertical-align: middle;">备注</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <textarea class="input-md form-control" name="remark"></textarea>请说明理由
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="width: 50%;margin: 0 auto;text-align: center;">
+                <input class="btn btn-info  submit" type="submit"  name="submit" value="提 交" />
+            </div>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

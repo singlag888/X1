@@ -1,0 +1,94 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+    $(document).ready(function() {
+        $("#control").change(function() {
+            str = "<option value=''>请选择</option>";
+            $("#action").html(str);
+<?php foreach ($allMenus as $k => $v): ?>
+                if ($("#control").val() == "<?php echo $k; ?>") {
+    <?php foreach ($v['submenu'] as $kk => $vv): ?>
+                        str = str + "<option value='<?php echo $vv['action']; ?>' <?php if ($vv['is_log'] == 0) { ?> style='color:#cccccc;font-style:italic;' <?php } ?>><?php echo $vv['title']; ?></option>";
+    <?php endforeach; ?>
+                    $("#action").html(str);
+                }
+<?php endforeach; ?>
+        });
+
+        //预选中值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $("#control").val('<?php echo $control; ?>').change();
+        $('#action').val('<?php echo $action; ?>');
+        $('input[name=ip]').val('<?php echo $ip; ?>');
+        $('input[name=startDate]').val('<?php echo $startDate; ?>');
+        $('input[name=endDate]').val('<?php echo $endDate; ?>');
+    });
+</script>
+
+<div id="query">
+    <form class=" mt10 mb10" name="form1" action="./" method="get">
+            <div class="form-inline">
+                <div class="form-group has-default has-feedback">
+                    <label class="ml10">操作时间</label>
+                    <input class="input-sm form-control Wdate" type="text" name="startDate" onclick="jeDate({dateCell:'#startDate',format:'YYYY-MM-DD hh:mm:ss',isTime:true,})"  id="startDate" value="" size="23"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback has-default">
+                    <label>到</label>
+                    <input class="input-sm form-control Wdate" type="text" name="endDate"  onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" id="endDate" value="" size="23"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <label >管理员</label>
+                <input class="form-control" type="text" name="username" size="12"/>
+                <label class="ml10" >权限名</label> 
+                <select class="input-sm form-control" name="control" id="control">
+                    <option value="">请选择控制器</option>
+                    <?php foreach ($allMenus as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v['control']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="input-sm form-control ml10"  name="action" id="action">
+                </select>
+                <label class="ml10">IP</label>
+                <input class="form-control" name="ip" size="15"/>
+       
+                <input type="hidden" name="c" value="adminUser"/><input type="hidden" name="a" value="logList"/>
+                <button class="btn  btn-info" type="submit" name="submit" value=">> 查 询 <<"/>>>查 询<<</button> 
+            </div>
+    </form>
+    <hr>
+</div>
+
+<div class="list-div" id="listDiv">
+        <table class="table table-responsive table-bordered mainList">
+        <thead>
+            <tr>
+                <td>log_id</td>
+                <td width="5%">用户名</td>
+                <td width="5%">控制器</td>
+                <td width="5%">动作</td>
+                <td width="5%">权限名</td>
+                <td width="7%">操作日期</td>
+                <td>IP</td>
+                <td>数据详情</td>
+                <td>备注</td>
+            </tr>
+        </thead>
+        <?php foreach ($adminLogs as $v): ?>
+            <tr>
+                <td><?php echo $v['log_id']; ?></td>
+                <td><?php echo $v['username']; ?></td>
+                <td><?php echo $v['control']; ?></td>
+                <td><?php echo $v['action']; ?></td>
+                <td><?php echo $v['title']; ?></td>
+                <td><?php echo $v['ts']; ?></td>
+                <td><?php echo ip::loc($v['client_ip']); ?></td>
+                <td><?php print_r($v['post_data']); ?></td>
+                <td><?php echo $v['remark']; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,427 @@
+<?php $this->import("head"); ?>
+<script>
+    function checkform(ob) {
+        var msg = "";
+        if ($('input[name=type]').val() == '2' && $('select[name=agent_id]').val() > '0') {
+            msg = "不能有多级代理";
+        }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+    //预设编辑值
+
+    $(document).ready(function () {
+        $("#status").attr("data-state","<?php if ($user['is_test'] == 1) { echo 1; } else { echo 0; } ?>");
+        if($("#status").attr("data-state") == 0){
+            $("#switch").removeClass("on").addClass("off");
+        }
+
+        var action = "<?php echo ACTION; ?>";
+
+        $("select[name=ref_group]").val("<?php echo $user['ref_group_id']; ?>");
+    });
+
+    function editrealname() {
+        var user_id = $('td[name=user_id]').text();
+        var ref_group_id = $('select[name=ref_group]').val();
+        var real_name = $('#real_name').val();
+        var npattern = /^[\u4e00-\u9fa5]+$/;
+        if(real_name!='' && !npattern.test(real_name)) {
+            alert('真实姓名必须为中文!');
+            return false;
+        }
+
+        $.ajax({
+            url: "./?c=user&a=editGroup",
+            type: "POST",
+            data: {user_id: user_id, ref_group_id: ref_group_id,real_name: real_name},
+            dataType: 'json',
+            success: function (data) {
+                if (data.errno == 0) {
+                    alert(data.errstr);
+                } else {
+                    alert(data.errstr);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+    function editqq() {
+        var user_id = $('td[name=user_id]').text();
+        var ref_group_id = $('select[name=ref_group]').val();
+        var qq = $('#qq').val();
+        var qqmatch = /^[1-9]\d{4,11}$/;
+
+        if(qq!='' && !qqmatch.test(qq)) {
+            alert('qq号码有误!');
+            return false;
+        }
+
+        $.ajax({
+            url: "./?c=user&a=editGroup",
+            type: "POST",
+            data: {user_id: user_id, ref_group_id: ref_group_id,qq: qq},
+            dataType: 'json',
+            success: function (data) {
+                if (data.errno == 0) {
+                    alert(data.errstr);
+                } else {
+                    alert(data.errstr);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+    function editmobile() {
+        var user_id = $('td[name=user_id]').text();
+        var ref_group_id = $('select[name=ref_group]').val();
+        var mobile = $('#mobile').val();
+        var mmatch = /^1[34578]\d{9}$/;
+        if(mobile!='' && !mmatch.test(mobile)) {
+            alert('请输入正确的手机号!');
+            return false;
+        }
+
+        $.ajax({
+            url: "./?c=user&a=editGroup",
+            type: "POST",
+            data: {user_id: user_id, ref_group_id: ref_group_id,mobile: mobile},
+            dataType: 'json',
+            success: function (data) {
+                if (data.errno == 0) {
+                    alert(data.errstr);
+                } else {
+                    alert(data.errstr);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+
+
+
+    function editGroup() {
+        var user_id = $('td[name=user_id]').text();
+        var ref_group_id = $('select[name=ref_group]').val();
+        var nick_name = $('#nick_name').val();
+
+        $.ajax({
+            url: "./?c=user&a=editGroup",
+            type: "POST",
+            data: {user_id: user_id, ref_group_id: ref_group_id,nick_name: nick_name},
+            dataType: 'json',
+            success: function (data) {
+                if (data.errno == 0) {
+                     alert(data.errstr);
+                } else {
+                    alert(data.errstr);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+    function toogle(th){
+        let ele = $(th).children(".move");
+        if($(th).hasClass('on')){
+            ele.animate({left: "1px"}, 300, function(){});
+            $(th).removeClass("on").addClass("off");
+        }else {
+            ele.animate({left: '35px'}, 300, function(){});
+            $(th).removeClass("off").addClass("on");
+        }
+
+        let is_test_user = $(th).hasClass('on') ? 1 : 0;
+        let user_id = $('td[name=user_id]').text();
+
+        $.post("./?c=user&a=setTestUser",{user_id: user_id, is_test_user: is_test_user},function($data){
+            if ($data.errno === 0) {
+
+            } else {
+                alert('修改失败!');
+            }
+        },'JSON');
+    }
+
+    function editRemark(){
+        var user_id = $('td[name=user_id]').text();
+        var remark1 = $('#remark1').val();
+        $.ajax({
+            url: "./?c=user&a=editRemark",
+            type: "POST",
+            data: {user_id:user_id,remark1:remark1},
+            dataType: 'json',
+            success: function (data) {
+                if (data.errno == 0) {
+                      alert(data.errstr);
+                } else {
+                    //alert(data.errstr);
+                }
+            },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+
+</script>
+<div class="list-div" id="addDiv">
+    <table class="table table-bordered table-responsive" width="100%">
+        <tr>
+            <td colspan="2" class="rowTitle">
+                <b>查看用户资料</b>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <table class="table table-responsive table-bordered table-hover ml15 mr15" width="100%">
+                    <tr>
+                        <td class="fb">用户id</td>
+                        <td name='user_id'><?php echo $user['user_id']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">用户名</td>
+                        <td><?php echo $user['username']; ?><?php if ($user['is_test']): ?><b
+                                    style="color:red">[测试]</b><?php endif; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">用户类型</td>
+                        <td>
+                            <?php echo $user['level'] != 100 ? $user['level'] . '代' : '会员'; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">上级树<br/></td>
+                        <td>
+                            <?php foreach ($allParent as $v): ?>
+                                <?php echo $v['username']; ?>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">用户余额</td>
+                        <td><?php echo $user['balance']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">下属团队余额</td>
+                        <td><?php echo $teamBalance; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">真实姓名</td>
+                        <td>
+                            <input type="text" maxlength="18" name="real_name" id="real_name" style="width:50%;text-align:left;" value="<?php echo $user['real_name']; ?>">
+                            <input type="button" name="real_name" class="btn btn-info" style="width: 60px;" value="修改" onclick="return editrealname();"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">昵称</td>
+                        <td>
+                            <input type="text" maxlength="18" name="nick_name" id="nick_name" style="width:50%;text-align:left;" value="<?php echo $user['nick_name']; ?>">
+                            <input type="button" name="nick_name" class="btn btn-info" style="width: 60px;" value="修改" onclick="editGroup();"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">QQ</td>
+                        <td>
+                            <input type="text" maxlength="20" name="qq" id="qq" style="width:50%;text-align:left;" value="<?php echo $showUserQQ ? (isset($user['qq']) && !empty($user['qq']) ? $user['qq'] : '当前用户没有qq') : '******'; ?>">
+                            <input type="button" name="qq" class="btn btn-info" style="width: 60px;" value="修改" onclick="return editqq();"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">mobile</td>
+                        <td>
+                            <input type="text" maxlength="20" name="mobile" id="mobile" style="width:50%;text-align:left;" value="<?php echo $showUserPhone ? (isset($user['mobile']) && !empty($user['mobile']) ? $user['mobile'] : '当前用户没有mobile') : '******'; ?>">
+                            <input type="button" name="mobile" class="btn btn-info" style="width: 60px;" value="修改" onclick="return editmobile();"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">注册IP</td>
+                        <td><?php echo ip::loc($user['reg_ip']); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">注册时间</td>
+                        <td><?php echo $user['reg_time']; ?>【<?php echo getInterval(strtotime($user['reg_time'])); ?>】
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">上次登录IP</td>
+                        <td><?php echo ip::loc($user['last_ip']); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">上次登录时间</td>
+                        <td><?php echo $user['last_time']; ?>【<?php echo getInterval(strtotime($user['last_time'])); ?>
+                            】
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">层级</td>
+                        <td>
+                            <select name="ref_group">
+                                <?php foreach ($groups as $k => $v): ?>
+                                    <option value="<?php echo $v['ref_group_id']; ?>"><?php echo $v['name']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <input type="button" class="btn btn-info" style="width: 60px;" value="修改" onclick="editGroup();"/>
+                        </td>
+                    </tr>
+                    <?php if(!($user['level'] > 0)): ?>
+                        <tr>
+                            <td class="fb">弹窗绑定</td>
+                            <td>
+                                <select title="弹窗绑定" name="userAlert" id="userAlert">
+                                    <option value="0">默认不绑定</option>
+                                    <?php foreach ($alertList as &$item): ?>
+                                        <option <?php if ($ua_id && $item['ua_id'] == $ua_id) echo 'selected'; ?>
+                                                value="<?php echo $item['ua_id']; ?>"><?php echo $item['title']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <input type="button" class="btn btn-info editAlert" style="width: 60px;" value="修改"
+                                       data-user_id="<?php echo $user['user_id']; ?>"/>
+                            </td>
+
+                            <script>
+                                $(function () {
+                                    $('.editAlert').on('click', function () {
+                                        let $ua_id = $('#userAlert').val();
+                                        let $user_id = $(this).data('user_id');
+                                        $.post('./?c=userAlert&a=bindUser', {
+                                            'ua_id': $ua_id,
+                                            'user_id': $user_id
+                                        }, function ($data) {
+                                            if($data.status === 1){
+                                                alert('修改成功');
+                                            }else{
+                                                alert($data.info);
+                                            }
+                                        }, 'JSON');
+                                    });
+                                });
+                            </script>
+                        </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <td class="fb">测试用户</td>
+                        <td>
+                            <div class="switch">
+                                <div class="btn_fath clearfix on" id="switch" onclick="toogle(this)">
+                                  <div class="move" data-state="1" id="status"></div>
+                                    <div class="btnSwitch btn1">是</div>
+                                    <div class="btnSwitch btn2">否</div>
+                                </div>
+
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+            <td width="55%" class="vt">
+                <table class="table table-responsive table-bordered table-hover" width="100%">
+                    <tr>
+                        <td class="fb">存款次数</td>
+                        <td><?php echo $user['deposit_num']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">备注</td>
+                        <td><input type="text" name="remark1" id="remark1" style="width:815px;text-align:left;" value="<?php echo $user['remark']; ?>">&nbsp;<input type="button" class="btn btn-info" style="width: 60px;" value="修改" onclick="editRemark();"/></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">记录最后更新时间</td>
+                        <td><?php echo $user['ts']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">状态</td>
+                        <td style="vertical-align:middle;">
+                            <?php if ($user['status'] == 0): ?><b><font color="red">已删除</font></b>
+                            <?php elseif ($user['status'] == 1): ?><b><font color="red">已冻结</font></b>
+                            <?php elseif ($user['status'] == 5): ?>已回收
+                            <?php elseif ($user['status'] == 8): ?>正常
+                            <?php endif; ?>
+
+                            <?php if ($islock): ?>
+                                <form name="form1" id="form1" action="" method="post">
+                                    <b><font color="red">登陆锁定</font></b>
+                                    <input type="hidden" name="unlock" value="1"/>
+                                    <input type="submit" name="submit" value="解锁"/>
+                                </form>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">返点一览</td>
+                        <td>
+                            <?php foreach ($properties as $k => $v): ?>
+                                <?php echo $v; ?>: <?php echo number_format($userRebates[$k]['rebate'] * 100, 1); ?>% &nbsp; (<?php echo $userRebates[$k]['prize']; ?>)
+                                <br/>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <?php if ($bindCards): ?>
+                            <table class="table table-responsive table-bordered table-hover " style="margin-top:37px;">
+                                <tr>
+                                    <td colspan="6" class="rowTitle">绑定银行卡列表</td>
+                                </tr>
+                                <tr>
+                                    <th class="tc">银行</th>
+                                    <th class="tc">卡号</th>
+                                    <th class="tc">省份</th>
+                                    <th class="tc">城市</th>
+                                    <th class="tc">绑定时间</th>
+                                    <th class="tc">状态</th>
+                                </tr>
+                                <?php foreach ($bindCards as $v): ?>
+                                    <tr>
+                                        <td class="tc"><?php echo $bankList[$v['bank_id']]; ?></td>
+                                        <td class="tc"><?php echo $v['card_num']; ?></td>
+                                        <td class="tc"><?php echo $v['province']; ?></td>
+                                        <td class="tc"><?php echo $v['city']; ?></td>
+                                        <td class="tc"><?php echo $v['create_time']; ?></td>
+                                        <td class="tc">
+                                            <?php if ($v['status'] == 0): ?>已解除
+                                            <?php elseif ($v['status'] == 1): ?>正常
+                                            <?php elseif ($v['status'] == 2): ?>冻结
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        <?php else: ?>
+                            <h4>该用户目前没有绑定任何银行卡！</h4>
+                        <?php endif; ?>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div style="width:100%;margin:0 auto;text-align:center;">
+    <input class="btn btn-info submit" type="button" onclick="javascript:window.close();" value="关闭窗口"/>
+</div>
+
+<?php $this->import("foot"); ?>

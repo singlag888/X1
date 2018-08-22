@@ -1,0 +1,47 @@
+<?php $this->import("head"); ?>
+    <div class="list-div mt20" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered">
+                <thead>
+                <tr>
+                    <td>维护</td>
+                </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <?php if ($systemStatus['value'] == 1): ?><input name="status" data-name="<?php echo $systemStatus['name']; ?>"
+                                                               title="status"
+                                                               type="checkbox"
+                                                               checked="checked">
+                        <?php else: ?><input name="status" data-name="<?php echo $systemStatus['name']; ?>" title="status"
+                                             type="checkbox">
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        $("input[name=status]").click(function () {
+            let name = $(this).data("name");
+            let status = $(this).prop("checked") === true ? 1 : 0;
+
+            $.ajax({
+                type: "POST",
+                url: "?c=egame&a=systemStatus",
+                dataType: "json",
+                data: "name=" + name + "&status=" + status + "&action=edit",
+                success: function (response) {
+                    alert(response.error_message);
+                    location.replace('?c=egame&a=systemStatus');
+                },
+                error: function (data) {
+//                    console.log(data);
+                    alert('调用 ajax 出错：' + data.toString());
+                    location.replace('?c=egame&a=systemStatus');
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php $this->import("foot"); ?>

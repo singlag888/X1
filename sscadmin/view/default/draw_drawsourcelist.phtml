@@ -1,0 +1,101 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+
+});
+</script>
+
+<form id="form1" action="?c=draw&a=batchSetStatus" method="POST">
+<div class="list-div form-top mt20" id="listDiv">
+<table class="table table-responsive table-bordered  mainList">
+<thead>
+<tr>
+    <td width="5%"><label class="fb" for="ca"><input type="checkbox" name="ca" id="ca" onclick="checkAll('ca')" />选</label></td>
+    <td width="5%">彩种</td>
+    <td width="5%">源id</td>
+    <td width="5%">开奖源</td>
+    <td>网址</td>
+    <td width="7%">是否启用</td>
+    <td width="7%">接口实现</td>
+    <td width="7%">权重</td>
+    <td>创建时间</td>
+    <td width="19%">操作</td>
+</tr>
+</thead>
+    <?php foreach ($lotteryDrawSources as $lottery_id => $drawSources): ?>
+    <tr align="center">
+        <td rowspan="<?php echo count($drawSources); ?>"><input type="checkbox" name="deleteItems[]" value="<?php echo $lottery_id; ?>" id="idArr"/></td>
+        <td rowspan="<?php echo count($drawSources); ?>" title="<?php echo $lottery_id; ?>"><?php echo $lotteries[$lottery_id]['cname']; ?></td>
+        <?php foreach ($drawSources as $drawSource): ?>
+        <td><?php echo $drawSource['ds_id']; ?></td>
+        <td><?php echo $drawSource['name']; ?></td>
+        <td><?php echo $drawSource['url']; ?></td>
+        <td><?php if ($drawSource['is_enabled'] == 1): ?><img src="./images/yes.gif"><?php else: ?><img src="./images/no.gif"><?php endif; ?></td>
+        <td><?php if ($drawSource['interface'] == 1): ?><img src="./images/yes.gif"><?php else: ?><img src="./images/no.gif"><?php endif; ?></td>
+        <td><?php echo $drawSource['rank']; ?></td>
+        <td><?php echo $drawSource['create_time']; ?></td>
+        <td>
+            <a class="btn btn-mini btn-info" href="?c=draw&a=editDrawSource&ds_id=<?php echo $drawSource['ds_id']; ?>">编辑</a> &nbsp;
+            <a class="btn btn-mini btn-info" href="?c=draw&a=editRank&ds_id=<?php echo $drawSource['ds_id']; ?>">权重</a> &nbsp;
+            <?php if ($drawSource['is_enabled'] == 1): ?><a class="btn btn-mini btn-info" href="?c=draw&a=setStatus&ds_id=<?php echo $drawSource['ds_id']; ?>&enabled=false" onclick="javascript:return confirm('是否真的要执行此操作？');">禁用</a> &nbsp;
+            <?php else: ?><a class="btn btn-mini btn-info" href="?c=draw&a=setStatus&ds_id=<?php echo $drawSource['ds_id']; ?>&enabled=true" onclick="javascript:return confirm('是否真的要执行此操作？');"><b>启用</b></a> &nbsp;
+            <?php endif; ?>
+            <a class="btn btn-mini btn-info" href="javascript:;" onclick="testSource(<?php echo $drawSource['ds_id']; ?>)">测试</a> &nbsp;
+            <a class="btn btn-mini btn-info" href="?c=draw&a=deleteSource&ds_id=<?php echo $drawSource['ds_id']; ?>" onclick="javascript:return confirm('是否真的要删除？');">删除</a>
+        </td>
+        </tr>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</table>
+</div>
+<table class="table table-responsive " id="list-table" cellspacing='0' cellpadding='3'>
+<tr >
+    <td>
+        <div style="width:100%;margin: 0 auto;text-align: center;">
+            <input  class="btn btn-info button" type=button value="批量启用" onClick="if($('#idArr:checked').length > 0) {this.form.enabled.value=true; this.form.submit();} else {alert('没有选择任何一项');return false;}">
+            <input  class="btn btn-info button" type=button value="批量禁用" onClick="if($('#idArr:checked').length > 0) {this.form.enabled.value=false; this.form.submit();} else {alert('没有选择任何一项');return false;}">
+            <input type="hidden" name="sa" value="batch" /><input type="hidden" name="enabled" value="-1" />
+        </div>
+    </td>
+</tr>
+</table>
+</form>
+
+<div id="tabloading" style="display:none;position:absolute;top:center;left:400px;">
+    <td colspan="13" height="100" align="center" valign="middle">请稍候......<br><img src="./images/loading.gif"></td>
+</div>
+<script>
+function testSource(id) {
+    $("#tabloading").ajaxStart(function(){
+        $(this).show();
+        $("#project-list").hide();
+    }).ajaxStop(function(){
+        $(this).hide();
+    });
+
+    $.ajax({
+        type:"GET",
+        url:"?c=draw&a=testSource&ds_id="+id,
+        dataType:"json",
+        data:"",
+        success:function(response)
+        {
+            if (response.errno) {
+                alert('抓取出错。\nDebug信息：'+response.errstr);
+            }
+            else {
+                alert('抓取成功!\n开奖源：' + response.url + '\n彩种：' +response.cname+ '\n奖期：' +response.issue+ '\n号码：' +response.number+ '\n耗时：' +response.time+ '秒\n');
+            }
+        },
+        error:function(data)
+        {
+            alert('调用ajax出错' + data.toString());
+            return false;
+        }
+    });
+}
+</script>
+
+<?php $this->import("foot"); ?>

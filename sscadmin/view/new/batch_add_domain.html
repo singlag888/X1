@@ -1,0 +1,155 @@
+<link rel="stylesheet" href="/view/new/layui/css/layui.css" />
+<link rel="stylesheet" href="/view/new/css/user-level.css" />
+<script type="text/javascript" src="/view/new/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/view/new/layui/layui.js"></script>
+<script type="text/javascript" src="/js/layer-v2.4/layer.js"></script>
+<style>
+.selected_li {
+	background-color: red;
+    color: white;
+}
+</style>
+<div class="domain-bind-title"><span>批量增加域名</span></div>
+<hr style="width: 990px;position: absolute;top: 45px;left: 30px;">
+<div id="add_level_domains">
+  <span class="domain-bind-address-div">域名：</span>
+  <textarea id="domain_textarea" name="domainName" class="user-level-textarea" >
+  </textarea>
+</div>
+<div id="add_level_discription">
+	<span>说明：可批量添加，请您使用英文半角，并使用英文逗号(,)分隔每条域名。添加时请确保域名格式正确并不存在空格,如：www.888.com,www.666.com,999.cn</span>
+</div>
+<div id="add_level_button_group" onclick="batchAddDomians()">
+	<span class="layui-btn layui-btn-danger layui-btn-radius">新增</span>
+</div>
+
+<div id="add_level_domain_list">
+	<span id="add_level_domain_tle">域名列表</span>
+	<hr style="width: 90%;position: absolute;top: 20px;left: 10px;">
+	<ul id="domain_list">
+		<li>显示系统内空闲域名</li>
+		<li>包括已解绑域名在内</li>
+		<li>点击新增，confirm确认</li>
+		<li>新增逻辑也完成</li>
+	</ul>
+	
+	<hr style="width: 90%;position: absolute;top: 355px;left: 10px;">
+	<div id="delete_selected_domain" class="user-level-button" onclick="delete4SeletedDomains()">
+      <span>删除</span>
+    </div>
+</div>
+<script type="text/javascript">
+
+	$("#domain_list li").bind('click', function(){
+		if($(this).hasClass("selected_li")){
+			$(this).removeClass("selected_li");
+		}else{
+			$(this).addClass("selected_li");
+		} 
+	});
+	
+	
+	function delete4SeletedDomains() {
+		var selectedLis = $("#domain_list").find(".selected_li"), selectedDomains = [];
+		if(!selectedLis || selectedLis.length == 0)return
+		$.each(selectedLis, function(i, item){
+			selectedDomains.push(item.innerHTML);
+		});
+		if(selectedDomains){
+			layer.confirm('删除之后将不可恢复！确定删除选中的域名吗？', function(yesBtn){
+				var idx = layer.load(1);
+				if(yesBtn){
+					$.ajax({
+						type: 'post',
+						async: false,
+						data: selectedDomains,
+						url: '',
+						success: function(result){
+							// ...do it
+							if('1' == result){
+								layer.msg('Deleted success!');
+								$("#domain_list").find(".selected_li").remove();
+								layer.close(idx);
+							}
+						}
+					});
+				}else{
+					layer.close(idx);
+				}
+			});
+		}
+	}
+	
+	function batchAddDomians() {
+		var na=[],a=$("#domain_textarea").val().trim().split(",");
+		if(!a || a.length<1) return;
+		/** 处理将域名集合移到域名列表； */
+		var lis=$("#domain_list li"), oldLis=lis;
+		$.each(a, function(i, item){
+			if(item.length>0){
+				na.push(item.trim());
+			}
+		});
+		na.sort();
+		var nna=[na[0]];
+		for(var i=0;i<na.length;i++){
+			if(na[i]!==nna[nna.length-1]){
+				nna.push(na[i]);
+			}
+		}
+		for(var i=0;i<nna.length;i++){
+			var c=false;
+			for(var k=0;k<lis.length;k++){
+				if(nna[i]==lis[k].innerHTML){c=true;break;}
+			}
+			if(!c){
+				$("#domain_list").append("<li>" + nna[i] + "</li>");
+			}
+		}
+		$("#domain_list li").unbind("click");
+		$("#domain_list li").bind('click', function(){
+			if($(this).hasClass("selected_li")){
+				$(this).removeClass("selected_li");
+			}else{
+				$(this).addClass("selected_li");
+			} 
+		});
+		/** 转移到域名列表后，处理新增业务逻辑 
+ 		 *  nna: 新增域名集合
+ 		 *  新增之后，不关闭pop
+		 */
+		
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

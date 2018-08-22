@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>   <!-- 服务中心下收件箱 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<!-- 顶部导航信息部分 -->
+<?php $this->import('public_header') ?>
+<!-- End 顶部导航条 -->
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <?php $this->import("servicecent_email_list"); ?>
+
+        <div class="email_content_layer">
+            <iframe id="showMailIframe" src="" width="100%" height="538" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" border="0" scrolling="no"></iframe>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="<?php echo $imgCdnUrl ?>/js/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(".servicecent_middle_part ul li:first").find("a").click();
+    // $('.duokebo-btn').click(function() {
+    //     top.layer.open({
+    //         type: 2,
+    //         title: '中彩网',
+    //         anim: 2,
+    //         offset: ['100px', ''],
+    //         fixed: false, //不固定
+    //         shade: 0, //不显示遮罩
+    //         shadeClose: true, //开启遮罩关闭
+    //         area: ['500px', '500px'],
+    //         content:'<?php echo config::getConfig('service_url') ?>',
+    //     });
+    // });
+</script>
+</body>
+</html>

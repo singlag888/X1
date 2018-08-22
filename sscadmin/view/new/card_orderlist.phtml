@@ -1,0 +1,155 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    .pageTal{width:70%;border:1px solid #ddd;height:40px;line-height:40px;}
+    #pageList{float:left;height:40px;line-height:40px;}
+    #pageList span{
+        display: inline-block;
+        padding:0 14px;
+        border-right:1px solid #ddd;
+        height:40px;
+        line-height:40px;
+    }
+    #pageList span.curPage{
+        color:red;
+    }
+    #pageList label{
+        padding:0 4px;
+        height:40px;
+        line-height:40px;
+        border-right:1px solid #ddd;
+
+    }
+    #pageList em{
+        padding:0 8px;
+        height:40px;
+        line-height:40px;
+        margin-left:-1px;
+        display: inline-block;
+        border-right:1px solid #ddd; 
+    }
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+    $("#from_card_type").change(function(){
+        str = "<option value=0>请选择</option>";
+        $("#from_card_id").html(str);
+        <?php foreach ($typeCards as $k => $v): ?>
+        if ($("#from_card_type").val() == "<?=$k?>") {
+            <?php foreach ($v as $kk => $vv): ?>
+                str = str + "<option value=<?=$vv['card_id']?> style='<?php if ($vv['status'] == 0) echo 'color:red;'; ?><?php if ($vv['type'] == 2) echo 'background:#ccc;'; ?>'><?=$bankList[$vv['bank_id']]?>&nbsp;<?=trim($vv['card_name'])?>&nbsp;<?=trim($vv['card_num'])?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?></option>";
+            <?php endforeach; ?>
+            $("#from_card_id").html(str);
+        }
+        <?php endforeach; ?>
+    });
+
+    //预设查询框值
+    $('#from_card_type').val('<?=$from_card_type?>').change();
+    $('select[name=from_card_id]').val('<?=$from_card_id?>');
+    $('select[name=order_type]').val('<?=$order_type?>');
+    $('input[name=startDate]').val('<?=$startDate?>');
+    $('input[name=endDate]').val('<?=$endDate?>');
+});
+</script>
+
+<div id="query">
+    <form name="form1" action="./" method="get">
+        <div class="form-inline mt15 mb15">
+            <div class="form-group has-default has-feedback">
+                <label class="ml15">账变时间</label>
+                <input class="input-md form-control"  type="text" name="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" id="startDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>到</label>
+                <input class="input-md form-control"  type="text" name="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="endDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label>银行卡类型</label>
+            <select class="input-md form-control" name="from_card_type" id="from_card_type">
+                <option value="0">请选择</option>
+                <option value="1">收款卡</option>
+                <option value="2">付款卡</option>
+                <option value="3">备用金卡</option>
+            </select>
+            <label class="ml15">银行卡</label>
+            <select class="input-md form-control" name="from_card_id" id="from_card_id"></select>
+            <label class="ml15">账变类型</label>
+            <select class="input-md form-control" name="order_type">
+                <option value="0">请选择</option>
+                <?php foreach ($cardOrderTypes as $k => $v): ?>
+                <option value="<?=$k?>"><?=$v?></option>
+                <?php endforeach; ?>
+            </select>
+            <input   type="hidden" name="c" value="card"/><input type="hidden" name="a" value="orderList"/>
+         　　 <input class="btn btn-sm  btn-info"  type="submit" name="submit" value=">> 查 询 <<"/>
+        </div>
+        
+    </form>
+</div>
+
+<div class="list-div" id="listDiv">
+        <table class="table table-responsive  table-bordered mainList" width="100%">
+            <thead>
+                <tr>
+                    <td width="5%">帐变id</td>
+                    <td>所属银行</td>
+                    <td width="6%">源卡类型</td>
+                    <td>源卡信息</td>
+                    <td>目的卡信息</td>
+                    <td>帐变类型</td>
+                    <td>帐变金额</td>
+                    <td>付出手续费</td>
+                    <td>帐变前余额</td>
+                    <td>帐变后余额</td>
+                    <td>帐变时间</td>
+                    <td>备注</td>
+                    <td>ref_auto_id</td>
+<!--                    //>>snow 修改下面的rd 为td 错误-->
+                    <td>提案id</td>
+                </tr>
+            </thead>
+                <?php foreach ($cardOrders as $v): ?>
+                <tr>
+                    <td><?=$v['cardorder_id']?></td>
+                    <td><?=$bankList[$v['from_bank_id']]?></td>
+                    <td>
+                        <?php if ($v['from_card_type'] == 1): ?>收款
+                        <?php elseif ($v['from_card_type'] == 2): ?>付款
+                        <?php elseif ($v['from_card_type'] == 3): ?>备用金
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?=$allCards[$v['from_card_id']]['card_name']?> <?=$allCards[$v['from_card_id']]['card_num']?>
+                    </td>
+                    <td>
+                        <?php if ($v['to_bank_id']): ?>
+                            <?=$bankList[$v['to_bank_id']]?> <?=$allCards[$v['to_card_id']]['card_name']?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?=$cardOrderTypes[$v['order_type']]?></td>
+                    <td><?=$v['amount']?></td>
+                    <td><?=$v['my_fee']?></td>
+                    <td><?=$v['pre_balance']?></td>
+                    <td><?=$v['balance']?></td>
+                    <td><?=$v['create_time']?></td>
+                    <td><?=$v['remark']?></td>
+                    <td><?=$v['ref_auto_id']?></td>
+                    <td>
+                        <?php if ($v['ref_id'] > 0): ?>
+                            <?php if ($v['order_type'] == 1): ?>
+                                <a target="_blank" href="?c=deposit&a=viewDeposit&deposit_id=<?=$v['ref_id']?>"><?=$v['ref_id']?></a>
+                            <?php else: ?>
+                                <a target="_blank" href="?c=withdraw&a=viewWithdraw&withdraw_id=<?=$v['ref_id']?>"><?=$v['ref_id']?></a>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+        </table>
+</div>
+<div class="pageTal"><?=$pageList?> <div>总计 <b><?=$trafficInfo['count']?></b> 笔记录，共计金额 <b><?=$trafficInfo['total_amount']?></b> 元，共计手续费 <b><?=$trafficInfo['total_fee']?></b> 元 &nbsp; </div></div>
+
+<?php $this->import("foot"); ?>

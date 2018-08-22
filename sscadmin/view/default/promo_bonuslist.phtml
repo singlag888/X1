@@ -1,0 +1,136 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+    //预选中值
+    $('select[name=status]').val('<?php echo $status; ?>');
+    $('input[name=startDate]').val('<?php echo $startDate; ?>');
+    $('input[name=endDate]').val('<?php echo $endDate; ?>');
+});
+function doCheck()
+{
+    $('#reasonDiv').css('display', 'block');
+    if ($('textarea[name=remark]').val() == '' ||　$('textarea[name=remark]').val() == '请输入取消原因！') {
+        $('textarea[name=remark]').val('请输入取消原因！');
+        return false;
+    }
+
+    return true;
+}
+</script>
+<div class="list-div mt15" id="listDiv" style="border:1px solid #ddd;">
+
+<div id="query">
+    <form name="form1" action="./" method="get">
+        <div class="form-inline mt20">
+            <div class="form-group has-default has-feedback">
+                <label>分红时间：</label>
+                <input class="input-sm form-control Wdate"  type="text" name="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="startDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>到</label>
+                <input class="input-sm form-control Wdate"  type="text" name="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" id="endDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label>状态:</label>
+            <select class="input-md form-control mr15" name="status">
+                <option value="-1">请选择</option>
+                <option value="1">批量上传未处理</option>
+                <option value="2">已审核</option>
+                <option value="8">已成功</option>
+                <option value="9">因故取消</option>
+            </select>
+            <input type="hidden" name="c" value="promo"/><input type="hidden" name="a" value="bonusList"/>
+            <input class="btn btn-sm btn-info" type="submit" name="submit" value=">> 查 询 <<"/>
+        </div>
+        <!--分红时间<input type="text" name="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="startDate" value="" size="21"/>
+        到<input type="text" name="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="endDate" value="" size="21"/>
+    状态<select name="status">
+        <option value="-1">请选择</option>
+        <option value="1">批量上传未处理</option>
+        <option value="2">已审核</option>
+        <option value="8">已成功</option>
+        <option value="9">因故取消</option>
+    </select>
+    <input type="hidden" name="c" value="promo"/><input type="hidden" name="a" value="bonusList"/>
+    <input type="submit" name="submit" value=">> 查 询 <<"/>-->
+    </form>
+</div>
+
+<form name="form1" class="form-top" action="??" method="POST" onsubmit="">
+    <table class="table table-responsive table-bordered  mainList mt20" width="100%">
+        <thead>
+        <tr>
+            <td><label for="ca"><input type="checkbox" name="ca" id="ca" onclick="checkAll('ca')" />选</label></td>
+        	<td>user_id</td>
+            <td>用户名</td>
+            <td>总盈亏</td>
+            <td>分红金额</td>
+            <td>入库时间</td>
+        </tr>
+        </thead>
+        <?php foreach ($promos as $v): ?>
+        <tr>
+            <td>
+                <input type="checkbox" name="deleteItems[]" id="idArr" value="<?php echo $v['promo_id']; ?>" />
+            </td>
+            <td><?php echo $v['user_id']; ?></td>
+            <td><?php echo $v['username']; ?></td>
+            <td>
+                <?php if ($v['win_lose'] > 0): ?><font color="red"><?php echo $v['win_lose']; ?></font>
+                <?php else: ?><?php echo $v['win_lose']; ?>
+                <?php endif; ?>
+            </td>
+            <td>
+                <?php echo $v['amount']; ?>
+            </td>
+            <td>
+                <?php echo $v['create_time']; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+    <div id="reasonDiv" style="display:none;"><textarea class="input-md form-control" name="remark"></textarea></div>
+    <div class="form-inline form-top mb10">
+        <div style="width:100%;margin:0 auto;text-align:center;">
+            <input class="btn btn-md  btn-info" type="button" name="button" value="批量审核" onclick="if (del(this.form)) {this.form.action='?c=promo&a=batchVerifyBonus';this.form.submit();}"/>
+            <input class="btn btn-md  btn-info" type="button" name="button" value="批量执行" onclick="if (del(this.form)) {this.form.action='?c=promo&a=batchExecuteBonus';this.form.submit();}"/>
+            <input class="btn btn-md  btn-info" type="button" name="button" value="批量取消" onclick="if (del(this.form)) {this.form.action='?c=promo&a=batchCancelBonus';if (doCheck()) {this.form.submit();}}"/>
+            <input type="hidden" name="endDate" value="<?php echo $endDate; ?>"/>
+        </div>
+    </div>
+</form>
+</div>
+<div class="pageTal mt10"><?php echo $pageList; ?><div>小计：总分红 <b><?php echo $trafficInfo['total_amount']; ?></b>元 &nbsp; </div></div>
+<div class="form-inline mt10 mb10" style="border:1px dotted #ddd; font-size:12px;">
+    <p>注一：总盈亏=中奖+返点+优惠-投注，为负表示客户输钱，这时才有分红。</p>
+    <p>注二：分红为0的记录仅方便查看，不会入库。</p>
+    <p>注三：本统计消耗较大，应在2:20以后再使用，切勿在系统繁忙时段使用。</p>
+</div>
+
+<div class="mt20 form-top">
+    <form name="form2" action="?c=promo&a=batchImportBonus" method="POST" onsubmit="return true;">
+        <fieldset style="padding:10px;width:100%;color:#333; border:#ededed 3px solid ;border-radius:5px;">
+        <legend style="color:#0098e1;font-weight:100; background:#fff;width:42rem;border:none;">分红统计（注意：时间段内不要重复添加）</legend>
+        <div class="form-inline mb10">
+            <label>时间范围:</label>
+            <input class="input-md form-control Wdate"  type="text" name="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="time1" value="<?php echo $startDate; ?>" size="21"/>
+            <label到</label>
+            <input class="input-md form-control Wdate"  type="text" name="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  id="time2" value="<?php echo $endDate; ?>" size="21"/>
+        </div>
+        <div class="form-inline mb10">
+            <label>1954的分红比例：</label>
+            <?php echo $configs['bonus_rate_1954']; ?> <input class="btn btn-md btn-default submit" type="button"  name="button" value="统计1954的分红数据" onclick="this.form.targetRebate.value=0.077;this.form.submit();"/>
+        </div>
+        <div class="form-inline">
+            <label>1956的分红比例：</label>
+            <?php echo $configs['bonus_rate_1956']; ?> <input class="btn btn-md btn-default submit" type="button"  name="button" value="统计1956的分红数据" onclick="this.form.targetRebate.value=0.078;this.form.submit();"/>
+        </div>
+         <input type="hidden" name="targetRebate" value=""/><input type="hidden" name="sa" value="stat"/>     
+        </fieldset>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,64 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    #container .form-control{width: 35%;text-align: left;}
+</style>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=<?php echo ACTION; ?>" method="post" >
+    <input type="hidden" name="bind_card_id" value="<?php echo $bindCard['bind_card_id'];?>">
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+        <tr>
+            <td colspan="2" class="rowTitle">
+                <b>编辑银行卡</b>
+            </td>
+        </tr>
+        <tr>
+            <td width="23%">银行卡开户姓名</td>
+            <td><input class="input-md form-control" type="text" name="bank_username" value="<?php echo $bindCard['bank_username'];?>" <?php if (!$editBindCardRealName): ?>readonly="readonly"<?php endif; ?> /></td>
+        </tr>
+
+        <tr>
+            <td>银行名称</td>
+            <td>
+                <select class="input-md form-control form_control" reg="[^0]" tip="选择银行名称" name="bind_bank_id" id="bind_bank_id">
+                    <?php foreach ($withdrawBankList as $k => $v): ?>
+                        <option value="<?php echo $k; ?>" <?php if($k==$bindCard['bank_id']):?> selected <?php endif; ?>><?php echo $v; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td>开户银行所在城市</td>
+            <td>
+                <select class="input-md form-control form_control sel_province mb10" reg="[^0]" tip="请选择省" name="province"   id="province" onChange="SelChgCity('city', document.getElementById('province').options[document.getElementById('province').selectedIndex].value, arrProvince, arrCity, 'country');"> </select>
+                <select class="input-md form-control form_control sel_city" reg="[^0]" tip="请选择市" name="city"  id="city"> </select></td>
+        </tr>
+
+        <tr>
+            <td>支行名称</td>
+            <td><input type="text" name="branch_name" id="branch_name" class="input-md form-control form_control" reg="^.+$" tip="**银行**分行**支行**分理处(储蓄)" value="<?php echo $bindCard['branch']; ?>" />
+            </td>
+        </tr>
+        <tr>
+            <td>银行卡号</td>
+            <td><input class="input-md form-control" type="text" name="card_num" value="<?php echo $bindCard['card_num']; ?>"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="width: 50%;margin:0 auto;text-align: center;">
+                    <input class="btn btn-info submit" type="submit"  value="提交">
+                </div>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+
+    <script type="text/javascript" src="js/jquery.plugin.js"></script><!--jquery小插件-->
+    <script src="js/area/area.js"></script>
+
+    <script language="javascript">
+        InitArea("province", "city", "country", arrProvince, arrCity, arrCountry,　"<?php echo $bindCard['province'];?>", "<?php echo $bindCard['city'];?>", "");
+    </script>
+
+<?php $this->import("foot"); ?>

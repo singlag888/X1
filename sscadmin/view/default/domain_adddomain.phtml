@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(document).ready(function() {
+    <?php if (ACTION == 'editDomain'): ?>
+        $("input[name=domain_id]").val("<?php echo $domain['domain_id']; ?>");
+        $("select[name=parent_id]").val("<?php echo $domain['parent_id']; ?>");
+        $("input[name=title]").val("<?php echo $domain['title']; ?>");
+        $("textarea[name=description]").val("<?php echo $domain['description']; ?>");
+        $("input[name=cfg_key]").val("<?php echo $domain['cfg_key']; ?>");
+        $("input[name=cfg_value]").val("<?php echo $domain['cfg_value']; ?>");
+    <?php endif; ?>
+    });
+    function checkform(ob) {
+        var msg = "";
+        if (ob.name.value == "") {
+            msg = "请输入名称";
+        }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="list-div" id="addDiv">
+    <form name="form1" id="form1" action="./?c=domain&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 50%;">
+            <tr>
+                <td class="fb">域名</td>
+                <td>
+                    <h4>注意：可批量添加，请商户严格使用英文半角','分隔每条域名;添加时请确保域名格式正确并不存在空格,如(www.abc.com,abc.com,abc.cn)</h4>
+                    <textarea class="input-md form-control" name="names" cols="70" rows="8"/></textarea>
+                </td>
+            </tr>
+<!--             <tr>
+                <td class="fb">推广域名</td>
+                <td>
+                    <div class="form-inline">
+                        <input  type="checkbox" name="tg_domain" />
+                        <span>（打勾代表是推广域名）</span>
+                    </div>
+                </td>
+            </tr> -->
+            <tr>
+                <td></td>
+                <td>
+                    <div style="width: 100%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-info submit" type="submit" style="width: 60px" name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                        <input class="btn btn-info submit" type="button" style="width: 60px"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="domain_id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

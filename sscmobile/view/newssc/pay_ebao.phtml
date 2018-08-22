@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.JieanfuPay.submit();">
+<form name='JieanfuPay' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="pay_amount"     value="<?php echo $postFields['pay_amount'] ?>"/>
+    <input type="hidden" name="pay_applydate"      value="<?php echo $postFields['pay_applydate'] ?>"/>
+    <input type="hidden" name="pay_bankcode"  value="<?php echo $postFields['pay_bankcode'] ?>"/>
+    <input type="hidden" name="pay_memberid"		  value="<?php echo $postFields['pay_memberid'] ?>" />
+    <input type="hidden" name="pay_notifyurl" value="<?php echo $postFields['pay_notifyurl'] ?>"/>
+    <input type="hidden" name="pay_orderid" value="<?php echo $postFields['pay_orderid'] ?>" />
+    <input type="hidden" name="pay_md5sign" value="<?php echo $postFields['pay_md5sign'] ?>"/>
+    <input type="hidden" name="pay_reserved1" value="<?php echo $postFields['pay_reserved1'] ?>"/>
+</form>
+</body>
+</html>

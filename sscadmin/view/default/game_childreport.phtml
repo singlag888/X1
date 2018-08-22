@@ -1,0 +1,183 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+$(function(){
+    //准备数据
+
+    //设置默认值
+    $('select[name=top_username]').val('<?=$top_username?>');
+    $('input[name=username]').val('<?=$username?>');
+    $('#start_time').val('<?=$start_time?>');
+    $('#end_time').val('<?=$end_time?>');
+    $('#ref_group_id').val('<?=$ref_group_id?>');
+    $('input[name=ignore][value=<?=$ignore?>]').prop({checked : true});
+});
+</script>
+<!------------------ author snow引入搜索相关文件--------------------------->
+
+<link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+<script src="/js/jquery-select/bootstrop.min.js"></script>
+<script src="/js/jquery-select/bootstrop-select.js"></script>
+<!------------------ author snow引入搜索相关文件--------------------------->
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-feedback has-default">
+            <label class="ml10">游戏时间:</label>
+            <input class="input-md form-control Wdate" type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text" name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label for="radio1">用户层级:</label>
+        <select class="input-md form-control" id="ref_group_id" name="ref_group_id">
+            <option value="-1">请选择</option>
+            <?php foreach ($cardGroups as $key => $val): ?>
+                <option value="<?=$val['ref_group_id']?>"><?=$val['name']?></option>
+            <?php endforeach; ?>
+        </select>
+
+
+    </div>
+    <div class="form-inline mt15">
+        &nbsp;&nbsp;<input type="radio" name="name_style" id="radio1" value="1"/>
+        <label for="radio1">所属总代:</label>
+        <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+            <option value="">请选择…</option>
+            <?php foreach ($json_topUsers as $k => $v): ?>
+                <option value="<?=$v['username']?>"><?=$v['username']?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>或</label>
+        <input type="radio" name="name_style" value="2" id="radio2"/>
+        <label for="radio2">用户名:</label>
+        <input class="input-md form-control" name="username" size="10"/>
+
+        <label for="radio1" style="color: #ff0000">是否忽略查询时间区间条件:</label>
+        <input type="radio" name="ignore" value="1"><label for="radio1">是:</label>
+        <input type="radio" name="ignore" value="0"><label for="radio1">否:</label>
+        <input type="hidden" name="c" value="game"/>
+        <input type="hidden" name="a" value="<?=ACTION?>"/>
+        <input class="btn btn-info submit" style="width: 60px" type="submit" name="submit"  value="查询"/>
+        <input style="margin-left: 10px" class="btn btn-info excel"  type="button" table=".mainList" excelFile="用户卡列表"  value="导出Excel"/>
+        <hr>
+    </div>
+</form>
+
+<h4>注1：第一个帐户的信息指其自己的购买量、自己的总返点（含下级对他的返点），自己的中奖金额，下级则为团队汇总信息。</h4>
+<h4 style="margin-top: 10px;">注2：勾选”忽略查询时间区间条件“后，查询会员数据从会员注册时间开始到当前查询时间</h4>
+<div class="list-div mt20" id="listDiv">
+<table class="table table-responsive table-bordered  mainList">
+    <thead>
+    <tr>
+    	<td>用户名</td>
+        <td>类型</td>
+<!--author snow
+1.取消不活跃天数 ,1.取消不活跃天数；
+2.拆分充值为：存款金额、优惠彩金（目前充值中统计了存款金额与优惠彩金）
+-->
+<!--        <td>不活跃天数</td>-->
+        <td>余额</td>
+        <td>充值</td>
+        <td>充值次数</td>
+        <td>优惠彩金</td>
+        <td>提现</td>
+        <td>提现次数</td>
+        <td>投注</td>
+        <td>返点</td>
+        <td>下级佣金量</td>
+        <td>中奖金额</td>
+        <td>投注盈亏</td>
+        <!--author snow
+1.取消不活跃天数 ,1.取消不活跃天数；
+2.拆分充值为：存款金额、优惠彩金（目前充值中统计了存款金额与优惠彩金）
+-->
+        <td>登录次数</td>
+        <td>注册IP</td>
+        <td>最后登录IP</td>
+    </tr>
+    </thead>
+    <?php if ($childReport): ?>
+        <?php foreach ($childReport as $v): ?>
+          <tr>
+            <td>
+                <?php if ($v['username'] != $username && $v['username'] != $top_username): ?>
+                    <a href="?c=game&a=<?=ACTION?>&username=<?=$v['username']?>&user_id=<?=$v['user_id']?>&start_time=<?=$start_time?>&end_time=<?=$end_time?>"><?=$v['username']?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></a>
+                <?php else: ?>
+                    <?=$v['username']?>
+                    <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                <?php endif; ?>
+                <?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+            </td>
+            <td><?php if ($v['level'] < 10): ?>代理<?php else: ?>会员<?php endif; ?></td>
+<!--
+1.取消不活跃天数 ,1.取消不活跃天数；
+2.拆分充值为：存款金额、优惠彩金（目前充值中统计了存款金额与优惠彩金）
+-->
+<!--            <td>--><?php //echo $users[$v['user_id']]['inactive_days']; ?><!--</td>-->
+            <td><?=$teamBalance[$v['user_id']]['total_balance']?></td>
+            <td><?=number_format($teamDeposit[$v['user_id']]['total_deposit'], 2)?></td>
+            <td><?=$teamDeposit[$v['user_id']]['total_deposit_count']?></td>
+            <td><?=number_format($teamDeposit[$v['user_id']]['total_promo'], 2)?></td>
+            <td><?=number_format($teamWithdraw[$v['user_id']]['total_withdraw'], 2)?></td>
+            <td><?=$teamWithdraw[$v['user_id']]['total_withdraw_count']?></td>
+            <td><?=number_format($v['total_amount'], 2)?></td>
+            <td><?=number_format($v['total_rebate'], 4)?></td>
+            <td>
+                <?php if ($v['username'] != $username && $v['username'] != $top_username): ?>
+                    <?=number_format($v['total_contribute_rebate'], 4)?>
+                <?php else: ?>
+                    -
+                <?php endif; ?>
+            </td>
+            <td><?=number_format($v['total_prize'], 2)?></td>
+            <td><span title="总中奖金额+总返点-总投注">
+                <?php if (-($v['total_rebate'] + $v['total_prize'] - $v['total_amount']) < 0): ?>
+                    <font color="red"><?=number_format(-($v['total_rebate'] + $v['total_prize'] - $v['total_amount']) , 2)?></font>
+                <?php else: ?>
+                    <?=number_format(-($v['total_rebate'] + $v['total_prize'] - $v['total_amount']) , 2)?>
+                <?php endif; ?>
+                </span>
+            </td>
+              <!-- author snow
+1.取消不活跃天数 ,1.取消不活跃天数；
+2.拆分充值为：存款金额、优惠彩金（目前充值中统计了存款金额与优惠彩金）
+-->
+              <td><?=isset($usersLoginCount[$v['user_id']]['login_count'])?$usersLoginCount[$v['user_id']]['login_count']:0?></td>
+              <td><?=$users[$v['user_id']]['reg_ip']?></td>
+              <td><?=$users[$v['user_id']]['last_ip']?></td>
+          </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+    <tr>
+        <td colspan="14" class="no-records">请选择某个用户后才能查询！</td>
+    </tr>
+    <?php endif; ?>
+        <tr>
+            <td colspan="2">合计</td>
+            <td><?=number_format($totalInfo['balance'], 4)?></td>
+            <td><?=number_format($totalInfo['deposit'], 2)?></td>
+            <td><?=$totalInfo['deposit_count']?></td>
+            <td><?=number_format($totalInfo['promo'], 2)?></td>
+            <td><?=number_format($totalInfo['withdraw'], 2)?></td>
+            <td><?=$totalInfo['withdraw_count']?></td>
+            <td><?=number_format($totalInfo['amount'], 2)?></td>
+            <td><?=number_format($totalInfo['rebate'], 4)?></td>
+            <td><?=number_format($totalInfo['contribute_rebate'], 4)?></td>
+            <td><?=number_format($totalInfo['prize'], 2)?></td>
+            <td><?php if (-($totalInfo['final']) < 0): ?>
+                        <font color="red"><?=number_format(-($totalInfo['final']), 2)?></font>
+                    <?php else: ?>
+                        <?=number_format(-($totalInfo['final']), 2)?>
+                    <?php endif; ?>
+            </td>
+            <td><?=$totalInfo['login_count']?></td>
+            <td>0.0.0.0</td>
+            <td>0.0.0.0</td>
+        </tr>
+</table>
+</div>
+
+<?php $this->import("foot"); ?>

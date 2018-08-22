@@ -1,0 +1,111 @@
+@charset "utf-8";
+
+*,*:before,*:after {-webkit-box-sizing:border-box;box-sizing:border-box;}
+*{margin:0;padding:0;font-weight:normal;}
+* html,* html body{background-image:url(about:blank);background-attachment:fixed;}
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;}
+html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{margin:0;padding:0;-webkit-tap-highlight-color:rgba(255,255,255,0);}
+body,input,textarea,select{font-size:12px;font-family: Microsoft Yahei, "Helvetica Neue", Helvetica, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;color:#414141;line-height:1.42857143;-webkit-font-smoothing:antialiased;}
+header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{display:block;}
+table{border-collapse:collapse;border-spacing:0;table-layout:fixed;}
+caption{text-align:left;font-weight:normal;}
+html,body,fieldset,img,iframe,abbr,button,input{border:0;}
+i,cite,em,var,address,dfn{font-style:normal;}
+[hidefocus],summary{outline:0;}
+ul,ol,li{list-style:none;}
+h1,h2,h3,h4,h5,h6,small{font-size:100%;}
+sup,sub{font-size:83%;}
+pre,code,kbd,samp{font-family:inherit;}
+blockquote:before,blockquote:after,q:before,q:after{content:none;content:"";}
+blockquote,q{quotes:"" "";}
+textarea{overflow:auto;resize:none;}
+label,summary{cursor:default;}
+a,button{cursor:pointer;}
+a,input,img{vertical-align:middle;border:0;outline:none;}
+h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:bold;}
+del,ins,u,s,a,a:hover,a:active{text-decoration:none;}
+body,textarea,input,button,select,keygen,legend{outline:0;}
+a{color:#033d8e;color:rgba(3,61,142,1);transition:color .2s ease;}
+a:hover{color:#2765a1;}
+a{blr:expression(this.onFocus=this.blur());}
+input,button,select,textarea,input:focus,button:focus,select:focus,textarea:focus{outline:none;}
+input,button,select,textarea{outline:none;border-radius:0;}
+input[type="search"]{-webkit-appearance:none;}
+input[type="button"]{cursor:pointer;}
+input::-webkit-search-decoration,input::-webkit-search-cancel-button{display:none;}
+hr{margin:0;padding:0;border:0;color:#000;height:1px; }
+[data-money-format] small{font-size:80%;}
+::-moz-selection{background:#11a9f7;color:#fff;}
+::selection {background:#11a9f7;color:#fff;}
+/*IE10取消input框默认的叉叉和密码输入框的眼睛*/
+::-ms-clear{display:none;}
+::-ms-reveal{display:none;}
+/*-- fixclear --*/
+.fix:after{content:".";display:block;clear:both;visibility:hidden;}
+.fix{display:inline-block;}
+* html .fix{height:1%;}
+.fix{display:block;}
+/*-- clear --*/
+.clear{clear:both;}
+
+/*主背景*/
+/*.BodyBg{position:relative;height:1080px;background:url(../images/bodybg.jpg) #6cc3be no-repeat;}*/
+.BodyBg{position:relative;}
+.BodyBg div{width:100%;height:40px;background-repeat:no-repeat;background-position:center;background-color:none;}
+.BodyBg .Bodybg01{background-image:url(../images/Bg/contBg_01.jpg);}
+.BodyBg .Bodybg02{background-image:url(../images/Bg/contBg_02.jpg);}
+.BodyBg .Bodybg03{background-image:url(../images/Bg/contBg_03.jpg);}
+.BodyBg .Bodybg04{background-image:url(../images/Bg/contBg_04.jpg);}
+.BodyBg .Bodybg05{background-image:url(../images/Bg/contBg_05.jpg);}
+.BodyBg .Bodybg06{background-image:url(../images/Bg/contBg_06.jpg);}
+.BodyBg .Bodybg07{background-image:url(../images/Bg/contBg_07.jpg);}
+.BodyBg .Bodybg08{background-image:url(../images/Bg/contBg_08.jpg);}
+.BodyBg .Bodybg09{background-image:url(../images/Bg/contBg_09.jpg);}
+.BodyBg .Bodybg10{background-image:url(../images/Bg/contBg_10.jpg);}
+.BodyBg .Bodybg11{background-image:url(../images/Bg/contBg_11.jpg);}
+.BodyBg .Bodybg12{background-image:url(../images/Bg/contBg_12.jpg);}
+.BodyBg .Bodybg13{background-image:url(../images/Bg/contBg_13.jpg);}
+.BodyBg .Bodybg14{background-image:url(../images/Bg/contBg_14.jpg);}
+.BodyBg .Bodybg15{background-image:url(../images/Bg/contBg_15.jpg);}
+.BodyBg .Bodybg16{background-image:url(../images/Bg/contBg_16.jpg);}
+.BodyBg .Bodybg17{background-image:url(../images/Bg/contBg_17.jpg);}
+.BodyBg .Bodybg18{background-image:url(../images/Bg/contBg_18.jpg);}
+.BodyBg .Bodybg19{background-image:url(../images/Bg/contBg_19.jpg);}
+.BodyBg .Bodybg20{background-image:url(../images/Bg/contBg_20.jpg);}
+.BodyBg .Bodybg21{background-image:url(../images/Bg/contBg_21.jpg);}
+.BodyBg .Bodybg22{background-image:url(../images/Bg/contBg_22.jpg);}
+.BodyBg .Bodybg23{background-image:url(../images/Bg/contBg_23.jpg);}
+.BodyBg .Bodybg24{background-image:url(../images/Bg/contBg_24.jpg);}
+.BodyBg .Bodybg25{background-image:url(../images/Bg/contBg_25.jpg);}
+.BodyBg .Bodybg26{background-image:url(../images/Bg/contBg_26.jpg);}
+.BodyBg .Bodybg27{background-image:url(../images/Bg/contBg_27.jpg);}
+
+/*中奖提示*/
+.WinTips{width:1190px !important;height:auto !important;position:fixed;left:50%;bottom:0;z-index:9;margin-left:-600px;}
+.WinBox{width:244px !important;height:96px !important;float:right;background:url(../images/WinTips.png) no-repeat center !important;margin-bottom:4px;}
+.WinBoxText{width:216px !important;height:88px !important;float:left;margin:4px 0 0 4px;padding:0 16px;}
+.WinBoxText h3{text-align:center;color:#ef7c02;font-size:14px;line-height:26px;margin-top:3px;}
+.WinBoxText p{text-justify:inter-ideograph;text-align:justify;}
+.WinBoxText p span{padding:0 2px;}
+.WinBoxText p strong{color:#ef7c02;font-weight:bold;}
+.WinTips a{width:20px;height:88px;float:right;background-color:#ef7c02;color:#fff;margin:4px 4px 0 0;text-align:center;padding-top:30px;font-size:18px;}
+
+/*充值礼金*/
+.CZ_main{width:auto !important;height:auto !important;margin-top:-110px;position:fixed;top:40%;right:0;z-index:99;}
+.CZ_supFixed{width:340px;height:210px;background:url(../../images/CZ_Suspension.png) no-repeat center;display:none;}
+.CZ_Sicon{width:51px;height:136px;background:url(../../images/CZ_Sicon.png) no-repeat center;cursor:pointer;display:block;}
+.CZ_main:hover .CZ_supFixed{display:block;}
+.CZ_main:hover .CZ_Sicon{display:none;}
+/*浮动客服窗口*/
+.lim_float_icon{right:5px !important;top:auto !important;bottom:20px !important;position:fixed !important;}
+#live800iconlink{width:20px;display:block;overflow:hidden;}
+#live800iconlink:hover{width:auto;}
+.padding-minw910{padding-top: 20px;min-width: 910px;}
+.Pay_cash .pay_option{height: 20px;width: 300px;}
+.Pay_cash .pay_option span{display: block;float: left;width: 100px}
+/*六合彩开奖视频*/
+.video_button{width: 80px;height: 25px;background: #e4393c;color: white;position: absolute;right: 48px;top: -4px;z-index: 100;border-radius: 5px;font-size: 14px;text-align: center;line-height: 25px;cursor: pointer}
+.video_area{position: absolute;top: 96px;right: 0px;z-index: 100; width:600px;height:400px;margin: 0 auto;display: none}
+.top_area{background: #e4393c;color: white;width: 584px;height: 37px;/*margin: 0 auto;*/line-height: 37px;}
+.top_area span:nth-child(1){float: left;font-weight: bold;margin-left: 20px;}
+.top_area span:nth-child(2){float: right;font-size: 40px;cursor: pointer;margin-right: 20px;}

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding" style="padding-top:20px;">
+            <div class="Gamepart">
+                <div class="sub_public">
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <!-- 搜索栏 -->
+                            <div class="SearchBar">
+                                <form method="GET" action="" id="form1" name="form1">
+                                <input type='hidden' name='mmcPopup' value=1 />
+                                <input type='hidden' name='lottery_id' value='15' />
+                                    <ul class="fix">
+                                        <li>
+                                            <label>订单编号：</label>
+                                            <input size="20" type="text" name="wrap_id" class="txtStyle orderNumb">
+                                        </li>
+                                        <li>
+                                            <label>订单状态：</label>
+                                            <select class="txtStyle SelectStyle" name="check_prize_status">
+                                                <option value="-1">请选择</option>
+                                                <option value="0">未开奖</option>
+                                                <option value="2">未中奖</option>
+                                                <option value="1">已中奖</option>
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <label>游戏时间：</label>
+                                            <div class="MutiTxt">
+                                                <input class="txtStyle gamedate" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" my97mark="false" id="start_time" name="startDate" size="16">
+                                                <em>—</em>
+                                                <input class="txtStyle gamedate" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" my97mark="false" id="end_time" name="endDate" size="16">
+                                            </div>
+                                        </li>
+                                        <li style="float:right;">
+                                            <input type="submit" value="查询" class="btnStyle orderInquireBtn" name="submit">
+                                        </li>
+                                    </ul>
+                                    <input type="hidden" value="game" name="c">
+                                    <input type="hidden" value="packageList" name="a">
+                                </form>
+                            </div>
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <div class="moreTable">
+                                <table class="tab01" border="0" cellspacing="0" cellpadding="0">
+                                    <thead>
+                                        <tr>
+                                            <th width="21%">订单编号</th>
+                                            <th width="10%">彩种</th>
+                                            <th width="4%">模式</th>
+                                            <th width="13%">奖期</th>
+                                            <th width="11%">投注金额</th>
+                                            <th>是否追号</th>
+                                            <th width="15%">购买时间</th>
+                                            <th width="9%">订单状态</th>
+                                            <th width="9%">中奖金额</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($packages): ?>
+                                            <?php foreach ($packages as $v): ?>
+                                                <tr class="recordsContent">
+                                                    <td><a  href="?c=game&a=packageDetail&mmcPopup=1&wrap_id=<?php echo $v['wrap_id']; ?>" title="查看订单详情"><?php echo $v['wrap_id']; ?></a></td>
+                                                    <td><span><?php echo $lotterys[$v['lottery_id']]['cname']; ?></span></td>
+                                                    <td><?php echo $GLOBALS['cfg']['modes'][strval(floatval($v['modes']))]; ?></td>
+                                                    <td><?php echo $v['issue']; ?></td>
+                                                    <td><span class="orange"><?php echo $v['amount']; ?></span></td>
+                                                    <td><?php if ($v['trace_id'] > 0): ?>是<?php else: ?>否<?php endif; ?></td>
+                                                    <td><?php echo $v['create_time']; ?></td>
+                                                    <td><?php if ($v['cancel_status'] == 0): ?>
+                                                                <?php if ($v['check_prize_status'] == 0): ?><span class="yellow_dark">未开奖</span>
+                                                                <?php elseif ($v['check_prize_status'] == 1): ?><span class="orange">已中奖</span>
+                                                                <?php else: ?><span class="red">未中奖</span>
+                                                                <?php endif; ?>
+                                                            <?php else: ?>
+                                                                <b>
+                                                                    <?php if ($v['cancel_status'] == 1): ?><span class="yellow_dark">个人撤单</span>
+                                                                    <?php elseif ($v['cancel_status'] == 2): ?><span class="yellow_dark">追中撤单</span>
+                                                                    <?php elseif ($v['cancel_status'] == 3): ?><span class="yellow_dark">出号撤单</span>
+                                                                    <?php elseif ($v['cancel_status'] == 4): ?><span class="yellow_dark">未开撤单</span>
+                                                                    <?php elseif ($v['cancel_status'] == 9): ?><span class="yellow_dark">系统撤单</span>
+                                                                    <?php endif; ?>
+                                                                </b>
+                                                            <?php endif; ?></td>
+                                                        <td><?php if ($v['cancel_status'] == 0): ?>
+                                                            <?php if ($v['check_prize_status'] == 1): ?><span class="orange"><?php echo $v['prize']; ?></span>
+                                                            <?php else: ?><span><?php echo '--' ?></span>
+                                                            <?php endif; ?>
+                                                        <?php else: ?><span><?php echo '--' ?></span>
+                                                        <?php endif; ?>
+                                                    </td>
+                                                </tr>
+                                        <?php endforeach; ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="statistics fix">
+                                                <div class="fl">计划投注金额：<span><?php echo number_format($totalAmount, 4); ?></span> 元&emsp;&emsp;实际投注金额：<span><?php echo number_format($realAmount, 4); ?></span> 元</div>
+                                                <div class="fr">中奖金额小计：<span><?php echo number_format($totalPrize, 4); ?></span> 元</div>
+                                            </div>
+                                        <?php else: ?>
+                                                    <tr>
+                                                        <th colspan="9" class="bom">暂无数据显示</th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <?php endif; ?>
+                            <!-- 分页 -->
+                            <div class="Page">
+                                 <?php echo $pageList; ?>
+                            </div>
+                            <!-- 分页end -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script src="<?php echo $imgCdnUrl ?>/js/common.js" type="text/javascript"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script>
+    $(function() {
+        //设置默认值
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('#start_time').val('<?php echo date('Y-m-d', strtotime($startDate));  ?>');
+        $('#end_time').val('<?php echo date('Y-m-d', strtotime($endDate)); ?>');
+        $('input[name=wrap_id]').val('<?php echo $wrap_id; ?>');
+        $('select[name=check_prize_status]').val('<?php echo $check_prize_status; ?>').change();
+    });
+</script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

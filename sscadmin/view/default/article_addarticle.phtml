@@ -1,0 +1,136 @@
+<?php $this->import("head"); ?>
+    <script>
+        //预设编辑值
+        $(document).ready(function() {
+            $('#form1').submit(function() {
+                if ($.trim($('input[name=title]').val()) == '') {
+                    alert('请输入标题');
+                    return false;
+                }
+                if ($('select[name=category_id]').val() == '-1') {
+                    alert('请选择分类');
+                    return false;
+                }
+
+                return true;
+            })
+
+            <?php if (ACTION == 'editArticle'): ?>
+            $("input[name=article_id]").val("<?php echo $article['article_id']; ?>");
+            $("input[name=title]").val("<?php echo addslashes($article['title']); ?>");
+            $("select[name=category_id]").val("<?php echo $article['category_id']; ?>");
+            $('select[name=status]').val("<?php echo $article['status']; ?>");
+            <?php endif; ?>
+        });
+    </script>
+    <div class="list-div add-main form-top" id="addDiv">
+        <form name="form1" id="form1" action="?c=article&a=<?php echo ACTION; ?>" method="post">
+            <table class="table table-responsive table-bordered" style="width:80%;">
+                <tr>
+                    <td>文章标题:</td>
+                    <td><input class="form-control" name="title" size="50"/></td>
+                </tr>
+                <tr>
+                    <td>文章分类:</td>
+                    <td><select  class="input-md form-control" data-style="btn-primary" name="category_id"><option value="-1">请选择</option>
+                            <?php foreach ($categories as $v): ?>
+                                <option value="<?php echo $v['category_id']; ?>"><?php echo $v['name']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td >文章内容:</td>
+                    <td>
+                        <textarea class="input-md form-control" id="content" name="content"><?php echo ($article ? $article['content'] : ''); ?></textarea>
+                        <script src="/js/ckeditor/ckeditor.js"></script>
+
+                        <script>
+                            var editor=CKEDITOR.replace('content', {
+                                language: 'zh-cn',
+                                width: '100%',
+                                height: '420',
+                                extraPlugins: 'tableresize,autosave',
+                                //  filebrowserBrowseUrl: '/ckfinder/ckfinder.html',
+                                filebrowserImageBrowseUrl: '/js/ckfinder/ckfinder.html?Type=Images',
+                                filebrowserFlashBrowseUrl: '/js/ckfinder/ckfinder.html?Type=Flash',
+                                //  filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+                                filebrowserImageUploadUrl: '/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+                                filebrowserFlashUploadUrl: '/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>状态:</td>
+                    <td>
+                        <select class="input-md form-control" name="status">
+                            <option value="1">正常</option>
+                            <option value="0">删除</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <button class="btn  btn-info submit" type="submit" style="width: 60px;" name="submitBtn" value="<?php if (ACTION == "addArticle"): ?>提交<?php else: ?>更新<?php endif; ?>">更新</button>
+                            <button class="btn btn-info submit" type="button" style="width: 60px;"3
+                             class="" onclick="javascript:history.go(-1);" value="返回">返回</button>
+                            <input type="hidden" name="article_id" value="" />
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+            <!--<table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <tr>
+                <td>文章标题</td>
+                <td><input name="title" size="50"/></td>
+            </tr>
+            <tr>
+                <td>文章分类</td>
+                <td><select name="category_id"><option value="-1">请选择</option>
+                        <?php foreach ($categories as $v): ?>
+                            <option value="<?php echo $v['category_id']; ?>"><?php echo $v['name']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>文章内容</td>
+                <td>
+                    <textarea id="content" name="content"><?php echo ($article ? $article['content'] : ''); ?></textarea>
+                    <script src="/js/ckeditor/ckeditor.js"></script>
+
+                    <script>
+    var editor=CKEDITOR.replace('content', {
+        language: 'zh-cn',
+        width: '100%',
+        height: '420',
+        extraPlugins: 'tableresize,autosave',
+      //  filebrowserBrowseUrl: '/ckfinder/ckfinder.html',
+        filebrowserImageBrowseUrl: '/js/ckfinder/ckfinder.html?Type=Images',
+        filebrowserFlashBrowseUrl: '/js/ckfinder/ckfinder.html?Type=Flash',
+      //  filebrowserUploadUrl: '/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl: '/js/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash'
+    });
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td><select name="status"><option value="1">正常</option><option value="0">删除</option></select></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2"><input type="submit" class="submit" name="submitBtn" value="<?php if (ACTION == "addArticle"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                    <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/>
+                    <input type="hidden" name="article_id" value="" />
+            </tr>
+        </table>-->
+        </form>
+    </div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $apiUrl; ?>' method='post'>
+    <input type="hidden" name="version"		  value="<?php echo $postFields['version'] ?>" />
+    <input type="hidden" name="customerid" value="<?php echo $postFields['customerid'] ?>" />
+    <input type="hidden" name="sdorderno" value="<?php echo $postFields['sdorderno'] ?>" />
+    <input type="hidden" name="total_fee" value="<?php echo $postFields['total_fee'] ?>" />
+    <input type="hidden" name="paytype" value="<?php echo $postFields['paytype'] ?>" />
+    <input type="hidden" name="notifyurl" value="<?php echo $postFields['notifyurl'] ?>" />
+    <input type="hidden" name="returnurl" value="<?php echo $postFields['returnurl'] ?>" />
+    <input type="hidden" name="remark" value="<?php echo $postFields['remark'] ?>" />
+    <input type="hidden" name="bankcode" value="<?php echo $postFields['bankcode'] ?>" />
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>" />
+    <input type="hidden" name="get_code" value="<?php echo $postFields['get_code'] ?>" /> 
+</form>
+</body>
+</html>

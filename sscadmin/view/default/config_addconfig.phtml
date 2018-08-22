@@ -1,0 +1,77 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+   if (action == 'editConfig') {
+       $("input[name=config_id]").val("<?php echo $config['config_id']; ?>");
+       $("select[name=parent_id]").val("<?php echo $config['parent_id']; ?>");
+       $("input[name=title]").val("<?php echo $config['title']; ?>");
+       $("textarea[name=description]").val("<?php echo $config['description']; ?>");
+       $("input[name=cfg_key]").val("<?php echo $config['cfg_key']; ?>");
+       $("input[name=cfg_value]").val("<?php echo $config['cfg_value']; ?>");
+   }
+   else {
+       $("select[name=parent_id]").val("<?php echo $parent_id; ?>");
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.name.value == "") {
+        msg = "请输入名称";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="container list-div form-top" id="addDiv">
+    <form class="form form-inline" name="form1" id="form1" action="./?c=config&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+      <table class="table table-responsive table-bordered mt10" cellpadding="0" cellspacing="0" style="width:60%;">
+          <tr>
+              <td style="width:20%;">所属父配置</td>
+              <td>
+                  <select class="input-md form-control" name="parent_id">
+                      <option value="0">作为顶级配置类</option>
+                      <?php foreach ($parentConfigs as $v): ?>
+                          <option value="<?php echo $v['config_id']; ?>"><?php echo $v['title']; ?></option>
+                      <?php endforeach; ?>
+                  </select>
+              </td>
+          </tr>
+          <tr>
+              <td>配置标题</td>
+              <td><input class="form-control" type="text" name="title"/></td>
+          </tr>
+          <tr>
+              <td>说明</td>
+              <td><textarea class="input-md form-control" style="height:100%;" name="description" cols="30"/></textarea></td>
+          </tr>
+          <tr>
+              <td>配置key（不可重复）</td>
+              <td> <input class="form-control" type="text" name="cfg_key" size="30"/></td>
+          </tr>
+          <tr>
+              <td>配置value</td>
+              <td><input class="form-control" name="cfg_value" size="30"/></td>
+          </tr>
+          <tr>
+              <td colspan="2">
+                <div style="width:60%;margin:0 auto;text-align: center;">
+                  <button class="btn btn-info submit" type="submit" style="width: 60px;"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>">更新</button>
+                  <button class="btn btn-info submit" type="button"  style="width: 60px;" onclick="javascript:history.go(-1);" value="返回"/>返回</button>
+                  <input type="hidden" name="config_id" value="" />
+                </div>
+              </td>
+          </tr>        
+      </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,107 @@
+<?php $this->import("head"); ?>
+<script>
+$(document).ready(function(){
+    $("#lotteryType").change(function(){
+		var lotteries = <?php echo $json_typeLotteries; ?>;
+		$("#lottery_id").html("");
+        //var shtml ="<select name='lottery' id='lottery'>";
+        var shtml = "<option value='0'>请选择</option>";
+		if($("#lotteryType").val()>=0 && undefined != lotteries[$("#lotteryType").val()])
+		{
+            $.each(lotteries[$("#lotteryType").val()], function(i,v){
+                shtml = shtml + "<option value='"+v.lottery_id+"'>"+v.name+"</option>";
+            });
+		}
+        //shtml += "</select>";
+		$("#lottery_id").html(shtml);
+	});
+
+   var action="<?php echo ACTION; ?>";
+   if (action == 'editDrawSource') {
+       $('#lotteryType').val("<?php echo $lotteries[$drawSource['lottery_id']]['lottery_type']; ?>").change();
+       $('#lottery_id').val("<?php echo $drawSource['lottery_id']; ?>");
+       $("input[name=ds_id]").val("<?php echo $drawSource['ds_id']; ?>");
+       $("input[name=name]").val("<?php echo $drawSource['name']; ?>");
+       $("input[name=url]").val("<?php echo $drawSource['url']; ?>");
+       $("input[name=interface]").attr("checked", <?php if ($drawSource['interface'] == 1) echo "true"; else echo "false"; ?>);
+       $("input[name=rank]").val("<?php echo $drawSource['rank']; ?>");
+       $("input[name=is_enabled]").attr("checked", <?php if ($drawSource['is_enabled'] == 1) echo "true"; else echo "false"; ?>);
+   }
+   else {
+       $("select[name=parent_id]").val("<?php echo $parent_id; ?>");
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.name.value == "") {
+        msg = "请输入名称";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="list-div add-main form-top" id="addDiv">
+<form name="form1" id="form1" action="./?c=draw&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 60%;">
+    <tr>
+        <td class="rowTitle" colspan="2">
+            <b>新增开奖源</b>
+        </td>
+    </tr>
+    <tr>
+        <td class="narrow-label">游戏名称</td>
+        <td>
+            <div class="form-inline">
+                <select class="input-md form-control" name="lotteryType" id="lotteryType">
+                    <option value="0">请选择</option>
+                    <?php foreach ($lotteryTypes as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <select class="input-md form-control" name="lottery_id" id="lottery_id">
+                    <option value="0">请选择</option>
+                </select>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>号源网站名称</td>
+        <td><input class="input-md form-control" name="name"/></td>
+    </tr>
+    <tr>
+        <td>详细网址</td>
+        <td><input class="input-md form-control" name="url" size="60"/></td>
+    </tr>
+    <tr>
+        <td>接口实现</td>
+        <td><input  type="checkbox" name="interface" value="1"/></td>
+    </tr>
+    <tr>
+        <td>权重</td>
+        <td><input class="input-md form-control" name="rank"/></td>
+    </tr>
+    <tr>
+        <td>是否启用</td>
+        <td><input type="checkbox" name="is_enabled" value="1" checked/></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="width:50%;margin: 0 auto;text-align: center;">
+                <input class="btn btn-info submit" type="submit"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                <input type="hidden" name="ds_id" value="" />
+            </div>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

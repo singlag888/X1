@@ -1,0 +1,85 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    //预设查询值
+    $(document).ready(function() {
+        //预选中值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('input[name=startDate]').val('<?php echo $startDate; ?>');
+        $('input[name=endDate]').val('<?php echo $endDate; ?>');
+    });
+</script>
+<div class="list-div form-top" id="listDiv">
+
+    <div id="query">
+        <form name="form1" class="mt20" action="./" method="get">
+            <div class="form-inline">
+                <div class="form-group has-default has-feedback">
+                    <label>发送时间:</label>
+                    <input class="input-md form-control" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" type="text" name="startDate"   id="startDate" value="" size="23"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <div class="form-group has-default has-feedback">
+                    <label>到</label>
+                    <input class="input-md form-control"  type="text"  name="endDate" id="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" value="" size="23"/>
+                    <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                </div>
+                <label class="ml10">用户名:</label>
+                <input class="input-md form-control" name="username" size="12"/>
+                <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="msgList"/>
+         　　     <input class="btn btn-info" type="submit" name="submit" value=">> 查 询 <<"/>
+            </div>  
+            <!--用户名<input name="username" size="12"/>
+            发送时间：<input type="text" name="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="startDate" value="" size="23"/>
+            到<input type="text" name="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="endDate" value="" size="23"/>
+            <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="msgList"/>
+         　　<input type="submit" name="submit" value=">> 查 询 <<"/>-->
+        </form>
+    </div>
+
+    <table class="table table-responsive  table-bordered mainList mt20" width="100%">
+        <thead>
+            <tr>
+                <td>msg_id</td>
+                <td>发送用户</td>
+                <td>标题</td>
+                <td>建立时间</td>
+                <td>消息类型</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php foreach ($userMsgs as $key => $v): ?>
+            <tr>
+                <td><?php echo $v['msg_id']; ?></td>
+                <td>
+                    <?php if ($v['type'] == '2'): ?>系统管理员
+                    <?php elseif ($users[$v['from_user_id']]['username'] == ''): ?>用户已删除
+                    <?php else: ?><?php echo $users[$v['from_user_id']]['username']; ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo htmlspecialchars($v['title']); ?></td>
+                <td><?php echo $v['create_time']; ?></td>
+                <td>
+                    <?php if ($v['type'] == '2'): ?>系统消息
+                    <?php else: ?>用户消息
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($canView): ?>
+                        <a class="btn btn-info" href="./?c=user&a=viewMsg&msg_id=<?php echo $v['msg_id']; ?>">查看详情</a>
+                    <?php endif; ?>
+                    <?php if ($canDelete): ?>
+                        <a class="btn btn-info" href="./?c=user&a=deleteMsg&msg_id=<?php echo $v['msg_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+                    <?php endif; ?>
+                    <?php if ($canPush): ?>
+                        <a class="btn btn-info" href="./?c=user&a=pushMsg&msg_id=<?php echo $v['msg_id']; ?>" onclick="return confirm('已读消息用户将不会再次推送,是否确认再次进行APP推送?');">再次推送</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal">
+    <?php echo $pageList; ?>
+</div>
+<?php $this->import("foot"); ?>

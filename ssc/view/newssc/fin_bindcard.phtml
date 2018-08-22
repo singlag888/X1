@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>  <!-- 银行资料管理 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo $html_version ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<!-- 顶部导航信息部分 -->
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="19%">绑定银行类型</th>
+                <th width="15%">开户人姓名</th>
+                <th width="20%">银行卡账号</th>
+                <th width="18%">最后操作时间</th>
+                <th width="13%">状态</th>
+                <th width="16%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if ($bindCards): ?>
+                <?php foreach ($bindCards as $v): ?>
+                    <tr>
+                        <td><?php echo $withdrawBankList[$v['bank_id']]; ?></td>
+                        <td><?php echo $v['bank_username']; ?></td>
+                        <td><?php echo $v['card_num']; ?></td>
+                        <td><?php echo $v['ts']; ?></td>
+
+                        <td><?php
+                            if($v['status'] == 1) {
+                                $statusDesc =  '已锁定';
+                            }elseif($v['status'] == 3 && time() > $v['frozen_ts'] + 3*24*3600){
+                                $statusDesc = '已解锁';
+                            }elseif($v['status'] == 3){
+                                $statusDesc = '解锁中';
+                            }else{
+                                $statusDesc = '';
+                            }
+                            echo $statusDesc;
+                            ?>
+                        </td>
+                        <td><?php
+                            //活动期间暂停
+                            if($v['status'] == 1) {
+                                $a_href = '<a href="index.jsp?c=fin&a=unBindCard&bind_card_id='.$v['bind_card_id'].'">解锁</a>';
+                            }elseif($v['status'] == 3) {
+                                $a_href = '<a href="index.jsp?c=fin&a=lockCard&bind_card_id='.$v['bind_card_id'].'">锁定</a>';
+                                if(time() > $v['frozen_ts']){
+                                    $a_href .= '&nbsp;&nbsp;<a href="index.jsp?c=fin&a=bindCard&bind_card_id='.$v['bind_card_id'].'">换绑</a>';
+                                }else{
+                                    $a_href .= '&nbsp;&nbsp;换绑';
+                                }
+                            }else{
+                                $a_href = '';
+                            }
+                            //echo $a_href;
+                            ?>
+                        </td>
+                        <td></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <th colspan="6" class="bom">暂无数据显示</th>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+        <div class="personal_infor_operate">
+            <?php if(!$bindCards): ?>
+            <form name="form1" id="form1" method="POST"  >
+                <input type="hidden" name="op" value="doBindCard"/>
+                <input type="hidden" name="bind_card_id" value="<?php echo $bind_card_id; ?>">
+                <ul>
+                    <li><label for="bind_bank_id">银行名称：</label><div class="must">*</div>
+
+                        <select class="form_control" reg="[^0]" tip="选择银行名称" name="bind_bank_id" id="bind_bank_id">
+                            <?php foreach ($withdrawBankList as $k => $v): ?>
+                                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li>
+                        <label for="province">开户银行所在城市：</label><div class="must">*</div><select class="form_control sel_province" reg="[^0]" tip="请选择省" name="province"   id="province" onChange="SelChgCity('city', document.getElementById('province').options[document.getElementById('province').selectedIndex].value, arrProvince, arrCity, 'country');"> </select>
+                        <select class="form_control sel_city" reg="[^0]" tip="请选择市" name="city"  id="city"> </select></li>
+                    <li><label for="branch_name">支行名称：</label><div class="must">*</div><input type="text" value="" name="branch_name" id="branch_name" class="form_control"  tip="**银行**分行(储蓄)"  /></li>
+                    <li><label for="bind_bank_username">银行卡开户姓名：</label><div class="must">*</div><input type="text" value="" name="bind_bank_username" id="bind_bank_username" class="form_control" reg="^[\u4E00-\u9FA5]+$"  /></li>
+
+                    <li><label for="bind_card_num">银行卡号：</label><div class="must">*</div><input type="text" value="" name="bind_card_num" id="bind_card_num" class="form_control" reg="^\d{15,19}$" tip="输入银行卡/存折号" /></li>
+                    <li><label for="bind_card_num2">确认银行卡号：</label><div class="must">*</div><input type="text" value="" name="bind_card_num2" id="bind_card_num2" class="form_control" reg="^\d{15,19}$" tip="输入银行卡/存折号" /></li>
+
+                    <li>
+                        <input name="提交" type="submit" value="提交" class="default_navyblue_btn personal_infor_subbtn"/>
+                        <input type="reset" name="重置" value="重置" class="default_common_btn defaultbig_gray_btn hundred_twenty_width"/></li>
+                </ul>
+            </form>
+            <?php endif;?>
+            <div class="personal_nocard_tip hide" id="nocardTip">尊敬的用户，您尚未绑定任何银行卡，<a href="#" id="nowBind">立即绑定</a></div>
+        </div>
+        <div class="notice_txt">
+            <p><strong>说明：</strong></p>
+            <!--<p>1. 银行卡绑定主要用于会员提现使用，最多可绑定3张银行卡（每个银行只可绑定1个卡号），如须解绑，请与在线客服联系</p>-->
+            <p>1. 银行卡绑定主要用于会员提现使用，最多可绑定1张银行卡，如须解绑，请与在线客服联系；</p>
+            <p>2. 请注意一旦银行卡绑定不能修改、删除，请认真核对填写；</p>
+            <p>3. 会员提现时请选择需要提现到的已绑定银行卡，并仔细核对。</p>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<?php if(!$bindCards): ?>
+
+<script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+<script language="javascript">
+  InitArea("province", "city", "country", arrProvince, arrCity, arrCountry, "", "", "");
+
+    $(function(){
+        $('#nowBind').on('click', function(){     // 立即绑定
+            $('#form1').show();
+            $('#nocardTip').hide();
+        });
+    });
+</script>
+
+<?php endif; ?>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   var datas = <?php echo $json_typeLotterys; ?>;
+    $('#lotteryType').change(function(){
+        var tmp = '';
+        var index = $('#lotteryType').val();
+        tmp = '<option value=-1>请选择</option>';
+        if (datas[index] == undefined) {
+
+        }
+        else {
+            for (var i in datas[index]) {
+                tmp += '<option value=' + i + '>' + datas[index][i].cname + '</option>';
+            }
+        }
+        $('#lottery_id').empty().append(tmp);
+    });
+});
+
+</script>
+<div class="list-div add-main mt20 form-top" id="addDiv">
+    <form name="form1" id="form1" action="./?c=draw&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered mainList" style="width:50%">
+            <tr>
+                <td class="rowTitle tl" colspan="2">
+                    <b>奖期延顺管理</b>
+                </td>
+            </tr>
+            <tr>
+            <td class="narrow-label" width="18%">选择彩种类型</td>
+            <td>
+                <select class="input-md form-control" name="lotteryType" id="lotteryType">
+                    <option value="-1">请选择</option>
+                    <?php foreach ($lotteryTypes as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </td>
+            </tr>
+            <tr>
+            <td class="narrow-label">选择彩种</td>
+            <td>
+                <select class="input-md form-control" name="lottery_id" id="lottery_id">
+                    <option value="-1">请选择</option>
+                </select>
+            </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 50%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-info submit" type="submit"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                        <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="sa" value="getIssue" />
+                    </div>
+                </td>
+
+        </table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

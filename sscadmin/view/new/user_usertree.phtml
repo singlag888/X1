@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>左侧菜单</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+    <style type="text/css">
+body {
+        color:#888C40;
+}
+a:visited {color: #000;text-decoration: none;}
+a:link { color: #000;text-decoration: none;}
+a:hover { color: #FF3333;text-decoration: none;}
+a:active { color: #666666;text-decoration: none;}
+
+#tabbar-div {
+    background:rgba(0,0,0,0.3);
+    height:25px;
+    line-height:25px;
+    text-align:center;
+    color:#333;
+}
+.tab-front {
+    font-weight: bold;
+    margin-top:5px;
+    border: 0px solid #f00;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.tab-back,.tab-hover { color: #F4FAFB; line-height: 20px; padding: 4px 15px 4px 18px; cursor: hand; cursor: pointer;}
+.tab-hover { background: #2F9DB5; }
+#top-div { padding: 3px 0 2px; background: #BBDDE5; margin: 5px; text-align: center; }
+#main-div { /*border: 1px solid #555522;*/ padding: 5px; margin: 5px; background: #FFF; }
+#menu-list { padding: 0; margin: 0;}
+.child a {display: inline-block;height:25px;line-height: 25px;text-align: center;}
+#child_0 a{display: inline-block;height:25px;line-height: 25px;text-align: center;}  
+#menu-list ul { padding: 0; margin: 0; list-style-type: none; color: #216B3C; padding-bottom:3px;}
+#menu-list li { padding-left: 16px; line-height: 16px; cursor: hand; cursor: pointer;}
+#main-div a:visited, #menu-list a:link, #menu-list a:hover {
+    color: #216B3C text-decoration: none;}
+#menu-list a:active { color: #216B3C;}
+.explode { background: url(./images/menu_minus.gif) no-repeat 0px 3px; font-weight: bold;}
+.collapse { background: url(./images/menu_plus.gif) no-repeat 0px 3px; font-weight: bold;}
+.menu-item { background: url(./images/menu_minus.gif) no-repeat 0px 3px; font-weight: normal;}
+#help-title { font-size: 14px; color: #000080; margin: 5px 0; padding: 0px;}
+#help-content { margin: 0; padding: 0;}
+.tips { color: #CC0000;}
+.link { color: #000099;}
+.child {
+border-left:1px double #CCCCCC;
+margin-left:3px;
+padding-left:8px;
+}
+</style>
+
+    <script language="JavaScript">
+        function show(id) {
+            if($("#img_"+id).attr("src")=="./images/menu_plus.gif") {
+                $("#img_"+id).attr("src","./images/menu_minus.gif");
+                $("#child_"+id).show();
+            }
+            else {
+                $("#img_"+id).attr("src","./images/menu_plus.gif");
+                $("#child_"+id).hide();
+            }
+        }
+
+        function getChild(parent_id) {
+            jQuery("#child_"+parent_id).html('');
+            jQuery("#child_"+parent_id).show();
+            $.ajax({
+                type:"GET",
+                url:"./?c=user&a=getChild&parent_id="+parent_id,
+                dataType:"json",
+                async:true,
+                success:function(data){
+                    $.each(data,function(i,v){
+                        html = "<div id='title_"+v.user_id+"'><a onclick='show("+v.user_id+");'><img src='./images/menu_plus.gif' id='img_"+v.user_id+"'></a><a href='./?c=user&a=userList&parent_id="+v.user_id+"' target='userMainFrame'>"+v.username+"<font color='#A0A0A0'>("+v.count+")</font></a><div id='child_"+v.user_id+"' style='display:none;' class='child'></div></div>";
+                        //html = html +" <a href='./?c=user&a=userList&parent_id="+v.user_id+"' target='userMainFrame' onclick='javascript:getChild("+v.user_id+");'";
+                        //html = html +">"+v.username+"<font color='#A0A0A0'>("+v.count+")</font></a><div id='child_"+v.user_id+"' style='display:none;' class='child'></div></div>";
+                        $("#child_"+parent_id).append(html);
+                        setCurrentLinkBackground();
+                    });
+                },
+                error:function(data){
+
+                }
+            });
+            jQuery("#img_"+parent_id).attr("src","./images/menu_minus.gif");
+        };
+
+        function setCurrentLinkBackground() {
+            $('a').each(function(k,v){
+                $(this).click(function(){
+                    $('a').css('color', '#000').css('background', '#fff');
+                    $(this).css('color', 'rgba(0,0,0,0.4)').css('background', 'rgba(211,211,211,0.3)');
+                });
+            });
+        }
+
+        //初始读取所有总代
+        jQuery(document).ready(function(){
+            getChild(0);
+
+            //当前链接加背景以示区别
+            setCurrentLinkBackground();
+        });
+    </script>
+</head>
+<body>
+    <div id="tabbar-div">
+        <p><span class="tab-front" id="menu-tab">总代列表</span>
+        </p>
+    </div>
+    <div id="main-div"><div id="child_0"></div></div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title><?php echo $curTitle; ?> - 管理系统</title>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <META http-equiv="Pragma" content="no-cache" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/public.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/default.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.min.css">
+<!--        <script src="--><?php //echo $imgCdnUrl ?><!--/js/jquery-1.7.2.min.js"></script>-->
+        <script src="/js/jquery-select/jquery.min.js"></script>
+        <script src="/js/jquery-select/jquery-migrate-1.2.1.js"></script>
+        <script src="<?php echo $imgCdnUrl ?>/js/common.js"></script>
+        <script src="<?php echo $imgCdnUrl ?>/js/jquery.tabletojson.min.js"></script>
+        <script>
+
+            //设置表格滑动和选中效果 便于阅读
+            $(function() {
+                //再加排除条件not($('tr').parent().get(0).tagName == 'THEAD') 没有成功，因为有些表头有2行
+                $('#listDiv tr:even').not($('tr:first')).addClass('even1');
+                $('#listDiv tr:odd').not($('tr:first')).addClass('odd1');
+
+                $('#listDiv tr:gt(0)').hover(function() {
+                    $(this).addClass('hover1');
+                }, function() {
+                    $(this).removeClass('hover1');
+                });
+                //    $('tr:gt(0)').toggle(function(){
+                //        $(this).addClass('click1');
+                //    }, function(){
+                //        $(this).removeClass('click1');
+                //    });
+                $('#listDiv tr:gt(0)').click(function() {
+                    $(this).toggleClass('click1');
+                });
+
+
+                //excel表格导出
+                $('.excel').click(function() {
+                    var table = $($(this).attr('table')).tableToJSON(); // Convert the table into a javascript object
+                    if ($('#excelIframe').length == 0) {
+                        $("body").append(' <iframe id="excelIframe" name="excelIframe" scrolling="no" frameborder="0" width="0" height="0"></iframe>');
+                        $("body").append(' <form name="excelForm" id="excelForm" action="/?c=default&a=excel" method="post" target="excelIframe"></form>');
+                        $('#excelForm').append('<input type="hidden" id="excelData" name="excelData"  value=""/>');
+                        $('#excelForm').append('<input type="hidden" id="excelFile" name="excelFile"  value=""/>');
+                    }
+                    $('#excelData').val(JSON.stringify(table));
+                    $('#excelFile').val($(this).attr('excelFile'));
+                    $('#excelForm').submit();
+                });
+
+            });
+        </script>
+        
+        <style>
+            a{text-decoration:none;color:#000;}
+            a:hover{text-decoration: none;color:#e4393c;}
+            .even1 {
+                background:#fff;
+                
+            }
+            .odd1 {
+                background:rgba(211,211,211,0.3);
+            }
+            /* FFaa66 */
+            .hover1 {
+                background:rgba(211,211,211,0.4);
+            }
+            .click1 {
+                background:rgba(211,211,211,0.7);
+            }
+            .indecator_head{
+                height:40px;
+                line-height: 40px;
+                background: #ededed;
+            }
+            .boyin_port{
+                display: inline-block;
+                height: 60px;
+                line-height: 29px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                width: 100%;
+                padding-left: 5px;
+            }
+            .cardWord{
+                width:100%;
+                border: 1px solid #cccccc;
+               -webkit-border-radius: 8px;
+               -moz-border-radius: 8px;
+               border-radius: 8px;
+            }
+            
+        </style>
+    </head>
+    <div id="container">
+        <div class="indecator">
+        <h2 style="margin:0;height:48px;line-height:31px;">
+                <?php if (isset($actionLinks)): ?>
+                    <?php foreach ($actionLinks as $v): ?>
+                        <span class="rightSpan"><a class="btn btn-default" href="<?php echo $v['url']; ?>"><?php echo $v['title']; ?></a></span>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <span class="leftSpan"><a href="./" target='_top'>管理中心</a> -> <?php echo $curTitle; ?></span>
+                <div style="clear: both;"></div>
+        </h2>
+
+            <!--<div class="indecator_head">
+                <?php if (isset($actionLinks)): ?>
+                    <?php foreach ($actionLinks as $v): ?>
+                        <span class="rightSpan"><a href="<?php echo $v['url']; ?>"><?php echo $v['title']; ?></a></span>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <span class="leftSpan"><a class="ml20" href="./" target='_top'>管理中心</a> -> <?php echo $curTitle; ?></span>
+                <div style="clear: both;"></div>
+            </div>-->
+
+        </div>
+

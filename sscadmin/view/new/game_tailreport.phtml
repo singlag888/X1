@@ -1,0 +1,31 @@
+<?php $this->import("head"); ?>
+
+<style>
+    body{text-align: center}
+    table,tbody{display:block;}
+    table{width: 60%;border: solid 1px #000}
+    tr{width:100%;clear:both}
+    th{background: #81c0c0;border-left: solid 1px #ffffff;width: 10%;text-align: center }
+    td{width: 10%;border-left: solid 1px #eee;}
+</style>
+<table>
+    <tr>
+        <th>用户ID</th>
+        <th>用户名</th>
+        <th><?php echo $str; ?>金额</th>
+        <th>次数</th>
+        <th>提交时间</th>
+        <th>完成时间</th>
+    </tr>
+    <?php foreach ($dayTail as $v): ?>
+        <tr>
+            <td><?php echo $v['user_id']; ?></td>
+            <td><?php echo $v['username']; ?></td>
+            <td><?php echo $v['amount']; ?></td>
+            <td><?php echo $v['num']; ?></td>
+            <td><?php echo $v['create_time']; ?></td>
+            <td><?php echo $v['finish_time']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<?php $this->import("foot"); ?>

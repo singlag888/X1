@@ -1,0 +1,91 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/js/jquery.dialog.js?_=1" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" />
+<script>
+//预设查询值
+	$(function () {
+		$('input[name=username]').val('<?php echo $username; ?>');
+		$('select[name=type]').val('<?php echo $type; ?>');
+		$('input[name=startDate]').val('<?php echo $startDate; ?>');
+		$('input[name=endDate]').val('<?php echo $endDate; ?>');
+		$('input[name=admin]').val('<?php echo $admin; ?>');
+	});
+</script>
+
+<div id="query">
+    <form name="form1" action="" method="get">
+        用户名<input name="username" size="12"/>
+		变更类型<select name="type">
+            <option value="-1">请选择</option>
+            <option value="101">真实姓名</option>
+            <option value="102">登录密码</option>
+			<option value="103">资金密码</option>
+            <option value="104">解绑银行卡</option>
+			<option value="105">手动增加余额</option>
+			<option value="106">手动减少余额</option>
+        </select>
+        操作时间：<input type="text" name="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" id="startDate" value="" size="13"/>
+        到<input type="text" name="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" id="endDate" value="" size="13"/>
+        执行人<input name="admin" size="12"/>
+        <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="eventList"/>
+         　　<input type="submit" name="submit" value=">> 查 询 <<"/>
+    </form>
+</div>
+
+<div class="list-div" id="listDiv">
+    <table class="mainList" width="100%">
+        <thead>
+            <tr>
+                <td>user-id</td>
+                <td>用户名</td>
+                <td>类型</td>
+                <td>变更类型</td>
+                <td>修改前</td>
+                <td>修改后</td>
+                <td>添加时间</td>
+                <td>执行人</td>
+                <td>变更原因</td>
+            </tr>
+        </thead>
+		<?php foreach ($events as $v): ?>
+			<tr>
+				<td><?php echo $v['user_id']; ?></td>
+				<td><?php echo $v['username']; ?></td>
+				<td><?php echo $v['level'] != 100 ? $v['level'].'代' : '会员'; ?></td>
+				<td>
+					<?php if ($v['type'] == 101): ?>真实姓名
+					<?php elseif ($v['type'] == 102): ?>登录密码
+					<?php elseif ($v['type'] == 103): ?>资金密码
+					<?php elseif ($v['type'] == 104): ?>解绑银行卡
+					<?php elseif ($v['type'] == 105): ?>手动增加余额
+					<?php elseif ($v['type'] == 106): ?>手动减少余额
+					<?php endif; ?>
+				</td>
+				</td>
+				<td><?php echo $v['type'] == 102 || $v['type'] == 103 ? '******' : $v['old_value']; ?></td>
+				<td><?php
+					if ($v['type'] == 102 || $v['type'] == 103) {
+						echo '******';
+					}
+					elseif ($v['type'] && $v['new_value'] == '') {
+						echo '解绑成功';
+					}
+					else {
+						echo $v['new_value'];
+					}
+					?>
+				</td>
+				<td><?php echo $v['create_time']; ?></td>
+				<td><?php echo $v['admin']; ?></td>
+				<td><?php echo $v['remark']; ?></td>
+			</tr>
+<?php endforeach; ?>
+    </table>
+</div>
+<input type="hidden" name="hide">
+<?php echo $pageList; ?>
+<div class="tip">
+</div>
+
+<?php $this->import("foot"); ?>

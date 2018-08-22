@@ -1,0 +1,55 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('input[name=start_time]').val('<?php echo substr($start_time, 0, 10); ?>');
+        $('input[name=end_time]').val('<?php echo substr($end_time, 0, 10); ?>');
+        $('select[name=time_section]').val('<?php echo $time_section; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="post">
+    开奖日期<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+    至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate" value=""/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    开奖时间段<select name="time_section">
+        <option value=''>不限</option>
+        <option value=3>00:00至15:59</option>
+        <option value=4>16:00至23:59</option>
+    </select>
+    <input type="hidden" name="c" value="market"/>
+    <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="sub"  style="width:90px" value="查询"/>
+</form>
+
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>奖品</td>
+                <td>总计划数（原计划+追加计划）</td>
+                <td>累计中奖人数</td>
+            </tr>
+        </thead>
+        <?php foreach ($planLevels as $k => $v): ?>
+            <tr class="awardReport">
+                <td><?php echo $v; ?></td>
+                <td><?php
+                    if ($k != 0 && $k != 1) {
+                        echo $originalPlans[$k] + $addPlans[$k] . '(' . $originalPlans[$k] . '+' . $addPlans[$k] . ')';
+                    }else{
+                        echo '不限';
+                    }
+                    ?></td>
+                <td><?php echo $awardReport[$k]['count'] ? $awardReport[$k]['count'] : 0; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

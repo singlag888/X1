@@ -1,0 +1,468 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/ZeroClipboard.107.js"></script>
+<script src="/js/base64.js"></script>
+<script>
+    function doCheck()
+    {
+        $('#reasonDiv').css('display', 'block');
+        if ($('select[name=errno]').val() == '') {
+            alert('请选择前台可见的取消原因！');
+            return false;
+        }
+        if ($('textarea[name=remark]').val() == '') {
+            $('textarea[name=remark]').val('请输入取消原因！');
+            return false;
+        }
+        else if ($('textarea[name=remark]').val() == '请输入取消原因！') {
+            alert('请输入取消原因！');
+            return false;
+        }
+
+        return true;
+    }
+
+    $(function(){
+
+
+        /********************* author snow 获取返回url**************************/
+
+
+
+//            var myBase = new Base64();
+//            var back_url = '<?//=$back_url?>//';
+//            if (back_url) {
+//                back_url = myBase.decode(back_url);
+//                if (back_url != '') {
+//                    $('.go-back-url').attr({'href' : back_url})
+//                }
+//            }
+        /********************* author snow 获取返回url**************************/
+        //=======================通用复制功能 开始=======================//
+        var clip = null,curBtn = null;
+        function move_swf(ee, txt)
+        {
+            clip.setText(txt);
+            if (clip.div) {
+                clip.receiveEvent('mouseout', null);
+                clip.reposition(ee.id);
+            }
+            else{
+                clip.glue(ee.id);
+            }
+            clip.receiveEvent('mouseover', null);
+        }
+
+        ZeroClipboard.setMoviePath('js/ZeroClipboard.swf');
+        clip = new ZeroClipboard.Client();
+        clip.setHandCursor(false);
+        //        clip.addEventListener( "mouseOver", function(client) {
+        //
+        //        });
+        //        clip.addEventListener( "mouseOut", function(client) {
+        //
+        //        });
+        clip.addEventListener( "mouseUp", function(client) {
+            //console.info('released mouse');
+            $('.copyBtn').val('点击复制');
+            $(curBtn).val('已复制');
+            clip.setText(copy); // 设置要复制的文本。
+        });
+        $('#copyBankBtn').mouseover(function(){
+            move_swf(this, $('#wdBank').text());
+            curBtn = this;
+        });
+        $('#copyNameBtn').mouseover(function(){
+            move_swf(this, $('#wdName').text());
+            curBtn = this;
+        });
+        $('#copyNumBtn').mouseover(function(){
+            move_swf(this, $('#wdNum').text());
+            curBtn = this;
+        });
+        $('#copyAmountBtn').mouseover(function(){
+            move_swf(this, $('#wdAmount').text());
+            curBtn = this;
+        });
+        //=======================通用复制功能 结束=======================//
+    });
+</script>
+
+<div class="list-div mt20" id="addDiv">
+    <form name="form1" id="form1" action="./?c=withdraw&a=<?php echo ACTION; ?>" method="post" onsubmit="return true;">
+        <table class="table table-responsive table-bordered mt15" style="width: 53%; float:left;">
+            <tr class="rowTitle"><td colspan="3"><b>提款风险评估一：最近存提趋势</b></td></tr>
+            <tr>
+                <th>时间</th>
+                <th>存</th>
+                <th>提</th>
+            </tr>
+            <?php $tmp = $tmp2 = 0; foreach ($dayDepositWithdraws as $v): $tmp += $v['deposit']; $tmp2 += $v['withdraw']; ?>
+            <tr>
+                <td>
+                    <?php echo $v['date']; ?>
+                    <?php if (substr($user['reg_time'], 0, 10) == $v['date']): ?>
+                    (<b>注册日期</b>)
+                    <?php endif; ?>
+                </td>
+                <td><?php if ($v['deposit'] > 0) echo $v['deposit']; ?></td>
+                <td><?php if ($v['withdraw'] > 0) echo $v['withdraw']; ?></td>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td>小计</td>
+                <td><?php echo $tmp; ?></td>
+                <td><?php echo $tmp2; ?></td>
+            </tr>
+            <tr>
+                <td>总存提差</td>
+                <td colspan="2" >
+                    <?php if ($tmp2 - $tmp > 0): ?>
+                        <font color=red><?php echo ($tmp2 - $tmp); ?></font>
+                    <?php else: ?>
+                        <?php echo ($tmp2 - $tmp); ?>
+                    <?php endif; ?>
+
+                    <?php if ($tmp2 - $tmp >= 100000): ?>
+                        <?php echo "<font color=red><b>★★★★</b></font>"; ?>
+                    <?php endif; ?>
+                    <?php if ($user['reg_time'] > date('Y-m-d', strtotime("-30 days"))): ?>
+                        <?php if ($tmp2 - $tmp >= 50000): ?>
+                            <?php echo "<font color=red><b>【新用户大额★★★★】</b></font>"; ?>
+                        <?php elseif ($tmp2 - $tmp >= 20000): ?>
+                            <?php echo "<font color=red><b>【新用户大额★★】</b></font>"; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>近期总盈亏比</td>
+                <td colspan="2">
+                    <?php if (round($tmp2 / $tmp, 1) >= 5): ?>
+                        <?php echo "<b>" . round($tmp2 / $tmp, 1) . "</b><font color=red><b>【超大盈亏比★★★★★】</b></font>"; ?>
+                    <?php elseif (round($tmp2 / $tmp, 1) >= 2.5): ?>
+                        <?php echo "<b>" . round($tmp2 / $tmp, 1) . "</b><font color=red><b>【较大盈亏比★★★】</b></font>"; ?>
+                    <?php else: ?>
+                        <?php echo round($tmp2 / $tmp, 1); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table table-responsive table-bordered " style="width: 45%; float:right">
+            <tr class="rowTitle">
+                <td colspan="2">
+                    <b>基本信息</b>
+                </td>
+            </tr>
+            <tr>
+                <td>withdraw_id</td>
+                <td>
+                    <?php echo $withdraw['withdraw_id']; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>用户名</td>
+                <td>
+                    <label title="<?php echo $withdraw['user_id']; ?>"><?php echo $withdraw['username']; ?></label>
+                    <?php if ($user['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                    <?php if ($user['status'] == 0): ?><b style="color:red">[已删除]</b>
+                    <?php elseif ($user['status'] == 1): ?><b style="color:red">[已冻结]</b>
+                    <?php elseif ($user['status'] == 5): ?><b style="color:red">[已回收]</b>
+                    <?php endif; ?>
+                </td>
+
+            </tr>
+            <tr>
+                <td>注册时间</td>
+                <td><?php echo $user['reg_time']; ?>【<?php echo getInterval(strtotime($user['reg_time'])); ?>】
+                </td>
+            </tr>
+            <tr>
+                <td>提款银行</td>
+                <td><label id="wdBank"><?php echo $bankList[$withdraw['bank_id']]; ?></label><input class="btn btn-info " type="button" id="copyBankBtn" class="copyBtn" value="点击复制" /></td>
+            </tr>
+            <tr>
+                <td>提款卡户名</td>
+                <td>
+                    <div class="form-inline">
+                        <label id="wdName"><?php echo $withdraw['card_name']; ?></label>
+                        <input class="btn btn-info copyBtn" type="button" id="copyNameBtn"  value="点击复制" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>提款卡号</td>
+                <td>
+                    <div class="form-inline">
+                        <label id="wdNum"><?php echo $withdraw['card_num']; ?></label>
+                        <input class="btn btn-info copyBtn" type="button" id="copyNumBtn"  value="点击复制" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>提款金额</td>
+                <td>
+                    <div class="form-inline">
+                        <label id="wdAmount"><?php echo $withdraw['amount']; ?></label>
+                        <input class="btn btn-info copyBtn" type="button" id="copyAmountBtn"  value="点击复制" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>支行地址</td>
+                <td><?php echo $withdraw['province']; ?>省 <?php echo $withdraw['city']; ?>市 <?php echo $withdraw['branch']; ?></td>
+            </tr>
+            <tr>
+                <td>申请提款时间<br/></td>
+                <td style="vertical-align: middle;"><?php echo $withdraw['create_time']; ?></td>
+            </tr>
+            <tr>
+                <td>状态</td>
+                <td>
+                    <?php if ($withdraw['status'] == 0): ?>
+                        暂无人受理...
+                    <?php elseif ($withdraw['status'] == 1): ?>
+                        <?php if ($GLOBALS['SESSION']['admin_id'] != $withdraw['verify_admin_id']): ?>
+                            财务 <?php echo $admins[$withdraw['verify_admin_id']]['username']; ?> 正在处理
+                        <?php else: ?>
+                            我 正在处理
+                        <?php endif; ?>
+                    <?php elseif ($withdraw['status'] == 2): ?>
+                        已审核
+                    <?php elseif ($withdraw['status'] == 3): ?>
+                        交给机器受理
+                    <?php elseif ($withdraw['status'] == 4): ?>
+                        机器正在受理
+                    <?php elseif ($withdraw['status'] == 8): ?>
+                        已执行
+                    <?php elseif ($withdraw['status'] == 9): ?>
+                        <b><font color="red">已取消</font></b>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>备注<br/></td>
+                <td><?php echo $withdraw['remark']; ?></td>
+            </tr>
+            <tr>
+                <td>出款信息<br/></td>
+                <?php $userType = $user['level'] != 100 ? $user['level'] . '代' : '会员'; $withdrawInfo = ($user['username'] . " " . $userType . ' ' . $topUsers[$user['top_id']]['username'] . ' ' .$bankList[$withdraw['bank_id']] . ' ' . $withdraw['card_name'] . ' ' . $withdraw['amount'] . ' ' .  $withdraw['create_time'] . ' ' . $withdraw['finish_time'] . ' ' . $withdrawBankList[$user['pay_bank_id']]['name'] . $payCards[$user['pay_card_id']]['card_name']) ?>
+                <td><?php echo $withdrawInfo; ?></td>
+            </tr>
+        </table>
+
+        <table class="table table-responsive table-bordered " style="width: 53%;float:left;margin-top:20px; ">
+            <tr class="rowTitle"><td colspan="2"><b>提款风险评估二：上次提款后到现在</b></td></tr>
+            <tr>
+            <td>上次提款情况<br/></td>
+                <td>
+                    <?php if (!empty($lastSuccessWithdraw) && $lastSuccessWithdraw['last_balance'] >= 0): ?> <?php echo $lastSuccessWithdraw['create_time']; ?>
+                        &nbsp; 提款后余额：<?php echo $lastSuccessWithdraw['last_balance']; ?>
+                    <?php else: ?>
+                        <font color=red><b>【第一次提款】</b></font>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>本次提款情况<br/></td>
+                <td>
+                    <?php echo $withdraw['create_time']; ?> 提款 <?php echo $withdraw['amount']; ?>
+                    &nbsp; 提款后余额：<?php echo $withdraw['last_balance']; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>期间优惠总额<br/></td>
+                <td><font color="red"><?php echo $totalPromos; ?></font>
+                    <?php if ($totalPromos >= 10000): ?>
+                        <font color=red><b>【较大优惠量★★★】</b></font>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>余额核算<br/>(正表示客户盈利)</td>
+                <td>
+                    (本次提款金额 + 本次本地余额) - (上次本地余额 + 期间存款量 + 期间优惠总额) = 输赢值<br/>
+                    <?php
+                    $lastSuccessWithdrawBalance = isset($lastSuccessWithdraw['last_balance']) ? $lastSuccessWithdraw['last_balance'] : 0;
+                    $tmp = ($withdraw['amount'] + $withdraw['last_balance']) - ($lastSuccessWithdrawBalance + $totalDeposits['total_amount'] + $totalPromos);
+                    $tmp2 = round(($withdraw['amount'] + $withdraw['last_balance']) / ($lastSuccessWithdrawBalance + $totalDeposits['total_amount'] + $totalPromos), 1);
+                    echo "({$withdraw['amount']} + {$withdraw['last_balance']}) - ({$lastSuccessWithdrawBalance} + {$totalDeposits['total_amount']} + {$totalPromos})" .
+                    " = " . ($tmp > 0 ? "<font color=red>{$tmp}</font>" : "{$tmp}") . "<br/>";
+                    ?>
+                </td>
+                </tr>
+                <tr>
+                    <td>期间盈亏比</td>
+                    <td>
+                        <?php if ($tmp2 >= 5): ?>
+                            <?php echo "<b>{$tmp2}</b><font color=red><b>【高盈亏比★★★★★】</b></font>"; ?>
+                        <?php elseif ($tmp2 >= 2.5): ?>
+                            <?php echo "<b>{$tmp2}</b><font color=red><b>【较大盈亏比★★★】</b></font>"; ?>
+                        <?php else: ?>
+                            <?php echo "{$tmp2}"; ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+        </table>
+
+        <div style="clear:both"></div><br/>
+
+        <table class=" table table-responsive table-bordered mainList" style="width: 53%;">
+            <tr>
+                <td colspan="4" class="rowTitle"><b>提款风险评估三：帐号与投注风险</b></td>
+            </tr>
+            <?php foreach ($crisis AS $key => $value) : ?>
+                <?php if ($value['value'] == 1) : ?>
+                <tr>
+                    <td align="center"><font <?php if ($key != 0) :?> color="red"<?php endif;?> ><?php echo $value['level']; ?></font></td>
+                    <td colspan="3"><font <?php if ($key != 0) :?> color="red"<?php endif;?> >
+                        <?php echo $value['datetime'] != '' ? '于' . $value['datetime'] . ',' : ''; ?>
+                        <?php echo $value['desc']; ?></font></td>
+                </tr>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </table>
+        <br/>
+        <table class="table table-bordered table-responsive mainList" style="width: 53%;">
+            <tr>
+                <td colspan='5' class="rowTitle"><b>提款风险评估四：流水要求</b></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    该用户的PT投注流水为 <?php echo $PTSum[$withdraw['user_id']]['pt_buy_amount'] > 0 ? $PTSum[$withdraw['user_id']]['pt_buy_amount'] : 0; ?>
+                    <?php if ($PTSum[$withdraw['user_id']]['pt_buy_amount'] > 0): ?>
+                    <input class="btn btn-info hand" type="button" onclick="window.location.href='./?c=withdraw&a=viewWithdraw&withdraw_id=30&pt=1'" value="获取实时PT数据" />
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb tc">序号</td>
+                <td class="fb tc">存款金额</td>
+                <td class="fb tc">存款时间</td>
+                <td class="fb tc">本次取款提案提交时间</td>
+                <td class="fb tc">期间有效投注总额 / 期间存款总额</td>
+            </tr>
+            <?php if ($depositSinceLastWithdraws) :?>
+            <?php foreach ($depositSinceLastWithdraws AS $key=>$value) :?>
+            <tr>
+                <td><?php echo $key+1; ?></td>
+                <td><?php echo number_format($value['amount'], 2); ?></td>
+                <td><?php echo $value['finish_time']; ?></td>
+                <td><?php echo $withdraw['create_time']; ?></td>
+                <td>
+                <?php
+                    $val = floor(number_format($value['play_amount']/$value['deposit_amount'], 4) * 100);
+                    if($val >= 30) {
+                        echo $value['play_amount'], ' / ', $value['deposit_amount'], ' = ', number_format($value['play_amount']/$value['deposit_amount'], 4) * 100, ' %';
+                    }
+                    else {
+                        echo "<span style='color:red;'>";
+                        echo $value['play_amount'], ' / ', $value['deposit_amount'], ' = ', number_format($value['play_amount']/$value['deposit_amount'], 4) * 100, ' %';
+                        echo "</span>";
+                    }
+                ?>
+                </td>
+            </tr>
+            <?php endforeach;?>
+            <?php else : ?>
+            <tr>
+                <td colspan="5">暂无数据</td>
+            </tr>
+            <?php endif;?>
+            <tr>
+                <td colspan="5">
+                    <?php if ($withdraw['status'] == 0): ?>
+                        <input class="btn btn-info submit" type="button"  name="button" value="我要受理"
+                               onclick="window.location.href='./?c=withdraw&a=acceptRequest&withdraw_id=<?php echo $withdraw['withdraw_id']; ?>';"/>
+                           <?php elseif ($withdraw['status'] == 1): ?>
+                               <?php if ($GLOBALS['SESSION']['admin_id'] != $withdraw['verify_admin_id']): ?>
+                            财务 <?php echo $admins[$withdraw['verify_admin_id']]['username']; ?> 正在处理。。。
+                        <?php else: ?>
+                            <input class="btn btn-info submit" type="button"  name="button" value="审核提款" onclick="this.form.action='./?c=withdraw&a=verify';this.disabled=true;this.form.submit();"/>
+                        <?php endif; ?>
+                    <?php elseif ($withdraw['status'] == 2): ?>
+                        <b>本提案已由 <?php echo $admins[$withdraw['verify_admin_id']]['username']; ?> 于 <?php echo $withdraw['verify_time']; ?> 通过审核。</b><br/>
+                        <input type="hidden" name="auto" value="0"/>
+                        如果确认无误，可以<input class="btn btn-info submit" type="button"  name="button" value="提交机器处理" onclick="if(confirm('确认给机器处理么?')){ this.form.auto.value=1;this.form.action='./?c=withdraw&a=pay';this.form.submit(); }"/>
+
+                        <?php if ($withdraw['amount'] > $configs['max_auto_pay_limit'] || $configs['is_force_machine_pay'] == 0): ?>
+                        或者
+
+                        付款卡<select class="input-md form-control" name="pay_card_num">
+                            <option value="0">请选择</option>
+                            <?php foreach ($payCards as $v): ?>
+                                <option value="<?php echo $v['card_num']; ?>"><?php echo $v['card_name']; ?> <?php echo $bankList[$v['bank_id']]; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        手续费<input class="input-md form-control" name="fee" size="10"/>
+                        <input  class="btn btn-info submit" type="button"  name="button" value="手工付款" onclick="if (this.form.pay_card_num.value == '0'){alert('请选择付款卡');return false;} if (this.form.fee.value == ''){alert('请输入手续费，无手续费请输入0');return false;} this.form.action='./?c=withdraw&a=pay';this.form.submit();"/>
+                        <?php endif; ?>
+                        <br/><br/>
+                    <?php elseif ($withdraw['status'] == 3): ?>
+                        <b>该提案已提交给机器处理。</b>
+                        <input class="btn btn-info submit" type="button"  name="button" value="重置为已审核状态" onclick="if(confirm('由于有些款项无法自动出款，因此提供一个重置选项的功能，确认要重置该状态么?')){ this.form.action='./?c=withdraw&a=reset2verified';this.form.submit();}"/>
+                        <input class="btn btn-info submit" type="button"  name="button" value="重置为已支付状态" onclick="if(confirm('如果您确认此笔已经支付，请设置为“已付款”？')){ this.form.action='./?c=withdraw&a=reset2pay';this.form.submit();}"/>
+                        <br/>
+                    <?php elseif ($withdraw['status'] == 4): ?>
+                        <b>机器正在处理。</b>
+
+                        <input class="btn btn-info submit" type="button"  name="button" value="重置为已审核状态" onclick="if(confirm('由于有些款项无法自动出款，因此提供一个重置选项的功能，确认要重置该状态么?')){ this.form.action='./?c=withdraw&a=reset2verified';this.form.submit();}"/>
+                        <input class="btn btn-info submit" type="button"  name="button" value="重置为已支付状态" onclick="if(confirm('如果您确认此笔已经支付，请设置为“已付款”？')){ this.form.action='./?c=withdraw&a=reset2pay';this.form.submit();}"/>
+                        <br/>
+                    <?php elseif ($withdraw['status'] == 8): ?>
+                        <b>本提案已由 <?php echo $admins[$withdraw['verify_admin_id']]['username']; ?> 于 <?php echo $withdraw['verify_time']; ?> 通过审核。</b><br/>
+                        <b>本提案已由 <?php echo $admins[$withdraw['finish_admin_id']]['username']; ?> 于 <?php echo $withdraw['finish_time']; ?> 执行提款，手续费<?php echo $withdraw['fee']; ?>元。</b><br/>
+                    <?php elseif ($withdraw['status'] == 9): ?>
+                        <b>本提案已由 <?php echo $admins[$withdraw['finish_admin_id']]['username']; ?> 于 <?php echo $withdraw['finish_time']; ?> 取消提款，取消原因：<?php echo $withdraw['remark']; ?></b><br/>
+                    <?php endif; ?>
+
+                    <div id="reasonDiv" style="display:none;">
+                        请选择前台客户可见的取消原因：<select class="input-md form-control" name="errno"><option value="">请选择</option><?php foreach ($errors AS $key => $error): ?><option value="<?php echo $key; ?>"><?php echo $error; ?></option><?php endforeach; ?></select><br/>
+                        请输入取消原因：<textarea class="input-md form-control" name="remark"></textarea>
+                    </div>
+                    <?php if ($withdraw['status'] < 3 && $withdraw['verify_admin_id'] == $GLOBALS['SESSION']['admin_id']): ?>
+                        <input class="btn btn-info  submit" type="button"  name="button" value="拒绝提款" onclick="this.form.action='./?c=withdraw&a=cancel';if (doCheck()) {this.disabled=true;this.form.submit();}"/>
+                    <?php endif; ?>
+
+                    <div style="width: 100%;margin: 10px auto;text-align: center;">
+                        <!---------------------- snow 修改返回列表方式,之前不是返回,是跳转--------------------------->
+                        <a href="<?=$withdraw_back_url?>" class="btn btn-info  submit go-back-url">返回列表</a>
+                        <input type="hidden" name="user_id" value="<?php echo $withdraw['user_id']; ?>" />
+                        <!---------------------- snow 修改返回列表方式,之前不是返回,是跳转--------------------------->
+                        <input type="hidden" name="withdraw_id" value="<?php echo $withdraw['withdraw_id']; ?>" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table class="table table-responsive table-bordered" style="width: 53%;">
+            <tr class="rowTitle">
+                <td>用户名</td>
+                <td>类型</td>
+                <td>所属总代</td>
+                <td>提款银行</td>
+                <td>户名</td>
+                <td>提款金额</td>
+                <td>客户发起时间</td>
+                <td>执行时间</td>
+                <td>付款卡</td>
+            </tr>
+            <?php $userType = $user['level'] != 100 ? $user['level'] . '代' : '会员'; $withdrawInfo = ($user['username'] . " " . $userType . ' ' . $topUsers[$user['top_id']]['username'] . ' ' .$bankList[$withdraw['bank_id']] . ' ' . $withdraw['card_name'] . ' ' . $withdraw['amount'] . ' ' .  $withdraw['create_time'] . ' ' . $withdraw['finish_time'] . ' ' . $withdrawBankList[$user['pay_bank_id']]['name'] . $payCards[$user['pay_card_id']]['card_name']) ?>
+            <tr>
+                <td><?php echo $user['username'] ; ?></td>
+                <td><?php echo $user['level'] != 100 ? $user['level'] . '代' : '会员'; ?></td>
+                <td><?php echo $topUsers[$user['top_id']]['username']; ?></td>
+                <td><?php echo $bankList[$withdraw['bank_id']]; ?></td>
+                <td><?php echo $withdraw['card_name']; ?></td>
+                <td><?php echo $withdraw['amount']; ?></td>
+                <td><?php echo $withdraw['create_time']; ?></td>
+                <td><?php echo $withdraw['finish_time']; ?></td>
+                <td><?php echo $withdrawBankList[$withdraw['pay_bank_id']]['name']; ?><?php echo $payCards[$withdraw['pay_card_id']]['card_name']; ?></td>
+
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

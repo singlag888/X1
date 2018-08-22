@@ -1,0 +1,48 @@
+<?php $this->import("head"); ?>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+$(function(){
+    //设置默认值
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $('#startDate').val('<?php echo $startDate; ?>');
+    $('#endDate').val('<?php echo $endDate; ?>');
+});
+</script>
+<ul class="title"><li>佣金明细</li></ul>
+     <div class="recordsBox">
+       <div class="recordsBox2">
+           <ul class="recordsInput">
+              <form name="form1" id="form1" action="" method="GET">
+              <li><span>用户名：</span><span><input name="username"/></span></li>
+              <li><span>游戏时间：</span><span><input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+                  </span><span>到</span><span><input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/></span>
+                    <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                    <input type="submit" name="submit" class="btnOne" value="查询"/>
+              </li>
+              </form>
+           </ul>
+          <ul class="recordsTop">
+            <li class="Rline W130px">用户名</li>
+            <li class="Rline W130px">昵称</li>
+            <li class="Rline W166px">返点时间</li>
+            <li class="Rline W166px">订单编号</li>
+            <li class="Rline W130px">购买金额</li>
+            <li class="W90px">佣金量</li>
+          </ul>
+        <?php foreach ($userDiffRebates as $v): ?>
+          <ul class="recordsContent">
+            <li class="Rline W130px"><?php echo $users[$v['package_user_id']]['username']; ?></li>
+            <li class="Rline W130px"><?php echo $users[$v['package_user_id']]['nick_name']; ?></li>
+            <li class="Rline W166px"><?php echo $v['create_time']; ?></li>
+            <li class="Rline W166px"><a target="_blank" href="index.jsp?c=game&a=packageDetail&wrap_id=<?php echo $v['wrap_id']; ?>"><?php echo $v['wrap_id']; ?></a></li>
+            <li class="Rline W130px"><?php echo $v['amount']; ?></li>
+            <li class="W90px"><?php echo $v['rebate_amount']; ?></li>
+          </ul>
+        <?php endforeach; ?>
+        <div class="nextPage">
+            <?php echo $pageList; ?>
+        </div>
+           <div class="listTip">注：只显示7天以内的数据</div>
+       </div>
+     </div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,87 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        function checkform(ob) {
+            $('.submit').html('正在提交数据');
+            $('.submit').attr('disabled',true);
+            return true;
+        }
+    </script>
+
+<style>
+    .bt{
+        background: #3B8FB2;
+        color: #fff;
+    }
+    table tr{
+        text-align: center;
+    }
+</style>
+    <div class="list-div" id="addDiv">
+        <form class="form-inline " role="form" name="form1" id="form1" action="./?c=app&a=<?php echo ACTION; ?>"
+              onsubmit="return checkform(this)" method="post" enctype="multipart/form-data">
+            <h6>注意：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h6>
+            <table class="table table-responsive table-bordered" style="width:60%;">
+                <tr>
+                    <td width="20%">是否使用首页弹窗？</td>
+                    <td>
+                        <div class="switch">
+                            <input type="hidden" name="is_use_wp"
+                                <?php if (isset($appAlert['is_use_wp'])): ?>
+                                    value="<?php if ($appAlert['is_use_wp'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                                <?php else: ?>
+                                    value=0
+                                <?php endif; ?> />
+                            <div class="btn_fath clearfix
+                        <?php if (isset($appAlert['is_use_wp'])): ?>
+                            <?php if ($appAlert['is_use_wp'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                        <?php else: ?>
+                            off
+                        <?php endif; ?>
+                        " id="switch" onclick="toogle(this)">
+                                <div class="move"></div>
+                                <div class="btnSwitch btn1">开</div>
+                                <div class="btnSwitch btn2">关</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>首页弹窗图片 (640宽 320-440高)</td>
+                    <td>
+                        <input class="input-sm form-control" name="m_welcome_page" type="file"/>
+                        <?php if(!empty($appAlert['welcome_page'])):?>
+                            <br><br><img src="<?php echo $appAlert['welcome_page'] ?>"/>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <input name="ua_id" type="hidden"
+                                   value="<?php if ($appAlert) echo $appAlert['ua_id']; ?>"/>
+                            <button type="submit" class="btn btn-info submit" name="submit">提交</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script>
+        function toogle(th) {
+            let ele = $(th).children(".move");
+            if ($(th).hasClass('on')) {
+                ele.animate({left: "1px"}, 300, function () {
+                });
+                $(th).removeClass("on").addClass("off");
+                $(th).prev('input').val(0);
+            } else {
+                ele.animate({left: '35px'}, 300, function () {
+                });
+                $(th).removeClass("off").addClass("on");
+                $(th).prev('input').val(1);
+            }
+        }
+    </script>
+<?php $this->import("foot"); ?>

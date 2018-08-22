@@ -1,0 +1,70 @@
+<?php $this->import("head"); ?>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+function checkform(ob) {
+    var msg = "";
+    if (ob.username.value == '') {
+        msg = '请输入客户帐号';
+    }
+    else if (ob.award_id.value <= 0) {
+        msg = '请选择奖品';
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+function checkUser(){
+    if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+        $('#tip1').html('您输入的账号有误');
+        $('input[name=username]').css('border', 'solid 1px red');
+        return false;
+    }
+
+    $.post(
+        '?c=market&a=promoControl&giftType=slots&option=addPlanPrize',
+        {sa:'checkUser', username: $('input[name=username]').val()},
+        function (json_data) {
+            if (json_data.user_id == '') {
+                $('#tip1').html('您输入的账号有误');
+            } else {
+                $('#tip1').html('');
+            }
+        },
+        "json"
+    );
+}
+
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="" method="post" onsubmit="return checkform(this)">
+<table cellpadding="0" cellspacing="0" width="40%" border="0">
+    <tr>
+        <td colspan="2"><b>添加中奖计划</b></td>
+    </tr>
+    <tr>
+        <td>客户帐号 <span style="color: red">*</<span></td>
+        <td><input type="text" name="username" value="" onchange="checkUser()"/> <span id="tip1"></span>
+        </td>
+    </tr>
+    <tr>
+        <td width="30%">奖品 <span style="color: red">*</<span></td>
+        <td width="70%"><select name="award_id" id="award_id">
+            <option value="0">请选择</option>
+            <?php foreach ($awardsConfig as $k => $v): ?>
+                <option value="<?php echo $k; ?>"><?php echo $v['title']; ?></option>
+            <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><input type="submit" class="submit" name="submit" value="提 交" />
+    </tr>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

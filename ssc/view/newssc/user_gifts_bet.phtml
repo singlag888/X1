@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta charset="UTF-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="shortcut icon" href="<?php echo $imgCdnUrl ?>/images/rebate/favicon.ico" type="images/x-icon">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/rebate.css" />
+</head>
+<body>
+<div class="content">
+    <div class="banner">
+        <div class="bannerMain">
+            <p>活动时间：2016年10月09日 10:00开始</p>
+        </div>
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner01.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner02.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner03.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner04.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner05.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner06.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner07.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner08.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner09.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/rebate/banner10.png">
+    </div>
+    <div class="main">
+        <div class="rebateTab">
+            <table>
+                <colgroup>
+                    <col width="36%">
+                    <col>
+                    <col width="36%">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>当日盈或亏</th>
+                    <th>当日最低流水</th>
+                    <th>当日可获返利</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>3000-5000</td>
+                    <td>≥10000</td>
+                    <td>亏损68&emsp;盈利28</td>
+                </tr>
+                <tr>
+                    <td>5001-10000</td>
+                    <td>≥30000</td>
+                    <td>亏损108&emsp;盈利48</td>
+                </tr>
+                <tr>
+                    <td>10001-20000</td>
+                    <td>≥50000</td>
+                    <td>亏损218&emsp;盈利88</td>
+                </tr>
+                <tr>
+                    <td>20001-30000</td>
+                    <td>≥100000</td>
+                    <td>亏损368&emsp;盈利138</td>
+                </tr>
+                <tr>
+                    <td>30001-50000</td>
+                    <td>≥200000</td>
+                    <td>亏损588&emsp;盈利218</td>
+                </tr>
+                <tr>
+                    <td>50001-100000</td>
+                    <td>≥350000</td>
+                    <td>亏损888&emsp;盈利368</td>
+                </tr>
+                <tr>
+                    <td>100001-120000</td>
+                    <td>≥600000</td>
+                    <td>亏损1888&emsp;盈利688</td>
+                </tr>
+                <tr>
+                    <td>180001-300000</td>
+                    <td>≥1000000</td>
+                    <td>亏损2888&emsp;盈利1288</td>
+                </tr>
+                <tr>
+                    <td>300000以上</td>
+                    <td>≥1500000</td>
+                    <td>亏损5888&emsp;盈利2888</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="rebateBtn">
+            <a href="javascript:void(0);">领取返利</a>
+        </div>
+        <div class="rebateRule">
+            <div class="rebateRuleTitle"><h3>活动规则：</h3></div>
+            <div class="rebateRuleText">
+                <p>1&emsp;用户当日亏损或盈亏达标且有效投注留水达标，当日23:59分前可领取活动返利，逾期视为自动放弃。</p>
+                <p>2&emsp;该活动只计算高频彩票的有效流水、盈亏值。</p>
+                <p>3&emsp;活动期间不可进行银行卡解绑、换绑操作。</p>
+                <p>4&emsp;相同IP地址（包含登录IP和游戏IP）、相同安全信息（银行资料）的用户仅可申请一次，如发现利用多账户或其他一切方式套利，有权拒绝赠送奖金、并扣除其盈利。</p>
+                <p>5&emsp;投注码量不可超过该玩法全包注数的70%，如发现规格投注情况，有权取消用户该活动的领取资格。</p>
+                <p>6&emsp;活动最终解释权归所有、有暂停、终止、修改权等利。</p>
+            </div>
+        </div>
+    </div>
+    <div class="PopBg"></div>
+    <div class="giftPopup">
+        <h3>信息</h3>
+        <div class="giftPopMain">
+            <div class="giftPopText">
+                <p>提示文字</p>
+            </div>
+        </div>
+        <div class="giftPopBtn fix">
+            <a href="javascript:void(0);">确定</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+    $(".PopBg").height($(document).height());//背景遮罩层
+    $(".rebateBtn a").click(function(){
+        $.post(
+            'index.jsp?&c=user&a=userGifts&giftType=bet',
+            {
+                'type': 'bet',
+            },
+            function(response){
+                $('.giftPopText p').html(response.errstr);
+                $(".PopBg,.giftPopup").fadeIn(300);
+            }, 'json');
+
+    });//弹出层
+
+    $(".giftPopBtn a").click(function(){
+        $(".PopBg,.giftPopup").fadeOut(300);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,356 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+/******************************by snow 提示信息 样式******************************************/
+    .snow_view_label{
+        color: #FF5151;
+        height: 25px;
+        line-height: 25px;
+        margin-left: 15px;
+        text-align: center;
+        vertical-align: middle;
+        padding: 0
+    }
+
+    .snow-hide-td {
+        border-color: #22ac38 !important;
+    }
+    .snow-hide-td-right {
+        border-right-color: #22ac38 !important;
+    }
+
+    .snow-hide-td-bottom {
+        border-bottom-color: #22ac38 !important;
+    }
+
+    .snow-theade-hide-td {
+
+        background: rgba(255,255,255,0) !important;
+        background-color: #FFFFFF !important;
+        border-top: solid #FFFFFF!important;
+        border-left-color: #FFFFFF !important;
+        border-right-color: #FFFFFF !important;
+
+    }
+
+    .snow-theade-hide-tr {
+        border: solid #FFFFFF !important;
+    }
+    .snow-theade-show-td {
+        cursor: pointer;
+        border-radius: 10px 10px 0 0;
+        min-width: 185px !important;
+        background-color: #FFFFFF;
+
+    }
+
+    .snow-theade-left-td {
+        border-left: solid #FFFFFF!important;
+    }
+
+    .snow-theade-show-td>div {
+        width: 100%;
+        height: 30px;
+        border 1px solid red !important;
+        background-color: #666666;
+        display: inline-block;
+        margin-bottom: -6px;
+        box-shadow:2px 0 2px 2px #c0c0c0;
+        line-height: 30px;
+        border-radius: 5px 5px 0 0;
+}
+
+    .snow-button-export {
+        width: 80px;
+        margin-left: 10px;
+    }
+
+    .snow-export-span {
+        color: #ff0000;
+        font-family: "Microsoft Yahei", "微软雅黑", "黑体";
+    }
+
+/******************************by snow 提示信息 样式******************************************/
+    .jedatehms{display: none!important;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+
+<link href="<?php echo $imgCdnUrl ?>/css/tablesorter.css" rel="stylesheet" type="text/css" />
+
+
+<script>
+    $(function() {
+
+        $('#startDate').val('<?=$startDate?>');
+        $('#endDate').val('<?=$endDate?>');
+
+
+
+        /***************************************** snow  添加提交提示,方案,最多只能查询一个月的数据 *****************************************************/
+        var  viewFlag = JSON.parse('<?=$flag?>');
+        if(viewFlag === false){
+            $('.snow_view_label').text('限定查询一个月之内的数据');
+        }
+
+        $('.snow-game-submit').click(function(){
+
+            //>>获取查询开始日期
+            var snow_startDate  =  $('#startDate').val();
+            //>>获取查询结束日期
+            var snow_endDate    =  $('#endDate').val();
+            //>>去掉空格
+            snow_startDate = $.trim(snow_startDate);
+            snow_endDate = $.trim(snow_endDate);
+            //>>先验证长度
+            if((snow_startDate.length != 10)  || (snow_endDate.length != 10)){
+                confirm('开始时间或者结束时间格式不正确.');
+                $('.snow_view_label').text('正确时间格式 为  2018-01-01');
+                return false;
+            }
+            var times1 =Date.parse(new Date(snow_startDate));
+            var times2 =Date.parse(new Date(snow_endDate));
+            if(isNaN(times1) || isNaN(times2)){
+                confirm('开始时间或者结束时间格式不正确.');
+                $('.snow_view_label').text('正确时间格式 为  2018-01-01');
+                return false;
+            }
+
+
+            if(snow_startDate > snow_endDate){
+                //>>如果开始日期大于结束日期,交换两个的值
+                alert('开始时间必须小于结束时间');
+                return false;
+            }
+            //>>判断如果开始日期与结束日期之间大于一个月.从结束日期倒推一个月.并提示限定查询一个月之内的数据
+            var year_endDate    = snow_endDate.substring(0,4);  //>>获取年份
+            var month_endDate   = snow_endDate.substring(5,7);  //>>获取月分
+            var day_endDate     = snow_endDate.substring(8,10);  //>>获取日期
+            var flag = true;//>>标示
+            var day = new Date(year_endDate,2,0);
+            var nowNumber = day.getDate();
+
+
+            //>>如果结束日期的上月不是2月
+            //>>天数小于等于30  判断开始日期是否小于当前月的上月同一天数
+            var tmpMonth    = '0' + String(month_endDate - 1);
+            var lenth       = tmpMonth.length;
+            tmpMonth        = tmpMonth.substring((lenth - 2));
+            if(month_endDate == '01'){
+                //>>如果结束日期的月份为01  则把上月改为12月.同时把年份-1
+                tmpMonth = '12';
+                year_endDate = String(year_endDate -1)
+            }
+            var tmpDay      = year_endDate + '-' + tmpMonth + '-' + day_endDate;
+            //>>先分情况 2 月和非2月
+//            alert(tmpMonth);return false;
+            switch (parseInt(tmpMonth)){
+                case 2  :
+                    if(day_endDate <= nowNumber){
+                        if(snow_startDate < tmpDay ){
+                            //>>超出了一个月的范围
+                            flag = false;
+                        }
+                    }else{
+                        if( snow_startDate < year_endDate + '-' + tmpMonth + '-' + String(28)){
+                            flag = false;
+                            //>>超出了一个月的范围
+                        }
+                    }
+                    break;
+                default :
+                    if(day_endDate <= 30){
+                        if(snow_startDate < tmpDay ){
+                            //>>超出了一个月的范围
+                            flag = false;
+                        }
+                    }else{
+                        //>>如果为31号 获取上一月的天数
+                        var tmpPreDay = new Date(year_endDate,tmpMonth,0);
+                        var tmpPreNum = tmpPreDay.getDate();
+                        if( snow_startDate < year_endDate + '-' + tmpMonth + '-' + String(tmpPreNum)){
+                            flag = false;
+                            //>>超出了一个月的范围
+                        }
+                    }
+                    break;
+            }
+
+            if(flag === false){
+                confirm('限定查询一个月之内的数据');
+            }
+        })
+
+
+        /***************************************** snow  添加提交提示,方案,最多只能查询一个月的数据 *****************************************************/
+
+
+        /************************* author snow 添加显示或隐藏入款分类统计*****************************************/
+        $(".snow-theade-show-td").click(function () {
+            //>>初次点击 不存在这个类
+            if ( !$(this).hasClass('isFirst')) {
+                $(this).addClass('isFirst');
+                $(this).find('span:first').text('展开入款方式分类统计');
+                $('.snow-theade-hide-tr>td:first').attr('colspan',6);
+                $('.snow-hide-td').hide();
+                $('.snow-hide-td-bottom').hide();
+                $('.snow-theade-td-top').hide();
+            } else {
+                $(this).removeClass('isFirst');
+                $(this).find('span:first').text('隐藏入款方式分类统计');
+                $('.snow-theade-hide-tr>td:first').attr('colspan',5);
+                $('.snow-hide-td').show();
+                $('.snow-hide-td-bottom').show();
+                $('.snow-theade-td-top').show();
+            }
+        })
+        $('.snow-button-export').click(function () {
+            //>>执行数据导出
+            //>>获取需要提交的数据
+            var data = {
+                'startDate'     : $.trim($('#startDate').val()),
+                'endDate'       : $.trim($('#endDate').val()),
+                'export_excel'  : 'totalReport'
+            };
+            url = location.host;
+            $.getJSON('?c=game&a=totalReport',data, function (response) {
+                if (!response){
+                    window.parent.layer.alert('网络错误,请重新下载')
+                }
+                if (response ) {
+
+                    if (response.flag === false ) {
+
+                        window.parent.layer.alert(response.error)
+                    } else {
+                        //>>跳转到下载页面
+                        location.href =response.fileName;
+                    }
+
+                }
+            });
+
+        });
+
+        //>>加载完成 ,触发隐藏点击事件
+        $(".snow-theade-show-td").click();
+        /************************* author snow 添加显示或隐藏入款分类统计*****************************************/
+    });
+</script>
+<div id="query">
+    <form name="form1" class="form-top" id="form1" action="" method="GET">
+        <div class="form-inline mt15">
+            <div class="form-group has-default has-feedback">
+                <label>开始时间:</label>
+                <input class="input-md form-control Wdate" type="text" name="startDate" id="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD'})" />
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback has-default">
+                <label>结束时间:</label>
+                <input class="input-md form-control Wdate" type="text" name="endDate" id="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD '})" />
+                <span class="glyphicon glyphicon-calendar form-control-feedback "></span>
+            </div>
+            <input type="hidden" name="c" value="game"/>
+            <input type="hidden" name="a" value="totalReport"/>
+            <input class="btn btn-info submit snow-game-submit" style="width: 60px;" type="submit" name="inquiry"  value="提交"/>
+            <input type="button" class="btn btn-info submit snow-button-export" value="导出数据" />
+<!--            <span class="snow-export-span">注意:必须先查询才能导出</span>-->
+            <div class="form-group has-feedback has-default">
+                <label class="snow_view_label" style="font-size:15px"></label>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="list-div mt18" id="listDiv" style="border:0px">
+
+    <table class="table  table-responsive table-bordered mainList tablesorter" id='myTable'  style="width:100%;">
+        <thead>
+            <tr class="snow-theade-hide-tr">
+                <td colspan="5"  class="snow-theade-hide-td"></td>
+                <td colspan="2"  class="snow-theade-show-td">
+                    <div>
+                        <span>隐藏入款方式分类统计</span>
+                        <span class="glyphicon glyphicon-hand-up ">
+                    </div>
+                </td>
+                <td colspan="5"  class="snow-theade-td-top snow-theade-hide-td">
+                <td colspan="10" class="snow-theade-hide-td snow-theade-left-td"></td></tr>
+            <tr>
+                <td>日期</td>
+                <td>总代数量</td>
+                <td>新增总代数</td>
+                <td>新增用户数</td>
+                <td>首存人数</td>
+                <td class="snow-hide-td-bottom">银行卡入款</td>
+                <td class="snow-hide-td-bottom">线上支付</td>
+                <td class="snow-hide-td-bottom">扫码支付</td>
+                <td class="snow-hide-td-bottom">微信收款</td>
+                <td class="snow-hide-td-bottom">支付宝收款</td>
+                <td>存款人数</td>
+                <td>总存款</td>
+                <td>会员提款</td>
+                <td title="总存款-会员提款">项目盈亏</td>
+                <td>优惠彩金</td>
+                <td>充值优惠</td>
+                <td>投注日返水</td>
+                <td>投注量</td>
+                <td>中奖量</td>
+                <td><a href="?c=game&a=totalReportForLottery&startDate=<?=$startDate?>&endDate=<?=$endDate?>" style="color: white;font-size: 13px" title="点击可按彩种分类查看" target="_blank">总损益</a>
+                    <span class="glyphicon glyphicon-hand-up ">
+            </span></td>
+            </tr>
+        </thead>
+        <?php
+        $num1 = $num2 = $num3 = $num4 = $num5 = $num6 = $num7 = $num503 = $num102 = $pageTotalDepositNum = 0;
+        foreach ($dayData as $belongDate => $v): ?>
+            <tr>
+                <td><?=$belongDate == date('Y-m-d') ? '今日' : $belongDate?></td>
+                <td><?=$v['top_num']?>人</td>
+                <td><?=$v['new_top_num']?>人</td>
+                <td><?=$v['new_user_num']?>人</td>
+                <td class="snow-hide-td-right"><?=$v['first_deposit_num']?>人</td>
+                <td class="snow-hide-td"><?=number_format($v[1]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&tradeType=1&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[1]['num']?>人</a>)</td>
+                <td class="snow-hide-td"><?=number_format($v[2]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&tradeType=2&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[2]['num']?>人</a>)</td>
+                <td class="snow-hide-td"><?=number_format($v[3]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&tradeType=3&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[3]['num']?>人</a>)</td>
+                <td class="snow-hide-td"><?=number_format($v[4]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&tradeType=4&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[4]['num']?>人</a>)</td>
+                <td class="snow-hide-td"><?=number_format($v[5]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&tradeType=5&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[5]['num']?>人</a>)</td>
+                <td><?=$v['deposit']['num'] ?>人</td>
+                <td><?=number_format($v['deposit']['amount'],2)?></td>
+                <?php $totalWin = $v['deposit']['amount'] - $v['withdraw']['amount']; ?>
+                <td><?=number_format($v['withdraw']['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate?>&withdraw=1&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v['withdraw']['num']?>人</a>)</td>
+                <td><font color="<?php if($totalWin < 0) echo 'red';?>"><?php echo number_format($totalWin,2) ?></font></td>
+                <td><?=number_format($v[6]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate?>&tradeType=6&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[6]['num']?>人</a>)</td>
+                <td><?=number_format($v[102]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate ?>&flag=102&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[102]['num']?></a>人)</td>
+                <td><?=number_format($v[503]['amount'], 2)?> (<a href="?c=game&a=totalReport&day=<?=$belongDate?>&flag=503&startDate=<?=$startDate?>&endDate=<?=$endDate?>" target="_blank"><?=$v[503]['num']?>人</a>)</td>
+                <td><?=number_format($v['sum_amount'], 2)?></td>
+                <td><?=number_format($v['sum_prize'], 2)?></td>
+                <!-------------添加跳转链接,按天统计明线-------------->
+                <td title="点击可按天查看明细" style="text-decoration:underline"><a href="?c=game&a=totalReportForLottery&startDate=<?=$belongDate?>&endDate=<?=$belongDate?>"><font color="<?=$v['sum_win'] < 0 ? 'red' : '#000000'?>"><?=number_format($v['sum_win'], 2)?></font></a></td>
+            </tr>
+        <?php endforeach; ?>
+        <tfoot>
+        <tr>
+            <td colspan="2">本页小计</td>
+            <td><?=$pageTotal['new_top_num']; ?>人</td>
+            <td><?=$pageTotal['new_user_num']; ?>人</td>
+            <td class="snow-hide-td-right"><?=$pageTotal['first_deposit_num']?>人</td>
+            <td class="snow-hide-td"><?=number_format($pageTotal[1]['amount'], 2)?> (<?=$pageTotal[1]['num']?>人)</td>
+            <td class="snow-hide-td"><?=number_format($pageTotal[2]['amount'], 2)?> (<?=$pageTotal[2]['num']?>人)</td>
+            <td class="snow-hide-td"><?=number_format($pageTotal[3]['amount'], 2)?> (<?=$pageTotal[3]['num']?>人)</td>
+            <td class="snow-hide-td"><?=number_format($pageTotal[4]['amount'], 2)?> (<?=$pageTotal[4]['num']?>人)</td>
+            <td class="snow-hide-td"><?=number_format($pageTotal[5]['amount'], 2)?> (<?=$pageTotal[5]['num']?>人)</td>
+            <td><?=$pageTotal['deposit']['num']?>人</td>
+            <td><?=number_format($pageTotal['deposit']['amount'],2)?></td>
+        <?php $win2 =  $pageTotal['deposit']['amount'] - $pageTotal['withdraw']['amount']; ?>
+            <td><?=number_format($pageTotal['withdraw']['amount'], 2)?> (<?=$pageTotal['withdraw']['num']?>人)</td>
+            <td><font color="<?php if($win2 < 0) echo 'red';?>"><?php echo number_format($win2,2) ?></font></td>
+            <td><?=number_format($pageTotal[6]['amount'], 2)?> (<?=$pageTotal[6]['num']?>人)</td>
+            <td><?=number_format($pageTotal[102]['amount'], 2)?> (<?=$pageTotal[102]['num']?>人)</td>
+            <td><?=number_format($pageTotal[503]['amount'], 2)?> (<?=$pageTotal[503]['num']?>人)</td>
+            <td><?=number_format($pageTotal['sum_amount'], 2)?> </td>
+            <td><?=number_format($pageTotal['sum_prize'], 2)?> </td>
+            <td><a style="text-decoration: underline" title="点击可按彩种分类查看" href="?c=game&a=totalReportForLottery&startDate=<?=$startDate?>&endDate=<?=$endDate?>"><font color="<?=$pageTotal['sum_win'] < 0 ? 'red' : '#000000'?>"><?=number_format($pageTotal['sum_win'], 2)?></font></a></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+<?php $this->import("foot"); ?>

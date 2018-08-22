@@ -1,0 +1,44 @@
+@charset "utf-8";
+.content{width:100%;min-width:1000px;position:relative;background-color:#eeeac5}
+.main{width:1000px;position:relative;margin:0 auto;z-index:2}
+.banner{width:100%;text-align:center;overflow:hidden;position:absolute;top:0}
+.banner img{display:block;position:relative;left:50%;margin-left:-950px}
+.banner .bannerMain{width:1900px;height:700px;background:url(../images/sign/banner.png) no-repeat center;position:absolute;left:50%;top:0;margin-left:-950px;z-index:1}
+.banner .bannerMain p{color:#fff;text-align:left;text-indent:1050px;font-size:14px;margin-top:280px;}
+.giftFoot{width:100%;height:516px;background:url(../images/sign/footBg.jpg) no-repeat center top #22b2bb;position:absolute;bottom:-516px}
+.giftPopup{width:360px;position:fixed;top:200px;left:50%;margin-left:-180px;z-index:9;background-color:#fff;display:none}
+.giftPopup h3{font:400 14px/36px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;background-color:#236aba;color:#fff;padding-left:20px}
+.giftPopup .giftPopMain{min-height:100px;display:table}
+.giftPopup .giftPopMain .giftPopText{display:table-cell;vertical-align:middle;padding:14px 50px}
+.giftPopup .giftPopMain .giftPopText p{font:400 14px/22px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;color:#333;text-justify:inter-ideograph;text-align:justify}
+.giftPopup .giftPopBtn{padding:10px 20px}
+.giftPopup .giftPopBtn a{width:60px;height:24px;font:400 14px/22px Microsoft Yahei,"Helvetica Neue",Helvetica,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;border-radius:6px;background-color:#236aba;color:#fff;text-align:center;display:block;float:right;margin-left:10px}
+.giftPopup .giftPopBtn a:hover{background-color:#488ad4}
+.PopBg{width:100%;position:absolute;left:0;top:0;background-color:#666;filter:Alpha(opacity=50);opacity:.5;-moz-opacity:.5;z-index:8;display:none}
+
+.main{padding-bottom:60px;}
+.giftFoot{bottom:-66px;}
+.siginList{width:700px;padding-top:420px;margin-left:200px;}
+.siginList ul li{width:163px;height:134px;display:inline-block;float:left;margin:0 6px;}
+.siginList ul li.Listfirst{margin-left:-80px;}
+.siginList ul li a{width:100%;height:100%;display:block;text-align:center;background:url(../images/sign/signin.png) no-repeat -163px 0;padding-top:30px;}
+.siginList ul li a:hover,.siginList ul li a.active{background-position:0 0;}
+.siginList ul li a span{display:block;font-weight:normal;font-size:20px;color:#ea9bab;}
+.siginList ul li a:hover span,.siginList ul li a.active span{color:#ffd300;}
+.siginList ul li a label{width:80px;height:24px;font-size:16px;display:block;border-radius:3px;background-color:#e98597;color:#891220;margin:17px auto 0 auto;cursor:pointer;}
+.siginList ul li a:hover label,.siginList ul li a.active label{background-color:#ffb400;color:#ac0020;}
+.siginList ul li.end a{font-size:24px;padding:34px 50px;color:#ea9bab;background-position:-326px 0;}
+.siginList ul li.end a.open{color:#ffd300;background-position:-489px 0;}
+.siginExp{width:834px;margin:130px auto 0 auto;background-color:#f65042;border-radius:8px;}
+.siginExp .siginExpTitle{width:834px;height:145px;background:url(../images/sign/signin.png) no-repeat 0 -134px;border-radius:8px 8px 0 0;}
+.siginExp .siginExpTitle h3{text-align:center;font-size:22px;color:#af1b33;padding-top:16px;font-weight:normal;}
+.siginExp .siginExpTitle h3 span{margin:0 4px;}
+.sginTab{width:720px;margin:30px auto;border-radius:8px;overflow:hidden;}
+.sginTab table{width:100%;}
+.sginTab table tr th,.sginTab table tr td{text-align:center;font-size:24px;padding:10px 0;}
+.sginTab table tr th{background-color:#f8de77;color:#af1b33;}
+.sginTab table tr td{background-color:#fff;color:#645151;border-top:1px solid #f65042;}
+.sginTab table tbody tr td{border-left:1px solid #f65042;border-right:1px solid #f65042;}
+.siginTips{margin-top:60px;}
+.siginTips h3{width:456px;height:90px;font-size:28px;line-height:84px;color:#b4e5e8;background:url(../images/sign/signin.png) no-repeat -652px -16px;text-align:center;margin:0 0 40px 284px;}
+.siginTips p{width:700px;margin:0 auto;font-size:18px;color:#def6f7;padding:0 0 10px 28px;text-indent:-28px;text-justify:inter-ideograph;text-align:justify;}

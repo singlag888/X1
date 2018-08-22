@@ -1,0 +1,74 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div form-top mt20" id="listDiv">
+    <table class="table table-responsive  table-bordered mainList" width="80%">
+        <thead>
+        <tr><td colspan="9" style="background-color: white;color: red;text-align: left;font-size: 15px;">******操作提示:  测试层级需要包含 "测试" 两个字,其它层级不能包含这两个字，电子返水只能返到昨天 23:59:59</td></tr>
+            <tr>
+                <td>卡组 ID</td>
+                <td>组名称</td>
+<!-------------------------  snow  添加在层级管理处显示 在层级管理卡组添加一个显示该层级人数的功能--------------------------------->
+                <td>当前组总人数</td>
+<!-------------------------  snow  添加在层级管理处显示 在层级管理卡组添加一个显示该层级人数的功能--------------------------------->
+                <td>等级金额</td>
+                <td>存款次数</td>
+                <td>返水</td>
+                <td>电子返水</td>
+                <td>排序</td>
+                <td>状态</td>
+                <td>是否固定</td>
+                <td>MW 电子返水</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php foreach ($groups as $v): ?>
+        <tr>
+            <td><?php echo $v['ref_group_id']; ?></td>
+            <td><?php echo $v['name']; ?></td>
+<!-------------------------  snow  添加在层级管理处显示 在层级管理卡组添加一个显示该层级人数的功能--------------------------------->
+            <td>(<a href="?c=card&a=groupList&key=show&ref_group_id=<?php echo $v['ref_group_id'];?>"><?php echo $v['ref_group_num']; ?><a>)</td>
+<!-------------------------  snow  添加在层级管理处显示 在层级管理卡组添加一个显示该层级人数的功能--------------------------------->
+            <td><?php echo $v['level_amount']; ?></td>
+            <td><?php echo $v['deposit_count']; ?></td>
+            <td><?php echo $v['commission_percentage']; ?></td>
+            <td><?php echo $v['egame_commission_percentage']; ?></td>
+            <td><?php echo $v['sort']; ?></td>
+            <td>
+                <?php
+                    if($v['status'] == 0) {
+                        echo '禁用';
+                    } else if($v['status'] == 1) {
+                        echo '启用';
+                    } else {
+                        echo '异常';
+                    }
+                ?>
+            </td>
+            <td>
+                <?php
+                    if($v['is_fixed'] == 0) {
+                        echo '不固定';
+                    } else if($v['is_fixed'] == 1) {
+                        echo '固定';
+                    } else {
+                        echo '异常';
+                    }
+                ?>
+            </td>
+            <td>
+                <a class="btn btn-mini btn-info" href="./?c=egame&a=rakeback&ref_group_id=<?php echo $v['ref_group_id']; ?>&egame_commission_percentage=<?php echo $v['egame_commission_percentage']; ?>">手动返水</a>
+            </td>
+            <td>
+                <a class="btn btn-mini btn-info" href="./?c=card&a=editGroup&cg_id=<?php echo $v['cg_id']; ?>">修改</a>
+                <a class="btn btn-mini btn-info" href="./?c=card&a=deleteGroup&cg_id=<?php echo $v['cg_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div style="width:100%;margin:0 auto;text-align:center;">
+    <a class="btn btn-info" href="?c=card&a=refreshGroup">刷新分组</a>
+    <a class="btn btn-info" href="?c=card&a=addGroup">新建分组</a>
+</div>
+
+<?php $this->import("foot"); ?>

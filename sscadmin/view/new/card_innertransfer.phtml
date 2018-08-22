@@ -1,0 +1,145 @@
+<?php $this->import("head"); ?>
+<script>
+function checkform(ob) {
+    var msg = "";
+//    if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+    if (ob.to_card_id.value == '0') {
+        msg = "请选择目标银行卡";
+    }
+    else if (parseFloat(ob.amount.value) <= 0 || parseFloat(ob.amount.value) + parseFloat(ob.fee.value) > <?php echo $card['balance']; ?>) {
+        msg = "请输入正确的金额 0 < amount + fee <= <?php echo $card['balance']; ?>";
+    }
+    else if (ob.fee.value == '' || parseFloat(ob.fee.value) < 0) {
+        msg = "请输入正确的手续费";
+    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+//预设编辑值
+$(document).ready(function(){
+    $('#direction').change(function(){
+        if ($('#direction').val() > 0) {
+            if ($('#direction').val() == 1) {
+                targetType = 3;
+            }
+            else {
+                targetType = 2;
+            }
+            $('#to_card_id').html('<option value="0">请选择</option>');
+            $.post(
+                '?c=card&a=getCard',
+                {'type':targetType},
+                function(result){
+                    eval("data="+result+";");
+                    //$('#balance').html(data.balance);
+                    if (data instanceof Array && data.length == 0) {
+                        alert('无目标卡，请先行添加对应的银行卡！');
+                    }
+                    else {
+                        var html = '';
+                        for (var i in data) {
+                            html = html + '<option value="' + data[i].card_id + '">' + data[i].card_name + ' ' + data[i].card_num + '</option>';
+                        }
+                        $('#to_card_id').append(html);
+                    }
+                });
+        }
+    });
+
+   var action="<?php echo ACTION; ?>";
+   $("input[name=card_id]").val("<?php echo $card['card_id']; ?>");
+   $('#to_card_id').html('<option value="0">请选择</option>');
+});
+
+</script>
+<div class="list-div add-main" id="addDiv">
+    <form name="form1" class="form-top" id="form1" action="./?c=card&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+                <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 60%;">
+                    <tr>
+                        <td class="fb" width="20%">户名:</td>
+                        <td><?php echo $card['card_name']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">卡号:</td>
+                        <td><?php echo $card['card_num']; ?></td>
+                    </tr>
+                    <tr>
+                        <td class="fb">地区:</td>
+                        <td>
+                            <?php echo $card['province']; ?>
+                            <?php echo $card['city']; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">类型:</td>
+                        <td>
+                            <?php if ($card['type'] == 1): ?>收款
+                            <?php else: ?>付款
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">所属银行:</td>
+                        <td>
+                            <?php echo $bankList[$card['bank_id']]; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">转移方向:</td>
+                        <td>
+                            <select class="input-md form-control" name="direction" id="direction">
+                                <option value="0">请选择</option>
+                                <?php if ($card['type'] == 1): ?>
+                                <option value="1">收款卡->备用卡</option>
+                                <option value="2">收款卡->付款卡</option>
+                                <?php elseif ($card['type'] == 3): ?>
+                                <option value="3">备用卡->付款卡</option>
+                                <?php endif; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">选择目标卡:</td>
+                        <td>
+                            <select class="input-md form-control" name="to_card_id" id="to_card_id"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">目前余额:</td>
+                        <td>
+                            <?php echo $card['balance']; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">要转移金额:</td>
+                        <td>
+                            <input class="input-md form-control" name="amount" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fb">转帐所产生的手续费:</td>
+                        <td>
+                            <input class="input-md form-control" name="fee" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div style="width:60%;margin:0 auto;text-align: center;">
+                                <input class="btn btn-info submit" type="submit" style="width: 60px;"  name="submit" value="提交" />
+                                <input class="btn btn-info submit" style="width: 60px;" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                                <input type="hidden" name="card_id" value="" />   
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

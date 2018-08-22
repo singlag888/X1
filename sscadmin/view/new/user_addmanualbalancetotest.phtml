@@ -1,0 +1,79 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+function checkform(ob) {
+    var msg = "";
+    if (ob.username.value == '' || ob.username.value.length < 4) {
+        msg = "用户名输入不规范";
+    }
+    if (ob.amount.value == '' || parseInt(ob.amount.value) <= 0) {
+        msg = "请输入操作正数金额 ";
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+function getUser(){
+    if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+        $('#tip1').html('您输入的账号有误');
+        $('input[name=username]').css('border', 'solid 1px red');
+        return false;
+    }
+
+    $.post(
+        '?c=user&a=addManualBalanceToTest',
+        {'sa':'showRealName', username: $('input[name=username]').val()},
+        function (json_data) {
+            if (json_data.user_id == '') {
+                $('#tip1').html('您输入的账号有误，请再次确认');
+                $('input[name=realname]').val('');
+            } else if (json_data.is_test != 1) {
+                $('#tip1').html('您输入的账号不是测试账号，无法进行该操作');
+            } else {
+                $('input[name=realname]').val(json_data.real_name);
+                $('#tip1').html('');
+            }
+        },
+        "json"
+    );
+}
+
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">测试帐号</td>
+            <td style="vertical-align:middle;">
+                <div class="form-inline">
+                    <input class="input-md form-control" type="text" name="username" value="" onchange="getUser()"/> 
+                    <span id="tip1"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">真实姓名</td>
+            <td style="vertical-align:middle;">
+                <input class="input-md form-control" type="text" name="realname" value="" disabled />
+            </td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold;text-align:left;vertical-align:middle;">存款金额</td>
+            <td style="vertical-align:middle;"><input class="input-md form-control" name="amount"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="width:100%;margin:0 auto;text-align:center;">
+                    <input class="btn btn-info submit" type="submit"  name="submit" value="提 交" />
+                </div>
+            </td>
+        </tr>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

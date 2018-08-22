@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="menu" content="terminalVersion"/>
+    <link href="<?php echo $imgCdnUrl ?>/css/wechat_pay_wap.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+</head>
+<body style="text-align: center;">
+<div class="body">
+    <h1 class="mod-title">
+        <span class="text">充值</span>
+    </h1>
+    <div class="mod-ct">
+        <div class="order">
+        </div>
+        <div class="amount">
+            <span>充值 </span>
+            <?php echo $Amt; ?><span> 元</span>
+        </div>
+        <div id="contentWrap">
+            <div id="widget table-widget">
+                <div class="pageTitle"></div>
+                <div class="pageColumn">
+                    <div>
+                        <input id="qrcodeURL" type="hidden"/>
+                    </div>
+                    <table>
+                        <div id="code" style="margin-top: 50px;display: none;"></div>
+                        <div style="margin-top: 50px;">
+                            <?php
+                            echo '<img id="qrcode" width="25%" src="' . $postFields . '"/>';
+                            ?>
+                        </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tip">
+            <span class="dec dec-left"></span>
+            <span class="dec dec-right"></span>
+            <div class="ico-scan" style="background: url('<?php echo $imgCdnUrl ?>/images/wechat-pay.png') 0 0 no-repeat;">
+            </div>
+
+        </div>
+    </div>
+    <div class="foot">
+        <div class="inner">
+            <p>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+

@@ -1,0 +1,41 @@
+<?php $this->import("head"); ?>
+
+    <div class="list-div" style="width: 60%;">
+        <form action="" method="post" enctype="multipart/form-data" target="_blank"
+              onsubmit="if ($('#file')[0].value =='') {alert('请选择文件');return false;}">
+            <label class="mt15" for="file">请选择JS文件：</label>
+            <input class="btn btn-default" type="file" name="file" id="file"/>
+            <input type="hidden" name="op" value="jspacker"/>
+            <input class="btn btn-default mt15" type="submit" name="submitBtn" value="JS混淆压缩"/>
+        </form>
+    </div>
+    <hr/>
+    <div class="list-div" style="width: 60%;">
+        <form action="" method="post" target="_blank">
+            <input type="hidden" name="op" value="createMethods"/>
+            <input class="btn btn-default" type="submit" name="submitBtn" value="生成新的methods.js文件"/>
+        </form>
+    </div>
+    <hr/>
+    <div class="list-div" style="width: 60%;">
+        <form action="" method="post">
+            <input type="hidden" name="op" value="flush"/>
+            <input class="btn btn-default" type="submit" name="submitBtn" value="清除memcache缓存"/>
+        </form>
+    </div>
+    <hr/>
+    <div class="list-div" style="width: 60%;">
+        <form action="" method="post">
+            <input type="hidden" name="op" value="flushRedis"/>
+            <input class="btn btn-default" type="submit" name="submitBtn" value="清除redis缓存"/>
+        </form>
+    </div>
+    <hr/>
+    <div class="list-div" style="width: 60%;">
+        <form action="" method="post">
+            <input type="hidden" name="op" value="flushAppRedis"/>
+            <input class="btn btn-default" type="submit" name="submitBtn" value="清除App redis缓存"/>
+        </form>
+    </div>
+
+<?php $this->import("foot"); ?>

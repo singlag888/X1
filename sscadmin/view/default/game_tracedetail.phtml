@@ -1,0 +1,156 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    .gameTrace tr td{text-align: center;vertical-align: middle;}
+</style>
+
+<script>
+$(function(){
+    $('#form1 :checkbox').click(function(){
+        var pt = this;
+        $.each($(this).parent().parent().nextAll(), function(k,v){
+            $(this).find(':checkbox').attr('checked', $(pt).attr('checked'));
+        });
+    });
+
+    if ($('#form1 :checkbox').length > 0) {
+        $('input[name=cancel]').css('display', '');
+    }
+    else {
+        //$('input[name=cancel]').remove();
+    }
+});
+</script>
+
+<div class="list-div gameTrace" id="addDiv" style="width: 60%;">
+    <h3 class="rowTitle">追号单编号：<?php echo $wrap_id; ?></h3>
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" >
+    <tr>
+        <td>投注用户</td>
+        <td><?php echo $package['username']; ?></td>
+        <td>游戏</td>
+        <td><?php echo $lottery['cname']; ?> 第 <?php echo $trace['start_issue']; ?> 期</td>
+    </tr>
+    <tr>
+        <td>单倍注数</td>
+        <td><?php echo $trace['single_num']; ?></td>
+        <td>总追号倍数</td>
+        <td><?php echo $trace['total_multiple']; ?></td>
+    </tr>
+    <tr>
+        <td>计划追号期数</td>
+        <td><?php echo $trace['trace_times']; ?></td>
+        <td>计划总金额</td>
+        <td><?php echo $trace['total_amount']; ?></td>
+    </tr>
+    <tr>
+        <td>奖金系列</td>
+        <td><?php echo $prizeMode; ?>系列</td>
+        <td>模式</td>
+        <td><?php echo $GLOBALS['cfg']['modes'][strval(floatval($trace['modes']))]; ?>模式</td>
+    </tr>
+    <tr>
+        <td>中奖即停止</td>
+        <td><?php if ($trace['stop_on_win']) echo '是'; else echo '否'; ?></td>
+        <td>追号时间</td>
+        <td><?php echo $trace['create_time']; ?></td>
+    </tr>
+    <tr>
+        <td>追号状态</td>
+        <td><?php if ($trace['status'] == 0): ?>未开始
+            <?php else: ?>
+                <b>
+                    <?php if ($trace['status'] == 1): ?>正在进行
+                    <?php elseif ($trace['status'] == 2): ?>已完成
+                    <?php elseif ($trace['status'] == 3): ?>已取消
+                    <?php endif; ?>
+                </b>
+            <?php endif; ?></td>
+        <td>是否锁定</td>
+        <td>
+            <b>
+                <?php if ($trace['is_locked'] == 1): ?>已锁定
+                <?php else: ?>
+                <?php endif; ?>
+            </b>
+        </td>
+    </tr>
+</table>
+
+    <h3 class="rowTitle">订单明细</h3>
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" >
+    <tr>
+        <td style="font-weight: normal;text-align: center;vertical-align: middle;">玩法名称</td>
+        <td style="font-weight: normal;text-align: center;vertical-align: middle;">投注内容</td>
+        <td style="font-weight: normal;text-align: center;vertical-align: middle;">单倍注数</td>
+        <td style="font-weight: normal;text-align: center;vertical-align: middle;">可能奖金</td>
+        
+    </tr>
+    <?php foreach ($projects as $v): ?>
+    <tr>
+        <td><?php echo $methods[$v['method_id']]['cname']; ?></td>
+        <td><?php echo $v['code']; ?></td>
+        <td><?php echo $v['single_num']; ?></td>
+        <td><?php echo $v['will_prize']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+    </table>
+
+
+    <h3 class="rowTitle">各期追号详情</h3>
+    <form name="form1" id="form1" action="?c=game&a=cancelTrace" method="post">
+      <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" >
+        <tr>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">操作</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">追号期号</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">开奖号码</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">当期倍数</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">投注金额</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">中奖金额</td>
+            <td style="font-weight: bold;vertical-align: middle;text-align: center;">订单状态</td>
+        </tr>
+        <?php foreach ($packages as $v): ?>
+        <tr>
+            <td>
+                <?php if (!isset($openCodes[$v['issue']]) && $v['cancel_status'] == 0): ?>
+                    <input type="checkbox" name="pkids[]" value="<?php echo $v['package_id']; ?>"/>
+                <?php endif; ?>
+            </td>
+            <td><?php echo $v['issue']; ?></td>
+            <td><?php if (isset($openCodes[$v['issue']])): ?><?php echo $openCodes[$v['issue']]; ?><?php else: ?> &nbsp; <?php endif; ?></td>
+            <td><?php echo $v['multiple']; ?></td>
+            <td><?php echo $v['amount']; ?></td>
+            <td><?php echo $v['prize']; ?></td>
+            <td><?php if ($v['cancel_status'] > 0): ?>
+                        <?php if ($v['cancel_status'] == 1): ?>个人撤单
+                        <?php elseif ($v['cancel_status'] == 2): ?>追中撤单
+                        <?php elseif ($v['cancel_status'] == 3): ?>出号撤单
+                        <?php elseif ($v['cancel_status'] == 4): ?>未开撤单
+                        <?php elseif ($v['cancel_status'] == 9): ?>管理员撤单
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if ($v['check_prize_status'] == 0): ?>未开奖
+                        <?php elseif ($v['check_prize_status'] == 1): ?>已中奖
+                        <?php else: ?>未中奖
+                        <?php endif; ?>
+                    <?php endif; ?>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td></td>
+            <td colspan="7">
+                <div style="width: 60%;margin: 0 auto;text-align: center;">
+                    <input class="btn btn-info submit" type="button" class="submit" onclick="javascript:window.close();" value="关闭"/>
+                    <?php if ($trace['cancel_status'] == 0): ?>
+                    <input class="btn btn-info submit" type="button"  name="cancel" style="display:none" value="撤单" onclick="if(confirm('您真的要撤单吗？')) {this.form.submit();}"/>
+                    <?php endif; ?>
+                    <input type="hidden" name="trace_id" value="<?php echo $trace['trace_id']; ?>" />
+                </div>
+            </td>
+        </tr>
+      </table>
+
+    </form>
+
+</div>
+<?php $this->import("foot"); ?>

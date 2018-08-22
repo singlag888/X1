@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link href="<?php echo $imgCdnUrl ?>/css/all_blue.css" rel="stylesheet" type="text/css" />
+        <script src="<?php echo $imgCdnUrl ?>/js/jquery.js" type="text/javascript"></script>
+        <script src="<?php echo $imgCdnUrl ?>/js/jquery.md5.js" type="text/javascript"></script>
+        <script>
+            $(function() {
+                $('#form1').submit(function() {
+                    if ($('input[name=nvpair]').val().length != 32) {
+                        alert("您未通过认证,不允许修改密码");
+                        window.location.href = "index.jsp?a=forgetPwd";
+                        return false;
+                    }
+                    return true;
+                });
+
+            });
+        </script>
+    </head>
+
+    <body  class="Log_bg" style=" position:relative; background:url(images/blue/LOG_BG.jpg) no-repeat #d6b58d repeat-x center;">
+        <div class="mainContent-center">
+            <div class="container" id="container">
+                <ul class="title">
+                    <li>找回密码</li>
+                </ul>
+                <div class="recordsBox" style="height:604px;">
+                    <div style="height:600px;">
+                        <form name="form1" id="form1" action="index.jsp?a=forgetPwd" method="post">
+                            <p class="passwordTitle" style=" margin-left:0px;">以下将重新设置您的登录密码，请牢记！</p>
+                            <ul class="new_passwordNeir">
+                                <li><span class="width_title">登录密码:</span> <span class="width_span">
+                                        <input type="password" name="password" maxlength="12" value="" /><span>*</span><span id="userTip"></span>
+                                    </span> </li>
+                                <li><span class="width_title">确认密码:</span> <span class="width_span">
+                                        <input type="password" name="password2"  maxlength="15" value=""/><span>*</span><span id="pwdTip"></span>
+                                    </span></li>
+                                <li class="button">
+                                    <input type="hidden" name="verify" value="reset"/><input type="hidden" name="nvpair" value="<?php echo $nvpair; ?>"/>
+                                    <input type="submit" class="submit"  value="提交" />
+                                </li>
+                            </ul>
+                        </form>
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>
+

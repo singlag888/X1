@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>SSS 1.0</title>
+<style>
+body {
+    padding:0px;
+    margin:0px;
+    color:#fff;
+    background:#555;
+    font-size:12px;
+    font-family:"Courier New";
+    border:0px solid #f00;
+    overflow:hidden;
+}
+table {
+    border-collapse: collapse;
+}
+td {
+    padding:3px 5px 3px 5px; /*决定上下间隙*/
+    border:0px solid #f00;
+}
+a:link,a:visited {
+    text-decoration:underline;
+    color:#fff;
+}
+#title{ letter-spacing:0px; height:60px;}
+#title a { text-decoration:none;font-size:20px; font-family:"";color:000; font-weight:700; letter-spacing:0px;}
+</style>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+	<td align="align"><span id="title"><a href="index.jsp?c=default" target="_top">SSS 1.0 前台</a> </span> &nbsp;
+        <?php if (RUN_ENV == 1): ?><font style="font-size:20px; font-family:''; font-weight:700;">[本地环境]</font>
+        <?php elseif (RUN_ENV == 2): ?><font style="font-size:20px; font-family:''; font-weight:700;">[测试环境]</font>
+        <?php endif;?>
+
+    </td>
+    <td width="250" style="text-align:right">
+        欢迎 <?php echo $username; ?>，<a href="index.jsp?a=logout">退出系统</a>
+        <br/><span>上次登录：<?php echo $last_time; ?></span>
+        <br/><span><?php echo $last_ip; ?></span>
+    </td>
+</tr>
+</table>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

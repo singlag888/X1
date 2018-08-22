@@ -1,0 +1,249 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        function getSectionStr(typeHour){
+
+            var dateObj = new Date();
+            var hour = dateObj.getHours(), min = dateObj.getMinutes(), monthStr ='' ,dayStr = '' , htm = '';
+            if(typeHour == 23 && hour < 16){
+                hour = 16;
+            }
+            var tmpHour = Math.floor(Math.random() * (typeHour - hour) + hour);
+            var tmpMin = Math.floor(Math.random() * 59);
+            if (tmpHour == typeHour){
+                if(49 - min <= 0){//如果现在时间大于等于50分则不允许生成追加计划
+                    return false;
+                }
+                tmpMin = Math.floor(Math.random() * (49 - min) + min);
+            }
+
+            monthStr = (dateObj.getMonth() + 1).toString().length == 1 ? '0' + (dateObj.getMonth() + 1).toString() : dateObj.getMonth() + 1;
+            dayStr = dateObj.getDate().toString().length == 1 ? '0' + dateObj.getDate().toString() : dateObj.getDate();
+            hour = tmpHour.toString().length == 1 ? '0' + tmpHour.toString() : tmpHour;
+            min = tmpMin.toString().length == 1 ? '0' + tmpMin.toString() : tmpMin;
+
+            var str = dateObj.getFullYear() + '/' + monthStr + '/' + dayStr + ' ' + hour + ':' + min;
+            if(Math.floor(new Date(str).getTime()/1000-600) > Math.floor(dateObj.getTime()/1000)){
+                return str;
+            }
+            else{
+                return false;
+            }
+        }
+        function addout() {
+            var winDate = $("input[name=winDate]").val();
+            var inputSeconds = new Date(winDate).getTime() / 1000;
+            var timeSection = $("select[name=timeSection]").val();
+            var winNum = $("input[name=winNum]").val();
+            var dayUnix = <?php echo strtotime(date("Y-m-d 15:59:00")); ?>,nightUnix = <?php echo strtotime(date("Y-m-d 23:59:00")); ?>;
+
+            if (winDate == '' || winNum < 1) {
+                alert("计划条件不完整！");
+                return false;
+            }
+            if (inputSeconds > <?php echo strtotime(date("Y-m-d 23:59:00")); ?> || inputSeconds < <?php echo strtotime(date("Y-m-d 00:00:00")); ?>) {
+                alert("开奖日期不正确,必须为当天");
+                return false;
+            }
+            var htm = '';
+            var i = 0,j = 1;
+            while(winNum){
+                j++;
+                if(j == 200){//防止死循环
+                    break;
+                }
+                var dateObj = new Date();
+                var sectionHour = 15;
+                if (timeSection == 1) {//上午段
+                    if (Math.floor(dateObj.getTime() / 1000) > (dayUnix - 600)) {
+                        alert("追加计划时间不正确！");
+                        return false;
+                    }
+                }else{//下午段
+//                    console.log(Math.floor(dateObj.getTime() / 1000));
+//                    console.log(nightUnix - 599);
+                    if ( Math.floor(dateObj.getTime() / 1000) > (nightUnix - 599) ) {
+                        alert("追加计划第二时间不正确！");
+                        return false;
+                    }
+                    sectionHour = 23;
+                }
+                
+                var timeStr = getSectionStr(sectionHour);
+                if(!timeStr){
+                    continue;
+                }
+                if(plans.indexOf(timeStr) < 0 ){//不包含此计划并且计划都是至少大于现在时间
+                    plans.push(timeStr);
+                    winNum--;
+                    i++;
+                }else{
+                    continue;
+                }
+                
+                htm += '<tr class="plan"><td>' + i + '</td><td>' + $("select[name=prizeLevel]").find("option:selected").text() + '</td><td>' + timeStr + '</td></tr>';
+            }
+            $(".plan").remove();
+            $(".noneData").remove();
+            $(".mainList").append(htm);
+        }
+        function comeout() {
+            var winDate = $("input[name=winDate]").val();
+            var timeSection = $("select[name=timeSection]").val();
+            var winNum = $("input[name=winNum]").val();
+            var nowSeconds = new Date(winDate).getTime() / 1000;
+
+            if (winDate == '' || winNum < 1) {
+                alert("计划条件不完整！");
+                return false;
+            }
+            if (nowSeconds < <?php echo strtotime(date("Y-m-d", strtotime("+1 days"))); ?>) {
+                alert("开奖日期不正确");
+                return false;
+            }
+
+            var offset = 0, lastOffset = 0, oneSection = 57599, towSection = 28799;
+
+            if (timeSection == 1) {
+                offset = Math.floor(oneSection / winNum);
+                lastOffset = oneSection % winNum == 0 ? offset : offset;//最后一个区间
+            }
+            else {
+                offset = Math.floor(towSection / winNum);
+                lastOffset = towSection % winNum == 0 ? offset : offset;//最后一个区间
+            }
+
+            var htm = '';
+            for (var i = 0; i < winNum; i++) {
+                var section = 0;
+                if (timeSection == 1) {
+                    section = nowSeconds + Math.floor((Math.random() + i) * offset);
+                    if (i + 1 == winNum) {
+                        var endSection = section - nowSeconds - oneSection;
+                        if (endSection > 0) {//如果超出15：59，就用15：59的时间戳作为最后标准
+                            section = nowSeconds + oneSection - lastOffset + Math.floor((Math.random() * lastOffset));//计算最后一个区间段
+                        }
+                    }
+                }
+                else {
+                    section = nowSeconds + 57600 + Math.floor((Math.random() + i) * offset);
+                    if (i + 1 == winNum) {
+                        var endSection = section - towSection - nowSeconds - 57600;
+                        if (endSection > 0) {//如果超出23：59，就用23：59的时间戳作为最后标准
+                            section = nowSeconds + 57600 + towSection - lastOffset + Math.floor((Math.random() * lastOffset));//计算最后一个区间段
+                        }
+                    }
+                }
+
+                var dateObj = new Date(section * 1000);
+                var month = (dateObj.getMonth() + 1).toString().length == 1 ? '0' + (dateObj.getMonth() + 1).toString() : dateObj.getMonth() + 1;
+                var day = dateObj.getDate().toString().length == 1 ? '0' + dateObj.getDate().toString() : dateObj.getDate();
+                var hour = dateObj.getHours().toString().length == 1 ? '0' + dateObj.getHours().toString() : dateObj.getHours();
+                var min = dateObj.getMinutes().toString().length == 1 ? '0' + dateObj.getMinutes().toString() : dateObj.getMinutes();
+                var sectionStr = dateObj.getFullYear() + '-' + month + '-' + day + ' ' + hour + ':' + min;
+
+                htm += '<tr class="plan"><td>' + (i + 1) + '</td><td>' + $("select[name=prizeLevel]").find("option:selected").text() + '</td><td>' + sectionStr + '</td></tr>';
+                plans.push(sectionStr);
+            }
+            $(".plan").remove();
+            $(".noneData").remove();
+            $(".mainList").append(htm);
+        }
+        function sub(flag) {
+            if ($(".plan").length === 0) {
+                alert("还没生成计划！");
+                return false;
+            }
+//            console.log($(".plan").length);
+            if (confirm("确认提交该中奖计划吗？")) {
+                $.ajax({
+                    type: "POST",
+                    url: "/?c=market&a=roulettePlan",
+                    data: {datas: plans, op: "sendPlans", plan_type: flag, plan_level: $("select[name=prizeLevel]").val()},
+                    dataType: "text",
+                    success: function (msg) {
+                        //console.log(msg);
+                        switch (msg) {
+                            case "1":
+                                alert("提交成功！");
+                                plans.splice(0,plans.length);//清空原来计划数组
+                                break;
+                            case "2":
+                                alert("计划数据有误！");
+                                break;
+                            case "3":
+                                alert("数据添加失败！");
+                                break;
+                            default:
+                                alert("网络异常！");
+                                break;
+                        }
+                    },
+                    error: function () {
+                        alert("提交异常");
+                    }
+                });
+            }
+        }
+        var plans = [];
+        $("input[name=plan]").click(function () {
+            plans.splice(0,plans.length);//清空原来计划数组
+            $("input[name = type]").val(1);
+            comeout();
+        });
+        $("input[name=add]").click(function () {
+            plans.splice(0,plans.length);//清空原来计划数组
+            $("input[name = type]").val(2);
+            addout();
+        });
+        $("input[name=sub]").click(function () {
+            sub($("input[name = type]").val());
+        });
+    });
+</script>
+
+开奖日期<input name="winDate" id="start_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy/MM/dd'})" class="Wdate" value="<?php echo date("Y/m/d", strtotime('+1 day')); ?>"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+奖品<select name="prizeLevel">
+    <?php foreach ($prizeLevels as $k => $v): ?>
+        <option value=<?php
+        echo $k;
+        if ($k == $prizeLevel) {
+            echo " selected = 'selected'";
+        }
+        ?>><?php echo $v; ?></option>
+            <?php endforeach; ?>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+开奖时间段<select name="timeSection">
+    <option value=1>00:00至15:59</option>
+    <option value=2>16:00至23:59</option>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+开奖个数<input name="winNum" size="6" id="limit" value="1"/>
+<input type="hidden" name="c" value="market"/>
+<input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" name="plan"  style="width:90px" value="生成计划"/>
+<input type="button" name="add"  style="width:80px" value="追加计划"/>
+<input type="hidden" name="type"/>
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>奖品</td>
+                <td>计划开奖时间</td>
+            </tr>
+        </thead>
+        <tr class="noneData">
+            <td colspan="3">暂无数据！</td>
+        </tr>
+
+    </table>
+
+</div>
+<input type="button" name="sub"  style="width:80px" value="提交计划"/>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,82 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(function(){
+    //准备数据
+    var json_topUsers = <?php echo $json_topUsers; ?>;
+    var tmp = '';
+
+//    $('#form2').submit(function(){
+//        if (!/^\d{5}$/.test($('input[name=code]').val())) {
+//            alert('请输入正确的5位数字');
+//            return false;
+//        }
+//
+//        return true;
+//    });
+
+    //总代选择框
+    $.each(json_topUsers, function(i,v){
+        tmp = '<option value=' + v.user_id + '>' + v.username + '</option>';
+        $('select[name=top_id]').append(tmp);
+    });
+
+    //设置默认值
+    $('select[name=top_id]').val('<?php echo $top_id; ?>');
+    $('#startDate').val('<?php echo $startDate; ?>');
+    $('#endDate').val('<?php echo $endDate; ?>');
+});
+</script>
+<form name="form1" id="form1" action="" method="GET">
+所属总代<select name="top_id"><option value="0">请选择</option></select>
+游戏时间<input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>到
+<input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+<input type="hidden" name="c" value="game"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+<input type="submit" name="submit" class="submit" value="查询"/>
+</form>
+
+<h4>注一：由于美东时差12小时，每天中午1点以后才能查看前一天的数据。</h4>
+<h4>注二：按惯例，输赢值为负表示用户亏损，为正表示用户盈利。</h4>
+<div class="list-div" id="listDiv">
+<table class="mainList">
+    <thead>
+    <tr>
+    	<td>总代</td>
+        <td>日期</td>
+        <td>投注次数</td>
+        <td>会员总流水</td>
+        <td>会员流水（不计和局）</td>
+        <td>会员输赢</td>
+    </tr>
+    </thead>
+    <?php if ($liveWaters): ?>
+        <?php foreach ($liveWaters as $v): ?>
+          <tr>
+            <td><?php echo $topUsers[$v['top_id']]['username']; ?></td>
+            <td><?php echo $v['belong_date']; ?></td>
+            <td style="text-align: right;"><?php echo $v['bet_times']; ?></td>
+            <td style="text-align: right;"><?php echo $v['water']; ?></td>
+            <td style="text-align: right;"><?php echo $v['real_water']; ?></td>
+            <td style="text-align: right;">
+                <?php if ($v['amount'] > 0): ?>
+                    <font color="red"><?php echo $v['amount']; ?></font>
+                <?php else: ?>
+                    <?php echo $v['amount']; ?>
+                <?php endif; ?>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+          <tr><td colspan="7">无可用数据！</td>
+    <?php endif; ?>
+        <tr>
+            <td colspan="3">合计</td>
+            <td style="text-align: right;"><?php echo number_format($pageWater, 2); ?></td>
+            <td style="text-align: right;"><?php echo number_format($pageRealWater, 2); ?></td>
+            <td style="text-align: right;"><?php echo number_format($pageAmount, 2); ?></td>
+        </tr>
+</table>
+</div>
+<div style="float: right;">总流水:<b> <?php echo number_format($trafficInfo['total_water'], 2); ?></b> 总输赢:<b> <?php echo number_format($trafficInfo['total_amount'], 2); ?></b> &nbsp; <?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

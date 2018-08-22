@@ -1,0 +1,127 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    function checkform(ob) {
+        var msg = "";
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+//预设编辑值
+    $(document).ready(function() {
+        var action = "<?php echo ACTION; ?>";
+        if (action == 'editNotice') {
+            $("input[name=notice_id]").val("<?php echo $notice['notice_id']; ?>");
+            $("input[name=expire_time]").val("<?php echo $notice['expire_time']; ?>");
+            $("input[name=title]").val("<?php echo addslashes($notice['title']); ?>");
+            $("input[name=link]").val("<?php echo $notice['link']; ?>");
+            $("input[name=start_time]").val("<?php echo $notice['start_time']; ?>");
+            $("input[name=save_path]").val("<?php echo $save_path; ?>");
+            <?php if ($notice['type'] == 3): ?>
+                $(".mobile,.thumbnail").show(500);
+            <?php endif; ?>
+        }
+        $("input[name='type'][value='<?php echo $notice['type'] ?>']").attr("checked", "checked");
+        $('input:radio').click(function(){
+            if($(this).val() == 3){
+                $(".mobile,.thumbnail").show(1000);
+            }else{
+                $(".mobile,.thumbnail").hide(800);
+            }
+        });
+    });
+</script>
+<div class="list-div form-top" id="addDiv">
+    <form  class="form-inline " role="form" name="form1" id="form1" action="./?c=notice&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)" enctype ="multipart/form-data">
+        <table class="table table-responsive table-bordered" style="width:60%;">
+            <tr>
+                <td>公告标题:</td>
+                <td><input class="form-control" name="title" size="50"/></td>
+            </tr>
+            <tr>
+                <td>公告类型:</td>
+                <td>
+                    <div class="checkbox-inline">
+                       <input type="radio" value="1"  name="type" id="type" />主站公告
+                    </div>
+                    <!-- <div class="checkbox-inline">
+                        <input type="radio"  value="2"  name="type" id="type"  />cp
+                    </div> -->
+                    <!-- <div class="checkbox-inline">
+                        <input type="radio"  value="3"  name="type" />手机端banner
+                    </div> -->
+                    <div class="checkbox-inline">
+                        <input type="radio"  value="4"  name="type" />手机端公告
+                    </div>
+                    <!-- <div class="checkbox">
+                        <input type="radio"  value="5"  name="type" />新闻资讯
+                    </div> -->
+                </td>
+            </tr>
+            <tr>
+                <td>公告开始时间:</td>
+                <td>
+                    <input class="input-md form-control Wdate"  type="text" name="start_time" id="start_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr>
+                <td>公告到期时间:</td>
+                <td>
+                <input class="input-md form-control Wdate"  type="text" name="expire_time" id="expire_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr class="mobile" style="display: none">
+                <td>手机端公告图片</td>
+                <td>保存路径:images/ <input class="input-md form-control" name="save_path" type="input" value="<?php echo $save_path ?>" onfocus="if (value =='<?php echo $save_path ?>'){value ='';}" onblur="if (value ==''){value='<?php echo $save_path ?>';}" />
+                <input class="input-sm form-control" name="app_img" type="file"/>
+                </td>
+            </tr>
+            <?php if (ACTION != "addNotice"): ?>
+            <tr class="thumbnail"  style="display: none">
+                <td>缩略图</td>
+                <?php if($notice['img_path'] != ''): ?>
+                <td><img src="<?php  echo $notice['img_path']; ?>" width="100"></td>
+                <?php endif; ?>
+            </tr>
+            <?php endif; ?>
+
+            <tr  class="mobile" style="display: none">
+                <td>手机端活动公告链接</td>
+                <td><input class="input-mini form-control" name="link" type="input" style="width: 350px;"/></td>
+            </tr>
+            <tr>
+                <td>公告内容:</td>
+                <td>
+                    <textarea class="input-md form-control" id="content" name="content"><?php echo ($notice?$notice['content']:''); ?></textarea>
+                    <script src="/js/ckeditor/ckeditor.js"></script>
+                    <script>
+                    CKEDITOR.replace('content', {
+                        language: 'zh-cn',
+                        width:'490',
+                        height:'420',
+                        extraPlugins: 'tableresize,autosave'
+                    });
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                         <button type="submit" class="btn btn-info  submit " style="width: 60px;" name="submit" value="<?php if (ACTION == "addNotice"): ?>提交<?php else: ?>更新<?php endif; ?>" >更新</button>
+                        <button type="button" class="btn btn-info submit" style="width: 60px;" onclick="javascript:history.go(-1);" value="返回">返回</button>
+                        <input type="hidden" name="old_img_path" value="<?php echo $notice['img_path']; ?>">
+                        <input type="hidden" name="notice_id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,88 @@
+<?php $this->import("head"); ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<div class="list-div add-main form-top mt20" id="addDiv">
+    <form name="form1" id="form1" action="./?c=app&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 80%;">
+            <tr>
+                <td>是否开启维护？</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="is_show" class="is_show"
+                            <?php if (isset($sm['is_show'])): ?>
+                                value='<?php if ($sm['is_show'] == 1): ?>1<?php else: ?>0<?php endif; ?>'
+                            <?php else: ?>
+                                value='0'
+                            <?php endif; ?> />
+                        <div class="btn_fath clearfix
+                        <?php if (isset($sm['is_show'])): ?>
+                                <?php if ($sm['is_show'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                        <?php else: ?>
+                            off
+                        <?php endif; ?> />
+                        " id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">开</div>
+                            <div class="btnSwitch btn2">关</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>维护提示信息</td>
+                <td>
+                    <input type="text" size="90" class="info" name="info" maxlength="40" value="<?php echo $sm['info']?>"> (注:内容最大长度为40个字符)
+                </td>
+            </tr>
+            <tr>
+                <td>维护时间的显示内容:</td>
+                <td>
+                    <input type="text" name="show_time" class="show_time" value="<?php echo $sm['show_time']?>"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 60%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-info submit_button" type="button" style="width: 100px;" value="提交" />
+                        <input type="hidden" name="user_id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+    $(function(){
+        $('.submit_button').click(function() {
+            $('.submit_button').val('正在提交数据中');
+            $('.submit_button').attr('disabled',true);
+            var is_show=$('.is_show').val();
+            if(is_show=='1'){
+                var info=$('.info').val();
+                var show_time=$('.show_time').val();
+                if(info==''||show_time==''){
+                    layer.alert("请填写提示内容和显示维护时间");
+                    $('.submit_button').val('提交');
+                    $('.submit_button').attr('disabled',false);
+                    return false;
+                }
+            }
+            $("form").submit();
+        });
+    });
+    function toogle(th) {
+        let ele = $(th).children(".move");
+        if ($(th).hasClass('on')) {
+            ele.animate({left: "1px"}, 300, function () {
+            });
+            $(th).removeClass("on").addClass("off");
+            $(th).prev('input').val(0);
+        } else {
+            ele.animate({left: '35px'}, 300, function () {
+            });
+            $(th).removeClass("off").addClass("on");
+            $(th).prev('input').val(1);
+        }
+    }
+</script>
+<?php $this->import("foot"); ?>
+

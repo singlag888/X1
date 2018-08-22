@@ -1,0 +1,77 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div mt10" id="listDiv">
+    <form class="form-top">
+        <table class="table table-responsive table-bordered  mainList" width="100%">
+            <thead>
+            <tr>
+                <td>弹窗ID</td>
+                <td>标题</td>
+                <td>域名</td>
+                <td>文本</td>
+                <td>PC图</td>
+                <td>手机图</td>
+                <td>类型</td>
+                <td>是否默认</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <?php foreach ($alertList as &$item): ?>
+                <tr id="userAlert_<?php echo $item['ua_id'] ?>">
+                    <td><?php echo $item['ua_id'] ?></td>
+                    <td><?php echo $item['title'] ?></td>
+                    <td><?php echo $item['domain'] ?></td>
+                    <td style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap"><?php echo $item['content'] ?></td>
+                    <td><img src="<?php echo $item['main_img'] ?>"></td>
+                    <td><img src="<?php echo $item['m_main_img'] ?>"></td>
+                    <td>
+                        <select data-ua_id="<?php echo $item['ua_id'] ?>" title="类型" class="alert-type">
+                            <option <?php if ($item['type'] == 'text') echo 'selected'; ?> value="text">文本</option>
+                            <option <?php if ($item['type'] == 'image') echo 'selected'; ?> value="image">图片</option>
+                        </select>
+                    </td>
+                    <td><?php if($item['default'] > 0){echo '是';}else{echo '否';} ?></td>
+                    <td>
+                        <a class="btn btn-mini btn-info"
+                           href="./?c=userAlert&a=editAlert&ua_id=<?php echo $item['ua_id']; ?>">编辑</a>
+                        <a class="btn btn-mini btn-info delete" data-ua_id="<?php echo $item['ua_id'] ?>"
+                           href="javascript:void(0)">删除</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </form>
+    <?php echo $pageList; ?>
+    <div class="tip"></div>
+</div>
+
+<?php $this->import("foot"); ?>
+
+<script>
+    $('.alert-type').on('change', function () {
+        let $ua_id = $(this).data('ua_id');
+        let $type = $(this).val();
+
+        $.post('./?c=userAlert&a=changeType', {'ua_id': $ua_id, 'type': $type}, function ($data) {
+            if($data.status !== 1){
+                alert('操作失败');
+            }
+        }, 'JSON');
+    });
+
+    $('.delete').on('click', function () {
+        if(!confirm('确定要删除吗？')){
+            return false;
+        }
+
+        let $ua_id = $(this).data('ua_id');
+
+        $.post('./?c=userAlert&a=delAlert', {'ua_id': $ua_id}, function ($data) {
+            if($data.status !== 1){
+                alert('操作失败');
+            }
+
+            $('#userAlert_'+$ua_id).hide();
+        }, 'JSON');
+    });
+</script>

@@ -1,0 +1,93 @@
+<?php $this->import("head"); ?>
+<script>
+    //AJAX取得用户信息
+    function getUser()
+    {
+        if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+            alert('用户名输入不规范');
+            return false;
+        }
+
+        $.post(
+            '?c=user&a=showBalance',
+            {username: $('input[name=username]').val()},
+            function(json_data) {
+                if (json_data.user_id == '') {
+                    $('#result').html('没有这个用户');
+                } else {
+                    $('#result').html('￥' + json_data.balance);
+                }
+            }, "json");
+    }
+
+    function checkform(ob) {
+        var msg = "";
+        if (ob.username.value == '' || ob.username.value.length < 4) {
+            msg = "用户名输入不规范";
+        }
+        if (ob.amount.value == ''||parseInt(ob.amount.value)<=0) {
+            msg = "请输入操作正数金额";
+        }
+		if (ob.remark.value == '') {
+			msg = '请输入备注';
+		}
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="list-div form-top" id="addDiv">
+    <form name="form1" id="form1" action="" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td colspan="2" class="rowTitle">
+                    <b>修改余额</b>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;vertical-align:middle;">
+                <span class="red">*</span>
+                接收人</td>
+                <td style="vertical-align: middle;">
+                    <div class="form-inline">
+                        <input class="input-md form-control" type="text" name="username" value="" />
+                        <input class="btn btn-default" type="button" name="check" value="检测用户" onclick='getUser()' />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;vertical-align:middle;"> 用户余额</td>
+                <td style="vertical-align: middle;">
+                    <span id="result"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;vertical-align:middle;">
+                <span class="red">*</span>
+                金额</td>
+                <td style="vertical-align: middle;"><input class="input-md form-control" style="width: 34%;" type="text" name="amount" value="" /></td>
+            </tr>
+			<tr>
+                <td style="text-align:left;vertical-align:middle;">
+                <span class="red">*</span>
+                备注</td>
+                <td style="vertical-align: middle;">
+                    <div class="form-inline">
+                        <input class="input-md form-control" type="text" name="remark" value="" maxlength="10" />（此栏为必填，且最多不超过10个字）
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:50%;margin:0 auto;text-align: center;">
+                        <input type="hidden" name="orderType" value="202" />
+                        <input class="btn btn-info submit" type="submit" style="width: 100px;" name="submit" value="提交" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,85 @@
+<?php $this->import("head"); ?>
+    <style type="text/css">
+        #start_time, #end_time {
+            width: 160px;
+        }
+
+        .code {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100px;
+            display: block;
+            white-space: nowrap;
+        }
+    </style>
+    <script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+    <script src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("input[name=username]").val("<?php echo $username; ?>");
+            $("input[name=start_time]").val("<?php echo $start_time; ?>");
+            $("input[name=end_time]").val("<?php echo $end_time; ?>");
+            $("select[name=is_test]").val("<?php echo $is_test; ?>");
+        });
+    </script>
+    <form name="form1" id="form1" class="form-top" action="?c=egame&a=merchantGameReport" method="POST">
+        <div class="form-inline mt15">
+            <div class="form-group has-default has-feedback">
+                <label>时间：</label>
+                <input title="start_time" class="input-md form-control Wdate" type="text" name="start_time" id="start_time"
+                       onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>到</label>
+                <input title="end_time" class="input-md form-control Wdate" type="text" name="end_time" id="end_time"
+                       onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label>是否测试账号</label>
+            <select title="is_test" class="input-md form-control" name="is_test">
+                <option value="-1">请选择
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+            <label for="radio2">代理商名称</label>
+            <input title="username" class="input-md form-control" name="username" size="10" />
+            <input type="hidden" title="action" class="input-md form-control" name="action" value="merchant_game_report" />
+            <input class="btn btn-info submit" type="submit" name="submit" value="查询" style="width:90px"/>
+        </div>
+    </form>
+
+    <div class="list-div mt15" id="listDiv">
+        <table class="table table-responsive table-bordered mainList">
+            <thead>
+            <tr>
+                <td>代理</td>
+                <td>赢分</td>
+                <td>玩分(总金额)</td>
+                <td>净分(派彩结果)</td>
+            </tr>
+            </thead>
+            <?php if ($merchantsGm): ?>
+                <?php foreach ($merchantsGm as $v): ?>
+                    <tr>
+                        <td><?php echo $tops[$v['top_id']]['username']; ?></td>
+                        <td><?php echo $v['win_money']; ?></td>
+                        <td><?php echo $v['play_money']; ?></td>
+                        <td><?php echo $v['play_jifen_amount']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="18" class="no-records">所选查选条件的数据为空！</td>
+
+                </tr>
+            <?php endif; ?>
+        </table>
+    </div>
+    <div class="pageTal" style="width: 100%;"><?php echo $pageList; ?>
+        <div>
+            玩分(总金额)总计：<?php echo $totalPlayAmount; ?>，净分(派彩结果)总计：<?php echo $totalPlayJifenAmount; ?>，赢分总计：<?php echo $totalPlayWin; ?>
+        </div>
+    </div>
+
+<?php $this->import("foot"); ?>

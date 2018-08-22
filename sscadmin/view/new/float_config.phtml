@@ -1,0 +1,206 @@
+<?php $this->import("head"); ?>
+<div class="list-div">
+    <form class="form-inline " role="form" name="form1" id="form1" action="./?c=float&a=edit" method="post"
+          enctype="multipart/form-data">
+        <h3>注意1：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h3>
+        <!-- 添加一个注意事项 ,by snow  2016-08-30 16:37 -->
+        <h3>注意2：浮窗建议在宽度150px以内。</h3>
+        <table class="table table-responsive table-bordered" style="width:100%;">
+            <tr>
+                <td>QQ:</td>
+                <td style="width:70%">
+                    <input class="form-control" name="qq_number" placeholder="QQ"
+                           value="<?php if ($floatConfig) echo $floatConfig['qq_number']; ?>"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>邮箱:</td>
+                <td>
+                    <input class="form-control" name="email_address" placeholder="邮箱"
+                           value="<?php if ($floatConfig) echo $floatConfig['email_address']; ?>"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>微信:</td>
+                <td>
+                    <input class="form-control" name="wechat_number" placeholder="微信"
+                           value="<?php if ($floatConfig) echo $floatConfig['wechat_number']; ?>"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>微信二维码:</td>
+                <td>
+                    <input class="input-sm form-control" name="wechat_qr" type="file"/>
+                    <?php if ($floatConfig && $floatConfig['wechat_qr']): ?>
+                        <span>缩略图:</span>
+                        <img src="<?php echo $floatConfig['wechat_qr']; ?>"/>
+                        <input class="input-sm form-control flush" data-field="wechat_qr" type="button" value="清除图片"/>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td>客服链接:</td>
+                <td>
+                    <input class="form-control" size="32" name="service_url" placeholder="客服链接"
+                           value="<?php if ($floatConfig) echo $floatConfig['service_url']; ?>"/>
+                </td>
+            </tr>
+
+            <tr>
+                <td>左浮窗整图:</td>
+                <td>
+                    <input class="input-sm form-control" name="left_img" type="file"/>
+                    <?php if ($floatConfig && $floatConfig['left_img']): ?>
+                        <span>缩略图:</span>
+                        <img src="<?php echo $floatConfig['left_img']; ?>"/>
+                        <input class="input-sm form-control flush" data-field="left_img" type="button" value="清除图片"/>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    左浮窗区块与链接:
+                    <input class="input-sm form-control fr btn-addLeft" type="button" value="+"/>
+                    <span class="fr">增加一个区块点→</span>
+                    <br/>
+                    例如:高度是 60px 和 100px，则0-60为第一块，60-100为第二块。
+                    <br/>
+                    链接 / 开头的地址 (例如 /?a=welcome)。
+                    <br/>
+                    不需要加链接的区块留空即可。
+                </td>
+                <td id="leftBox">
+                    <?php foreach ($floatConfig['left_target'] as $item): ?>
+                        <div>
+                            <span>高：</span><input value="<?php echo $item['height'] ?>" class="input-sm form-control"
+                                                  name="left_height[]" type="number" min="0" placeholder="像素值"/>
+                            <span>未登录链接：</span><input title="链接" size="32"
+                                                      value="<?php echo str_replace("\"", '&#34;', $item['fake_url']) ?>"
+                                                      class="input-sm form-control"
+                                                      name="left_fake_url[]" type="text"/>
+                            <span>登录后链接：</span><input title="链接" size="32"
+                                                      value="<?php echo str_replace("\"", '&#34;', $item['url']) ?>"
+                                                      class="input-sm form-control"
+                                                      name="left_url[]" type="text"/>
+                            <span>是否新窗口打开：</span><input title="打开方式" type="checkbox"
+                                                        class="chk-urlTarget" <?php echo $item['target'] ? 'checked' : ''; ?> />
+                            <input type="hidden" name="left_url_target[]" value="<?php echo $item['target']; ?>"/>
+                            <input class="input-sm form-control btn-killSelf" type="button" value="-"/>
+                        </div>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td>右浮窗整图:</td>
+                <td>
+                    <input class="input-sm form-control" name="right_img" type="file"/>
+                    <?php if ($floatConfig && $floatConfig['right_img']): ?>
+                        <span>缩略图:</span>
+                        <img src="<?php echo $floatConfig['right_img']; ?>"/>
+                        <input class="input-sm form-control flush" data-field="right_img" type="button" value="清除图片"/>
+                    <?php endif; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    右浮窗区块与链接:
+                    <input class="input-sm form-control fr btn-addRight" type="button" value="+"/>
+                    <span class="fr">增加一个区块点→</span>
+                    <br/>
+                    例如:高度是 60px 和 100px，则0-60为第一块，60-100为第二块。
+                    <br/>
+                    链接 / 开头的地址 (例如 /?a=welcome)。
+                    <br/>
+                    不需要加链接的区块留空即可。
+                </td>
+                <td id="rightBox">
+                    <?php foreach ($floatConfig['right_target'] as $item): ?>
+                        <div>
+                            <span>高：</span><input value="<?php echo $item['height'] ?>" class="input-sm form-control"
+                                                  name="right_height[]" type="number" min="0" placeholder="像素值"/>
+                            <span>未登录链接：</span><input title="链接" size="32"
+                                                      value="<?php echo str_replace("\"", '&#34;', $item['fake_url']) ?>"
+                                                      class="input-sm form-control"
+                                                      name="right_fake_url[]" type="text"/>
+                            <span>登录后链接：</span><input title="链接" size="32"
+                                                      value="<?php echo str_replace("\"", '&#34;', $item['url']) ?>"
+                                                      class="input-sm form-control"
+                                                      name="right_url[]" type="text"/>
+                            <span>是否新窗口打开：</span><input title="打开方式" type="checkbox"
+                                                        class="chk-urlTarget" <?php echo $item['target'] ? 'checked' : ''; ?> />
+                            <input type="hidden" name="right_url_target[]" value="<?php echo $item['target']; ?>"/>
+                            <input class="input-sm form-control btn-killSelf" type="button" value="-"/>
+                        </div>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                        <button type="submit" class="btn btn-info submit" name="submit">提交</button>
+                        <!--<button type="button" class="btn btn-info submit" onclick="history.go(-1);" value="返回">返回</button>-->
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<script>
+    $(function () {
+        $('.btn-addLeft').on('click', function () {
+            $('#leftBox').append(
+                '<div>' +
+                '<span>高：</span><input class="input-sm form-control" name="left_height[]" type="number" min="0" placeholder="像素值" />' +
+                ' <span>未登录链接：</span><input title="链接" size="32" class="input-sm form-control" name="left_fake_url[]" type="text"/>' +
+                ' <span>登录后链接：</span><input title="链接" size="32" class="input-sm form-control" name="left_url[]" type="text"/>' +
+                ' <span>是否新窗口打开：</span><input title="打开方式" type="checkbox" class="chk-urlTarget" />' +
+                ' <input type="hidden" name="left_url_target[]" value="0" />' +
+                ' <input class="input-sm form-control btn-killSelf" type="button" value="-" />' +
+                '</div>'
+            );
+        });
+
+        $('.btn-addRight').on('click', function () {
+            $('#rightBox').append(
+                '<div>' +
+                '<span>高：</span><input class="input-sm form-control" name="right_height[]" type="number" min="0" placeholder="像素值" />' +
+                ' <span>未登录链接：</span><input title="链接" size="32" class="input-sm form-control" name="right_fake_url[]" type="text"/>' +
+                ' <span>登录后链接：</span><input title="链接" size="32" class="input-sm form-control" name="right_url[]" type="text"/>' +
+                ' <span>是否新窗口打开：</span><input title="打开方式" type="checkbox" class="chk-urlTarget" />' +
+                ' <input type="hidden" name="right_url_target[]" value="0" />' +
+                ' <input class="input-sm form-control btn-killSelf" type="button" value="-" />' +
+                '</div>'
+            );
+        });
+
+        // 清除自己
+        $('.btn-killSelf').live('click', function () {
+            $(this).parent('div').remove();
+        });
+
+        // 删除图片
+        $('.flush').on('click', function () {
+            let $field = $(this).data('field');
+            if (confirm('确定要清除吗？')) {
+                window.location.href = '?c=float&a=flush&field=' + $field;
+            }
+        });
+
+        // 是否新窗口显示
+        $('.chk-urlTarget').live('click', function () {
+            let $this = $(this);
+            let $flag = $this.attr('checked') ? 1 : 0;
+            $this.parent('div').find('input[type=hidden]').val($flag);
+        });
+    });
+</script>
+<?php $this->import("foot"); ?>

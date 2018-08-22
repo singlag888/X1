@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>     <!-- 会员管理下回收页面 -->
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_default.css" />
+    </head>
+
+    <body>
+      <div class="recycle_page_part">
+          <form name="form1" id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+             <div class="form_group">
+                  <label class="control_label">申请回收用户：</label>
+                  <div class="col_sm_10">
+                       <?php echo $target_user['username']; ?>
+                  </div>
+            </div>
+             <div class="form_group">
+                  <label class="control_label">说明：</label>
+                  <div class="col_sm_10">
+                       该用户的所有个人安全资料均清空，如真实姓名、邮箱、资金密码、绑定卡信息等。
+                  </div>
+            </div>
+             <div class="form_group recycle_remark_part">
+                  <label for="remark" class="control_label"><span style='color: red;font-size:15px;'>*&nbsp;</span>回收原因：</label>
+                  <div class="col_sm_10">
+                       <textarea name="remark" id="remark" placeholder="请填写原因最少10个字" class="form_control remark_txtarea"></textarea>
+                  </div>
+            </div>
+           <div class="close_order_layer">
+                <input type="hidden" name="target_user_id" value="" />
+                 <input type="submit" name="submit" id='recycle' class="default_blue_btn" value="申请回收">
+                 <a href="javascript:;" class="default_gray_btn closeDialogBtn">返回</a>
+            </div>
+          </form>
+      </div>
+
+            <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+            <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+            <script>
+                $(function() {
+                    $('input[name=target_user_id]').val('<?php echo $target_user['user_id']; ?>');
+
+                    $('#recycle').click(function(){
+                    	var txt = $('#remark').val();
+                        if(txt.length < 10) {
+                            parent.layer.alert('请填写原因最少10个字');
+                            return false;
+                        }
+                    });
+
+                    $('a.closeDialogBtn').on('click', function(){
+                        var index = parent.layer.getFrameIndex(window.name);      //获取当前窗口索引
+                       parent.layer.close(index);
+                    });
+                });
+            </script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

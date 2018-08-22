@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html class="ui-mobile">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+<meta name="apple-touch-fullscreen" content="YES"/>  <!-- "添加到主屏幕"后，全屏显示 -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+<!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title><?php echo config::getConfig('site_title'); ?></title>
+<style>
+@charset "utf-8";
+
+*,*:before,*:after {-webkit-box-sizing:border-box;box-sizing:border-box;}
+*{margin:0;padding:0;font-weight:normal;}
+* html,* html body{background-image:url(about:blank);background-attachment:fixed;}
+html{-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%;}
+a{blr:expression(this.onFocus=this.blur());}
+a,input,img{vertical-align:middle;border:0;outline:none;}
+/*-- fixclear --*/
+.fix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.fix{display:inline-block;}
+* html .fix{height:1%;}
+.fix{display:block;}
+/*-- clear --*/
+.clear{clear:both;}
+
+.spCont{width:100%;margin:0 auto;}
+.spCont img{width:100%;border-bottom:1px solid #c1c1c1;}
+</style>
+</head>
+<body>
+	<div class="spCont">
+        <img src="<?php echo $imgCdnUrl ?>/images/light_blue/download/01.png" width="100%" />
+		<img src="<?php echo $imgCdnUrl ?>/images/light_blue/download/02.png" width="100%" />
+		<img src="<?php echo $imgCdnUrl ?>/images/light_blue/download/03.jpg" width="100%" />
+		<img src="<?php echo $imgCdnUrl ?>/images/light_blue/download/04.jpg" width="100%" />
+		<img src="<?php echo $imgCdnUrl ?>/images/light_blue/download/05.jpg" width="100%" />
+	</div>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

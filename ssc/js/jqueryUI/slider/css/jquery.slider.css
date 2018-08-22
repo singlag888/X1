@@ -1,0 +1,57 @@
+
+.defaultBar {
+    margin-top: 10px;
+    height: 5px;
+    background-color: #FFFFE0;
+    border: 1px solid #A9C9E2;
+    position: relative;
+    padding:0px;
+}
+
+.defaultBar .completed {
+	height: 5px;
+    background-color: #7d9edb;
+    top: 0px;
+    left: 0px;
+    position: absolute;
+}
+
+.defaultBar .slider {
+	height: 15px;
+    background-color: #E6E6FA;
+    border: 1px solid #A5B6C8;
+    top: -6px;
+    display: block;
+    cursor: pointer;
+    position: relative;
+}
+
+.defaultBar .slider-hover {
+	background-color: #000080;
+}
+
+.blueBar {
+	margin-top: 10px;
+    height: 4px;
+    background:#F7F7F7;
+    border:solid 1px #3e3e3e;
+    position: relative;
+}
+.blueBar .completed {
+	height: 4px;
+    background:url(../images/slider/blue/bar.gif) left center no-repeat;
+    top: 0;
+    left:0;
+    position: absolute;
+}
+.blueBar .slider {
+	height: 17px;
+    background:url(../images/slider/blue/slider.gif) center 0 no-repeat;
+    top: -4px;
+    display: block;
+    cursor: pointer;
+    position: absolute;
+}
+.blueBar .slider-hover {
+	background-position:center -17px;
+}

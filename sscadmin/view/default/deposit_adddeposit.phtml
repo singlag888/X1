@@ -1,0 +1,158 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+function checkform(ob) {
+    var msg = "";
+    if (ob.username.value == "") {
+        msg = "请选择用户名";
+    }
+    else if (ob.bank_id.value == "0") {
+        msg = "请选择银行";
+    }
+    else if (ob.card_id.value == "0") {
+        msg = "请选择收款卡";
+    }
+    else if (ob.player_card_name.value == "") {
+        msg = "请输入卡户名";
+    }
+    else if (ob.player_pay_time.value == "" || (!/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value) && !/\d{4}年\d{2}月\d{2}日 \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value))) {
+        msg = "请输入正确的付款时间";
+    }
+//    else if (ob.order_num.value == "") {
+//        msg = "请输入订单号，24位";
+//    }
+    else if (ob.amount.value == "" && ob.amount2.value == "") {
+        msg = "请输入正确的金额，2位小数";
+    }
+    else if (ob.trade_type.value == "0") {
+        msg = "请选择交易类型";
+    }
+    else if (ob.trade_type.value == "5" && ob.fee2.value == "") {
+        msg = "ATM现存必须填写手续费0";
+    }
+    else if (ob.trade_type.value == "7" && ob.trade_place.value == "") {
+        msg = "跨行没有交易地点，请仔细核对数据";
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+$(document).ready(function(){
+    $("#bank_id").change(function(){
+        str = "<option value=0>请选择</option>";
+        $("#card_id").html(str);
+        /************ author snow 有值中有换行,添加trim 去掉******************/
+        <?php foreach ($bankDepositCards as $k => $v): ?>
+        if ($("#bank_id").val() == "<?php echo $k; ?>") {
+            <?php foreach ($v as $kk => $vv): ?>
+                str = str + "<option value=<?php echo $vv['card_id']; ?> <?php if ($vv['status'] == 0) echo 'style=\"color:red;\"'; ?>><?php echo trim($vv['card_name']); ?>&nbsp;<?php echo trim($vv['card_num']); ?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?></option>";
+            <?php endforeach; ?>
+            $("#card_id").html(str);
+        }
+        <?php endforeach; ?>
+        /************ author snow 有值中有换行,添加trim 去掉******************/
+    });
+
+    //预设查询值
+    $('#bank_id').val(118).change();
+    // $('#card_id').val(89);
+});
+</script>
+
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<div class="list-div add-main" id="addDiv">
+    <form name="form1" class="form-top" id="form1" action="?c=deposit&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td width="35%">用户帐号</td>
+                <td><input class="input-sm form-control" type="text" name="username" value=""/>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <table class="table table-responsive table-bordered"  cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td colspan="2" class="rowTitle"><b>付款信息</b></td>
+            </tr>
+            <tr>
+                <td width="31%">交易类型</td>
+                <td >
+                    <div class="form-inline">
+                        <select class="input-md form-control" name="trade_type" id="trade_type" />
+                        <option value="0">请选择</option>
+                        <?php foreach ($tradeTypes as $k => $v): ?>
+                        <option value="<?php echo $k; ?>" <?php if($k == 3) echo 'selected=selected'; ?>><?php echo $v; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <font color="red">*</font>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 33%;">户名</td>
+                <td width="60%"><input class="input-md form-control" name="player_card_name" maxlength="19"/></td>
+            </tr>
+            <tr>
+                <td>付款金额</td>
+                <td><input class="input-md form-control" name="amount"/></td>
+            </tr>
+            <tr>
+                <td>付款时间 格式：
+                    <br/>YYYY-mm-dd HH:ii:ss
+                </td>
+                <td><input class="input-md form-control Wdate"  name="player_pay_time" id="player_pay_time" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" value="<?php echo date('Y-m-d H:i:s') ?>" /></td>
+            </tr>
+            <input type="hidden" name="fee" value="0"/>
+            <input type="hidden" name="order_num" value="" />
+        </table>
+        <br/>
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;" >
+            <tr>
+                <td colspan="2" class="rowTitle"><b>收款信息</b></td>
+            </tr>
+            <tr>
+                <td width="36%">收款银行</td>
+                <td>
+                    <!------------------ author snow 修改成可搜索------------------------------>
+                    <select class="selectpicker bank_id" name="bank_id" id="bank_id" data-live-search="true" title="请选择 ...">
+                        <option value="0">请选择…</option>
+                        <?php foreach ($bankList as $k => $v): ?>
+                            <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <!------------------ author snow 修改成可搜索------------------------------>
+                </td>
+            </tr>
+            <tr>
+                <td>收款卡</td>
+                <td>
+                    <select class="input-md form-control" name="card_id" id="card_id"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td>
+                    <textarea class="input-md form-control" style="height: 50px;" name="remark"><?php echo $GLOBALS['SESSION']['admin_username'] ?>手工添加</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;margin:0 auto;text-align:center;">
+                        <input class="btn btn-info  submit" style="width: 60px;" type="submit"  name="submit" value="提 交" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

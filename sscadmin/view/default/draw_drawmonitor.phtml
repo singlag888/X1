@@ -1,0 +1,359 @@
+
+<?php $this->import("head"); ?>
+<style type="text/css">
+    #first_title{background: #383838;color:#fff;}
+    #first_title td{padding:5px;}
+    #seconTitle{background: #383838;color:#fff;}
+</style>
+<div class="list-div mt15" id="listDiv">
+    <!--  商城监控  -->
+    <table class="table table-responsive table-bordered mainList shopsList" style="margin-bottom: 30px;">
+        <thead>
+            <tr id="shopsListHeader">
+                <td>商城名称</td>
+                <td>心跳次数</td>
+                <td>错误次数</td>
+            </tr>
+        </thead>
+    </table>
+    <table class="table table-responsive table-bordered mainList expireList" style="margin-bottom: 30px;">
+        <thead>
+            <tr id="expireListHeader">
+                <td>彩种名称</td>
+                <td>剩余奖期</td>
+                <td>提示信息</td>
+            </tr>
+        </thead>
+    </table>
+
+<table class="table table-responsive table-bordered form-top mainList">
+    <tr id="first_title">
+        <td>彩种</td>
+        <td>奖期</td>
+        <td>开奖号码</td>
+        <td>最早录号时间</td>
+        <td>抓号状态</td>
+        <td>权重/达标权重</td>
+    </tr>
+<?php if ($drawInfos): ?>
+<?php foreach ($drawInfos as $v): ?>
+<tr align="center">
+    <td><?php echo $v['cname']; ?></td>
+    <td><?php echo $v['issue']; ?></td>
+    <td><?php echo $v['code']; ?></td>
+    <td><?php echo $v['earliest_input_time']; ?></td>
+    <td><?php if($v['status_fetch'] == 0): ?>等待
+        <?php elseif($v['status_fetch'] == 0): ?><b>处理中</b>
+        <?php else: ?>已完成
+        <?php endif; ?>
+    </td>
+    <td><b style="color:red"><?php echo $v['rank']; ?></b>/<?php echo $config['least_rank']; ?></td>
+</tr>
+<?php endforeach; ?>
+<?php else: ?>
+<tr>
+<td colspan="6" class="no-records">找不到奖期</td>
+</tr>
+<?php endif; ?>
+<tr id="end_button">
+<td colspan="6" class="no-records">
+<input class="btn btn-info button" style="width: 65px;" type="button" id="refreshBtn"  value=" 刷  新 "/>&nbsp;&nbsp;
+<input class="btn btn-info button" style="width: 65px;" type="button"  onclick="pauseVoice();" name="pausevoice" id="pausevoice"  value="关闭声音"/>
+</td>
+</tr>
+</table>
+</div>
+
+<div class="list-div tablediv mainList" id="error_body" style="background:#FFF;margin-top:5px;">
+<?php if ($errors['openTimeErr']): ?>
+<font color="#FF0000" size="30"><b>以下是官方提前开奖的信息</b></font><br><br>
+<?php foreach ($errors['openTimeErr'] as $v): ?>
+	<?php echo '彩种：' . $v['cname'] + '&nbsp;&nbsp;&nbsp;&nbsp;奖期：' . $v['issue'] . '&nbsp;&nbsp;&nbsp;&nbsp;提前的开奖时间：' . $v['open_time'] . '<br><br>' ?>
+<?php endforeach; ?>
+<?php endif; ?>
+
+<?php if ($errors['drawErr']): ?>
+&nbsp;&nbsp;&nbsp;&nbsp;<font color="#FF0000" size="+3"><b>以下是抓号已完成，但权值未达到100，需手动开奖</b></font>
+<table class="table table-responsive table-bordered mainList">
+    <tr id="seconTitle">
+        <td>彩种</td>
+        <td>奖期</td>
+        <td>最早录号时间</td>
+        <td>抓号状态</td>
+        <td>权重/达标权重</td>
+    </tr>
+<?php foreach ($errors['drawErr'] as $v): ?>
+<tr align="center">
+    <td><?php echo $v['cname']; ?></td>
+    <td><?php echo $v['issue']; ?></td>
+    <td><?php echo $v['earliest_input_time']; ?></td>
+    <td><?php if($v['status_fetch'] == 0): ?>pending
+        <?php elseif($v['status_fetch'] == 0): ?><b>processing</b>
+        <?php else: ?>Finished
+        <?php endif; ?>
+    </td>
+    <td><b style="color:red"><?php echo $v['rank']; ?></b>/<?php echo $config['least_rank']; ?></td>
+</tr>
+<?php endforeach; ?>
+</table>
+<?php endif; ?>
+</div>
+<div id="soundDiv"></div>
+
+
+<script>
+
+var step=0;                              //闪烁步进
+var flash_title_id,flash_shop_title_id;  //时间计数器ID
+var alert_title = 'Have a alert data';   //闪烁标题
+var alert_shop_waring = '警告商城无法连接!!!';   //闪烁标题
+var type = 1 //彩票监视 2商城监视
+var _title=window.parent.document.title; //获取网页标题
+var isBelowIe8 = navigator.userAgent.indexOf("MSIE") > 0 && navigator.userAgent.match(/MSIE (\d{1,2}).0;/)[1] <= 8;
+
+function playSound2()
+{
+    var node=document.getElementById(playSoundID);
+
+	if (playSoundID == '') {
+		return false;
+	}
+
+
+    if( node )  node.play();
+    if(type==1){
+        clearInterval(flash_title_id);
+        flash_title_id=setInterval("flashTitle()",500);  
+    }else{
+        clearInterval(flash_shop_title_id);
+        flash_shop_title_id=setInterval("flashShopTitle()",500);
+    }
+
+//    OpenWindow = window.open('images/alertWindow.html','alertWindow','width=300,height=300');     //弹出窗显示信息
+}
+function stopSound2()
+{
+   // var node=document.getElementById(playSoundID);
+    var node=document.getElementById(playSoundID);
+    if (playSoundID == '') {
+        return false;
+    }
+
+    if( node && node.hasAttribute('pause') )  node.pause();
+
+    stopFlashTitle();
+}
+/**
+ * @todo 标题闪烁
+ */
+function flashTitle()
+{
+    step++;
+    if(step==3) {
+        step=1;
+    }
+    if(step==1) {
+        window.parent.document.title=alert_title;
+    }
+    if(step==2) {
+        window.parent.document.title=_title;
+    }
+}
+/**
+ * @todo 标题闪烁
+ */
+function flashShopTitle()
+{
+    window.parent.document.title=alert_shop_waring;
+}
+/**
+ * @todo 停止标题闪烁
+ */
+function stopFlashTitle()
+{
+    clearInterval(flash_title_id);
+    clearInterval(flash_shop_title_id);
+    window.parent.document.title=_title;
+}
+
+var isstopvolume = false;
+function pauseVoice(){
+	if( isstopvolume == false ){
+		isstopvolume = true;
+		stopSound2();
+		$("#pausevoice").val("打开声音提示");
+	}else{
+		isstopvolume = false;
+		$("#pausevoice").val("关闭声音");
+        playSound2();
+	}
+}
+
+//此方法暂不需要了 30秒定期reload页面即可
+var playSoundID = 'drawError';
+function getData(){
+    $.post(
+       "?c=draw&a=drawMonitor",
+       {flag:"ajax"},
+        function(response){
+
+            var json_expire_issue_list = response.expireIssueList;
+            /************  by snow 添加 动态修改剩余奖期************/
+            $('.expireList').find('tbody').remove();
+            if(json_expire_issue_list){
+                //>>先删除所有的记录
+                //>>再添加新的记录
+                $.each(json_expire_issue_list,function(k,v){
+                    $('<tr><td id="'+ v.lottery_id+'" style="width:30%">'+v.cname+'</td><td class="" style="width:30%">' + v.count_num + '</td><td id="'+ v.lottery_id +'" style="width:30%"><b style="color:red">请及时生成奖期</b></td></tr>').appendTo(".expireList");
+                });
+            }
+            /************ by snow   添加 动态修改剩余奖期************/
+
+            if(typeof(response.errors.drawErr) != 'undefined' || typeof(response.errors.openTimeErr) != 'undefined'){//有需要报警处理的数据
+    			//抓号错误
+    			var html = '';
+    			if (typeof(response.errors.drawErr) != 'undefined') {
+    				var html_head = '<font color="#FF0000" size="30"><b>以下是抓号已完成，但权值未达到100，需手动开奖</b></font><table width="100%"><tr><th>游戏</th><th>奖期</th><th>录号时间</th><th>状态</th><th>权值/达标权值</th></tr>';
+    				 $.each(response.errors.drawErr,function(i,n){
+                        html += '<tr align="center"><td>'+n.cname+'</td><td>'+n.issue+'</td><td>'+n.earliest_input_time+'</td><td>';
+                        if( parseInt(n.status_fetch,10) == 0 ){
+                            html += '挂起';
+                        }else if( parseInt(n.status_fetch,10) == 1 ){
+                            html += '<b>正在抓号</b>';
+                        }else{
+                            html += '抓号结束';
+                        }
+                        html += '</td><td><b style="color:red">'+n.rank+'</b>/'+n.least_rank+'</td></tr>';
+                    });
+    			}
+
+    			//官方提前开奖
+    			var open_time_html = '';
+    			if (typeof(response.errors.openTimeErr) != 'undefined') {
+    				var open_time_html_head = '<font color="#FF0000" size="30"><b>以下是官方提前开奖的信息</b></font><br><br>';
+    				$.each(response.errors.openTimeErr,function(i,m){
+                        open_time_html += '彩种：' + m.cname + '&nbsp;&nbsp;&nbsp;&nbsp;奖期：' + m.issue + '&nbsp;&nbsp;&nbsp;&nbsp;提前的开奖时间：' + m.open_time + '<br><br>';
+                    });
+    			}
+
+                if (html != '') {
+                	html = html_head + html + '</table>';
+                }
+
+                if (open_time_html != '') {
+                	open_time_html = open_time_html_head + open_time_html + '<br><br><hr>';
+                }
+                //html += '</table>';
+                $("#error_body").empty();
+                $(open_time_html + html).appendTo("#error_body");
+                //playWarning();
+                if (open_time_html == '') {
+                	playSoundID = 'drawError';
+                }
+                else {
+                	playSoundID = 'openTime';
+                }
+                playSound2();
+            }else{
+                $("#error_body").empty();
+                //stopWarning();
+                stopSound2();
+            }
+
+            var htmlstr = '';
+            $.each(response.data,function(i,n){
+                htmlstr += '<tr align="center" class="' + (i%2 == 0 ? 'odd1' : 'even1') + '"><td>'+n.cname+'</td><td>'+n.issue+'</td><td>'+n.code+'</td><td>'+n.earliest_input_time+'</td><td>';
+                if( parseInt(n.status_fetch,10) == 0 ){
+                    htmlstr += '挂起';
+                }else if( parseInt(n.status_fetch,10) == 1 ){
+                    htmlstr += '<b>正在处理</b>';
+                }else{
+                    htmlstr += '已完成';
+                }
+                htmlstr += '</td><td><b style="color:red">'+n.rank+'</b>/'+n.least_rank+'</td></tr>';
+            });
+            htmlstr += '<tr id="end_button">'+$("#end_button").html()+'</tr>';
+            $("#first_title").nextAll().remove();
+            $(htmlstr).insertAfter("#first_title");
+       }, 'json');
+};
+
+/*****************************商城监控**************************/
+var fetch_num = 0;
+var shops_fail_list = {"alipay2":{"cname":'<?php echo $shop_domain_config['description']; ?>',"fail_num":0}};//商城配置必须与后台draw.php->drawMonitor方法中的一致
+var expire_issue_list = '<?php echo $expireIssueList;?>';
+var interval_mins = <?php echo $interval_mins; ?>;//抓取间隔时长
+var trigger_num = <?php echo $trigger_num; ?>;//触发报警次数
+function getShopsData(){
+    fetch_num++;
+    $(".try_num").text(fetch_num);
+    $.post(
+       "?c=draw&a=drawMonitor",
+       {flag:"shopAjax"},
+        function(response){
+            for(var k in response){
+                if(response[k].error != 0){
+
+                   shops_fail_list[response[k].shop].fail_num++;
+                   var errIdStr = "#"+response[k].shop+"_err_num";
+                   var idStr = "#"+response[k].shop;
+                   $(errIdStr).text(shops_fail_list[response[k].shop].fail_num);
+                   if(shops_fail_list[response[k].shop].fail_num >= trigger_num){
+                       $(idStr).parent().css('background','red');
+                       type = 2;
+                       playSound2();
+                   }
+                }
+            }
+        },'json');
+}
+
+$(function(){
+
+    $.each(shops_fail_list,function(k,v){
+        $('<tr><td style="width:30%" id="'+k+'" >'+v.cname+'</td><td style="width:30%" class="try_num">0</td><td style="width:30%" id="'+k+'_err_num">0</td></tr>').appendTo(".shopsList");
+    });
+    if(expire_issue_list.replace(/(^s*)|(s*$)/g, "").length > 0){
+        expire_issue_list = JSON.parse(expire_issue_list)
+        $.each(expire_issue_list,function(k,v){
+            $('<tr><td id="'+ v.lottery_id+'" style="width:30%">'+v.cname+'</td><td class="" style="width:30%">' + v.count_num + '</td><td id="'+ v.lottery_id +'" style="width:30%"><b style="color:red">请及时生成奖期</b></td></tr>').appendTo(".expireList");
+        });
+    }
+    window.setInterval(function(){getShopsData();}, interval_mins * 10000);
+
+    $('#listDiv tr:even').addClass('even1');
+    $('#listDiv tr:odd').addClass('odd1');
+    $('#listDiv tr:gt(0)').hover(function() {
+        $(this).addClass('hover1');
+    }, function() {
+        $(this).removeClass('hover1');
+    });
+
+    $('#refreshBtn').click(function(){
+        document.location.reload();
+    });
+    //定期刷新页面
+    window.setInterval(function(){
+        //$('#refreshBtn').val('正在刷新。。。').click();
+        getData();
+    }, 10000);
+    $(function () {
+        if( isBelowIe8 ){
+            $('#soundDiv').html('<embed id="drawError" src="images/error.wav" width="0" height="0" loop="false" autostart="false" />'+
+                '<embed id="openTime" src="images/openerror.wav" width="0" height="0" loop="false" autostart="false" />');
+        }else{
+            $('#soundDiv').html(
+                '<audio id="drawError" hidden="true" autostart="false">'+
+                '<source src="images/error.wav" type="audio/wav" loop="false">'+
+                '</audio> <audio id="openTime" hidden="true" autostart="false"> <source src="images/openerror.wav" type="audio/wav" loop="false"> </audio>'
+            );
+        }
+        <?php if ($errors): ?>
+        playSound2();
+        <?php else: ?>
+        stopSound2();
+        <?php endif; ?>
+    });
+});
+</script>
+<?php $this->import("foot"); ?>

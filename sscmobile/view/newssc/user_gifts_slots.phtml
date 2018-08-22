@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="webkit" name="renderer">
+	<meta charset="UTF-8">
+	<title><?php echo config::getConfig('site_title'); ?></title>
+	<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/forSlots.css" />
+</head>
+<body>
+	<div class="content">
+		<div class="banner">
+			<div class="banner_bg">
+				<img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/fudie.png" width="1910" height="720">
+			</div>
+			<div class="banner_mking"></div>
+			<div class="cloud">
+				<img class="c1" src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cloud.png" width="1040" height="260">
+				<img class="c2" src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cloud.png" width="1040" height="260">
+			</div>
+		</div>
+		<div class="cont">
+            <?php if (time() < strtotime($promoStartTime)): ?>
+			<div class="sup_star">
+				<a href="javascript:void(0);">了解详情</a>
+			</div>
+			<div class="chongjiang cj_star">
+				<div class="explain">
+					<h3 class="expTime">活动时间</h3>
+					<p><?php echo date('Y年m月d日', strtotime($promoStartTime)); ?> - <?php echo date('Y年m月d日', strtotime($promoEndTime)); ?></p>
+					<h3 class="expNrong">活动内容</h3>
+					<p>活动期间您可以使用当日的有效投注来参与猴年抽奖活动，每参与一次需要消耗您1888的有效投注流水。</p>
+				</div>
+				<div class="change">
+					<table>
+						<colgroup>
+							<col/>
+							<col width="14.286%"/>
+							<col width="14.286%"/>
+							<col width="14.286%"/>
+							<col width="14.286%"/>
+							<col width="14.286%"/>
+							<col width="15%"/>
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>鼠</th>
+								<th>兔</th>
+								<th>兔<span>X2</span></th>
+								<th>蛇</th>
+								<th>蛇<span>X2</span></th>
+								<th>猪</th>
+								<th>猪<span>X2</span></th>
+							</tr>
+							<tr>
+								<td>1<span>元</span></td>
+								<td>2.5<span>元</span></td>
+								<td>5<span>元</span></td>
+								<td>18<span>元</span></td>
+								<td>36<span>元</span></td>
+								<td>88<span>元</span></td>
+								<td>176<span>元</span></td>
+							</tr>
+							<tr>
+								<td colspan="7" class="gx"></td>
+							</tr>
+							<tr>
+								<th>羊</th>
+								<th>羊<span>X2</span></th>
+								<th>牛</th>
+								<th>龙</th>
+								<th>龙<span>X2</span></th>
+								<th>猴</th>
+								<th>猴<span>X2</span></th>
+							</tr>
+							<tr>
+								<td>268<span>元</span></td>
+								<td>536<span>元</span></td>
+								<td>888<span>元</span></td>
+								<td>1688<span>元</span></td>
+								<td>3376<span>元</span></td>
+								<td>5333<span>元</span></td>
+								<td>10666<span>元</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+            <?php endif; ?>
+			<div class="luck noda">
+				<div class="surplus">
+					<table>
+						<colgroup><col/><col/><col/></colgroup>
+						<tbody>
+							<tr>
+                                <td class="topt1 toptl">每次抽奖将消耗<span><?php echo userGiftsSlots::EACH_LOTTERY_SPEND_WATER;?></span>的流水</td>
+								<th rowspan="3"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/line.png"></th>
+								<td class="topt1">每日抽奖次数上限为<span><?php echo userGiftsSlots::MAX_LOTTERY_NUM;?></span>次</td>
+							</tr>
+							<tr>
+								<td class="topt2 toptl">您当前的可用流水：<span id="remainWater"><?php echo number_format($userWater['remainWater'], 2, '.', '');?></span></td>
+								<td class="topt2">您今日的剩余抽奖次数：<span id="runCount"><?php echo $remainRunCount;?> 次</span></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="cjtab">
+					<table class="tabs">
+						<colgroup>
+                            <col width="108" /><col width="108"/><col width="108"/><col width="108"/><col width="108"/><col width="108"/><col width="108"/>
+						</colgroup>
+						<tbody>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_03.png" width="100%" height="100%" id="img1" title="牛"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_24.png" width="100%" height="100%" id="img2" title="鼠"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_05.png" width="100%" height="100%" id="img3" title="猴"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_07.png" width="100%" height="100%" id="img4" title="猴X2"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_19.png" width="100%" height="100%" id="img5" title="蛇"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_09.png" width="100%" height="100%" id="img6" title="蛇X2"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_27.png" width="100%" height="100%" id="img7" title="兔"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_24.png" width="100%" height="100%" id="img24" title="鼠"></td>
+								<td colspan="5" rowspan="5" class="choujiang bgnone">
+									<div class="chongjiang">
+										<div class="explain">
+											<h3 class="expTime">活动时间</h3>
+											<p><?php echo date('Y年m月d日', strtotime($promoStartTime)); ?> - <?php echo date('Y年m月d日', strtotime($promoEndTime)); ?></p>
+											<h3 class="expNrong">活动内容</h3>
+											<p>活动期间您可以使用当日的有效投注来参与猴年抽奖活动，每参与一次需要消耗您1888的有效投注流水。</p>
+										</div>
+                                        <div class="change">
+											<table class="tabsb">
+												<colgroup>
+													<col/>
+													<col width="14.286%"/>
+													<col width="14.286%"/>
+													<col width="14.286%"/>
+													<col width="14.286%"/>
+													<col width="14.286%"/>
+													<col width="15%"/>
+												</colgroup>
+												<tbody>
+													<tr>
+														<th>鼠</th>
+														<th>兔</th>
+														<th>兔<span>X2</span></th>
+														<th>蛇</th>
+														<th>蛇<span>X2</span></th>
+														<th>猪</th>
+														<th>猪<span>X2</span></th>
+													</tr>
+													<tr>
+														<td>1<span>元</span></td>
+														<td>2.5<span>元</span></td>
+														<td>5<span>元</span></td>
+														<td>18<span>元</span></td>
+														<td>36<span>元</span></td>
+														<td>88<span>元</span></td>
+														<td>176<span>元</span></td>
+													</tr>
+													<tr>
+														<td colspan="7" class="gx"></td>
+													</tr>
+													<tr>
+														<th>羊</th>
+														<th>羊<span>X2</span></th>
+														<th>牛</th>
+														<th>龙</th>
+														<th>龙<span>X2</span></th>
+														<th>猴</th>
+														<th>猴<span>X2</span></th>
+													</tr>
+													<tr>
+														<td>268<span>元</span></td>
+														<td>536<span>元</span></td>
+														<td>888<span>元</span></td>
+														<td>1688<span>元</span></td>
+														<td>3376<span>元</span></td>
+														<td>5333<span>元</span></td>
+														<td>10666<span>元</span></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="button">
+											<a href="javascript:void(0);">开始抽奖</a>
+										</div>
+									</div>
+								</td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_16.png" width="100%" height="100%" id="img8" title="猪"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_19.png" width="100%" height="100%" id="img23" title="蛇"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_20.png" width="100%" height="100%" id="img9" title="猪X2"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_23.png" width="100%" height="100%" id="img22" title="兔X2"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_24.png" width="100%" height="100%" id="img10" title="鼠"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_24.png" width="100%" height="100%" id="img21" title="鼠"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_27.png" width="100%" height="100%" id="img11" title="兔"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_03.png" width="100%" height="100%" id="img20" title="牛"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_29.png" width="100%" height="100%" id="img12" title="羊"></td>
+							</tr>
+							<tr>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_29.png" width="100%" height="100%" id="img19" title="羊"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_24.png" width="100%" height="100%" id="img18" title="鼠"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_27.png" width="100%" height="100%" id="img17" title="兔"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_32.png" width="100%" height="100%" id="img16" title="龙X2"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_34.png" width="100%" height="100%" id="img15" title="龙"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_03.png" width="100%" height="100%" id="img14" title="牛"></td>
+								<td><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slots/cj/cj_36.png" width="100%" height="100%" id="img13" title="羊X2"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="notice nodeat">
+				<table>
+					<colgroup>
+						<col width="50%" /><col />
+					</colgroup>
+					<thead>
+						<tr>
+							<th><h3 class="prize">我的奖品</h3></th>
+							<th><h3 class="nic">中奖公告</h3></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<div class="pz">
+									<table>
+										<colgroup>
+											<col width="55%" /><col width="20%" /><col/>
+										</colgroup>
+										<tbody>
+											<tr>
+												<th>抽奖时间</th><th>奖品</th><th>奖金</th>
+											</tr>
+										</tbody>
+									</table>
+									<div class="pz_main">
+										<table>
+											<colgroup>
+												<col width="55%" /><col width="20%" /><col/>
+											</colgroup>
+											<tbody>
+                                                <?php foreach ($userAwards AS $userAward):?>
+												<tr>
+													<td><?php echo substr($userAward['prize_time'], 0, 16); ?></td>
+													<td><?php echo $awardsConfig[$userAward['award_id']]['title']; ?></td>
+													<td><?php echo $awardsConfig[$userAward['award_id']]['prize']; ?>元</td>
+												</tr>
+                                                <?php endforeach; ?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</td>
+							<td>
+								<div id="news" class="nc">
+									<ul>
+                                        <?php foreach ($promos AS $promo):?>
+										<li>恭喜 <?php echo $promo['username']; ?> 于 <?php echo substr($promo['finish_time'], 0 ,16); ?> 抽中 <?php echo $promo['amount']; ?>元</li>
+                                        <?php endforeach;?>
+									</ul>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="foots">
+			<div class="fot_text">
+				<h3>活动须知</h3>
+				<p>1. 所有投注流水皆可参与本次活动。(PT除外)</p>
+				<p>2. 每天的投注流水将会在当天23:59:59清空。</p>
+				<p>3. 同一账户，同一姓名，同一银行卡，同一IP地址不可重复参加。</p>
+				<p>4. 每日抽奖次数上限为20次。</p>
+				<p>5. 用户于活动期间内，用户的玩法注单投注不得超过该玩法全包注数的70%，即定位胆必须小于等于7注，二码必须小于等于70注，三码必须小于等于700注，四星必须小于等于7000注，五星必须小于等于70000注。如发现违规投注情况，均视作放弃本次活动。</p>
+				<p>6. 对利用活动规则恶意套利的客户，平台有权收回奖金及冻结账号。</p>
+				<p>7. 本次活动解释权归金亚洲所有。</p>
+			</div>
+		</div>
+	</div>
+	<div class="mesBox">
+		<div class="mesBg"></div>
+		<div class="mestext">
+			<p>恭喜您中了</p>
+			<p class="strg"><strong></strong>元奖金</p>
+			<a href="javascript:void(0);">领取</a>
+		</div>
+	</div>
+	<script type="text/javascript" language="javascript" src="js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" language="javascript" src="js/grayscale.js"></script>
+    <script type="text/javascript" src="js/layer/layer.min.js"></script>
+	<script type="text/javascript" id="j_grayscale">
+		window.onload = function(){
+			if(navigator.userAgent.indexOf("MSIE") > 0){
+                grayscale($('.nodeat,.noda,.noda .button a,.cj_star .button a'));
+            }//置灰
+			$(".cj_star .button a").unbind("click");//禁止点击抽奖
+		}
+	</script>
+	<style type="text/css" id="c_grayscale">
+        .nodeat,.noda,.noda .button a,.cj_star .button a{
+            filter:grayscale(100%);
+            -webkit-filter:grayscale(100%);
+            -moz-filter:grayscale(100%);
+            -ms-filter:grayscale(100%);
+            -o-filter:grayscale(100%);
+            filter:url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+            filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+            -webkit-filter:grayscale(1);
+        }
+	</style>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            init;//初始化
+
+            $(".mesBg").height($(document).height());//背景遮罩层
+            $(".mesBox").hide();
+
+            var click = true; //控制在一次抽奖结束前下次点击无效
+            var index; //控制的抽奖结束后效果的还原
+
+            $(".button a").click(function () {
+                //进行判断是否抽奖完毕
+                if (click != true) {
+                    return false;
+                }
+                click = false;
+
+                // 判断活动是否开始
+                if (init.nowTime < init.promoStartTime || init.nowTime > init.promoEndTime ) {
+                    parent.layer.alert(init.tips[403].msg);
+                    click = true;
+                    return false;
+                }
+
+                // 判断抽奖次数
+                if (init.remainRunCount <= 0) {
+                    parent.layer.alert(init.tips[402].msg);
+                    click = true;
+                    return false;
+                }
+
+                // 判断流水是否足够
+                if (init.userRemainWater < init.eachLotterySpendWater) {
+                    parent.layer.alert(init.tips[401].msg);
+                    click = true;
+                    return false;
+                }
+
+                //抽奖完后将图片还原到初始状态
+                if (index != 1) {
+                    $(".cjtab td img").parent().removeClass();
+                }
+
+                // 这里开始进行ajax。返回的值传参给图片轮播
+                lottery();
+
+                var i = 1; //图片轮播的地方
+                var T = 1; //控制转了多少圈才停下来的变量
+                var time = setInterval(function () {
+                    i++;
+                    //控制图片轮播的范围（24张图片）
+                    if (i > 24) {
+                        i = 1;
+                        T++;
+                    };
+                    index = i;
+
+                    //此处为图片的滚动
+                    $(".cjtab td img").parent().removeClass();
+                    $("#img" + i).parent().addClass("on");
+                    //当滚动3圈后开始出奖
+                    if (T == init.cycleCount) {
+                        if (init.award != '') {
+                            if (i == init.award.position) {
+                                clearInterval(time);
+                                var myPrize = "<tr><td>" + init.award.prize_time 
+                                            + "</td><td>" + init.award.title
+                                            + "</td><td>" + init.award.prize + "元</td></tr>";
+                                $("#img" + i).parent().addClass("jggg");
+                                $(".mestext .strg strong").html(init.award.prize);
+                                setTimeout(function(){
+                                    click = true;
+                                    $("#img" + i).parent().removeClass("jggg");
+                                    $(".mesBox").fadeIn(200);
+                                    // 在我的奖品中插入一条
+                                    $(".pz_main tbody").prepend(myPrize);
+                                    // 修改用户的可用流水和抽奖次数
+                                    $("#remainWater").html(init.userRemainWater);
+                                    $("#runCount").html(init.remainRunCount);
+                                    init.award = '';
+                                }, 2500);
+                            }
+                        } else {
+                            clearInterval(time);
+                            click = true;
+                            parent.layer.alert(init.msg);
+                        }
+                    }
+                }, 100)
+            });
+            $(".mestext a").click(function () {
+                $(".mesBox").fadeOut(200);
+            });
+         });
+
+        $(function(){
+            //中奖轮播滚动
+            var liIndex = $("#news ul li").length;
+            if(liIndex > 7){
+              var $this = $("#news");
+              var scrollTimer;
+              $this.hover(function() {
+                  clearInterval(scrollTimer);
+              }, function() {
+                  scrollTimer = setInterval(function() {
+                      scrollNews($this);
+                  }, 2000);
+              }).trigger("mouseleave");
+
+              function scrollNews(obj) {
+                  var $self = obj.find("ul");
+                  var lineHeight = $self.find("li:first").outerHeight();
+                  $self.animate({
+                      "marginTop": -lineHeight + "px"
+                  }, 600, function() {
+                      $self.css({
+                          marginTop: 0
+                      }).find("li:first").appendTo($self);
+                  })
+              }
+            }
+
+            //平滑滚动
+            $('.sup_star a').click(function() {
+                $('html,body').animate({
+                    scrollTop:$('.luck').offset().top
+                }, 500);
+            });
+
+            if (init.nowTime >= init.promoStartTime) {
+                remve();
+            }
+            function remve(){//即将启幕,开始后删除
+                $("#j_grayscale,#c_grayscale,.sup_star,.cj_star,script[src='js/grayscale.js']").remove();
+                $('.nodeat,.nodeat *,.noda,.noda *,.noda .button a,.cj_star .button a').removeAttr("style");
+                $(".bgnone").removeClass("bgnone");
+            };
+            
+            // 开始滚动
+            function startScroll() {
+                if (ismove_jx){
+                    time=setInterval(scrollUp, 20);//滚动速度
+                    jianxie.scrollTop(jianxie.scrollTop() + 1);
+                }
+            };
+            // 向上滚动
+            function scrollUp() {
+                if(jianxie.scrollTop() % 38==0) {
+                    clearInterval(time);
+                    setTimeout(startScroll, 500);//停留时间
+                } else {
+                    jianxie.scrollTop(jianxie.scrollTop() + 1);
+                    if (jianxie.scrollTop() >= demo1_jx.height()) {
+                        jianxie.scrollTop(0);
+                    }
+                }
+            };
+        });
+           
+        var init = {
+            nowTime: <?php echo time();?>,
+            promoStartTime: <?php echo strtotime($promoStartTime); ?>,
+            promoEndTime: <?php echo strtotime($promoEndTime); ?>,
+            tips: <?php echo $tips; ?>,
+            cycleCount: 4,// 在第几圈停下
+            userRemainWater: <?php echo $userWater['remainWater']; ?>, // 用户剩余流水
+            remainRunCount: <?php echo $remainRunCount; ?>, // 用户已抽奖次数
+            maxLotteryNum: <?php echo userGiftsSlots::MAX_LOTTERY_NUM;?>,
+            eachLotterySpendWater: <?php echo userGiftsSlots::EACH_LOTTERY_SPEND_WATER;?>,
+            lotteryUrl: '/?c=user&a=userGifts&giftType=slots',
+            award: '',
+            msg: '',
+        };
+
+        var lottery = function() {
+            $.ajax({
+                type: "POST",
+                url: init.lotteryUrl,
+                data: {'sa': 'lottery'},
+                dataType: "json", //返回错误号和用户流水
+                cache : false,
+                async : true,
+                timeout : 5000,   //超时10S
+                success: function(data){
+                    if (data.errno > 0) {
+                        init.award = '';
+                        init.msg = data.msg;
+                        return false;
+                    }
+                    else {
+                        init.award = data.award;
+                        init.remainRunCount = init.maxLotteryNum - data.runCount;
+                        init.userRemainWater = data.userWater;
+                        return true;
+                    }
+                },
+                error: function() {
+                    init.msg = '网络错误，请刷新页面';
+                    return false;
+                }
+            });
+        };
+	</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

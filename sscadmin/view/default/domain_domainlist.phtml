@@ -1,0 +1,227 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/jquery-ui-1.8.20.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/jquery-ui-1.8.20.custom.css" type="text/css" />
+<script>
+function checkSiblings(obj) {
+    var val = true;
+    if($(obj).attr("checked") != 'checked'){
+        val = false;
+    }
+    $(":checkbox",$(obj).parent().nextAll()).attr("checked", val);
+}
+$('#form2').submit(function(){
+    alert('ddddddd');
+    return del(this);
+});
+</script>
+
+<h4>1.一个推广型域名只分配给一个总代，该域名注册的会员属于该总代，但目前也不限制其他会员登录；</h4>
+<form name="form1" id="form1" action="?c=domain&a=cancelAssociate" method="post" onsubmit="return del(this)">
+<div class="list-div" id="listDiv">
+    <table class="table table-responsive  table-bordered">
+        <thead>
+            <tr>
+                <td></td>
+                <td>总代</td>
+                <td>已分配域名</td>
+            </tr>
+            </thead>
+            <?php foreach ($tops as $top_id => $v): ?>
+            <tr>
+                <td><input type="checkbox" onclick="checkSiblings(this)"/></td>
+                <td><?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></td>
+                <td>
+                    <?php foreach ($userDomains[$top_id] as $v): ?>
+                    <div style="float: left; padding: 5px;text-align: left;">
+                        <label class="fn" title="" for="domain_<?php echo $v['domain_id']; ?>_<?php echo $top_id; ?>">
+                            <input type="checkbox" value="<?php echo $v['domain_id']; ?>,<?php echo $top_id; ?>" id="domain_<?php echo $v['domain_id']; ?>_<?php echo $top_id; ?>" name="deleteItems[]"><?php echo $v['name']; ?>
+                        </label>
+                    </div>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+    </table>
+</div>
+<div style="width: 100%;margin: 0 auto;text-align: center;">
+    <input class="btn btn-info submit" type="submit" name="button" value="取消关联"/>
+    <input class="btn btn-info submit" type="reset" name="reset" value="重置"/>
+</div>
+</form>
+
+<p>
+<div class="form-div">
+    <form id="form2" name="form2" action="" method="post">
+    <div class="mt10 mb10">
+        <b>可分配域名:</b>
+    </div>
+    <div style="width:100%; height: 100%; overflow-y: scroll; border:1px solid darkgray; padding:2px;border-radius: 4px;">
+    <?php foreach ($domains as $v): ?>
+       <div class="checkbox-inline" style="height: 30px;">
+            <label title="<?php echo $v['domain_id']; ?>" style="float: left;" for="domain2_<?php echo $v['domain_id']; ?>">
+            <input class="domainstyle" type="checkbox" value="<?php echo $v['domain_id']; ?>" name="domainIds[]" id="domain2_<?php echo $v['domain_id']; ?>"><?php echo $v['name']; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </label>
+       </div>
+    <?php endforeach; ?>
+    </div>
+    <div class="form form-inline mt20" role="form">
+        <input class="btn btn-default" type="button" onclick="this.form.action='?c=domain&a=deleteDomain';if ($('.domainstyle:checked').length > 0) {this.form.submit();} else {alert('没有选择任何一项');return false;}" value="删除" name="delete"/>
+ <!--    <input class="btn btn-default" type="button" onclick="this.form.action='?c=domain&a=allocDomain'; this.form.submit();" value="分配" class="button"> -->
+    &nbsp;&nbsp;总代:&nbsp;&nbsp;
+    <select style="width:10%" class="input-sm form-control" name="top_id">
+        <option value="-1">请选择</option>
+        <?php foreach ($tops as $v): ?>
+        <option value="<?php echo $v['user_id']; ?>"><?php echo $v['username']; ?></option>
+        <?php endforeach; ?>
+    </select>
+    &nbsp;&nbsp;<input class="btn btn-default" type="button" onclick="this.form.action='?c=domain&a=associate'; if($('select[name=top_id]').val()=='-1') {alert('请选择目标'); return false;} this.form.submit();" class="button" value="关联">
+    </div>
+    <hr>
+</form>
+</div>
+
+
+
+<div id="dialog" title="分配域名" style="display:none">
+    选择总代：
+    <select class="input-sm form-control" name="tops">
+        <option value="0">请选择</option>
+        <?php foreach ($tops as $v): ?>
+            <option value="<?php echo $v['user_id']; ?>"><?php echo $v['username']; ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+<div id="dialogOK" title="MessageBox" style="display:none"></div>
+
+<script>
+//分配域名给总代
+function assignDomain(domain_id)
+{
+    //显示dialog
+	$("#dialog").dialog({
+        autoOpen:true,                            //设置默认的对框框为关闭
+        resizable:false,
+        bgiframe:true,                            //是否使用 bgiframe 插件解决 IE6 下无法遮盖 select 元素问题。
+        modal:true,                                //是否为模态窗口，设置为 true 时，页面上其它元素将被覆盖且无法响应用户操作。
+        width:400,                                //设定对话框宽度，像素单位。
+        buttons:{                                //设置对话框底部按钮，对象属性名为按钮文本，属性值为单击按钮时的回调函数。
+            "确认":function(){
+                if ($("select[name=tops]").val() == "0") {
+                    alert('请选择总代');
+                    return false;
+                }
+                $(this).dialog("close");       //关闭这个对话框
+                //其他操作
+                //alert($("select[name=vipLevel]").val());
+                //alert('user_id='+user_id);
+                $.post(
+                    '?c=domain&a=assignDomain',
+                    {'domain_id':domain_id, 'top_id':$("select[name=tops]").val()},
+                    function(response){
+                        eval("data="+response+";");
+                        if (data.errno == 0) {
+                            var tmp = $('#dialogOK').myDlg('<h3>操作成功^_^</h3>');
+                            setTimeout(function(){
+                                tmp.fadeOut(500,function(){
+                                    window.location.reload();
+                                });
+                            }, 1000);
+                        }
+                        else {
+                            alert('操作失败:'+data.errstr);
+                        }
+                });
+            },
+            "取消":function(){
+                $("#dialog").dialog("close");       //关闭这个对话框
+            }
+        }
+    });
+}
+//jquery插件初体验
+$.getWindowInfo=function() {
+    var scrollX=0, scrollY=0, width=0, height=0, contentWidth=0, contentHeight=0;
+    if (typeof(window . pageXOffset) == 'number') {
+        scrollX=window . pageXOffset;
+        scrollY=window . pageYOffset;
+    }
+    else if (document . body && (document . body . scrollLeft || document . body . scrollTop)) {
+        scrollX=document . body . scrollLeft;
+        scrollY=document . body . scrollTop;
+    }
+    else if (document . documentElement && (document . documentElement . scrollLeft || document . documentElement . scrollTop)) {
+        scrollX=document . documentElement . scrollLeft;
+        scrollY=document . documentElement . scrollTop;
+    }
+    if (typeof(window . innerWidth) == 'number') {
+        width=window . innerWidth;
+        height=window . innerHeight;
+    }
+    else if (document . documentElement && (document . documentElement . clientWidth || document . documentElement . clientHeight)) {
+        width=document . documentElement . clientWidth;
+        height=document . documentElement . clientHeight;
+    }
+    else if (document . body && (document . body . clientWidth || document . body . clientHeight)) {
+        width=document . body . clientWidth;
+        height=document . body . clientHeight;
+    }
+    if (document . documentElement && (document . documentElement . scrollHeight || document . documentElement . offsetHeight)) {
+        if (document . documentElement . scrollHeight > document . documentElement . offsetHeight) {
+            contentWidth=document . documentElement . scrollWidth;
+            contentHeight=document . documentElement . scrollHeight;
+        }
+        else {
+            contentWidth=document . documentElement . offsetWidth;
+            contentHeight=document . documentElement . offsetHeight;
+        }
+    }
+    else if (document . body && (document . body . scrollHeight || document . body . offsetHeight)) {
+        if (document . body . scrollHeight > document . body . offsetHeight) {
+            contentWidth=document . body . scrollWidth;
+            contentHeight=document . body . scrollHeight;
+        }
+        else {
+            contentWidth=document . body . offsetWidth;
+            contentHeight=document . body . offsetHeight;
+        }
+    }
+    else {
+        contentWidth=width;
+        contentHeight=height;
+    }
+    if (height > contentHeight)
+        height=contentHeight;
+    if (width > contentWidth)
+        width=contentWidth;
+    var rect=new Object();
+    rect.ScrollX=scrollX;
+    rect.ScrollY=scrollY;
+    rect.Width=width;
+    rect.Height=height;
+    rect.ContentWidth=contentWidth;
+    rect.ContentHeight=contentHeight;
+    return rect;
+}
+    $.fn.myDlg = function(content){
+        //alert($.getWindowInfo().Width + ',' + $.getWindowInfo().Height);
+        if ($("#myDialogElms").length == 0) {
+            var html = '<div id="myDialogElms" style="z-index:9999;background:#fff;width:200px;height:80px;border:2px solid #F6AF39;"><div style="color:#fff;background:#F6AF39;font-weight:bold;">' + $(this).attr('title') + '</div><div id="myDialogElms2" style="padding:10px;text-align:center;vertical-align:middle;border:0px solid #f00;"></div></div>';
+            $("body").append(html);
+            if (content != undefined) {
+                $(this).html(content);
+            }
+            //让提示框处于最中央。这个调了很久 当有滚动条时需要加上$.getWindowInfo().ScrollY
+            var leftX = $.getWindowInfo().ScrollX + ($.getWindowInfo().ContentWidth - parseInt($("#myDialogElms").css('width')))/2;
+            var topX = $.getWindowInfo().ScrollY + ($.getWindowInfo().Height - parseInt($("#myDialogElms").css('height')))/2;
+            //alert($.getWindowInfo().ContentHeight + ',' + $.getWindowInfo().ScrollY + ',结果:' + topX + ',' + leftX);
+            $("#myDialogElms").offset({top:topX, left:leftX});
+            $("#myDialogElms2").append($(this).html());
+        }
+        else {
+            $("#myDialogElms").show();
+        }
+        return $("#myDialogElms"); //返回原对象
+    };
+</script>
+
+<?php $this->import("foot"); ?>

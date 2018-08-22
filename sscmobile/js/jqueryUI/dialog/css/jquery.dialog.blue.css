@@ -1,0 +1,48 @@
+/* 整个对话框 */
+.ui-dialog {overflow:hidden !important;position:absolute;border-radius: 14px;}
+/* 标题栏 */
+.ui-dialog-title{height:51px;background:url(../images/loginBg.png) no-repeat 0 0;font-size:16px;font-weight:normal;line-height:50px;text-align:center;display:block;}
+.ui-dialog-titlebar {cursor:move;}
+/* 主容器栏 */
+.ui-dialog-main{padding:0 20px;background:#fff;position:relative;}
+/* 内容栏 */
+.ui-dialog .ui-dialog-boxtab{width:100%;min-height:60px;padding:20px 0;display:table;overflow:hidden;}
+.ui-dialog .ui-dialog-content{vertical-align:middle;display:table-cell;text-align:left;line-height: 1rem;}
+.ui-dialog .ui-dialog-content h3{text-align: center;}
+/* 按钮栏 */
+.ui-dialog .ui-dialog-button {text-align:center;}
+.ui-dialog .ui-dialog-button .ui-dialog-buttonset{padding:10px 0;}
+/* 底部栏 */
+.ui-dialog-foot{height:12px;}
+/* 按钮 */
+.but-box{text-align:center;margin-top: 10px;}
+.ui-button{padding:5px 10px;background-color:#f00000;display:inline-block;cursor:pointer;text-align:center;border-radius:6px;border:1px solid #bb0a0a;margin:0 10px;color: #fff;}
+/* 按钮上的文字 */
+.ui-button .ui-button-text{line-height:34px;display:block;font-size:16px;color:#fff;cursor:pointer;text-align:center;padding:0 30px;}
+.ui-button .ui-button-text:hover{background-color:#5593f6;}
+/* 设置float过后的样式 */
+.ui-helper-clearfix:before, .ui-helper-clearfix:after { content: ""; display: table; }
+.ui-helper-clearfix:after { clear: both; }
+/* 四周呈现圆角，只在FF下有用 */
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 4px; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 4px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { -moz-border-radius-topright: 4px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { -moz-border-radius-topleft: 4px; }
+/* 遮罩层 */
+.ui-widget-overlay { height: 100%; left: 0; position: absolute; top: 0; width: 100%; /*background: url("../images/ui-bg_diagonals-thick_20_666666_40x40.png") repeat scroll 50% 50% #666666;*/ background: #000; opacity: 0.5; filter: alpha(opacity=50);}
+/* 用于追号层 */
+.ui-widget-overlay2 { height: 100%; left: 0; position: absolute; top: 0; width: 100%; /*background: url("../images/ui-bg_diagonals-thick_20_666666_40x40.png") repeat scroll 50% 50% #666666;*/ background: #000; opacity: 0.5; filter: alpha(opacity=50);}
+.color-8c8c8c{ background-color:#8c8c8c; border:1px solid #FFF; color:#333;}
+.ui-dialog-content{position: relative;}
+.agreement3{width: 12rem;
+    overflow: auto;
+    height: 16rem;
+    margin-bottom: 3rem;}
+.agreement2{    position:absolute;
+    bottom: 0rem;
+    width: 12rem;
+    background: #fff;
+    height: 3rem;
+    margin: 0 auto;
+    border-top: 1px solid #ccc;}
+.agreement2 input.agreement2-input{width: 1rem; height: 1rem;}

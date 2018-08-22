@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <title>in8w.com</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+    <script language="JavaScript">
+    <!--
+    var noHelp   = "<p align='center' style='color: #666'>暂时还没有该部分内容</p>";
+    //-->
+</script>
+    <style type="text/css">
+body {
+    background: #fff url(images/bg222222.jpg);
+        color:#000;
+}
+a:visited {color: #000;text-decoration: none;}
+a:link { color: #000;text-decoration: none;}
+a:hover { color: #FF3333;text-decoration: none;}
+a:active { color: #666666;text-decoration: none;}
+
+#tabbar-div {
+    background: #fff;
+    padding-left: 10px;
+    padding-top: 0px;
+    height:22px;
+}
+.tab-front {
+    font-weight: bold;
+    margin-top:5px;
+    border: 0px solid #f00;
+    cursor: hand;
+    cursor: pointer;
+}
+
+.tab-back,.tab-hover { color: #F4FAFB; line-height: 20px; padding: 4px 15px 4px 18px; cursor: hand; cursor: pointer;}
+.tab-hover { background: #2F9DB5; }
+#top-div { padding: 3px 0 2px; background: #BBDDE5; margin: 5px; text-align: center; }
+#main-div { border: 1px solid #555522; padding: 5px; margin: 5px; background: #FFF; }
+#menu-list { padding: 0; margin: 0;}
+#menu-list ul { padding: 0; margin: 0; list-style-type: none; color: #000; padding-bottom:3px;}
+#menu-list li { padding-left: 16px; line-height: 16px; cursor: hand; cursor: pointer;}
+#main-div a:visited, #menu-list a:link, #menu-list a:hover {
+    color: #000 text-decoration: none;}
+#menu-list a:active { color: #000;}
+.explode { background: url(./images/menu_minus.gif) no-repeat 0px 3px; font-weight: bold;}
+.collapse { background: url(./images/menu_plus.gif) no-repeat 0px 3px; font-weight: bold;}
+.menu-item { background: url(./images/menu_minus.gif) no-repeat 0px 3px; font-weight: normal;}
+#help-title { font-size: 14px; color: #000080; margin: 5px 0; padding: 0px;}
+#help-content { margin: 0; padding: 0;}
+.tips { color: #CC0000;}
+.link { color: #000099;}
+</style>
+</head>
+<body>
+    <div id="tabbar-div">
+        <p>
+            <span title="EXPAND ALL" class="tab-front" id="menu-tab" >
+                <img id="toggleImg" src="<?php echo $imgCdnUrl ?>/images/menu_plus.gif" width="9" height="9" border="0" />
+                EXPAND ALL
+            </span>
+        </p>
+    </div>
+
+    <div id="main-div">
+        <div id="menu-list">
+            <ul>
+                <?php foreach ($menus as $menuId =>
+                $menu): ?>
+                <li class="explode" key="menu_<?php echo $menu['menu_id']; ?>
+                    " id="menu_
+                    <?php echo $menu['menu_id']; ?>
+                    " name="menu">
+                    <span title="menu">
+                        <?php echo $menu['title']; ?></span>
+                    <ul>
+                        <?php foreach ($menu['submenu'] as $menuId2 =>
+                        $v): ?>
+                        <li class="menu-item">
+                            <a href="index.jsp?c=<?php echo $v['control']; ?>
+                                &a=
+                                <?php echo $v['action']; ?>
+                                " target="mainFrame">
+                                <?php echo $v['title']; ?></a>
+                        </li>
+                        <?php endforeach; ?></ul>
+                </li>
+                <?php endforeach; ?></ul>
+        </div>
+        <div id="help-div" style="display:none">
+            <h1 id="help-title"></h1>
+            <div id="help-content"></div>
+        </div>
+    </div>
+
+    <script language="JavaScript">
+            <!--
+            $("#menu-tab").click(function(){
+                if( $("#toggleImg").attr("src") == "./images/menu_minus.gif" ){
+                    $(this).attr("title","EXPAND ALL");
+                    $("#toggleImg").attr("src","./images/menu_plus.gif").attr("title","EXPAND ALL");
+                    $("li[name='menu']").attr("class","collapse").children("ul").slideUp("fast");
+                }else{
+                    $(this).attr("title","COLLAPSE ALL");
+                    $("#toggleImg").attr("src","./images/menu_minus.gif").attr("title","COLLAPSE ALL");
+                    $("li[name='menu']").attr("class","explode").children("ul").slideDown("fast");
+                }
+            });
+            $("span[title='menu']").click(function(){
+                if( $(this).parent().attr("class") == "explode" ){
+                    $(this).parent().attr("class","collapse").children("ul").slideUp("fast");
+                }else{
+                    $(this).parent().attr("class","explode").children("ul").slideDown("fast");
+                }
+            });
+            $("span[title='menu']").click();
+
+            function setCurrentLinkBackground() {
+                $('a').each(function(k,v){
+                    $(this).click(function(){
+                        $('a').css('color', '#000').css('background', '#fff');
+                        $(this).css('color', '#fff').css('background', '#0A246A');
+                    });
+                });
+            }
+
+            //当前链接加背景以示区别
+            setCurrentLinkBackground();
+        </script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

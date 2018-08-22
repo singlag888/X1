@@ -1,0 +1,77 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    //预设查询值
+    $(document).ready(function() {
+        //预选中值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('input[name=startDate]').val('<?php echo $startDate; ?>');
+        $('input[name=endDate]').val('<?php echo $endDate; ?>');
+    });
+    function saveCode(obj) {
+        var market_code = $(obj).prev().val();
+        var reg = /^[0-9a-zA-Z]+$/
+        if(market_code.length<3 || market_code.length >10 || !reg.test(market_code))
+        {
+            alert('推广码格式不正确!');
+            window.location.reload();
+            return false;
+        }
+
+
+       var prize_mode = $(obj).attr('prize_mode');
+       var user_id = $(obj).attr('user_id');
+       var key = $(obj).attr('key');
+
+        $.post('?c=domains&a=regChild',{'key':key,'user_id':user_id,'prize_mode':prize_mode,'market_code':market_code},function (response) {
+            var data=eval('('+response+')');
+            if(data.errno === 1)
+            {
+                alert(data.msg);
+                window.location.reload();
+            }
+
+            if(data.errno === 0)
+            {
+                alert(data.msg);
+            }
+
+        })
+    }
+    function ckCode(obj) {
+        var vo = $(obj).val();
+        if(vo.length > 10)
+        {
+            $(obj).val(vo.substring(0,10))
+        }
+    }
+</script>
+<div class="list-div form-top" id="listDiv" style="width: 500px;">
+
+    <table class="table table-responsive  table-bordered mainList mt20">
+        <thead>
+            <tr>
+                <td style="padding: 7px;">奖金组</td>
+                <td>推广码<span style="color: red">*3-12位数字与字母组成</span></td>
+
+            </tr>
+        </thead>
+        <?php foreach ($aPrizeMode as $key => $v): ?>
+            <tr style="margin-top: 10px;">
+                <td style="padding: 7px;"><?php echo $key.'/'.$v; ?></td>
+                <td>
+                    <input type="text" value="<?php echo isset($marketlinklist[$key]['market_code'])?$marketlinklist[$key]['market_code']:''?>" name="market_code" onkeyup="ckCode(this)" style="height: 30px;width: 200px;">
+                    <?php if(isset($marketlinklist[$key]['market_code'])):?>
+                    <button host="<?php echo $host;?>" prize_mode="<?php echo $key;?>" user_id="<?php echo $user_id;?>" key="up" onclick="saveCode(this)">提交</button>
+                        <?php else:?>
+                        <button host="<?php echo $host;?>" prize_mode="<?php echo $key;?>" user_id="<?php echo $user_id;?>" key="ad" onclick="saveCode(this)">提交</button>
+                <?php endif;?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal">
+    <?php echo $pageList; ?>
+</div>
+<?php $this->import("foot"); ?>

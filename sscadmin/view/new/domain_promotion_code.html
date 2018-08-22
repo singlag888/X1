@@ -1,0 +1,41 @@
+<link rel="stylesheet" href="/view/new/layui/css/layui.css" />
+<link rel="stylesheet" href="/view/new/css/domain.css" />
+<script type="text/javascript" src="/view/new/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/view/new/layui/layui.js"></script>
+
+<div class="domain-bind-title"><span>UserName 的推广码</span></div>
+<hr style="width: 990px;position: absolute;top: 45px;left: 30px;">
+<div id="domain_bonus_group_div">
+  <span>奖金组：</span>
+  <select id="domain_bonus_group" name="" class="user-condition-input">
+    <option value="0">1990/9.5</option>
+    <option value="1">1988/9.4</option>
+    <option value="2">1986/9.3</option>
+    <option value="3">1984/9.2</option>
+  </select>
+  <input type="text" id="domain_promotion_code_text" name="" placeholder="请输入推广码" />
+</div>
+  <div id="domain_bonus_group_submit"><span>提交</span></div>
+  <span style="color: #FF0000;position: absolute;top: 120px;left: 30px;font-size: 14px;" >说明：推广码由3-12位数字与字母组成</span>
+  <div id="domain_promotion_list_title" class="domain-bind-title"><span>推广码列表</span></div>
+  <hr style="width: 990px;position: absolute;top: 195px;left: 30px;">
+  <div id="domain_promotion_list_div" ><table id="domain_promotion_list" lay-filter="domain_promotion_list"></table></div>
+
+  
+  
+<script type="text/javascript">
+	layui.use('table', function(){
+		var table = layui.table;
+		table.render({
+			elem: '#domain_promotion_list',
+		    height: 335,
+		    width: 515,
+		    url: '', //数据接口
+		    cols: [[ //表头
+		      {field: 'bounsGroup', title: '奖金组', width: 110, align:'center'},
+		      {field: 'promotionCode', title: '推广码', width: 305, align:'center'},
+		      {field: 'operation', title: '操作', width: 105, align:'center'}
+		    ]]
+		});
+	});
+</script>

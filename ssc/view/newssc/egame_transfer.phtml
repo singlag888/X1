@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>   <!-- 新增会员 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>电子钱包 - <?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="css/common_operate.css"/>
+    <?php $this->import('public_cssjs') ?>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.qrcode.min.js"></script>
+</head>
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+    <div class="common_pages add_menbers_page">
+        <div class="defadd_menber_title">
+            <span>当前电子游戏额度：</span>
+            <span id="egame_balance">0</span>
+        </div>
+        <div class="defadd_menber_title">
+            <span>平台转入电子游戏</span>
+        </div>
+        <div class="addmenber_userinfo">
+            <div class="form_group">
+                <label for="amount_in" class="control_label">金额：</label>
+                <div class="col_sm_10">
+                    <input title='amount_in' class="form_control two_hundred_width" name="amount_in">
+                </div>
+                <span class="help_block"></span>
+            </div>
+            <div class="form_group">
+                <label for="trans_pass" class="control_label">资金密码：</label>
+                <div class="col_sm_10">
+                    <input type="password" title='trans_pass_in' class="form_control two_hundred_width"
+                           name="trans_pass_in">
+                </div>
+                <span class="help_block"></span>
+            </div>
+            <div class="form_group msgsend_btn_layer">
+                <input type="submit" name="submit_in" class="default_navyblue_btn two_hundred_width modify_btn"
+                       value="转入">
+            </div>
+        </div>
+        <div class="defadd_menber_title">
+            <span>电子游戏转出平台</span>
+        </div>
+        <div class="addmenber_userinfo">
+            <div class="form_group">
+                <label for="amount_out" class="control_label">金额：</label>
+                <div class="col_sm_10">
+                    <input title='amount_out' class="form_control two_hundred_width" name="amount_out">
+                </div>
+                <span class="help_block"></span>
+            </div>
+            <div class="form_group">
+                <label for="trans_pass_out" class="control_label">资金密码：</label>
+                <div class="col_sm_10">
+                    <input type="password" title='trans_pass_out' class="form_control two_hundred_width"
+                           name="trans_pass_out">
+                </div>
+                <span class="help_block"></span>
+            </div>
+            <div class="form_group msgsend_btn_layer">
+                <input type="submit" name="submit_out" class="default_navyblue_btn two_hundred_width modify_btn"
+                       value="转出">
+            </div>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/ZeroClipboard.107.js"></script>
+<script>
+    $(function () {
+        var submitIn = $('input[name=submit_in]');
+
+        submitIn.click(function () {
+            var r1 = /^[0-9]*[1-9][0-9]*$/;
+
+            if (!r1.test($('input[name=amount_in]').val())) {
+                parent.layer.alert("金额必须为正整数！");
+                return false;
+            }
+
+            submitIn.attr('disabled', 'disabled');
+
+            $.post(
+                '?c=fin&a=tranMoney',
+                {
+                    'op': "tran",
+                    'tranFrom': 0,
+                    'tranTo': 1,
+                    'tranAmount': $('input[name=amount_in]').val(),
+                    'tranPass': $('input[name=trans_pass_in]').val(),
+                },
+                function (response) {
+                    parent.layer.alert(response.errstr);
+                    $('input[name=amount_in]').val("");
+                    $('input[name=trans_pass_in]').val("");
+                    submitIn.removeAttr('disabled');
+                }, 'json').error(function () {
+                parent.layer.alert("未知错误，请联系客服");
+                submitIn.removeAttr('disabled');
+            });
+
+            getUserInfo();
+        });
+
+        var submitOut = $('input[name=submit_out]');
+
+        submitOut.click(function () {
+            var r1 = /^[0-9]*[1-9][0-9]*$/;　//正整数
+
+            if (!r1.test($('input[name=amount_out]').val())) {
+                parent.layer.alert("金额必须为正整数！");
+                return false;
+            }
+
+            submitOut.attr('disabled', 'disabled');
+
+            $.post(
+                '?c=fin&a=tranMoney',
+                {
+                    'op': "tran",
+                    'tranFrom': 1,
+                    'tranTo': 0,
+                    'tranAmount': $('input[name=amount_out]').val(),
+                    'tranPass': $('input[name=trans_pass_out]').val(),
+                },
+                function (response) {
+                    parent.layer.alert(response.errstr);
+                    $('input[name=amount_out]').val("");
+                    $('input[name=trans_pass_out]').val("");
+                    submitOut.removeAttr('disabled');
+                }, 'json').error(function () {
+                parent.layer.alert("未知错误，请联系客服");
+                submitOut.removeAttr('disabled');
+            });
+
+            getUserInfo();
+        });
+
+        $(document).ready(function () {
+            getUserInfo();
+        });
+
+        function getUserInfo() {
+            $.post(
+                '?c=egame&a=userInfo',
+                {},
+                function (response) {
+                    $("#egame_balance").text(response.money);
+                }, 'json');
+        }
+    });
+</script>
+</body>
+</html>

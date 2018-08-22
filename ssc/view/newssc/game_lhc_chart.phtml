@@ -1,0 +1,371 @@
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="no-cache" http-equiv="Pragma">
+    <link rel="stylesheet" type="text/css" href="https://imgcdn.hazdmj.com/xy00001/css/global_reset.css">
+    <link href="css/chart.css" rel="stylesheet" type="text/css">
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery.js" type="text/javascript"></script>
+    <link href="css/chart.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="rightcon">
+    <div style="display:none;" class="win_bot" id="msgbox">
+        <h5 id="msgtitle"></h5>
+        <div class="clear"></div>
+        <div class="wb_con">
+            <p id="msgcontent"></p>
+        </div>
+        <div class="clear"></div>
+        <a id="msgpre" onclick="javascript:prenotice();" href="#" class="wb_p">上一条</a><a
+            onclick="javascript:nextnotice();" href="#" class="wb_n">下一条</a></div>
+    <script language="javascript">
+    </script>
+    <style>
+        esun\: * {
+            behavior: url(#default#VML)
+        }
+    </style>
+    <div class="rc_con history">
+        <div class="rc_con_lt"></div>
+        <div class="rc_con_rt"></div>
+        <div class="rc_con_lb"></div>
+        <div class="rc_con_rb"></div>
+        <div class="rc_con_to">
+            <div class="rc_con_ti">
+                <div class="history_code">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tm">
+                        <tbody>
+                        <tr>
+                            <td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong> <font><?php  echo $lottery['cname'];?>：</font>
+                                基本走势 </strong></td>
+                            <td align="right">
+                                <div class="Tabfixed">
+                                    <form method="POST">
+                                            <span>
+                                            <label for="has_miss">
+                                                <input type="checkbox" id="has_miss" checked="checked" value="checkbox" name="checkbox2">
+                                                显示遗漏分层 </label>
+                                            </span>&nbsp; <span>
+                                            <label for="no_miss">
+                                                <input type="checkbox" id="no_miss" value="checkbox" name="checkbox">
+                                                不带遗漏</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <!-- <label for="no_miss"> 显示期数：
+                                                <select name="issueNum" id="issueNum">
+                                                <option value="50" selected="">50 &nbsp;&nbsp;期</option>
+                                                <option value="100">100 期</option>
+                                                <option value="200">200 期</option>
+                                                </select>
+                                            </label> -->
+                                            </span>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hrc_list">
+                    <div class="hrl_list">
+                        <table border="0" cellspacing="1" cellpadding="0" id="chartsTable">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layer"></div>
+</body>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/template-web.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/game_chart.js"></script> 
+<script type="text/html" id="head_lhc">
+    <tr class="th">
+        <td rowspan="2" width="6.5%"><div style="width:auto;">期号</div></td>
+        <td colspan="6" rowspan="2">正码球</td>
+        <td colspan="1" rowspan="2">特码球</td>
+        <td colspan="49">正码</td>
+        <td colspan="59">特码</td>
+    </tr>
+    <tr class="th">
+        <td class="wdh">1</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">11</td>
+        <td class="wdh">12</td>
+        <td class="wdh">13</td>
+        <td class="wdh">14</td>
+        <td class="wdh">15</td>
+        <td class="wdh">16</td>
+        <td class="wdh">17</td>
+        <td class="wdh">18</td>
+        <td class="wdh">19</td>
+        <td class="wdh">20</td>
+        <td class="wdh">21</td>
+        <td class="wdh">22</td>
+        <td class="wdh">23</td>
+        <td class="wdh">24</td>
+        <td class="wdh">25</td>
+        <td class="wdh">26</td>
+        <td class="wdh">27</td>
+        <td class="wdh">28</td>
+        <td class="wdh">29</td>
+        <td class="wdh">30</td>
+        <td class="wdh">31</td>
+        <td class="wdh">32</td>
+        <td class="wdh">33</td>
+        <td class="wdh">34</td>
+        <td class="wdh">35</td>
+        <td class="wdh">36</td>
+        <td class="wdh">37</td>
+        <td class="wdh">38</td>
+        <td class="wdh">39</td>
+        <td class="wdh">40</td>
+        <td class="wdh">41</td>
+        <td class="wdh">42</td>
+        <td class="wdh">43</td>
+        <td class="wdh">44</td>
+        <td class="wdh">45</td>
+        <td class="wdh">46</td>
+        <td class="wdh">47</td>
+        <td class="wdh">48</td>
+        <td class="wdh">49</td>
+        <td class="wdh">1</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">11</td>
+        <td class="wdh">12</td>
+        <td class="wdh">13</td>
+        <td class="wdh">14</td>
+        <td class="wdh">15</td>
+        <td class="wdh">16</td>
+        <td class="wdh">17</td>
+        <td class="wdh">18</td>
+        <td class="wdh">19</td>
+        <td class="wdh">20</td>
+        <td class="wdh">21</td>
+        <td class="wdh">22</td>
+        <td class="wdh">23</td>
+        <td class="wdh">24</td>
+        <td class="wdh">25</td>
+        <td class="wdh">26</td>
+        <td class="wdh">27</td>
+        <td class="wdh">28</td>
+        <td class="wdh">29</td>
+        <td class="wdh">30</td>
+        <td class="wdh">31</td>
+        <td class="wdh">32</td>
+        <td class="wdh">33</td>
+        <td class="wdh">34</td>
+        <td class="wdh">35</td>
+        <td class="wdh">36</td>
+        <td class="wdh">37</td>
+        <td class="wdh">38</td>
+        <td class="wdh">39</td>
+        <td class="wdh">40</td>
+        <td class="wdh">41</td>
+        <td class="wdh">42</td>
+        <td class="wdh">43</td>
+        <td class="wdh">44</td>
+        <td class="wdh">45</td>
+        <td class="wdh">46</td>
+        <td class="wdh">47</td>
+        <td class="wdh">48</td>
+        <td class="wdh">49</td>
+    </tr>               
+</script>
+
+
+<script type="text/html" id="content_lhc">
+    {{each list value i}}
+
+    <tr>
+        <td class="issue">
+            <!-- 输出期号 -->
+            <div>{{value.issue}}</div>
+        </td>
+
+        <!-- 输出开奖号 -->
+        {{each value.code codeItem}}
+        <td align="center">
+            <div class="ballnumb">
+                <div class="wth">{{codeItem}}</div>
+            </div>
+        </td>
+        {{/each}}
+
+        <!--正码球特码球循环-->
+        <!--循环正码球特码对应的号码-->
+        <% var flag = 1; %>
+        <% for(var i = 1; i <= 49; ++i){ %>
+            <% flag = 1 %>
+            <% for(var j = 0; j < 6; ++j){ %>
+                <!-- 判断是否是开奖的号,是则输出圈的样式 -->
+                <% if(value.code[j] == i){ %>
+                    <td align="center" class="charball">
+                        <div class="tenthousand">
+                            <div class="ball01">{{value.code[j]}}</div>
+                        </div>
+                    </td>
+                <% flag = 0; %>
+                <% } %>
+            <% } %>
+            <% if(flag == 1){ %>
+                <td align="center" class="wdh">
+                    <div class="tenthousand">
+                        <div class="ball03"></div>
+                    </div>
+                </td>
+            <% } %>
+        <% } %>
+
+        <% for(var i=1; i<=49;++i) { %>
+            <% if(value.code[6] == i) { %>
+                <td align="center" class="charball">
+                    <div class="tenthousand">
+                        <div class="ball02">{{value.code[6]}}</div>
+                    </div>
+                </td>
+            <% } else { %>
+                <td align="center" class="wdh">
+                    <div class="tenthousand">
+                        <div class="ball04 m"></div>
+                    </div>
+                </td>
+            <% }%>
+
+        <% } %>
+        
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/html" id="foot_lhc">
+    <tr class="th">
+        <td rowspan="2"><div>期号</div></td>
+        <td colspan="6" rowspan="2">正码球</td>
+        <td colspan="1" rowspan="2">特码球</td>
+        <td class="wdh">1</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">11</td>
+        <td class="wdh">12</td>
+        <td class="wdh">13</td>
+        <td class="wdh">14</td>
+        <td class="wdh">15</td>
+        <td class="wdh">16</td>
+        <td class="wdh">17</td>
+        <td class="wdh">18</td>
+        <td class="wdh">19</td>
+        <td class="wdh">20</td>
+        <td class="wdh">21</td>
+        <td class="wdh">22</td>
+        <td class="wdh">23</td>
+        <td class="wdh">24</td>
+        <td class="wdh">25</td>
+        <td class="wdh">26</td>
+        <td class="wdh">27</td>
+        <td class="wdh">28</td>
+        <td class="wdh">29</td>
+        <td class="wdh">30</td>
+        <td class="wdh">31</td>
+        <td class="wdh">32</td>
+        <td class="wdh">33</td>
+        <td class="wdh">34</td>
+        <td class="wdh">35</td>
+        <td class="wdh">36</td>
+        <td class="wdh">37</td>
+        <td class="wdh">38</td>
+        <td class="wdh">39</td>
+        <td class="wdh">40</td>
+        <td class="wdh">41</td>
+        <td class="wdh">42</td>
+        <td class="wdh">43</td>
+        <td class="wdh">44</td>
+        <td class="wdh">45</td>
+        <td class="wdh">46</td>
+        <td class="wdh">47</td>
+        <td class="wdh">48</td>
+        <td class="wdh">49</td>
+        <td class="wdh">1</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">11</td>
+        <td class="wdh">12</td>
+        <td class="wdh">13</td>
+        <td class="wdh">14</td>
+        <td class="wdh">15</td>
+        <td class="wdh">16</td>
+        <td class="wdh">17</td>
+        <td class="wdh">18</td>
+        <td class="wdh">19</td>
+        <td class="wdh">20</td>
+        <td class="wdh">21</td>
+        <td class="wdh">22</td>
+        <td class="wdh">23</td>
+        <td class="wdh">24</td>
+        <td class="wdh">25</td>
+        <td class="wdh">26</td>
+        <td class="wdh">27</td>
+        <td class="wdh">28</td>
+        <td class="wdh">29</td>
+        <td class="wdh">30</td>
+        <td class="wdh">31</td>
+        <td class="wdh">32</td>
+        <td class="wdh">33</td>
+        <td class="wdh">34</td>
+        <td class="wdh">35</td>
+        <td class="wdh">36</td>
+        <td class="wdh">37</td>
+        <td class="wdh">38</td>
+        <td class="wdh">39</td>
+        <td class="wdh">40</td>
+        <td class="wdh">41</td>
+        <td class="wdh">42</td>
+        <td class="wdh">43</td>
+        <td class="wdh">44</td>
+        <td class="wdh">45</td>
+        <td class="wdh">46</td>
+        <td class="wdh">47</td>
+        <td class="wdh">48</td>
+        <td class="wdh">49</td>
+    </tr>
+    <tr class="th">
+        <td colspan="49">正码</td>
+        <td colspan="49">特码</td>
+    </tr>
+</script>
+</html>

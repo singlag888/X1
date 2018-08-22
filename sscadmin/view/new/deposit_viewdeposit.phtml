@@ -1,0 +1,169 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script src="/js/base64.js"></script>
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+
+
+    /********************* author snow 获取返回url**************************/
+
+
+
+    var myBase = new Base64();
+    var back_url = '<?=$back_url?>';
+    if (back_url) {
+        back_url = myBase.decode(back_url);
+        if (back_url) {
+            $('.go-back-url').attr({'href' : back_url})
+        }
+    }
+    /********************* author snow 获取返回url**************************/
+
+});
+function doCheck()
+{
+    $('#charge').css('display', 'none');
+    $('#reasonDiv').css('display', 'block');
+    if ($('textarea[name=remark]').val() == '' ||　$('textarea[name=remark]').val() == '请输入取消原因！') {
+        $('textarea[name=remark]').val('请输入取消原因！');
+        return false;
+    }
+
+    return true;
+}
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=site&a=<?php echo ACTION; ?>" method="post" onsubmit="return true;">
+<table class="table table-responsive table-bordered table-hover" cellpadding="0" cellspacing="0" style="width: 60%;" >
+    <tr>
+        <td class="fb">deposit_id</td>
+        <td>
+            <?php echo $deposit['deposit_id']; ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">用户名</td>
+        <td>
+            <label title="<?php echo $deposit['user_id']; ?>"><?php echo $deposit['username']; ?></label>
+            <?php if ($user['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+            <?php if ($user['status'] == 0): ?><b style="color:red">[已删除]</b>
+            <?php elseif ($user['status'] == 1): ?><b style="color:red">[已冻结]</b>
+            <?php elseif ($user['status'] == 5): ?><b style="color:red">[已回收]</b>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">注册时间</td>
+        <td><?php echo $user['reg_time']; ?>【<?php echo getInterval(strtotime($user['reg_time'])); ?>】
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">存款次数</td>
+        <td>
+            <b><?php echo $user['deposit_num']; ?>次</b>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">汇款所属银行</td>
+        <td><?php echo $bankList[$deposit['player_bank_id']]; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">存款卡户名</td>
+        <td><?php echo $deposit['player_card_name']; ?></td>
+    </tr>
+     <tr>
+        <td class="fb">交易流水号</td>
+        <td><?php echo $deposit['order_num']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">金额</td>
+        <td><?php echo $deposit['amount']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">存款时间<br/>（客户填写的存款大致时间）</td>
+        <td><?php echo $deposit['player_pay_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">存款方式</td>
+        <td><?php echo $tradeTypes[$deposit['trade_type']]; ?></td>
+    </tr>
+    <tr>
+        <td class="fb" colspan="2" class="rowTitle"><font color="blue"><b>准</b> 收 款 信 息</font></td>
+    </tr>
+    <tr>
+        <td class="fb">收款银行</td>
+        <td><?php echo $bankList[$deposit['deposit_bank_id']]; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">收款卡</td>
+        <td><?php echo $depositCards[$deposit['deposit_card_id']]['card_num']; ?> <?php echo $depositCards[$deposit['deposit_card_id']]['card_name']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">客户提交时间</td>
+        <td><?php echo $deposit['create_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">状态</td>
+        <td><?php if ($deposit['status'] == 0): ?>未处理
+            <?php elseif ($deposit['status'] < 3): ?>已审核
+            <?php elseif ($deposit['status'] == 8): ?><b>已执行</b>
+            <?php elseif ($deposit['status'] == 9): ?><font color="red"><b>已取消</b></font>
+            <?php elseif ($deposit['status'] == 3): ?>机器正在处理
+            <?php endif;?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">备注</td>
+        <td><?php echo $deposit['remark']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">执行人员</td>
+        <td><?php if ($deposit['finish_admin_id']): ?><?php echo $admins[$deposit['finish_admin_id']]['username']; ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">执行时间</td>
+        <td><?php echo $deposit['finish_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">被付出手续费</td>
+        <td><?php if ($deposit['fee'] > 0): ?><?php echo $deposit['fee']; ?><?php else: ?>0（绝大多数情况为0，仅当ATM无卡现存时才需要支付手续费）<?php endif; ?></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div id="reasonDiv" style="display:none;">
+                <textarea class="input-md form-control" name="remark"></textarea></div>
+                <!-- <input type="button" class="submit" name="submit" value="审核" onclick="this.form.action='./?c=site&a=verify';this.form.submit();"/>&nbsp;-->
+            <div style="width: 100%;margin:0 auto;text-align:center;">
+                <?php if ($deposit['status'] <= 3): ?>
+                <input class="btn btn-info  submit" id="charge" type="button"  name="button" value="审核并确认充值" onclick="this.form.action='./?c=deposit&a=charge';if (confirm('确定要充值？')) this.form.submit();"/>
+            <?php elseif ($deposit['status'] == 8): ?>
+                <b>已审核！</b>
+                <b>已执行充值！</b>
+            <?php elseif ($deposit['status'] == 9): ?>
+                <b color="red">已取消提案！</b>
+                <input class="btn btn-info submit" type="button"  name="button" value="恢复提案" onclick="this.form.action='./?c=deposit&a=recover';if (confirm('确定要恢复提案？')) {this.form.submit();}"/>
+            <?php endif; ?>
+
+            <?php if ($deposit['status'] < 3): ?>
+                <input class="btn btn-info submit" type="button"  name="button" value="取消提案" onclick="this.form.action='./?c=deposit&a=cancel';if (doCheck()) {this.form.submit();}"/>
+            <?php endif; ?>
+
+            </div>
+
+        </td>
+    <tr>
+        <td colspan="2">
+            <div style="width:100%;margin:10px auto;text-align: center;">
+                <!---------------------- snow 修改返回列表方式,之前不是返回,是跳转--------------------------->
+                <a href="javascript:history.go(-1)" class="btn btn-info  submit go-back-url">返回列表</a>
+                <!---------------------- snow 修改返回列表方式,之前不是返回,是跳转--------------------------->
+                <input type="hidden" name="deposit_id" value="<?php echo $deposit['deposit_id']; ?>" />
+            </div>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

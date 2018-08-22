@@ -1,0 +1,36 @@
+<?php $this->import("head"); ?>
+
+<span style="display:inline-block;height:35px;line-height:35px;font-size:14px;">注：支持3级人事等级</span><br/>
+<div class="list-div" id="listDiv">
+    <form class="form-top">
+        <table class="table table-responsive  table-bordered mainList" width="80%">
+        <thead>
+            <tr>
+                <td>组名称</td>
+                <td>说明</td>
+                <td>排序</td>
+                <td>是否启用</td>
+                <td>权限</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php foreach ($groups as $v): ?>
+            <tr>
+                <td><?php echo $v['name']; ?></td>
+                <td><?php echo $v['description']; ?></td>
+                <td><?php echo $v['sort']; ?></td>
+                <td><?php if ($v['is_enabled'] == 1): ?>是<?php else: ?>否<?php endif; ?></td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="./?c=userGroup&a=editPriv&group_id=<?php echo $v['group_id']; ?>">分配权限</a>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="./?c=userGroup&a=editGroup&group_id=<?php echo $v['group_id']; ?>">修改</a>
+                    <a class="btn btn-sm btn-info" href="./?c=userGroup&a=deleteGroup&group_id=<?php echo $v['group_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

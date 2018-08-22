@@ -1,0 +1,162 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/js/jquery.dialog.js?_=1" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" />
+<script>
+function checkform(ob) {
+    var msg = "";
+    if (ob.deposit_card_id.value <= 0) {
+        msg = '请选择收款卡';
+    }
+    else if (ob.deposit_bank_id.value != 203 && ob.card_name_1.value == '') {
+        msg = '请输入汇款户名';
+    }
+    else if (ob.amount_1.value <= 0) {
+        msg = '请输入存款金额';
+    }
+    else if (ob.order_num_1.value == '') {
+        msg = '请输入订单号';
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+// 倒计时
+function timer() {
+    var tmpInputTime = "<?php echo $manualDeposit['input_time']; ?>";
+    tmpInputTime = tmpInputTime.replace(new RegExp("-","gm"),"/");
+    var inputTime = new Date(tmpInputTime).getTime();
+    var ts = (inputTime+15*60*1000) - (new Date());//计算剩余的毫秒数
+
+    if (ts > 0) {
+        var mm = parseInt(ts / 1000 / 60 % 60, 10);//计算剩余的分钟数
+        var ss = parseInt(ts / 1000 % 60, 10);//计算剩余的秒数
+        mm = checkTime(mm);
+        ss = checkTime(ss);
+        document.getElementById("timer").innerHTML = mm + "分" + ss + "秒";
+        setTimeout("timer()", 1000);
+    } else {
+        document.getElementById("timer").innerHTML = "0分" + "0秒";
+    }
+}
+function checkTime(i) {  
+   if (i < 10) {
+       i = "0" + i;  
+    }  
+   return i;  
+}  
+
+// 取消提案
+var func = function (par, id) {
+    var url = "./?c=deposit&a=operateManualDeposit&sa=cancel&md_id="+id;
+    //拒绝时提示语
+    title = 'title="注意：拒绝后，该提案无法进行其他操作"';
+
+    var formStr = '<form class="remark_form" method="post">输入理由：<textarea class="remark_text" name="remark_1"></textarea></form>';
+    $('<div ' + title + '>' + formStr + '</div>').dialog({
+        bgiframe: true,
+        width: 300,
+        buttons: {
+            "确定": function() {
+                if($(".remark_text").val()===''){
+                    alert("理由不能为空");
+                }else{
+                    $(".remark_form").attr("action",url);
+                    $(".remark_form").submit();
+                }
+            },
+            "取消": function() {
+                $(par).dialog("close", window.self);       //关闭这个对话框
+            }
+        }
+    });
+};
+</script>
+<div class="list-div mt15" id="addDiv">
+<form name="form1" id="form1" action="?c=deposit&a=<?php echo ACTION; ?>&sa=compare&md_id=<?php echo $manualDeposit['md_id']; ?>" method="post" onsubmit="return checkform(this)">
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tr><td>当前状态：
+        <b><?php if ($manualDeposit['status'] == 0): ?>未处理
+            <?php elseif ($manualDeposit['status'] == 1): ?>已受理
+            <?php elseif ($manualDeposit['status'] == 4): ?>已拒绝
+            <?php elseif ($manualDeposit['status'] == 5): ?>系统撤单
+            <?php elseif ($manualDeposit['status'] == 8): ?>已执行
+            <?php endif; ?></b>
+        </td>
+        <td>
+            倒计时：<b id="timer" style="color:red; font-size:16px"></b>
+        </td>
+        <td colspan="2" style="color: #575757">说明：有背景色为对比项</td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>客服录入数据</b></td>
+        <td colspan="2"><b>财务录入数据</b></td>
+    </tr>
+    <tr>
+        <td width="20%">支付渠道</td>
+        <td width="30%"><?php echo $GLOBALS['cfg']['bankList'][$manualDeposit['deposit_bank_id']]; ?></td>
+        
+        <td width="20%">收款卡</td>
+        <td width="30%"><select name="deposit_card_id" id="deposit_card_id">
+            <option value="0">请选择</option>
+            <?php foreach ($depositCards as $k => $v): ?>
+                <option value="<?php echo $v['card_id']; ?>" <?php if ($v['status'] == 0) echo 'style=\"color:red;\"'; ?>>
+                    <?php echo $v['card_name']; ?>&nbsp;<?php echo $v['card_num']; ?>
+                    <?php if ($v['usage'] == 2) echo '(ATM)'; ?>
+                </option>
+            <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <?php if ($manualDeposit['deposit_bank_id'] != 203): ?>
+    <tr id="cardName">
+        <td>汇款户名</td>
+        <td><?php echo $manualDeposit['card_name_0']; ?></td>
+        <td>汇款户名 <span style="color: red">*</<span></td>
+        <td><input name="card_name_1" maxlength="19"/></td>
+    </tr>
+    <?php endif; ?>
+    <tr id="amount">
+        <td>存款金额</td>
+        <td><?php echo $manualDeposit['amount_0']; ?></td>
+        <td>存款金额 <span style="color: red">*</<span></td>
+        <td><input name="amount_1"/></td>
+    </tr>
+    <tr id="orderNum">
+        <td>订单号</td>
+        <td><?php echo $manualDeposit['order_num_0']; ?></td>
+        <td>订单号 <span style="color: red">*</<span></td>
+        <td><input name="order_num_1" size="24"/></td>
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td><?php echo $manualDeposit['remark_0']; ?></td>
+        <td>备注</td>
+        <td><textarea name="remark_1">财务手工添加</textarea></td>
+    </tr>
+    <tr>
+        <td colspan="4" align="center">
+            <input type="hidden" name="deposit_bank_id" value="<?php echo $manualDeposit['deposit_bank_id']; ?>" >
+            <input id="cancel" type="button" class="submit" name="button" value="拒绝提案" onclick="func(this, <?php echo $manualDeposit['md_id']; ?>)"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="compare" type="submit" class="submit" name="submit" value="对比数据"/>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+<input type="hidden" name="hide">
+<script >
+$(function () {
+    timer();
+   
+    var bankId = $('input[name=deposit_bank_id]').val();
+    $('#cardName').css('background-color', '#ccc');
+    $('#amount').css('background-color', '#ccc');
+    $('#orderNum').css('background-color', '#ccc');
+});
+
+</script>
+<?php $this->import("foot"); ?>

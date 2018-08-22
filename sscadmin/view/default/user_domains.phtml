@@ -1,0 +1,75 @@
+
+<?php $this->import("head"); ?>
+<script>
+$(function(){
+    $('#group_id').val('<?php echo $group_id; ?>');
+    $('#is_enabled').val('<?php echo $is_enabled; ?>');
+});
+</script>
+<form class="form-inline mt10 mb10 form-top fl"  name="form1"  method="POST">
+	<label style="font-weight: normal;">域名:</label>
+		<input class="form-control" name="domain" size="15"/>
+	<label class="ml20" style="font-weight: normal;">代理帐号:</label>
+		<input class="form-control" name="username" size="15"/>
+	<label class="ml20" style="font-weight: normal;">代理昵称:</label>
+		<input class="form-control" name="nick_name" size="15"/>
+
+	<label class="ml20" style="font-weight: normal;">序号排序:</label>
+	<select class="input-sm form-control" name="order"  />
+		<option value="asc">正序</option>
+		<option value="desc">倒序</option>
+	</select>
+
+	<input type="hidden" name="c" value="adminUser"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+	<input class="btn  btn-info ml15" style="width: 60px;" type="button"  class="submit" value="查询" onclick="sb()" >
+	<input class="btn  btn-info ml15" style="width: 60px;" type="button" class="submit" value="绑定" onclick="bd()">
+</form>
+<label class="ml20" style="font-weight: normal;"><font color="#FF0000">注意:仅支持单项精确查询 例如：域名：XX.com<br>同时输入多项条件，会默认以最前面的一条为准</font></label>
+<script>
+function bd(){
+       document.form1.action="?c=domains&a=domainsAdd"
+       document.form1.submit();
+	  
+}
+function sb(){
+	document.form1.action="?c=domains&a=domainsSelect"
+	document.form1.submit();
+}
+</script>
+
+<div class="list-div form-top" id="listDiv">
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>代理帐号</td>
+                <td>代理昵称</td>
+                <td>域名</td>
+                <td>修改时间</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+		<?php foreach ($userDomains as $domain_id => $v):?>
+    <tr>
+		<td><?php echo $v['ud_id']; ?></td>
+        <td><?php echo $v['username']; ?><b
+                    style="color:red"><?php if ($v['parent_is_test']&&!$v['parent_type']): ?>[测]<?php elseif ($v['parent_type']&&!$v['parent_is_test']): ?>
+                [推]<?php elseif ($v['parent_type']&&$v['parent_is_test']): ?>[推][测]</b><?php endif; ?></td>
+        <td><?php echo $v['nick_name'];?></td>
+        <td><?php echo $v['name']?></td>
+        <td><?php echo $v['ts']; ?></td>
+        <td>
+            <a class="btn btn-info" href="./?c=domains&a=marketLink&user_id=<?php echo $v['user_id']; ?>&host=<?php echo $v['name'];?>">推广码</a>&nbsp;
+            <a class="btn btn-info" href="./?c=domains&a=domainsUpdata&ud_id=<?php echo $v['ud_id']; ?>">编辑</a>&nbsp;
+            <a class="btn btn-info" href="./?c=domains&a=domainsDel&ud_id=<?php echo $v['ud_id']; ?>" onclick="return confirm('真的要解除绑定吗？');">解绑</a>
+        </td>
+    </tr>  
+		<?php endforeach ;?>
+    </table>
+</div>
+<!--<div>共<?php echo $domainNumber['count']; ?>条记录</div>-->
+<div class="pageTal"><?php echo $pageList; ?></div>
+        <div class="tip"></div>
+<?php $this->import("foot"); ?>
+
+

@@ -1,0 +1,579 @@
+<?php $this->import("head"); ?>
+<!--/************snow 引入 下载进度css*****************-->
+<link rel="stylesheet" href="/css/ui.css">
+<!--/************snow 引入 下载进度css*****************-->
+    <!--/************** snow 引入 下载进度 js 文件********************/-->
+    <script src="/js/layer-v2.4/layer.js"></script>
+    <script src="/js/progress.js"></script>
+    <script src="/js/base64.js"></script>
+<!--/************** snow 引入 下载进度 js 文件********************/-->
+    <script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+    <script>
+        //预设查询值
+        $(document).ready(function () {
+
+
+
+            /********************* author snow 获取返回url**************************/
+            //>>author snow 添加跳转点击事件
+            $('.go-back-url').click(function () {
+                //>>1.获取当前页面完整url 包括参数
+                back_url = location.href;
+                next_url = $(this).data('url')
+
+                var myBase = new Base64();
+                var str = myBase.encode(back_url);
+
+                next_url =next_url + '&back_url=' + str;
+
+                location.href = next_url
+
+            })
+            /********************* author snow 获取返回url**************************/
+
+            //准备数据
+            $(".deposit_bank_id").change(function () {
+
+                str = "<option value=0>请选择</option>";
+                $("#deposit_card_id").html(str);
+                <?php foreach ($bankDepositCards as $k => $v): ?>
+                if ($(this).val() == "<?php echo $k; ?>") {
+                    <?php foreach ($v as $kk => $vv): ?>
+                    str = str + "<option value=<?php echo $vv['card_id']; ?>>\
+                        <?php echo $vv['card_name']; ?>&nbsp;<?php echo isset($vv['card_num']) ? trim($vv['card_num']) : ''; ?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?>\
+                        </option>";
+                    <?php endforeach; ?>
+                    $("#deposit_card_id").html(str);
+                }
+                <?php endforeach; ?>
+            });
+
+
+            //预选中值
+            $('select[name=top_username]').val('<?php echo $top_username; ?>');
+            $('input[name=username]').val('<?php echo $username; ?>');
+            $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+            $('select[name=is_test]').val('<?php echo $is_test; ?>');
+            $('select[name=is_manual]').val('<?php echo $is_manual; ?>');
+            $(".deposit_bank_id").val('<?php echo $deposit_bank_id; ?>').change();
+            $('#deposit_card_id').val('<?php echo $deposit_card_id; ?>');
+
+            var trade_type_string = "<?php echo $trade_type; ?>";
+
+            if (trade_type_string != "") {
+                if (trade_type_string.indexOf(',') < 0) {
+                    $('#trade_type_' + trade_type_string).attr('checked', true);
+                } else {
+                    var trade_types = trade_type_string.split(',');
+
+                    for (var trade_type in trade_types)
+                    {
+                        $('#trade_type_' + trade_types[trade_type]).attr('checked', true);
+                    }
+                }
+            }
+
+            $('input[name=trade_type]').val('<?php echo $trade_type; ?>');
+            $('input[name=startDate]').val('<?php echo $startDate; ?>');
+            $('input[name=endDate]').val('<?php echo $endDate; ?>');
+            $('select[name=status]').val('<?php echo $status; ?>');
+            $('select[name=time_status]').val('<?php echo $time_status; ?>');
+
+        });
+        function doCancel(depositId) {
+            if (!confirm('这是自动存款项目，除非用户确定提交错了才需要取消，确定要取消吗？')) {
+                return false;
+            }
+            var str = prompt('请输入取消原因：', '');
+            if (str == null) {
+                return false;
+            }
+
+            $.post(
+                '?c=deposit&a=cancel',
+                {'deposit_id': depositId, 'remark': str},
+                function (result) {
+                    //eval("data="+result+";");
+                    //$(document.body).html(result);
+                    alert('已提交，请检查提案是否成功取消');
+                    window.location.reload();
+                });
+        }
+
+        $(function () {
+            $('#sel').submit(function () {
+                var start_amount =$("input[name='start_amount']").val();
+                var end_amount =$("input[name='end_amount']").val();
+                if(start_amount != '' && end_amount != '')
+                {
+
+                    if(!/^\d+$/.test(start_amount) || !/^\d+$/.test(end_amount))
+                    {
+                       alert('输入金额不合法!');
+                       return false;
+                    }
+                    if(Number(start_amount) > Number(end_amount))
+                    {
+                        alert('开始金额不能大于结束金额');
+                        return false;
+                    }
+                }
+            })
+        })
+
+        function checkStartAmount(obj) {
+            var startAmount = $(obj).val();
+            if(startAmount.length > 11)
+            {
+                $(obj).val(startAmount.substring(0,11));
+            }
+
+        }
+
+        function checkEndAmount(obj) {
+            var endAmount = $(obj).val();
+            if(endAmount.length > 11)
+            {
+                $(obj).val(endAmount.substring(0,11));
+            }
+
+        }
+    </script>
+<!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+<!------------------author snow 引入搜索相关文件--------------------------->
+    <div id="query">
+        <form class="mt20" class="form-top" id="sel" name="form1" action="./" method="get">
+            <table class="table table-responsive">
+                <tr>
+                    <td>
+                        <div class="form-inline">
+                            <div class="form-group has-default has-feedback">
+                                <label>时间:</label>
+                                <input class="input-sm form-control tl" type="text" name="startDate"
+                                       onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                                       id="startDate" value="" size="21"/>
+                                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                            <div class="form-group has-default has-feedback">
+                                <label>到</label>
+                                <input class="input-sm form-control " type="text" name="endDate"
+                                       onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                                       id="endDate" value="" size="21"/>
+                                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                            <div class="form-group">
+                                <!------------------ author snow 修改成可搜索------------------------------>
+                                <label>银行:</label>
+                                <select class="selectpicker deposit_bank_id" name="deposit_bank_id" id="deposit_bank_id" data-live-search="true" title="请选择 ...">
+                                    <option value="">请选择…</option>
+                                    <?php foreach ($bankList as $k => $v): ?>
+                                            <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <!------------------ author snow 修改成可搜索------------------------------>
+                            </div>
+                            <!------------------------  snow 把银银行分为  普通银行与第三方支付--------------------------->
+                            <label>收款卡:</label>
+                            <select class="input-sm form-control" name="deposit_card_id" id="deposit_card_id"></select>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="form-inline">
+                        <div class="form-inline" style="margin-top: 10px">
+                            <label>存款方式:</label>
+                            <?php foreach ($tradeTypes as $k => $v): ?>
+                                <input id="trade_type_<?php echo $k; ?>" name='trade_type_checkbox' type="checkbox" value="<?php echo $k; ?>" /><?php echo $v['group_name']; ?>
+                            <?php endforeach; ?>
+                            <input type="hidden" name="trade_type" value="" />
+                            <input type="radio" name="name_style" id="radio1" value="1"/>
+                            <div class="form-group snow-parent-id">
+                                <label>所属总代:</label>
+                                <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+                                    <option value="">请选择…</option>
+                                    <?php foreach ($json_topUsers as $k => $v): ?>
+                                        <option value="<?=$v['username']?>"><?=$v['username']?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <label>或</label>
+                            <input type="radio" name="name_style" value="2" id="radio2"/>
+                            <label for="radio2">用户名:</label>
+                            <input class="input-sm form-control " name="username" size="10"/>
+                            <input type="checkbox" name="include_childs" id="include_childs" value="1"/>
+                            <label for="include_childs">包含下级</label>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-inline">
+                            <label>是否测试账号:</label>
+                            <select class="input-sm form-control" name="is_test">
+                                <option value="-1">请选择</option>
+                                <option value="0">正式帐号</option>
+                                <option value="1">测试帐号</option>
+                            </select>
+                            <label>是否手工存款:</label>
+                            <select class="input-sm form-control" name="is_manual">
+                                <option value="-1">请选择</option>
+                                <option value="0">自动存款</option>
+                                <option value="1">手工存款</option>
+                            </select>
+                            <label>时间状态:</label>
+                            <select class="input-sm form-control" name="time_status">
+                                <option value="1">申请时间</option>
+                                <option value="2">完成时间</option>
+                            </select>
+
+                            <label>状态:</label>
+                            <select class="input-sm form-control" name="status">
+                                <option value="-1">请选择</option>
+                                <option value="0">未处理</option>
+                                <option value="1">已受理</option>
+                                <option value="2">已审核</option>
+                                <option value="8">已执行</option>
+                                <option value="9">取消提案</option>
+                            </select>
+                            <label>金额区间:</label>
+                            <input class="input-sm form-control " type="text" name="start_amount" onkeyup="checkStartAmount(this)" size="10" value="<?php if(isset($startAmount)) echo $startAmount;?>"/>
+                            -
+                            <input class="input-sm form-control " type="text" name="end_amount" onkeyup="checkStartAmount(this)" size="10" value="<?php if(isset($endAmount)) echo $endAmount;?>"/>
+
+                            <input type="hidden" name="c" value="deposit"/>
+                            <input type="hidden" name="a" value="depositList"/>
+                            <input class="btn btn-info mt10 ml10" type="submit" name="submit" value=">>查 询<<"/>
+                            <input class="btn btn-info mt10 ml10" type="button" id="export_excel_data" name="export_excel_data" data-urlData="&c=deposit&a=snowExportDepositListGetData" data-urlCount="&c=deposit&a=snowExportDepositListGetTotalCount" value=">>导出到excel 询<<"/><label style="color: red;margin-left: 20px;display: inline-block;margin-top: 10px;font-size: 15px">必须先查询后才可以导出</label>
+                        </div>
+
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <div class="list-div form-top" id="listDiv">
+        <table class="table table-responsive table-bordered  mainList"  style="table-layout:fixed;" width="100%">
+            <thead>
+            <tr>
+<!---------------------------------------------------添加 批量删除   ------------------------------------------->
+<!---->
+<!--                <td width="5%"><input type="button"  value="批量删除" class="snow-delete-all btn btn-info btn-danger" data-url="?&c=deposit&a=deleteDepositMany" data-id="data-deposit_id"/></td>-->
+<!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                <td width="4%">提案id</td>
+                <td width="4%">用户id</td>
+                <td width="5%">用户名</td>
+                <td width="5%">类型</td>
+                <!-- <td>汇款所属银行</td> -->
+                <td width="5%">卡户名</td>
+                <td width="6%">金额</td>
+                <td width="5%">收款银行</td>
+                <td width="5%">收款卡</td>
+                <!-- <td>收款卡所在地区</td> -->
+                <td width="10%">订单号</td>
+                <td width="10%">请求订单号</td>
+                <td width="10%">第三方订单号</td>
+                <!-------- snow 添加支付账号字段------------>
+                <td width="10%">支付账号</td>
+                <!-------- snow 添加支付账号字段------------>
+                <td width="7%">客户发起时间</td>
+                <td width="7%">完成时间</td>
+                <td width="5%">时间差</td>
+                <td width="7%">真实存款姓名微信号或其他账号</td>
+                <td width="6%">备注</td>
+                <td width="4%">状态</td>
+                <td width="5%">操作</td>
+            </tr>
+            </thead>
+            <?php foreach ($deposits as $v): ?>
+                <tr>
+<!---------------------------------------------------添加 批量删除   ------------------------------------------->
+<!--                    <td style="WORD-WRAP: break-word"><input type="checkbox" class="snow-id" data-deposit_id="--><?php //echo $v['deposit_id']; ?><!--"/></td>-->
+<!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                    <td style="WORD-WRAP: break-word"><?php echo $v['deposit_id']; ?></td>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['user_id']; ?></td>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['username']; ?>
+                        <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                        <?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                        <?php if ($v['user_status'] == 0): ?><b style="color:red">[已删除]</b>
+                        <?php elseif ($v['user_status'] == 1): ?><b style="color:red">[已冻结]</b>
+                        <?php elseif ($v['user_status'] == 5): ?><b style="color:red">[已回收]</b>
+                        <?php endif; ?>
+                    </td>
+                    <td style="WORD-WRAP: break-word">
+                        <?php if ($v['level'] == 0): ?>
+                            <?php echo "<b>总代</b>"; ?>
+                        <?php elseif ($v['level'] == 100): ?>
+                            <?php echo "<font color=blue>会员</font>"; ?>
+                        <?php else: ?>
+                            <?php echo $v['level'] . '代'; ?>
+                        <?php endif; ?>
+                    </td>
+                    <!--改变取值方式-->
+                    <!-- <td><?php echo $bankList[$v['player_bank_id']]['name']; ?></td> -->
+                    <td style="WORD-WRAP: break-word"><?php echo mb_substr($v['player_card_name'], 0, mb_strlen($v['player_card_name'], 'utf-8') - 1, 'utf-8') . '*' ?></td>
+                    <td style="vertical-align: middle;text-align: center;">
+                        <?php echo $v['amount']; ?>
+                    </td>
+                    <!--author snow改变取值方式-->
+                    <td style="WORD-WRAP: break-word"><?php echo $bankList[$v['deposit_bank_id']]['name']; ?></td>
+                    <td style="WORD-WRAP: break-word">
+                        <label title="<?php echo $depositCards[$v['deposit_card_id']]['card_num']; ?>"><?php echo $depositCards[$v['deposit_card_id']]['card_name']; ?></label>
+                    </td>
+                    <!-- <td><?php echo $depositCards[$v['deposit_card_id']]['province']; ?> <?php echo $depositCards[$v['deposit_card_id']]['city']; ?></td> -->
+                    <td style="WORD-WRAP: break-word"><?php echo $v['local_order_num']; ?></td>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['shop_order_num']; ?></td>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['order_num']; ?></td>
+                    <!----------------- snow 添加字段显示支付账号------------------------>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['pay_account_id']; ?></td>
+                    <!----------------- snow 添加字段显示支付账号------------------------>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['create_time']; ?></td>
+                    <td style="WORD-WRAP: break-word"><?php echo $v['finish_time']; ?></td>
+                    <td style="WORD-WRAP: break-word">
+                        <?php if (strtotime($v['finish_time']) - strtotime($v['create_time']) > 300): ?>
+                            <?php echo "<font color=red>" . (strtotime($v['finish_time']) - strtotime($v['create_time'])) . "</font>"; ?>
+                        <?php else: ?>
+                            <?php echo(strtotime($v['finish_time']) - strtotime($v['create_time'])); ?>
+                        <?php endif; ?>
+                    </td>
+                    <td style="WORD-WRAP: break-word" id="real_name-<?php echo $v['deposit_id']; ?>"><?php echo $v['real_name']; ?></td>
+                    <td style="WORD-WRAP: break-word" id="remark-<?php echo $v['deposit_id']; ?>"><?php echo preg_replace('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', '-'  , $v['remark']);?></td>
+                    <td style="WORD-WRAP: break-word" id="status-<?php echo $v['deposit_id']; ?>">
+                        <?php if ($v['status'] == 0): ?><b>未处理</b>
+                        <?php elseif ($v['status'] == 1): ?>已受理
+                        <?php elseif ($v['status'] == 2): ?><?php echo $v['adminname']; ?>已审核
+                        <?php elseif ($v['status'] == 3): ?><?php echo $v['adminname']; ?><font color="red">未处理</font>
+                        <?php elseif ($v['status'] == 8): ?><?php echo $v['adminname']; ?>已执行
+                        <?php elseif ($v['status'] == 9): ?><font color="red"><?php echo $v['adminname']; ?>取消提案</font>
+                        <?php endif; ?>
+                    </td>
+                    <td style="WORD-WRAP: break-word" id="action-<?php echo $v['deposit_id']; ?>">
+                        <button class="btn btn-mini btn-info go-back-url" data-url="?c=deposit&a=viewDeposit&deposit_id=<?php echo $v['deposit_id']; ?>">明细</button>
+          <!--              <a class="btn btn-mini btn-info"
+                           href="./?c=deposit&a=viewDeposit&deposit_id=<?php /*echo $v['deposit_id']; */?>">明细
+                        </a>-->
+                        <!--
+            <?php if ($v['status'] == 0): ?>
+                <a href="./?c=deposit&a=verify&deposit_id=<?php echo $v['deposit_id']; ?>">审核</a>
+            <?php elseif ($v['status'] == 1): ?>
+                <a href="./?c=deposit&a=verify&deposit_id=<?php echo $v['deposit_id']; ?>">审核</a>
+            <?php elseif ($v['status'] == 2): ?>
+                <a href="./?c=deposit&a=charge&deposit_id=<?php echo $v['deposit_id']; ?>">执行充值！</a>
+            <?php elseif ($v['status'] == 8): ?>
+            <?php elseif ($v['status'] == 9): ?>
+            <?php endif; ?>
+            -->
+                        <?php if ($v['status'] != 8): ?>
+                            <a class="btn btn-mini btn-info charge action-button<?php if (!($v['status'] <= 3)) echo ' hide'; ?>"
+                               data-id="<?php echo $v['deposit_id']; ?>">确认充值</a>
+
+                            <a class="btn btn-mini btn-info recover action-button<?php if (!($v['status'] == 9)) echo ' hide'; ?>"
+                               data-id="<?php echo $v['deposit_id']; ?>">恢复提案</a>
+
+                            <a class="btn btn-mini btn-info cancel action-button<?php if (!($v['status'] < 4) && $v['status'] != 0) echo ' hide'; ?>"
+                               data-id="<?php echo $v['deposit_id']; ?>">取消提案</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="pageTal">
+        <div>本页小计:<b> <?php echo $trafficInfo['count']; ?></b> 笔记录，总金额
+            <b><?php echo $trafficInfo['total_amount']; ?></b> 元，本页有效金额<b> <?php echo $pageRealAmount; ?></b>，总有效金额
+            <b><?php echo $trafficInfo['total_real_amount']; ?></b> &nbsp; <?php echo $pageList; ?></div>
+    </div>
+    <!--<input  type="button"  onclick="playSound2();" class="button" value="点击播放" />-->
+    <!--<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false"></embed>-->
+    <div id="soundDiv"></div>
+    <script type="text/javascript">
+        var originTitle = window.parent.document.title;
+        var isBelowIe8 = navigator.userAgent.indexOf("MSIE") > 0 && navigator.userAgent.match(/MSIE (\d{1,2}).0;/)[1] <= 8;
+
+        $(function () {
+            if (isBelowIe8) {
+                $('#soundDiv').html('<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false" />');
+            } else {
+                $('#soundDiv').html(
+                    '<audio id="devUnknown" hidden="true" autostart="false">' +
+                    '<source src="images/chimes.wav" type="audio/wav" loop="false">' +
+                    '</audio>'
+                );
+            }
+            playSound2();
+        });
+
+        function playSound2() {
+            var node = document.getElementById('devUnknown');
+            if (node) node.play();
+        }
+        function checkNew() {
+            $.post(
+                '?c=deposit&a=checkNew',
+                {'check': 1},
+                function (result) {
+                    eval("data=" + result + ";");
+                    //$('#balance').html(data.balance);
+                    if (data.newNum) {
+                        playSound2();
+                        window.parent.document.title = '提示：有 ' + data.newNum + ' 笔存款待处理！';
+                        window.setTimeout("window.location.reload()", 20000);
+                    }
+                    else {
+                        //alert('没有存款提案！');
+                        window.parent.document.title = originTitle;
+                    }
+                });
+        }
+        window.setInterval(checkNew, 20000);
+        /************************************ snow  修改弹出层显示订单详细信息 down ****************************************************/
+        /**
+         * 审核并确认充值
+         */
+        $('.charge').on('click', function () {
+
+            var that = this;
+            var all_tds         = window.parent.$(that).closest('tr').find('td');//>>获取当前tr 下面所有td
+            var user_name       = window.parent.$(all_tds[2]).text();//>>用户名
+            var bank_card_id    = window.parent.$(all_tds[7]).text();//>>收 款 卡
+            var order_id        = window.parent.$(all_tds[8]).text();//>>网站 订单
+            var order_amount    = window.parent.$(all_tds[5]).text();//>>金     额
+            var bank_name       = window.parent.$(all_tds[6]).text();//>>收款 银行
+
+            var confirmInfo = '<div id="buy_message">请确认以下充值内容：<br>************************<br>用&nbsp;&nbsp;户&nbsp;&nbsp;名：' + user_name + "<br>金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额：￥" + order_amount + "<br>收款&nbsp;银行：" + bank_name + "<br>收&nbsp;&nbsp;款&nbsp;&nbsp;卡：" + bank_card_id + "<br>网站&nbsp;订单：" + order_id + "<br>************************<br></div>";
+            window.parent.layer.confirm(confirmInfo, {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+
+                $deposit_id = window.parent.$(that).attr('data-id');
+
+                window.parent.$.post('./?c=deposit&a=charge', {'deposit_id': $deposit_id}, function ($response) {
+                    if (!($response.errno === 0)) {
+                        window.parent.layer.alert($response.errstr);
+                        return false;
+                    }else{
+
+                        // 修改状态
+                        window.parent.$(all_tds[15]).html('<b>已执行</b>');
+                        // 隐藏确认、取消、恢复按钮
+                        window.parent.$(all_tds[16]).find('.action-button').addClass('hide');
+                        window.parent.layer.msg('执行成功', {icon: 1});
+                    }
+;
+                }, 'JSON');
+            },function(){
+                window.parent.layer.msg('好吧,哪就再等一下吧', {icon: 1});
+
+            });
+
+        });
+
+        /************************************ snow  修改弹出层显示订单详细信息 up down ****************************************************/
+        /**
+         * 恢复提案
+         * @returns {boolean}
+         */
+        $('.recover').on('click', function () {
+            var that = this;
+            var all_tds         = window.parent.$(that).closest('tr').find('td');//>>获取当前tr 下面所有td
+
+             window.parent.layer.confirm('确定要恢复提案？',{btn: ['确定','取消'] },function(){
+                 $deposit_id = window.parent.$(that).attr('data-id');
+                 window.parent.$.post('./?c=deposit&a=recover', {'deposit_id': $deposit_id}, function ($response) {
+                     if (!($response.errno === 0)) {
+                         window.parent.layer.alert($response.errstr);
+                         return false;
+                     }else{
+
+                         window.parent.$(all_tds[14]).html('');
+                         window.parent.$(all_tds[15]).html('<b>未处理</b>');
+
+                         // 隐藏确认、取消、恢复按钮
+                         window.parent.$(all_tds[16]).find('.recover').addClass('hide');
+                         window.parent.$(all_tds[16]).find('.charge').removeClass('hide');
+                         window.parent.$(all_tds[16]).find('.cancel').removeClass('hide');
+                         window.parent.layer.msg('恢复提案成功', {icon: 1});
+
+                     }
+
+
+                 }, 'JSON');
+                },function(){
+                 window.parent.layer.msg('好吧,哪就再等一下吧', {icon: 1});
+
+                }) ;
+
+
+        });
+        /************************************ snow  修改弹出层显示订单详细信息 up down ****************************************************/
+        /**
+         * 取消提案
+         * @returns {boolean}
+         */
+        $('.cancel').on('click', function () {
+
+
+            var that = this;
+            var all_tds         = window.parent.$(that).closest('tr').find('td');//>>获取当前tr 下面所有td
+            var user_name       = window.parent.$(all_tds[2]).text();//>>用户名
+            var bank_card_id    = window.parent.$(all_tds[7]).text();//>>收 款 卡
+            var order_id        = window.parent.$(all_tds[8]).text();//>>网站 订单
+            var order_amount    = window.parent.$(all_tds[5]).text();//>>金     额
+            var bank_name       = window.parent.$(all_tds[6]).text();//>>收款 银行
+
+            var confirmInfo = '<div id="buy_message">请确认以下取消充值内容：<br>************************<br>用&nbsp;&nbsp;户&nbsp;&nbsp;名：' + user_name + "<br>金&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额：￥" + order_amount + "<br>收款&nbsp;银行：" + bank_name + "<br>收&nbsp;&nbsp;款&nbsp;&nbsp;卡：" + bank_card_id + "<br>网站&nbsp;订单：" + order_id + "<br>************************<br></div>";
+
+            window.parent.layer.confirm(confirmInfo, {
+                btn: ['确定取消','再考虑'] //按钮
+            }, function(){
+                $deposit_id = window.parent.$(that).attr('data-id');
+                window.parent.$.post('./?c=deposit&a=cancel', {'deposit_id': $deposit_id, 'remark': '人工取消'}, function ($response) {
+                    if (!($response.errno === 0)) {
+                        window.parent.layer.alert($response.errstr);
+                        return false;
+
+                    }else{
+
+                        window.parent.$(all_tds[14]).html('人工取消');
+                        // 修改状态
+                        window.parent.$(all_tds[15]).html('<font color="red">取消提案</font>');
+                        // 隐藏确认、取消、恢复按钮
+                        window.parent.$(all_tds[16]).find('.charge').addClass('hide');
+                        window.parent.$(all_tds[16]).find('.cancel').addClass('hide');
+                        window.parent.$(all_tds[16]).find('.recover').removeClass('hide');
+                        window.parent.layer.msg('提案取消成功', {icon: 1});
+
+                    }
+
+                }, 'JSON');
+
+            },function(){
+                window.parent.layer.msg('好吧,哪就再等一下吧', {icon: 1});
+            });
+
+        });
+        /************************************ snow  修改弹出层显示订单详细信息 up****************************************************/
+
+        $('input[name="trade_type_checkbox"]').on('click', function () {
+            $trade_type_string = '';
+
+            $('input[name="trade_type_checkbox"]').each(function () {
+
+                if ($(this).attr('checked') != undefined) {
+                    if ($trade_type_string != '') {
+                        $trade_type_string += ",";
+                    }
+
+                    $trade_type_string += $(this).val();
+                }
+            });
+
+            $('input[name="trade_type"]').val($trade_type_string);
+        });
+
+    </script>
+<?php $this->import("foot"); ?>

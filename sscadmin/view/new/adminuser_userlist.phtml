@@ -1,0 +1,68 @@
+
+<?php $this->import("head"); ?>
+
+<script>
+$(function(){
+    $('#group_id').val('<?php echo $group_id; ?>');
+    $('#is_enabled').val('<?php echo $is_enabled; ?>');
+});
+</script>
+<form class="form-inline mt10 mb10 form-top"  name="form1" id="form1" action="" method="GET">
+<label style="font-weight: normal;">所属部门:</label>
+<select class="input-sm form-control" name="group_id" id="group_id">
+    <option value="0">请选择</option>
+    <?php foreach ($firstSecondThirdItems as $v): ?>
+    <option value="<?php echo $v['group_id']; ?>"><?php echo $v['name']; ?></option>
+        <?php foreach ($v['childs'] as $vv): ?>
+        <option value="<?php echo $vv['group_id']; ?>">&nbsp;&nbsp;<?php echo $vv['name']; ?></option>
+            <?php foreach ($vv['childs'] as $vvv): ?>
+            <option value="<?php echo $vvv['group_id']; ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $vvv['name']; ?></option>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+</select>
+<label class="ml20" style="font-weight: normal;">是否启用:</label>
+<select class="input-sm form-control" name="is_enabled" id="is_enabled" />
+    <option value="-1">全部</option>
+    <option value="1">启用</option>
+    <option value="0">帐户已禁用</option>
+</select>
+    <input type="hidden" name="c" value="adminUser"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <button class="btn  btn-info ml15" style="width: 60px;" type="submit" name="submit" class="submit" value="查询">查询</button>
+    <!--<input type="submit" name="submit" class="submit" value="查询"/>-->
+</form>
+
+<div class="list-div form-top" id="listDiv">
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <td>用户id</td>
+                <td>用户名</td>
+                <td>所属组别</td>
+                <td>是否启用</td>
+                <td>上次登录IP</td>
+                <td>上次登录时间</td>
+                <td>建立时间</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+         <?php foreach ($users as $v): ?>
+    <tr>
+        <td><?php echo $v['admin_id']; ?></td>
+        <td><?php echo $v['username']; ?></td>
+        <td><label title="<?php echo $groups[$v['group_id']]['description']; ?>"><?php echo $groups[$v['group_id']]['name']; ?></label></td>
+        <td><?php if($v['is_enabled']): ?>是<?php else: ?><font color="red">否</font><?php endif; ?></td>
+        <td><?php echo ip::loc($v['last_ip']); ?></td>
+        <td><?php echo $v['last_time']; ?></td>
+        <td><?php echo $v['date']; ?></td>
+        <td>
+            <a class="btn btn-info" href="./?c=adminUser&a=editUser&user_id=<?php echo $v['admin_id']; ?>">编辑</a>&nbsp;
+            <!-- <a href="./?c=adminUser&a=deleteUser&user_id=<?php echo $v['admin_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');"><img src="images/b_drop.png"/></a>&nbsp; -->
+        </td>
+    </tr>
+    <?php endforeach; ?>    
+    </table>
+</div>
+<div>共<?php echo count($users); ?>条记录</div>
+
+<?php $this->import("foot"); ?>

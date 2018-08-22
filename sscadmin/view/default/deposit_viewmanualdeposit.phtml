@@ -1,0 +1,77 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=deposit&a=<?php echo ACTION; ?> ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 80%;">
+    <tr><td colspan="4">当前状态：
+        <b><?php if ($manualDeposit['status'] == 0): ?>未处理
+            <?php elseif ($manualDeposit['status'] == 1): ?>已受理
+            <?php elseif ($manualDeposit['status'] == 4): ?>已拒绝
+            <?php elseif ($manualDeposit['status'] == 5): ?>系统撤单
+            <?php elseif ($manualDeposit['status'] == 8): ?>已执行
+            <?php endif; ?></b>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="tc"><b>客服录入数据</b></td>
+        <td colspan="2" class="tc"><b>财务录入数据</b></td>
+    </tr>
+    <tr>
+        <td width="20%">支付渠道</td>
+        <td width="30%"><?php echo $GLOBALS['cfg']['bankList'][$manualDeposit['deposit_bank_id']]; ?></td>
+
+        <td width="20%">收款卡</td>
+        <td width="30%"><?php echo $depositCards['card_name'] . ' ' . $depositCards['card_num']; ?></td>
+    </tr>
+    <?php if ($manualDeposit['deposit_bank_id'] != 203): ?>
+    <tr>
+        <td>汇款户名</td>
+        <td><?php echo $manualDeposit['card_name_0']; ?></td>
+        <td>汇款户名</td>
+        <td><?php echo $manualDeposit['card_name_1']; ?></td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+        <td>存款金额</td>
+        <td><?php echo $manualDeposit['amount_0']; ?></td>
+        <td>存款金额</td>
+        <td><?php echo $manualDeposit['amount_1'] > 0 ? $manualDeposit['amount_1'] : ''; ?></td>
+    </tr>
+    <tr>
+        <td>订单号</td>
+        <td><?php echo $manualDeposit['order_num_0']; ?></td>
+        <td>订单号</td>
+        <td><?php echo $manualDeposit['order_num_1']; ?></td>
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td><?php echo $manualDeposit['remark_0']; ?></td>
+        <td>备注</td>
+        <td><?php echo $manualDeposit['remark_1']; ?></td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <div style="width: 80%;margin:0 auto;text-align:center;">
+                 <?php if ($canAcceptManualDeposit): ?>
+                <?php if ($manualDeposit['status'] == 0): ?>
+                <input id="accept" type="button" class="submit" name="button" value="我要受理" onclick="this.form.action='./?c=deposit&a=acceptManualDeposit';this.form.submit();"/>
+                <?php elseif ($manualDeposit['status'] == 1): ?>
+                <input type="button"  onclick="window.location.href='?c=deposit&a=operateManualDeposit&md_id=<?php echo $manualDeposit['md_id']; ?>';" value="开始处理"/>
+                <?php endif; ?>
+                <?php endif; ?>
+                <input class="btn btn-info submit" type="hidden" name="md_id" value="<?php echo $manualDeposit['md_id']; ?>" />
+                <input class="btn btn-info  submit" type="button"  onclick="window.location.href='?c=deposit&a=manualDepositList';" value="返回列表"/>
+            </div>
+        </td>
+           
+    </tr>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

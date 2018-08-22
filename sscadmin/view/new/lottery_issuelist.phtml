@@ -1,0 +1,41 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div" id="listDiv">
+<form name="form1" id="form1" action="./?c=lottery&a=deleteIssue&lottery_id=<?php echo $lottery['lottery_id']; ?>" method="post">
+<table class="table table-responsive  table-bordered mt20" width="100%">
+    <thead>
+        <tr>
+        	<td>
+                <label class="fn" for="ca"><input type="checkbox" name="ca" id="ca" onclick="checkAll('ca')" />反选</label>
+            </td>
+            <td>彩种</td>
+            <td>期号</td>
+            <td>所属哪天</td>
+            <td>周期开始时间</td>
+            <td>周期结束时间</td>
+            <td>开奖号码</td>
+        </tr>
+    </thead>
+        <?php foreach ($issues as $v): ?>
+        <tr>
+        	<td><input type="checkbox" name="deleteItems[]" id="idArr" value="<?php echo $v['issue_id']; ?>" /><?php echo $v['issue_id']; ?></td>
+            <td><?php echo $lottery['name']; ?></td>
+            <td><?php echo $v['issue']; ?></td>
+            <td><?php echo $v['belong_date']; ?></td>
+            <td><?php echo $v['start_sale_time']; ?></td>
+            <td><?php echo $v['end_sale_time']; ?></td>
+            <td><?php echo $v['code']; ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="7">
+            <div class="tl">
+                <input class="btn btn-info" type="button" name="button" value=" 删除奖期 " onclick="if ($(':checkbox:checked[id!=\'ca\']').length == 0) {alert('请选择');return false};if (confirm('真的要删除吗？')) this.form.submit();"/>
+            </div>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+<?php $this->import("foot"); ?>

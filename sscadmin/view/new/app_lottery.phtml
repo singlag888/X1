@@ -1,0 +1,50 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        function checkform(ob) {
+            $('.submit').html('正在提交数据');
+            $('.submit').attr('disabled',true);
+            return true;
+        }
+    </script>
+
+    <style>
+        .bt{
+            background: #3B8FB2;
+            color: #fff;
+        }
+        table tr{
+            text-align: center;
+        }
+    </style>
+    <div class="list-div" id="addDiv">
+        <form class="form-inline " role="form" name="form1" id="form1" action="./?c=app&a=<?php echo ACTION; ?>"
+              onsubmit="return checkform(this)" method="post" enctype="multipart/form-data">
+            <h5 style="color: red">(一次最多上传20个彩种图标)多图片上传了时间较长,请勿再上传过程中刷新页面,建议多次少量上传彩种图标。</h5>
+            <h5>注意：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h5>
+            <table class="table table-responsive table-bordered" style="width:60%;">
+                <?php foreach ($lotterys as $item):?>
+                <tr>
+                    <td><?php echo $item['cname']?></td>
+                    <td>
+                        <input class="input-sm form-control <?php echo 'm_'.$item['lottery_id']?>" name="<?php echo 'm_'.$item['lottery_id']?>" type="file"/>
+                        <?php if(!empty($imgs[$item['lottery_id']])):?>
+                            <br><br><img src="<?php echo $imgs[$item['lottery_id']] ?>"/>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach;?>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <input name="ua_id" type="hidden"
+                                   value="<?php if ($appAlert) echo $appAlert['ua_id']; ?>"/>
+                            <button type="submit" class="btn btn-info submit" name="submit">提交</button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+<?php $this->import("foot"); ?>

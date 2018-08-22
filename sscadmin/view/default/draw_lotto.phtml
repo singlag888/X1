@@ -1,0 +1,130 @@
+<?php $this->import("head"); ?>
+<script>
+    $(function() {
+        $('#form1 :button').click(function() {
+            $('input[name=lottery_id]').val($(this).attr('id2'));
+        });
+        $('#form2').submit(function() {
+            if (!/^\d{2} \d{2} \d{2} \d{2} \d{2}$/.test($('input[name=code]').val())) {
+                alert('请输入正确的10位数字，每2位之前有一个空格');
+                return false;
+            }
+
+            return true;
+        });
+
+        //预选中
+        $('#lottery_<?php echo $lottery['lottery_id']; ?>').css('background', '#ea39e0');
+        $('#lottery_<?php echo $lottery['lottery_id']; ?>').css('border', 'none');
+    });
+</script>
+<form name="form1" id="form1" action="" method="GET">
+    <input type="hidden" name="c" value="draw"/><input type="hidden" name="a" value="lotto"/>
+    <input type="hidden" name="lottery_id" value=""/>
+    <table class="table table-responsive table-bordered gameBtn mt20">
+        <tr>
+            <?php foreach ($lotterys as $v): ?>
+                <td>
+                    <button class="btn btn-info " name="btn" id="lottery_<?php echo $v['lottery_id']; ?>" id2="<?php echo $v['lottery_id']; ?>"><?php echo $v['cname']; ?></button>
+                </td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</form>
+<?php if ($lastNoDrawIssue): ?>
+    <form name="form2" id="form2" action="?c=draw&a=lotto" method="POST">
+        <input type="hidden" name="lottery_id" value="<?php echo $lastNoDrawIssue['lottery_id']; ?>"/>
+        <table class="table table-responsive table-bordered gameTable">
+            <tr>
+                <td>游戏：<?php echo $lottery['name']; ?></td>
+                <td>奖期：<?php echo $lastNoDrawIssue['issue']; ?></td>
+                <td>销售时间：<?php echo $lastNoDrawIssue['start_sale_time']; ?> ~ <?php echo $lastNoDrawIssue['end_sale_time']; ?></td>
+                <td>状态：<?php if ($lastNoDrawIssue['status_fetch'] == 0): ?>Pending<?php elseif ($lastNoDrawIssue['status_fetch'] == 1): ?>Processing<?php else: ?>Finished<?php endif; ?></td>
+                <td>当前权值/达标权值：<?php echo $lastNoDrawIssue['rank']; ?>/<?php echo $least_rank; ?></td>
+            </tr>
+            <tr>
+                <td colspan="10">
+                    <div class="form-inline">
+                        <label>可手工开奖奖期:</label>
+                        <select class="input-md form-control" name="issue_id">
+                            <?php foreach ($noDrawIssues as $v): ?>
+                            <option value="<?php echo $v['issue_id']; ?>" <?php if ($lastNoDrawIssue['issue_id'] == $v['issue_id']): ?> selected="selected"<?php endif; ?>><?php echo $v['issue']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <label class="ml20">开奖号码：</label>
+                        <input class="input-md form-control" name="code" value=""/>
+                        <input class="btn btn-info ml20" type="submit" class="submit" name="submit" value="提交"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+<?php endif; ?>
+<div class="list-div mt10" id="listDiv">
+    <table class="table  table-responsive table-bordered  mainList" >
+        <thead>
+            <tr>
+                <th rowspan="2">奖期</th>
+                <th rowspan="2">销售截止时间</th>
+                <th rowspan="2">最早录号时间</th>
+                <th rowspan="2">开奖号码</th>
+                <th rowspan="2">录入者</th>
+                <th rowspan="2">实际录号时间</th>
+                <th rowspan="2">审核者</th>
+                <th rowspan="2">审核时间</th>
+                <th rowspan="2">权值</th>
+                <th rowspan="2">开奖状态</th>
+                <th colspan="4">状态</th>
+            </tr>
+            <tr>
+                <td>返点</td>
+                <td>中奖</td>
+                <td>派奖</td>
+            </tr>
+        </thead>
+        <?php foreach ($issues as $v): ?>
+            <tr>
+                <td><?php echo $v['issue']; ?></td>
+                <td><?php echo $v['end_sale_time']; ?></td>
+                <td><?php echo $v['earliest_input_time']; ?></td>
+                <td><?php if ($v['status_code'] == 2) echo $v['code']; ?></td>
+                <td><?php echo $admins[$v['input_admin_id']]['username']; ?></td>
+                <td><?php echo $v['input_time']; ?></td>
+                <td><?php if ($v['verify_admin_id'] > 0): ?><?php echo $admins[$v['verify_admin_id']]['username']; ?><?php endif; ?></td>
+                <td><?php if ($v['verify_admin_id'] > 0): ?><?php echo $v['verify_time']; ?><?php endif; ?></td>
+                <td><?php echo $v['rank']; ?></td>
+                <td>
+                    <?php if ($v['status_code'] == 0): ?><b>未写入</b>
+                    <?php elseif ($v['status_code'] == 1): ?>写入待验证
+                    <?php elseif ($v['status_code'] == 2): ?>已验证
+                    <?php elseif ($v['status_code'] == 3): ?><font color="red"><b>官方未开奖</b></font>
+                    <?php endif; ?>
+                </td>
+
+                <td>
+                    <?php if ($v['status_rebate'] == 0): ?>未开始
+                    <?php elseif ($v['status_rebate'] == 1): ?>进行中
+                    <?php elseif ($v['status_rebate'] == 2): ?><img src="./images/yes.gif">
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['status_check_prize'] == 0): ?>未开始
+                    <?php elseif ($v['status_check_prize'] == 1): ?>进行中
+                    <?php elseif ($v['status_check_prize'] == 2): ?><img src="./images/yes.gif">
+                    <?php elseif ($v['status_check_prize'] == 3): ?><font color="red"><b>官方未开奖</b></font>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['status_send_prize'] == 0): ?>未开始
+                    <?php elseif ($v['status_send_prize'] == 1): ?>进行中
+                    <?php elseif ($v['status_send_prize'] == 2): ?><img src="./images/yes.gif">
+                    <?php elseif ($v['status_send_prize'] == 3): ?><font color="red"><b>官方未开奖</b></font>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

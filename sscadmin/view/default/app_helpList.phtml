@@ -1,0 +1,41 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        //预设查询值
+        $(document).ready(function(){
+
+        });
+    </script>
+    <div class="list-div mt10" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered mainList" width="100%">
+                <thead>
+                <tr>
+                    <td width="10%">ID</td>
+                    <td width="20%">文档名称</td>
+                    <td width="60%">文档内容</td>
+                    <?php if ($canEdit): ?>
+                    <td width="10%">操作</td>
+                    <?php endif; ?>
+                </tr>
+                </thead>
+                <?php foreach ($helpList as $v): ?>
+                    <tr>
+                        <td width="10%"><?php echo $v['id']; ?></td>
+                        <td width="20%"><?php echo $v['name']; ?></td>
+                        <td width="60%"><?php echo empty($v['show_content'])?'暂无内容':'<a href="./?c=app&a=showHelp&id='.$v['id'].'">点击查看详情</a>'; ?></td>
+                        <?php if ($canEdit): ?>
+                            <td width="10%">
+                                    <a class="btn btn-mini btn-info" href="./?c=app&a=editHelp&id=<?php echo $v['id']; ?>">编辑</a>
+                            </td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+    </div>
+    <div class="pageTal"><?php echo $pageList; ?></div>
+    <div class="tip">
+    </div>
+
+<?php $this->import("foot"); ?>

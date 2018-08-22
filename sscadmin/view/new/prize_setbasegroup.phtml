@@ -1,0 +1,164 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(document).ready(function(){
+
+    //剩下的是根据奖金计算利润
+
+   if ("<?php echo ACTION; ?>" == 'setBaseGroup') {
+       $("input[name=pg_id]").val("<?php echo $baseGroup['pg_id']; ?>");
+       $("input[name=name]").val("<?php echo $baseGroup['name']; ?>");
+       $("input[name=description]").val("<?php echo $baseGroup['description']; ?>");
+       $("input[name=max_top_rebate]").val("<?php echo $baseGroup['max_top_rebate']; ?>");
+   }
+
+   $(":input").change();
+});
+//计算总利润
+function computeTotal(method_id, cur_level) {
+    //已知
+    var max_money = $("#max_money_" + method_id).val();
+    var level = $("#level_" + method_id).val();
+    var unknown_type = $("#unknown_type_" + method_id).val();
+    var expand_num = $("#expand_num_" + method_id + "_" + cur_level).val();
+    var prize = $("#prize_" + method_id + "_" + cur_level).val();
+    //求解
+    var total_profit;
+    if(prize == "") {
+        $("#prize_" + method_id + "_" + cur_level).val('0.00');
+        prize ="0.00";
+    }
+    var total_profit = (max_money - expand_num * prize) / max_money;
+    $("#total_profit_" + method_id + "_" + cur_level).html(total_profit.toFixed(3));
+    $("#top_rebate_" + method_id).change();
+}
+//计算纯利润
+function computePure(method_id) {
+    var level = $("#level_" + method_id).val();
+    for (var i = 1; i <= level; i++) {
+        var total_profit = $("#total_profit_" + method_id + "_" + i).text();
+        var top_rebate  = $("#top_rebate_" + method_id).val();
+		if(top_rebate == "") {
+			top_rebate = 0.00;
+			$("#top_rebate_" + method_id).val("0.00");
+		}
+        var pure_profit = total_profit - top_rebate;
+        $("#pure_profit_" + method_id + "_" + i).html(pure_profit.toFixed(3));
+    }
+}
+//批量设置返点
+function batchSetRebate(val) {
+    $("input[id^='top_rebate_']").each(function(i,obj){
+        //obj = this 是DOM对象，如果要获取jquery对象用$(this)
+        this.value = val;
+        //$(this).val(ob.value);
+        $(this).change();
+    });
+}
+
+</script>
+<div class="list-div" id="addDiv">
+<p style="color:#FF5151;font-size:16px;">说明：以90%返奖作为基本组的精确奖金，精确至小数点4位。任何非基本奖金均可根据比例算出。例：((0.078-0.03)*全包2000+基准奖金1700)/1700*该玩法基本奖金=最终奖金</p>
+    <form name="form1" class="form-top" id="form1" action="./?c=prize&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>" method="post">
+        <div id="query">
+            <table class="table table-responsive">
+                <tr>
+                    <td>
+                        <div class="form-inline">
+                            <label>奖金组名称:</label>
+                            <input class="input-sm form-control" type="text" name="name"/>
+                            <label class="ml15">说明：</label>
+                            <input class="input-sm form-control" type="text" name="description" size="30"/>
+                            <label class="ml15">总代最高返点</label>
+                            <input class="input-sm form-control" type="text" name="max_top_rebate" value="0.10" />
+                            <input class="btn btn-sm btn-info ml15" type="button" name="batchSet" value="批量设置" onclick="batchSetRebate($('input[name=max_top_rebate]').val());"/>
+                        </div>
+                     </td>
+                </tr>
+            </table>
+        </div>
+    <h3>玩法奖金详细设定</h3>
+
+    <div class="form-top" id="listDiv">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0">
+            <thead>
+                <tr>
+                    <td>彩种</td>
+                    <td>玩法组</td>
+                    <td>玩法</td>
+                    <td>全包金额</td>
+                    <td width="19%">奖金</td>
+                    <td>对于多奖级是否兼中兼得</td>
+                    <td>总利润</td>
+                    <td>总代返点</td>
+                    <td>公司留水</td>
+                </tr>
+            </thead>
+            <?php foreach ($methods as $k => $v): ?>
+            <?php foreach ($v as $kk => $vv): ?>
+                <tr>
+                    <?php if ($kk == 0): ?><td rowspan="<?php echo count($v); ?>"><?php echo $lottery['name']; ?></td><?php endif; ?>
+                    <?php if ($kk == 0): ?><td  rowspan="<?php echo count($v); ?>"><?php echo $vv['mg_name']; ?></td><?php endif; ?>
+                    <td>
+                        <?php echo $vv['cname']; ?>
+                        <input class="input-sm form-control" type="hidden" id="max_money_<?php echo $vv['method_id']; ?>" value="<?php echo $vv['max_money']; ?>"/>
+                        <input class="input-sm form-control" type="hidden" id="level_<?php echo $vv['method_id']; ?>" value="<?php echo $vv['levels']; ?>"/>
+                        <input class="input-sm form-control" type="hidden" id="unknown_type_<?php echo $vv['method_id']; ?>" value="<?php echo $vv['unknown_type']; ?>"/>
+                    </td>
+                    <td><?php echo $vv['max_money']; ?></td>
+                    <td class="priceTd">
+                        <div class="form-inline">
+                            <?php for ($kkk = 1; $kkk <= $vv['levels']; $kkk++): ?>
+                        <?php //dump($prizes[$vv['method_id']][$kkk]['prize']); ?>
+                            <?php echo $vv['expands'][$kkk]['name']; ?>:
+                            <input class="input-sm form-control mb5" name="prize[<?php echo $vv['method_id']; ?>][<?php echo $kkk; ?>]" id="prize_<?php echo $vv['method_id']; ?>_<?php echo $kkk; ?>" size="9" value="<?php if (isset($prizes[$vv['method_id']][$kkk]['prize'])): ?><?php echo $prizes[$vv['method_id']][$kkk]['prize']; ?><?php else: ?>0<?php endif; ?>" onchange="computeTotal(<?php echo $vv['method_id']; ?>,<?php echo $kkk; ?>)" />元
+                            （<?php echo $vv['expands'][$kkk]['expand_num']; ?>注）<br/>
+                            <input class="input-sm form-control mb5" type="hidden" id="expand_num_<?php echo $vv['method_id']; ?>_<?php echo $kkk; ?>" value="<?php echo $vv['expands'][$kkk]['expand_num']; ?>" />
+                        <?php endfor; ?>
+                        </div>
+                    </td>
+                    <td>
+                        <?php if ($vv['unknown_type'] == 3): ?>是
+                        <?php else: ?>&nbsp;
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php foreach ($vv['expands'] as $kkk => $vvv): ?>
+                            <span id="total_profit_<?php echo $vv['method_id']; ?>_<?php echo $kkk; ?>"></span><br/>
+                        <?php endforeach; ?>
+                    </td>
+                    <td>
+                        <input class="input-sm form-control" name="top_rebate[<?php echo $vv['method_id']; ?>]" id="top_rebate_<?php echo $vv['method_id']; ?>" size="6" value="<?php if (isset($prizes[$vv['method_id']][$kkk]['top_rebate'])): ?><?php echo $prizes[$vv['method_id']][$kkk]['top_rebate']; ?><?php else: ?>0<?php endif; ?>" onchange="computePure(<?php echo $vv['method_id']; ?>)"/></td>
+                    <td>
+                        <?php if ($vv['unknown_type'] == 0): ?>
+                            <?php foreach ($vv['expands'] as $kkk => $vvv): ?>
+                                <span id="pure_profit_<?php echo $vv['method_id']; ?>_<?php echo $kkk; ?>"></span><br/>
+                            <?php endforeach; ?>
+                        <?php elseif ($vv['unknown_type'] == 3): ?>
+                            <?php foreach ($vv['expands'] as $kkk => $vvv): ?>
+                                <span id="pure_profit_<?php echo $vv['method_id']; ?>_<?php echo $kkk; ?>"></span><br/>
+                            <?php endforeach; ?>
+                            <font color="Red"><b>总计:<span id="pure_profit_<?php echo $vv['method_id']; ?>"></span></b></font>
+                        <?php elseif ($vv['unknown_type'] == 1): ?>
+                            未知处理方式
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php endforeach; ?>
+                <tr>
+                    <td colspan="9">
+                        <div style="width:100%;margin:0 auto;text-align: center;">
+                            <input class="btn btn-info submit" style="width: 65px;" type="submit"  name="submit" value="<?php if (ACTION == "addGroup"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                            <input class="btn btn-info submit " style="width: 65px;" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                            <input type="hidden" name="pg_id" value="" />
+                        </div>
+                    </td>
+
+                </tr>
+        </table>
+    </form>
+    </div>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,161 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/js/jquery.dialog.js?_=1" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" />
+<script>
+//预设查询值
+	$(function () {
+		$('input[name=username]').val('<?php echo $username; ?>');
+		$('input[name=realname]').val('<?php echo $realname; ?>');
+		$('select[name=type]').val('<?php echo $type; ?>');
+
+		$('select[name=operate]').val('<?php echo $operate; ?>');
+		$('input[name=amount]').val('<?php echo $amount; ?>');
+		$('input[name=startInputDate]').val('<?php echo $startInputDate; ?>');
+		$('input[name=endInputDate]').val('<?php echo $endInputDate; ?>');
+		$('input[name=inputAdmin]').val('<?php echo $inputAdmin; ?>');
+		$('input[name=startFinishDate]').val('<?php echo $startFinishDate; ?>');
+		$('input[name=endFinishDate]').val('<?php echo $endFinishDate; ?>');
+		$('input[name=finishAdmin]').val('<?php echo $finishAdmin; ?>');
+		$('select[name=reason]').val('<?php echo $reason; ?>');
+		$('input[name=remark]').val('<?php echo $remark; ?>');
+		$('select[name=status]').val('<?php echo $status; ?>');
+
+		<?php if ($operate1 == -1): ?>$('input[name=amount]').attr('disabled', 'disabled');
+		<?php endif; ?>
+		<?php if ($operate2 == -1): ?>$('input[name=inputAdmin]').attr('disabled', 'disabled');
+		<?php endif; ?>
+		<?php if ($operate3 == -1): ?>$('input[name=finishAdmin]').attr('disabled', 'disabled');
+		<?php endif; ?>
+	});
+
+	function disableInput(obj, toid) {
+		if (obj.value == -1) {
+			$('input[name=' + toid + ']').attr('disabled', 'disabled');
+		} else {
+			$('input[name=' + toid + ']').removeAttr('disabled');
+		}
+	}
+</script>
+
+<div id="query">
+    <form name="form1" action="" method="get">
+        客户账号: <input name="username" size="12"/>
+        真实姓名: <input name="realname" size="12"/>
+		调整类型: <select name="type">
+            <option value="-1">不限</option>
+            <option value="1">减少</option>
+            <option value="2">增加</option>
+        </select>
+		调整金额: <select name="operate" onchange="disableInput(this, 'amount')">
+            <option value="-1">不限</option>
+            <option value=">">大于</option>
+            <option value=">=">大于等于</option>
+            <option value="=">等于</option>
+            <option value="<=">小于等于</option>
+            <option value="<">小于</option>
+            <option value="!=">不等于</option>
+        </select><input type="text" name="amount" size="12">
+        调整原因: <select name="reason">
+            <option value="-1">不限</option>
+            <option value="1">存款</option>
+            <option value="2">取款</option>
+            <option value="3">其他</option>
+		</select>
+		备注: <input name="remark" size="12"/>
+		状态: <select name="status">
+            <option value="-1">不限</option>
+            <option value="0">未处理</option>
+            <option value="8">已执行</option>
+            <option value="9">已取消</option>
+		</select><br />
+        提交时间: <input type="text" name="startInputDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="startInput" value="" size="21"/>
+        到<input type="text" name="endInputDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="endInput" value="" size="21"/>
+        提交人: <input name="inputAdmin" size="12"/><br />
+		审核时间: <input type="text" name="startFinishDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="startFinish" value="" size="21"/>
+        到<input type="text" name="endFinishDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="endFinish" value="" size="21"/>
+        审核人: <input name="finishAdmin" size="12"/>
+        <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="balanceAdjustList"/>
+        <input type="submit" name="submit" value=">> 查 询 <<"/>
+    </form>
+</div>
+
+<div class="list-div" id="listDiv">
+    <table class="mainList" width="100%">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>客户账号</td>
+                <td>真实姓名</td>
+                <td>调整类型</td>
+                <td>调整金额</td>
+                <td>调整原因</td>
+                <td>调整备注</td>
+                <td>提交人</td>
+                <td>提交时间</td>
+                <td>处理人</td>
+                <td>处理时间</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php if ($balanceAdjusts): ?>
+		<?php foreach ($balanceAdjusts as $v): ?>
+			<tr>
+				<td><?php echo $v['ba_id']; ?></td>
+				<td><?php echo $v['username']; ?></td>
+				<td><?php echo $v['real_name']; ?></td>
+				<td>
+					<?php if ($v['amount'] < 0): ?>减少
+					<?php elseif ($v['amount'] > 0): ?>增加
+					<?php endif; ?>
+				</td>
+				<td style="text-align:right"><?php echo number_format(abs($v['amount']), 4); ?></td>
+				<td>
+					<?php if ($v['reason'] == 1): ?>存款
+					<?php elseif ($v['reason'] == 2): ?>取款
+					<?php elseif ($v['reason'] == 3): ?>其他
+					<?php endif; ?>
+				</td>
+				<td><?php echo $v['remark']; ?></td>
+				<td><?php echo $admins[$v['input_admin_id']]['username']; ?></td>
+				<td><?php echo $v['input_time']; ?></td>
+				<td><?php echo $admins[$v['finish_admin_id']]['username']; ?></td>
+				<td><?php echo $v['finish_time']; ?></td>
+				<td>
+					<?php if ($v['status'] == 0): ?>未处理
+					<?php elseif ($v['status'] == 8): ?>已执行
+					<?php elseif ($v['status'] == 9): ?>已取消
+					<?php endif; ?>
+				</td>
+				<td>
+					<?php if ($v['status'] == 0): ?>
+						<a onclick="return confirm('确认执行？该操作不可恢复！');" href="./?c=user&a=executeBalanceAdjust&id=<?php echo $v['ba_id'] ?>">执行</a>
+						<a onclick="return confirm('确认取消？该操作不可恢复！');" href="./?c=user&a=cancelBalanceAdjust&id=<?php echo $v['ba_id'] ?>">取消</a>
+					<?php endif; ?>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+            <tr>
+                <td colspan="4">当前页小计</td>
+                <td style="text-align:right"><?php echo number_format($currentTotalAmount, 4); ?></td>
+                <td colspan="8"></td>
+            </tr>
+            <tr >
+                <td colspan="4">所有页小计</td>
+                <td style="text-align:right"><?php echo number_format($totalAmount, 4); ?></td>
+                <td colspan="8"></td>
+            </tr>
+        <?php else: ?>
+            <tr>
+                <td colspan="13">暂无数据</td>
+            </tr>
+        <?php endif;?>
+    </table>
+</div>
+<input type="hidden" name="hide">
+<?php echo $pageList; ?>
+<div class="tip">
+</div>
+
+<?php $this->import("foot"); ?>

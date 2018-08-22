@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no,email=no" name="format-detection">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>资讯详情-资讯</title>
+    <style>.header-logo .logo-play { padding:16px 0;}</style>
+    <?php $this->import("public_cssjs"); ?>
+</head>
+<body>
+<div class="big-box">
+    <!--头部-->
+    <?php $this->import('public_header') ?>
+    <!--主要main-->
+    <div class="it">
+        <div class="it-play">
+            <div class="it-tt"><?php echo $article['title'] ?></div>
+            <div class="it-ly">来源：原创</div>
+            <div class="it-ttp">
+               <div class="it-ttpbg">摘要：<?php echo $article['summary']; ?>……</div>
+                <div class="it-ttpl">
+                <?php echo $article['content']; ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!--底部-->
+<?php $this->import('public_foot') ?>
+</div>
+</body>
+</html>

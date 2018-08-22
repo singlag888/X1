@@ -1,0 +1,45 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div mt20" id="listDiv">
+<form name="form1" id="form1" action="./?c=user&a=updateTopPrizeGroup" method="post">
+<table class="table  table-responsive table-bordered mainList">
+    <thead>
+    <tr>
+    	<td>总代2</td>
+        <?php foreach ($lotterys as $v): ?>
+        <td><?php echo $v['name']; ?></td>
+        <?php endforeach; ?>
+    </tr>
+    </thead>
+    <?php foreach ($tops as $v): ?>
+    <tr>
+    	<td><?php echo $v['username']; ?></td>
+        <?php foreach ($lotterys as $lottery_id => $lottery): ?>
+        <td>
+            <?php foreach ($prizeGroups[$lottery_id] as $prizeGroup): ?>
+            <div style="width: 180px; float: left; padding: 5px;">
+                <input type="checkbox" name="newGroups[]" id="pg_<?php echo $prizeGroup['pg_id']; ?>" value="<?php echo $v['user_id']; ?>,<?php echo $prizeGroup['lottery_id']; ?>,<?php echo $prizeGroup['pg_id']; ?>"
+                       <?php if (isset($userPrizeGroups[$v['user_id']][$lottery_id][$prizeGroup['pg_id']])): ?>checked<?php endif; ?>/>
+                <a class="btn btn-mini btn-info" href="?c=prize&a=viewGroup&pg_id=<?php echo $prizeGroup['pg_id']; ?>&lottery_id=<?php echo $lottery_id; ?>" title="<?php echo $prizeGroup['description']; ?>"><?php echo $prizeGroup['name']; ?></a>
+                (总返点<?php echo $prizeGroup['max_top_rebate']; ?>)
+            </div>
+            <?php endforeach; ?>
+        </td>
+        <?php endforeach; ?>
+    </tr>
+    <?php endforeach; ?>
+    <?php if ($canUpdateTopPrizeGroup): ?>
+    <tr>
+        <td colspan="7">
+            <div style="width: 100%;margin: 0 auto;text-align: center;">
+                <input class="btn btn-info submit" type="submit"  value="提交"/>
+            </div>
+        </td>
+            
+    </tr>
+    <?php endif; ?>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

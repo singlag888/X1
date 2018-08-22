@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta charset="UTF-8">
+    <title>_签到活动</title>
+    <link rel="shortcut icon" href="<?php echo $imgCdnUrl ?>/images/rebate/favicon.ico" type="images/x-icon">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/signin.css" />
+</head>
+<body>
+<div class="content">
+    <div class="banner">
+        <div class="bannerMain">
+            <p>活动时间：<?php echo date('Y年m月d日H:i',strtotime($promoStartTime));?>开始</p>
+        </div>
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner01.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner02.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner03.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner04.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner05.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner06.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner07.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner08.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner09.jpg">
+        <img src="<?php echo $imgCdnUrl ?>/images/sign/banner10.jpg">
+    </div>
+    <div class="main">
+        <div class="siginList">
+            <ul class="fix">
+                <?php
+                    $days = [1=>'一', 2=>'二', 3=>'三', 4=>'四', 5=>'五', 6=>'六', 7=>'七']; 
+                    for ($i=1; $i<=7; $i++):
+                ?>
+                <li <?php if($i==1): ?> class="Listfirst" <?php endif; ?> >
+
+                    <?php if($signCount >= $i): ?>
+                        <a class="active" href="javascript:void(0);">
+                            <span>第<?php echo $days[$i]; ?>天</span>
+                            <label>已签到</label>
+                        </a>
+                    <?php else: ?>
+                        <a href="javascript:void(0);" class="active_sign">
+                            <input name="day" type="hidden" value="<?php echo $i; ?>">
+                            <span>第<?php echo $days[$i]; ?>天</span>
+                            <label>未签到</label>
+                        </a>
+                    <?php endif; ?>
+                </li>
+                <?php endfor; ?>
+
+                <li class="end"><a <?php if($getReward): ?> class="open" <?php endif; ?> href="javascript:void(0);">领取奖励</a></li>
+            </ul>
+        </div>
+        <div class="siginExp fix">
+            <div class="siginExpTitle">
+                <h3>上周有效投注额为<span><?php echo number_format($lastBetAmount,2);?></span>元<br>本周有效投注额为<span><?php echo number_format($thisBetAmount,2);?></span>元</h3>
+            </div>
+            <div class="sginTab">
+                <table>
+                    <colgroup>
+                        <col width="50%">
+                        <col>
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>周有效投注额</th>
+                        <th>活动奖励</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>6888</td>
+                        <td>58</td>
+                    </tr>
+                    <tr>
+                        <td>18888</td>
+                        <td>128</td>
+                    </tr>
+                    <tr>
+                        <td>68888</td>
+                        <td>388</td>
+                    </tr>
+                    <tr>
+                        <td>188888</td>
+                        <td>1088</td>
+                    </tr>
+                    <tr>
+                        <td>888888</td>
+                        <td>5888</td>
+                    </tr>
+                    <tr>
+                        <td>1688888</td>
+                        <td>8888</td>
+                    </tr>
+                    <tr>
+                        <td>3888888</td>
+                        <td>18888</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="siginTips">
+            <h3>活动规则</h3>
+            <p>1、会员每日有效投注达到688元即可点击签到，连续签到7天即可获得相应签到奖励；</p>
+            <p>2、签到从第一天必须连续签到7天才可领取奖励，如中途中断签到视为放弃活动；</p>
+            <p>3、本活动有效投注只限于高频彩票游戏，连续签到完成后需在第8天内领取活动奖金，逾期未领取则视为自动放弃活动奖励；</p>
+            <p>4、参与此活动投注注数不可超过全包注数的70％，如违法则无法领取活动奖励；</p>
+            <p>5、所有同账户、同IP、对冲等一切套利行为，一经发现立即取消参与资格并没收彩金，情节严重者直接冻结账号；</p>
+            <p>6、有权对此活动修改或终止，此活动最终解释权归所有。</p>
+        </div>
+    </div>
+    <div class="giftFoot"></div>
+    <div class="PopBg"></div>
+    <div class="giftPopup">
+        <h3>信息</h3>
+        <div class="giftPopMain">
+            <div class="giftPopText">
+                <p>提示文字</p>
+            </div>
+        </div>
+        <div class="giftPopBtn fix">
+            <a href="javascript:void(0);">确定</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+    $(".PopBg").height($(document).height());//背景遮罩层
+/*
+    $(".end a").click(function(){
+        $(".PopBg,.giftPopup").fadeIn(300);
+    });//弹出层
+*/
+
+    $(".giftPopBtn a").click(function(){
+        $(".PopBg,.giftPopup").fadeOut(300);
+    });
+
+    $('.active_sign').click(function(){
+        var obj = $(this);
+        $.post(
+            'index.jsp?&c=user&a=userGifts&giftType=sign',
+            {
+                'type': 'sign',
+                'sign_day': obj.children('input[name=day]').first().val(),
+            },
+            function(response){
+                if(response.errno　== 0){
+                    obj.addClass('active');
+                    obj.removeClass('active_sign');
+                    obj.children('label').html('已签到');
+                }
+                $('.giftPopText p').html(response.errstr);
+                $(".PopBg,.giftPopup").fadeIn(300);
+            }, 'json');
+    });
+
+    $('.end a').click(function(){
+        var obj = $(this);
+        $.post(
+            'index.jsp?&c=user&a=userGifts&giftType=sign',
+            {
+                'type': 'reward',
+            },
+            function(response){
+                if(response.errno　== 0){
+                    obj.removeClass('open');
+                }
+                $('.giftPopText p').html(response.errstr);
+                $(".PopBg,.giftPopup").fadeIn(300);
+            }, 'json');
+    });
+
+</script>
+</body>
+</html>

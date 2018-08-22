@@ -1,0 +1,82 @@
+<?php $this->import("head"); ?>
+<script>
+    $(function() {
+        $('#form1 :button').click(function() {
+            $('input[name=lottery_id]').val($(this).attr('id2'));
+        });
+        $('#form2').submit(function() {
+            if (!/^\d{5}$/.test($('input[name=code]').val())) {
+                alert('请输入正确的5位数字');
+                return false;
+            }
+
+            return true;
+        });
+
+        //预选中
+        $('#lottery_<?php echo $lottery['lottery_id']; ?>').css('background', '#f112f8').css('border','none').css('color','#fff');
+    });
+</script>
+<form name="form1"  id="form1" action="" method="GET">
+    <input type="hidden" name="c" value="lock"/><input type="hidden" name="a" value="lockList"/>
+    <input type="hidden" name="lottery_id" value=""/>
+    <table class="table table-responsive table-bordered mt15 gameBtn">
+        <tr>
+            <?php foreach ($lotterys as $v): ?>
+                <td>
+                    <button class="btn " style="width: 65px;" name="btn" id="lottery_<?php echo $v['lottery_id']; ?>" id2="<?php echo $v['lottery_id']; ?>"><?php echo $v['name']; ?></button>
+                </td>
+            <?php endforeach; ?>
+        </tr>
+    </table>
+</form>
+
+<div class="list-div form-top mt20"  id="listDiv">
+            <table class="table table-responsive table-bordered  mainList" width="80%">
+                <thead>
+                    <tr>
+                        <td>lock_id</td>
+                        <td>玩法简称</td>
+                        <td>中文名</td>
+                        <td>封锁值</td>
+                        <td>创建时间</td>
+                    <!--<td colspan="2">状态</td>-->
+                    </tr>
+
+                </thead>
+                <?php if($lottery['lottery_id'] == 9 || $lottery['lottery_id'] == 10): ?>
+                    <tr>
+                        <td><?php echo $lottery['lottery_id'] == 9 ? 1 : 2; ?></td>
+                        <td><?php echo $lottery['lottery_id'] == 9 ? '3D' : 'P3P5'; ?></td>
+                        <td><?php echo $lottery['lottery_id'] == 9 ? '3D低频' : 'P3P5低频';; ?></td>
+                        <td> <input type="text" class="form-control" name="lock_ids[<?php echo $lottery['lottery_id'] == 9 ? 1 : 2; ?>]" maxlength="19" value="<?php echo $lockLimit; ?>"/> </td>
+                        <td></td>
+                    </tr>
+                <?php else:  ?>
+                <?php  foreach ($locks as $v): ?>
+                    <tr>
+                        <td><?php echo $v['lock_id']; ?></td>
+                        <td><?php echo $v['name']; ?></td>
+                        <td><?php echo $v['cname']; ?></td>
+                        <td> <input type="text" class="form-control" name="<?php echo isset($v['lock_id'])?'lock_ids':'method_ids'; ?>[<?php echo $v[(isset($v['lock_id'])?'lock_id':'method_id')]; ?>]" maxlength="19" value="<?php echo $v['lock_limit']; ?>"/> </td>
+                        <td><?php echo $v['create_time']; ?></td>
+    <!--                    <td colspan="2"><a href="?c=lock&a=lockDelete&lock_id=<?php echo $v['lock_id']; ?>">删除</a></td>-->
+
+                    </tr>
+
+                <?php endforeach; ?>
+            <?php endif; ?>
+                <tr>
+                    <td ></td>
+                    <td ></td>
+                    <td ></td>
+                    <td > <input class="btn btn-info" style="width: 60px;" type="submit" class="submit" name="submit" value="保存" /></td>
+                    <td ></td>
+    <!--                <td colspan="2"></td>-->
+                </tr>
+            </table>    
+    </form>
+</div>
+<?php echo $pageList; ?>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML> <!--最新公告 -->
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo $html_version; ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css?v=<?php echo $html_version; ?>" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css?v=<?php echo $html_version; ?>" />
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js?v=<?php echo $html_version; ?>"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js?v=<?php echo $html_version; ?>"></script> <!-- layer调用弹出层 -->
+    </head>
+
+    <body>
+        <div class="operate_middle_page">
+            <?php $this->import("_usermenu"); ?>
+
+           <div class="common_pages default_operate_pageheight">
+                  最新公告页面
+           </div>
+
+         </div>
+         <?php $this->import('public_tongji') ?>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<?php $this->import("head"); ?>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('select[name=award_id]').val('<?php echo $awardId; ?>');
+        $('input[name=start_time]').val('<?php echo $startTime; ?>');
+        $('input[name=end_time]').val('<?php echo $endTime; ?>');
+        $('input[name=username]').val('<?php echo $username; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<div class="left leftContainer">
+    <ul>
+    <?php foreach ($promoList AS $key => $list): ?>
+    <li><a href="/?c=market&a=promoList&giftType=<?php echo $key; ?>"><?php echo $list->cnTitle; ?></a></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<div class="rightContainer">
+    <form name="form1" id="form1" action="" method="get">
+    奖品名称<select name="award_id">
+        <option value="" selected="selected">不限</option>
+        <?php foreach ($awardsConfig as $k => $v): ?>
+            <option value=<?php echo $k; ?> ><?php echo $v['title']; ?></option>
+        <?php endforeach; ?>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    派奖时间<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+    至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    会员账号<input type="text" value="" name="username">
+    <input type="hidden" name="c" value="market"/>
+    <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="sub"  style="width:90px" value="查询"/>
+    </form>
+
+    <h4> </h4>
+    <div class="list-div" id="listDiv">
+        <table class="mainList">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>活动名称</td>
+                    <td>会员账号</td>
+                    <td>奖品名称</td>
+                    <td>奖品类型</td>
+                    <td>奖品价值</td>
+                    <td>派奖时间</td>
+                </tr>
+            </thead>
+            <?php if ($awards) : ?>
+            <?php foreach($awards as $v):?>
+            <tr class="plansList">
+                <td><?php echo $v['ugs_id'];  ?></td>
+                <td>猴年幸运大抽奖</td>
+                <td><?php echo $v['username'];  ?></td>
+                <td><?php echo $awardsConfig[$v['award_id']]['title'];  ?></td>
+                <td>现金</td>
+                <td><?php echo $awardsConfig[$v['award_id']]['prize'];  ?></td>
+                <td><?php echo $v['prize_time'] ; ?></td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr class="noneData">
+                <td colspan="8">暂无数据！</td>
+            </tr>
+            <?php endif; ?>
+        </table>
+    </div>
+    <?php echo $pageList; ?>
+</div>
+<?php $this->import("foot"); ?>

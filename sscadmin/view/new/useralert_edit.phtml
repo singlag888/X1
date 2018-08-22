@@ -1,0 +1,125 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        function checkform(ob) {
+            if ($("input[name=title]").val() == '') {
+                $("input[name=title]").focus();
+                alert('标题不能为空');
+                return false;
+            }
+            if ($("input[name=domain]").val() == '') {
+                $("input[name=domain]").focus();
+                alert('域名不能为空');
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+    <div class="list-div" id="addDiv">
+        <form class="form-inline " role="form" name="form1" id="form1" action="./?c=userAlert&a=<?php echo ACTION; ?>"
+              onsubmit="return checkform(this)" method="post" enctype="multipart/form-data">
+            <h3>注意：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h3>
+            <table class="table table-responsive table-bordered" style="width:60%;">
+                <tr>
+                    <td>弹窗标题:</td>
+                    <td><input class="form-control" name="title" size="50" placeholder="请输入弹窗标题"
+                               value="<?php if ($userAlert) echo $userAlert['title']; ?>"/></td>
+                </tr>
+                <tr>
+                    <td>域名:</td>
+                    <td><input class="form-control" name="domain" size="50" placeholder="请输入域名"
+                               value="<?php if ($userAlert) echo $userAlert['domain']; ?>"/></td>
+                </tr>
+                <tr>
+                    <td>文本内容(文本中禁止传图):</td>
+                    <td><textarea style="min-width: 390px;min-height: 100px" class="form-control" id="content"  name="content"
+                                  placeholder="文本内容"><?php if ($userAlert) echo $userAlert['content']; ?></textarea>
+                    </td>
+
+                    <script src="/js/ckeditor/ckeditor.js"></script>
+
+                    <script>
+                        var editor=CKEDITOR.replace('content', {
+                            language: 'zh-cn',
+                            width: '600px',
+                            height: '250px',
+                            // Define the toolbar groups as it is a more accessible solution.
+                            toolbarGroups: [
+//                                {"name":"basicstyles","groups":["basicstyles"]},
+                                {"name":"links","groups":["links"]},
+//                                {"name":"paragraph","groups":["list","blocks"]},
+                                {"name":"document","groups":["mode"]},
+                                {"name":"styles","groups":["styles"]},
+                                { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
+                                { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+                                { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+                                { name: 'forms' },
+                                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                                { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+                                { name: 'colors' },
+                                { name: 'tools' },
+                                { name: 'others' },
+                            ],
+                            // Remove the redundant buttons from toolbar groups defined above.
+                            removeButtons: 'Underline,Strike,Subscript,Superscript,Anchor,Styles,Specialchar',
+                        });
+                    </script>
+                </tr>
+                <tr>
+                    <td>PC弹窗图<br />(图片将以600px*354px显示,请注意上传图片尺寸比例.)</td>
+                    <td>
+                        <input class="input-sm form-control" name="main_img" type="file"/>
+                        <?php if ($userAlert && $userAlert['main_img']): ?>
+                            <span>缩略图:</span>
+                            <img src="<?php echo $userAlert['main_img'] ?>"/>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>手机弹窗图<br />(640宽 320-440高)</td>
+                    <td>
+                        <input class="input-sm form-control" name="m_main_img" type="file"/>
+                        <?php if ($userAlert && $userAlert['m_main_img']): ?>
+                            <span>缩略图:</span>
+                            <img src="<?php echo $userAlert['m_main_img'] ?>"/>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>弹出方式</td>
+                    <td>
+                        <select title="类型" name="type">
+                            <option <?php if ($userAlert && $userAlert['type'] == 'text') echo 'selected'; ?>
+                                    value="text">文本
+                            </option>
+                            <option <?php if ($userAlert && $userAlert['type'] == 'image') echo 'selected'; ?>
+                                    value="image">图片
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>是否为未登录默认弹窗(只允许有一个)</td>
+                    <td>
+                        <span>是：<input name="default" type="radio" value="1" title="是" <?php if($userAlert && $userAlert['default'] === 1) echo 'checked' ?> /></span>
+                        <span>否：<input name="default" type="radio" value="0" title="否" <?php if(!$userAlert || $userAlert['default'] !== 1) echo 'checked' ?> /></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <input name="ua_id" type="hidden"
+                                   value="<?php if ($userAlert) echo $userAlert['ua_id']; ?>"/>
+                            <button type="submit" class="btn btn-info submit" name="submit">提交</button>
+                            <button type="button" class="btn btn-info submit" onclick="javascript:history.go(-1);"
+                                    value="返回">返回
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+<?php $this->import("foot"); ?>

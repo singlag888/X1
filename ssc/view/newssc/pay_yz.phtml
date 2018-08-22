@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>跳转中</title>
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+<a>正在加载，请勿离开页面或者刷新页面</a>
+<input type="hidden" name="merchantOutOrderNo" value="<?php echo $postFields['merchantOutOrderNo'] ?>"/>
+<input type="hidden" name="merid" value="<?php echo $postFields['merid'] ?>"/>
+<input type="hidden" name="noncestr" value="<?php echo $postFields['noncestr'] ?>"/>
+<input type="hidden" name="notifyUrl" value="<?php echo $postFields['notifyUrl'] ?>"/>
+<input type="hidden" name="orderMoney" value="<?php echo $postFields['orderMoney'] ?>"/>
+<input type="hidden" name="orderTime" value="<?php echo $postFields['orderTime'] ?>"/>
+<input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+<input type="hidden" name="url" value="<?php echo $postFields['url']; ?>" />
+<input type="button" name="pay" value="启动 微信/支付宝 支付" />
+<script>
+    $(document).ready(function(){
+        $("input[name=pay]").click(function(){
+            var url = $('[name=url]').val();
+            url += '?merchantOutOrderNo=' + $('[name=merchantOutOrderNo]').val();
+            url += '&merid=' + $('[name=merid]').val();
+            url += '&noncestr=' + $('[name=noncestr]').val();
+            url += '&notifyUrl=' + $('[name=notifyUrl]').val();
+            url += '&orderMoney=' + $('[name=orderMoney]').val();
+            url += '&orderTime=' + $('[name=orderTime]').val();
+            url += '&sign=' + $('[name=sign]').val();
+
+            window.open(url, "_blank");
+        });
+    });
+</script>
+
+</body>
+</html>

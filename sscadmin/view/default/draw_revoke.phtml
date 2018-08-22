@@ -1,0 +1,136 @@
+<?php $this->import("head"); ?>
+    <script>
+        $(function(){
+            searchIssue = <?php echo $issue?>
+
+                $('#reset_lottery_id').change(function(){
+                    getIssue();
+                });
+
+            $('[name=date]').change(function(){
+                getIssue();
+            });
+
+            $('#revoke_btn').click(function(){
+                var revokeIds = [];
+                $('[name=revoke_box]:checked').each(function(){
+                    revokeIds.push($(this).val());
+                });
+
+                if (revokeIds == '') {
+                    alert('请选择奖期');
+                }
+                $.post(
+                    '?c=draw&a=revoke',
+                    {'revokeIds':revokeIds.join('|')},
+                    function(data){
+                        alert(data);
+                        location.reload();
+                    },'json');
+
+                return false;
+            });
+
+            getIssue();
+        });
+
+        function getIssue()
+        {
+            if ($('select[name=reset_lottery_id]').val() == 0) {
+                return;
+            }
+
+            $.post(
+                '?c=game&a=getIssue',
+                {'lottery_id': $('select[name=reset_lottery_id]').val(), 'start_time': $('select[name=date]').val()},
+                function (json_data) {
+                    $('select[name=issue]').empty().append('<option value="">请选择</option>');
+                    $.each(json_data, function (i, v) {
+                        tmp = '<option value="' + v.issue + '">' + v.issue + '（' + v.code + '）' + ' (' + v.start_sale_time + ')</option>';
+                        $('[name=issue]').append(tmp);
+                    });
+                    //预选中奖期
+                    $('select[name=issue]').val('<?php echo $issue; ?>');
+                }, 'json');
+        }
+    </script>
+
+    <div id="query" style="padding: 5px; margin: 5px 0pt; border: 1px solid rgb(57, 150, 119); background: none repeat scroll 0% 0% rgb(255, 255, 255);">
+        <form name="form1" id="form1" action="" method="get">
+            <div class="form-inline">
+                <label>彩种：</label>
+                <select class="input-md form-control" name="reset_lottery_id" id="reset_lottery_id">
+                    <option value="0">请选择</option>
+
+                    <?php foreach ($typeLotterys as $v): ?>
+                        <option value="<?php echo $v['lottery_id']; ?>" <?php if($v['lottery_id'] == $lottery_id){echo 'selected';}?>><?php echo $v['cname']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <label>日期:</label>
+                <select class="input-md form-control" name="date">
+                    <option value="">请选择</option>
+                    <?php foreach($dates as $k => $v){ ?>
+                        <option value="<?php echo $v;?>" <?php if($v == $date){echo 'selected';}?>><?php echo $v;?></option>
+                    <?php }?>
+                </select>
+                <label>奖期:</label>
+                <select class="input-md form-control" name="issue"><option value="">请选择</option></select>
+                <input class="btn btn-info button" name="submit" type="submit" value="&nbsp查找&nbsp" >
+                <input class="btn btn-info button" id="revoke_btn" name="button" type="submit" value="&nbsp撤销开奖&nbsp" >
+            </div>
+
+            <input type="hidden" name="c" value="draw">
+            <input type="hidden" name="a" value="revoke">
+        </form>
+    </div>
+
+    <div class="list-div mt20" id="listDiv">
+        <table class="table table-responsive table-bordered  mainList">
+            <thead>
+            <tr>
+                <th></th>
+                <th>奖期</th>
+                <th>派奖状态</th>
+                <th>开奖号码状态</th>
+                <th>返点状态</th>
+                <th>检查中奖状态</th>
+                <th>抓号状态</th>
+                <?php foreach ($sources as $v): ?>
+                    <td>
+                        <?php echo $v['name']; ?>（<?php echo $v['rank']; ?>）
+                    </td>
+                <?php endforeach; ?>
+            </tr>
+            </thead>
+            <?php foreach ($issues as $issue => $v): ?>
+                <tr>
+                    <td><input type="checkbox" name="revoke_box" value="<?php echo $v['issue_id']?>"></td>
+                    <td><?php echo $v['issue']; ?></td>
+                    <td><?php echo $statusSendMapping[$v['status_send_prize']]; ?></td>
+                    <td><?php echo $statusCodeMapping[$v['status_code']]; ?></td>
+                    <td><?php echo $statusCodeMapping[$v['status_rebate']]; ?></td>
+                    <td><?php echo $statusCodeMapping[$v['status_check_prize']]; ?></td>
+                    <td><?php echo $statusCodeMapping[$v['status_fetch']]; ?></td>
+                    <?php foreach ($sources as $source): ?>
+                        <td style="text-align: center;vertical-align: middle;">
+                            <?php foreach ($v['detail'] as $history): ?>
+                                <?php if ($history['ds_id'] == $source['ds_id']): ?>
+                                    <?php if ($history['number']): ?>
+                                        <?php echo $history['number']; ?>
+                                    <?php else: ?>
+                                        <b style="color:red">No result（<?php if ($issues['status_fetch'] == 2): ?>Finished<?php else: ?>processing<?php endif; ?>）</b>
+                                    <?php endif; ?>
+                                    <br/>
+                                    （<?php if ($history['retry'] > 0): ?>
+                                        <b style="color:red"><?php echo $history['retry']+1; ?></b><?php else: ?><?php echo $history['retry']+1; ?><?php endif; ?> 次，<?php echo $history['His']; ?>）
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+<?php echo $pageList; ?>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,83 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<style>
+#betArea {
+    border:1px solid #000;
+    width:400px;
+    height:100px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+}
+#betArea ul {
+    padding:0px;
+}
+#betArea ul li {
+    list-style-type:none;
+    margin:0px;
+    padding:0px;
+}
+#betArea span {
+    margin:1px 5px 1px 5px;
+    text-align:center;
+}
+</style>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(function(){
+    $('.submit').click(function(){
+        //因为数据需要预处理，用$.post提交，代替form提交
+        $.post(
+                '?c=test&a=testPT',
+                {
+                    'op':$(this).attr('name'),
+                    'username':$('input[name=username]').val(),
+                    'password':$('input[name=password]').val(),
+                    'amount':$('input[name=amount]').val(),
+                    'newpassword':$('input[name=newpassword]').val(),
+                    'startDate':$('input[name=startDate]').val(),
+                    'endDate':$('input[name=endDate]').val(),
+                    'specialUser':$('input[name=specialUser]').attr('checked') == true ? 1 : 0
+                },
+                function(response){
+                    if (response.errno == 0) {
+                        $('#result').text('执行成功:)');
+                        alert('执行成功:)');
+                    }
+                    else {
+                        $('#result').text('执行失败:'+ response.errstr + "(errno=" + response.errno +")").css('color', 'red');
+                    }
+            }, 'json');
+    });
+});
+</script>
+
+<form name="form1" id="form1" action="?c=test&a=<?php echo ACTION; ?>" method="POST">
+
+用户名：<input type="text" name="username" value="jyztest01"/>
+密码：<input type="text" name="password" value=""/>
+<input type="button" name="createPlayer" class="submit" value="创建新用户"/>
+<input type="button" name="getPlayerInfo" class="submit" value="查询用户资料"/>
+<input type="button" name="isPlayerOnline" class="submit" value="玩家是否在线"/>
+<input type="button" name="logoutPlayer" class="submit" value="登出游戏"/>
+<input type="button" name="resetFailedLoginPlayer" class="submit" value="重置玩家登录失败记录"/>
+<br/>
+<input type="text" name="newpassword" value=""/>
+<input type="button" name="updatePlayer" class="submit" value="改密码"/>
+<br/>
+<input type="text" name="amount" value=""/>
+<input type="button" name="transferIn" class="submit" value="存点"/>
+<input type="button" name="transferOut" class="submit" value="提点"/>
+<br/>
+<input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+<input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+<input type="checkbox" name="specialUser" value="1"/>查询指定玩家
+<input type="button" name="gameStats" class="submit" value="gameStats玩家投注额统计"/>
+<input type="button" name="playerStats" class="submit" value="playerStats所有玩家汇总（也可指定某一玩家）"/>
+<input type="button" name="playerGames" class="submit" value="playerGames查询游戏明细"/>
+<br/>
+
+</form>
+<br/>
+<h4>结果：<span id="result"></span></h4>
+
+<?php $this->import("foot"); ?>

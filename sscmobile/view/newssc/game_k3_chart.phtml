@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+<meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+<meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+<meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+<meta http-equiv="Cache-Control" content="no-cache"/>  <!-- 每次打开都清除浏览器页面缓存 -->
+<meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title><?php echo config::getConfig('site_title'); ?></title>
+<link href="<?php echo $imgCdnUrl ?>/css/chart.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/line.js" type="text/javascript" language="javascript"></script>
+<script language="JavaScript">function ResumeError() {return true;} window.onerror = ResumeError; </script>
+    <style>
+    html,body{width: 100%;}
+    #num{position:relative;z-index:8;background: #fff;width:16px;height:16px;border-radius:50%;
+         border:1px solid #333;color:#333;display:block;top:-30px;left:13px;line-height:14px;text-align:center;}
+    .run{color:#ee5859}
+    .w100{width: 100%;overflow: auto;}
+</style>
+</head>
+    <body>
+        <div id="rightcon_k3">
+
+	<div class="rc_con history w100">
+		<div class="rc_con_to w100">
+			<div class="rc_con_ti w100">
+                <div class="history_code w100" >
+                <div class="head_Box1">
+                    <a href="index.jsp?&a=welcome"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+                </div>
+                <div class="head_Box2">基本走势</div>
+                <div class="head_Box3">
+                    <a href="javascript:void(0);" class="openlayer_cz"><img src="<?php echo $imgCdnUrl ?>/images/mobile/czmenu.png"/></a>
+                </div>
+                </div>
+				<div id="wtable01" class="hrc_list  w100">
+					<div class="hrl_list  w100">
+                        <div class="hrc_menu wrapper wrapper02" id="wrapper02">
+                                <div class="scroller">
+                                <ul class="clearfix">
+                                    <li class="tabmenu0"><a href="javascript:void(0);">全部</a></li>
+                                    <li class="tabmenu1"><a href="javascript:void(0);">号码分布</a></li>
+                                    <li class="tabmenu2"><a href="javascript:void(0);">和值走势</a></li>
+                                </ul>
+                                </div>
+                            </div>
+						<table border="0" cellspacing="1" cellpadding="0" id="chartsTable">
+							<tbody>
+								<tr class="th">
+                                    <td rowspan="1" width="6.5%"><div style="width:auto;">期号</div></td>
+                                    <td colspan="3" rowspan="1" class="as0">开奖号码</td>
+                                    <?php foreach($vaildnum as $num) : ?>
+                                        <td class="wdh as1"><?php echo $num; ?></td>
+                                    <?php endforeach; ?>
+                                    <?php foreach($sumnum as $num) : ?>
+                                        <td class="wdh as2"><?php echo $num; ?></td>
+                                    <?php endforeach; ?>
+								</tr>
+                                <?php foreach($codes as $k =>$v) : ?>
+						        <tr>
+                                    <td class="issue"><div><?php echo $v['issue']; ?></div></td>
+                                    <?php foreach ($v['openNumber'] as $num): ?>
+                                        <td class="as0" align="center"><div class="wth"><?php echo $num; ?></div></td>
+                                    <?php endforeach; ?>
+
+                                <?php
+                                foreach ($vaildnum as $key1 => $val1):
+                                    $i = 0;
+                                    foreach ($v['openNumber'] as $val):
+                                      if($val1 == $val):
+                                          $i ++;
+                                        endif;
+                                    endforeach;
+                                    if($i):?>
+
+                                        <td align="center" class="as1 charball">
+                                            <div class="tenthousand">
+                                                <div class="ball01" ><?php echo $val1;?></div>
+                                                <?php if($i>1): ?>
+                                                <em id="num"><?php echo $i;?></em>
+                                                <?php endif; ?>
+                                            </div>
+                                        </td>
+                                    <?php else: ?>
+                                        <td align="center" class="as1 wdh">
+                                            <div class="tenthousand">
+                                                <div class="ball03"><?php if(isset($v['miss_info'][$val1])) echo $v['miss_info'][$val1];else echo ''; ?></div>
+                                            </div>
+                                         </td>
+                                <?php endif;
+                                endforeach;?>
+
+                                <!--和值项-->
+                                <?php foreach ($sumnum as $v4):
+                                if($v4 == $v['sum']):  ?>
+
+                                    <td align="center" class="charball as2">
+                                    <div class="tenthousand">
+                                    <div class="ball02" ><?php echo $v['sum'];?></div></div>
+                                    </td>
+
+                                <?php else : ?>
+
+                                    <td align="center" class="wdh as2">
+                                    <div class="tenthousand">
+                                    <div class="ball04"><?php if(isset($v['miss_k3']['sum'][$v4])) echo $v['miss_k3']['sum'][$v4];else echo ''; ?> </div></div>
+                                    </td>
+
+                                <?php endif; ?>
+                                <?php  endforeach; ?>
+                                    <!--和值项-->
+                					</tr>
+                                <?php endforeach; ?>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="clear"></div>
+                <div class="history_foot">
+                    <span id="games_name"><?php  echo $lottery['cname'];?></span>
+                    <a href="?c=game&a=<?php echo $fun ?>" class="trend-add">去投一注</a>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+	<script type="text/javascript">
+	    $("#issueNum").change(function(i){
+	    	window.location = "index.jsp?c=game&a=chart&lottery_id=<?php echo $lottery['lottery_id']; ?>&issueNum=" + $(this).val();
+	    });
+    </script>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+    <script type="text/javascript">
+    $('.openlayer_cz').click(function() {
+    layer.open({
+                type: 1,
+                title:'选择彩种',
+                closeBtn: 1,
+                shade: [0.3, '#000'],
+                shadeClose: true, //开启遮罩关闭
+                border: [0],
+                anim: 2,
+                //offset: ['0', '5%'],
+                area: ['90%','18rem'],
+                content:'<div class="caizclass"><a href="?c=game&a=chart&lottery_id=1">重庆时时彩</a><a href="?c=game&a=chart&lottery_id=2">山东11选5</a><a href="?c=game&a=chart&lottery_id=4">新疆时时彩</a><a href="?c=game&a=chart&lottery_id=5">江苏11选5</a><a href="?c=game&a=chart&lottery_id=6">江西11选5</a><a href="?c=game&a=chart&lottery_id=7">广东11选5</a><a href="?c=game&a=chart&lottery_id=8">天津时时彩</a><a href="?c=game&a=chart&lottery_id=9">福彩3D</a><a href="?c=game&a=chart&lottery_id=10">体彩P3P5</a><a href="?c=game&a=chart&lottery_id=11">幸运分分彩</a><a href="?c=game&a=chart&lottery_id=12">江苏快三</a><a href="?c=game&a=chart&lottery_id=13">快三分分彩</a><a href="?c=game&a=chart&lottery_id=16">11选5分分彩</a><a href="?c=game&a=chart&lottery_id=17">北京PK拾</a><a href="?c=game&a=chart&lottery_id=18">东京1.5分彩</a><a href="?c=game&a=chart&lottery_id=19">安徽快三</a><a href="?c=game&a=chart&lottery_id=21">香港⑥合彩</a><a href="?c=game&a=chart&lottery_id=22">双色球</a><a href="?c=game&a=chart&lottery_id=23">幸运28</a><a href="?c=game&a=chart&lottery_id=25">极速⑥合彩</a><a href="?c=game&a=chart&lottery_id=26">幸运飞艇</a></div>'
+            });
+});
+        //位数隐藏
+$('.as1').hide();
+$('.as2').hide();
+$('.tabmenu1,.tabmenu2').click(function() {$('.asnums').show();$('.as0').hide();});
+$('.tabmenu0').click(function() {
+    $('.as0').show();
+    $(".tabmenu0").addClass("cur");
+    $(".tabmenu1").removeClass("cur");
+    $(".tabmenu2").removeClass("cur");
+    $('.as1').hide();
+    $('.as2').hide();
+        });
+$('.tabmenu1').click(function() {
+    $('.as1').show();
+    $(".tabmenu0").removeClass("cur");
+    $(".tabmenu1").addClass("cur");
+    $(".tabmenu2").removeClass("cur");
+    $('.as2').hide();
+        });
+$('.tabmenu2').click(function() {
+    $('.as1').hide();
+    $('.as2').show();
+    $(".tabmenu0").removeClass("cur");
+    $(".tabmenu2").addClass("cur");
+    $(".tabmenu1").removeClass("cur");
+        });
+/*$('.hrc_menu li').click(function() {
+    $('canvas').remove();
+    Chart.init();
+    DrawLine.bind("chartsTable","has_line");
+
+    DrawLine.color('#499495');
+    DrawLine.add(7,2,16,0);
+
+    DrawLine.draw(Chart.ini.default_has_line);
+    if($("#chartsTable").width()>$('#wtable01').width())
+    {
+       $('#wtable01').width($("#chartsTable").width() + "px");
+    }
+    $("#container").height($("#chartsTable").height() + "px");
+    $("#missedTable").width($("#chartsTable").width() + "px");
+    resize();
+
+    DrawLine.draw(Chart.ini.default_has_line);
+    $("#container").height($("#chartsTable").height() + "px");
+    $("#missedTable").width($("#chartsTable").width() + "px");
+    resize();
+});*/
+//默认万位
+$('.tabmenu0').click();
+    </script>
+<?php $this->import('public_tongji') ?>
+<style type="text/css"></style>
+</body>
+</html>

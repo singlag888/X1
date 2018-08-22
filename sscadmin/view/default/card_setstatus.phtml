@@ -1,0 +1,138 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+<script>
+function checkform(ob) {
+    var msg = "";
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+    if ($('select[name=status').val() == '-1') {
+        msg = "请选择状态";
+    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+//预设编辑值
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+   if (action == 'setStatus') {
+       $("input[name=card_id]").val("<?php echo $card['card_id']; ?>");
+       $("input[name=card_name]").val("<?php echo $card['card_name']; ?>").attr('disabled', true);
+       $("input[name=card_num]").val("<?php echo $card['card_num']; ?>").attr('disabled', true);
+       $("select[name=province]").val("<?php echo $card['province']; ?>").change().attr('disabled', true);
+       $("select[name=city]").val("<?php echo $card['city']; ?>").attr('disabled', true);
+       $("select[name=type]").val("<?php echo $card['type']; ?>").attr('disabled', true);
+       $("select[name=bank_id]").val("<?php echo $card['bank_id']; ?>").attr('disabled', true);
+       $("select[name=usage]").val("<?php echo $card['usage']; ?>").attr('disabled', true);
+       $("input[name=balance]").val("<?php echo $card['balance']; ?>").attr('disabled', true);
+       //$("input[name=status][value=<?php echo $card['status']; ?>]").attr("checked", true);
+       $('select[name=status]').val(<?php echo $card['status']; ?>);
+   }
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=card&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 50%;">
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">户名</td>
+        <td style="vertical-align: middle;">
+            <input class="input-md form-control" name="card_name"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">卡号</td>
+        <td style="vertical-align: middle;">
+            <input class="input-md form-control" name="card_num" maxlength="19"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">地区</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <select class="input-md form-control" name="province" class="input_bk_D2D2D2" id="province" onChange="SelChgCity('city' , document.getElementById('province').options[document.getElementById('province').selectedIndex].value , arrProvince , arrCity , 'country');"></select>
+                <select class="input-md form-control" name="city" class="input_bk_D2D2D2" id="city"></select>
+            </div>
+            <!--
+            onChange="SelChgCounty('country' , document.getElementById('city').options[document.getElementById('city').selectedIndex].value , arrCity , arrCountry);"
+            <select name="country" class="input_bk_D2D2D2" id="country"></select>
+            -->
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">类型</td>
+        <td style="vertical-align: middle;">
+            <div class="form-inline">
+                <select class="input-md form-control" name="type">
+                <option value="0">请选择</option>
+                <option value="1">收款</option>
+                <option value="2">付款</option>
+                <option value="3">备用</option>
+            </select>
+            （该选项不可再更改）
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">所属银行</td>
+        <td style="vertical-align: middle;">
+            <select class="input-md form-control" name="bank_id">
+                <option value="0">请选择</option>
+                <?php foreach ($bankList as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">收付方式</td>
+        <td style="vertical-align: middle;">
+            <select class="input-md form-control" name="usage">
+                <option value="0">请选择</option>
+                <option value="1">网银转帐</option>
+                <option value="2">ATM等其他方式</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">余额</td>
+        <td style="vertical-align: middle;">
+            <input class="input-md form-control" name="balance"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight: normal;font-size: 16px;text-align: left;vertical-align: middle;">状态？</td>
+        <td style="vertical-align: middle;">
+            <select class="input-md form-control" name="status">
+                <option value="-1">请选择</option>
+                <option value="1">启用</option>
+                <option value="2">使用中</option>
+                <option value="3">收款超额下线</option>
+                <option value="4">付款余额不足下线</option>
+                <option value="5">超过当日支付上限下线</option>
+                <option value="0">禁用</option>
+            </select>
+            <br/>（注意：若要秒到卡工作，初始状态要设置为“启用”，不能设置为“使用中”，秒到系统会自动把状态改成“使用中”）
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="width: 50%;margin:0 auto;text-align: center;">
+                <input class="btn btn-info submit" type="submit"  name="submit" value="<?php if (ACTION == "addCard"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                <input type="hidden" name="card_id" value="" />
+            </div>
+        </td>
+
+    </tr>
+</table>
+    </form>
+</div>
+<script language="javascript">
+	InitArea("province" , "city" , "country" , arrProvince , arrCity , arrCountry , "" , "" , "");
+</script>
+
+<?php $this->import("foot"); ?>

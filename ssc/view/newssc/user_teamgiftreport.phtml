@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>   <!-- 团队日结报表 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <div class="default_record_search">
+            <form name="form1" id="form1" action="" method="GET">
+                <ul>
+                    <li>
+                        <label class="search_record_datelab">时间：</label>
+                        <div class="record_date_range">
+                            <input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                            <em>到</em>
+                            <input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="margin_left_thirty">用户名：</label>
+                        <input name="username" class="default_common_input" type="text"/>
+                    </li>
+                    <li>
+                        <input type="hidden" name="c" value="user"/>
+                        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                        <input type="hidden" id="sortKey"  name="sortKey" value="<?php echo $sortKey; ?>" >
+                        <input type="hidden" id="sortDirection" name="sortDirection" value="<?php echo $sortDirection ?>"/>
+                        <input type="submit" value="搜索" class="default_record_searchbtn">
+                        <!--  注:默认只能查询截止到昨日的数据 -->
+                    </li>
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="12%">用户名</th>
+                <th width="12%">注册送</th>
+                <th width="12%">首冲送</th>
+                <th width="12%">签到送</th>
+                <th width="12%">日盈利送</th>
+                <th width="12%">日亏损送</th>
+                <th width="12%">下级消费送</th>
+                <th width="12%">下级亏损送</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($teamGifts as $userGift): ?>
+                <tr>
+                    <td><?php echo $userGift['username']; ?></td>
+                    <td><?php echo $userGift['register']; ?></td>
+                    <td><?php echo $userGift['first_deposit']; ?></td>
+                    <td><?php echo $userGift['sign']; ?></td>
+                    <td><?php echo $userGift['day_win']; ?></td>
+                    <td><?php echo $userGift['day_loss']; ?></td>
+                    <td><?php echo $userGift['sub_bet']; ?></td>
+                    <td><?php echo $userGift['sub_loss']; ?></td>
+                </tr>
+            <?php endforeach;?>
+            </tbody>
+        </table>
+    </div>
+    <table class="bet_count_layer">
+        <tbody>
+        <tr class="bet_count_thispage defoperate_record_tablist">
+            <td width="12%" class="count_first_line rose_red_font" colspan="2">本页合计：</td>
+            <th width="12%"><?php echo $pageTotal['register'];?></th>
+            <th width="12%"><?php echo $pageTotal['first_deposit'];?></th>
+            <th width="12%"><?php echo $pageTotal['sign'];?></th>
+            <th width="12%"><?php echo $pageTotal['day_win'];?></th>
+            <th width="12%"><?php echo $pageTotal['day_loss'];?></th>
+            <th width="12%"><?php echo $pageTotal['sub_bet'];?></th>
+            <th width="12%"><?php echo $pageTotal['sub_loss'];?></th>
+
+        </tr>
+        <tr class="defoperate_record_tablist">
+            <td class="count_first_line rose_red_font" colspan="2">总计：</td>
+            <td><?php echo $allPageTotal['register']; ?></td>
+            <td><?php echo $allPageTotal['first_deposit']; ?></td>
+            <td><?php echo $allPageTotal['sign']; ?></td>
+            <td><?php echo $allPageTotal['day_win']; ?></td>
+            <td><?php echo $allPageTotal['day_loss']; ?></td>
+            <td><?php echo $allPageTotal['sub_bet']; ?></td>
+            <td><?php echo $allPageTotal['sub_loss']; ?></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="common_pages ten_height">&nbsp;</div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+
+    });
+
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+
+        //submit
+        $('#form1').submit();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<?php $this->import("head"); ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<div class="list-div add-main form-top mt20" id="addDiv">
+    <form name="form1" id="form1" action="./?c=app&a=<?php echo ACTION; ?>" method="post" enctype="multipart/form-data">
+        <h6>注意：仅支持jpg,png,gif格式,大小300K的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h6>
+
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 50%;">
+            <tr>
+                <td>是否切换至伪装页？</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="is_pretender"
+                            <?php if (isset($app['is_pretender'])): ?>
+                                value="<?php if ($app['is_pretender'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                            <?php else: ?>
+                                value=1
+                            <?php endif; ?> />
+                        <div class="btn_fath clearfix
+                        <?php if (isset($app['is_pretender'])): ?>
+                                <?php if ($app['is_pretender'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                        <?php else: ?>
+                            on
+                        <?php endif; ?>
+                        " id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">开</div>
+                            <div class="btnSwitch btn2">关</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%">是否显示试玩按钮</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="show_demo"
+                            <?php if (isset($app['show_demo'])): ?>
+                                value="<?php if ($app['show_demo'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                            <?php else: ?>
+                                value=0
+                            <?php endif; ?> />
+                        <div class="btn_fath clearfix
+                        <?php if (isset($app['show_demo'])): ?>
+                            <?php if ($app['show_demo'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                        <?php else: ?>
+                            off
+                        <?php endif; ?>
+                        " id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">开</div>
+                            <div class="btnSwitch btn2">关</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%">IOS 版本号</td>
+                <td><input class="input-md form-control ios_version" name="ios_version" value="<?php echo $app['ios_version']?>" maxlength="19"/></td>
+            </tr>
+            <style>
+                .menu_change{
+                    display: none;
+                }
+                .menu_change input {
+                    width: 170px !important;
+                    margin-top: 10px;
+                }
+            </style>
+            <tr>
+                <td width="25%" rowspan="6">app首页展示按钮</td>
+                <td>
+                    <div class="chk <?php if(in_array(1,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="1" id="menu1" <?php if(in_array(1,$app['show_menu']))echo 'checked="checked"'?>><label for="menu1">充值 <span style="font-weight: bold">ID:1</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(1,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[1]" type="text" value="<?php echo $app['menu_info'][1]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_1" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][1]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][1]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="chk <?php if(in_array(2,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="2" id="menu2" <?php if(in_array(2,$app['show_menu']))echo 'checked="checked"'?>><label for="menu2">提现 <span style="font-weight: bold">ID:2</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(2,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[2]" type="text" value="<?php echo $app['menu_info'][2]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_2" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][2]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][2]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="chk <?php if(in_array(3,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="3" id="menu3" <?php if(in_array(3,$app['show_menu']))echo 'checked="checked"'?>><label for="menu3">走势 <span style="font-weight: bold">ID:3</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(3,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[3]" type="text" value="<?php echo $app['menu_info'][3]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_3" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][3]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][3]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="chk <?php if(in_array(4,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="4" id="menu4" <?php if(in_array(4,$app['show_menu']))echo 'checked="checked"'?>><label for="menu4">在线客服 <span style="font-weight: bold">ID:4</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(4,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[4]" type="text" value="<?php echo $app['menu_info'][4]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_4" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][4]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][4]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="chk <?php if(in_array(5,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="5" id="menu5" <?php if(in_array(5,$app['show_menu']))echo 'checked="checked"'?>><label for="menu5">电子游戏 <span style="font-weight: bold">ID:5</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(5,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[5]" type="text" value="<?php echo $app['menu_info'][5]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_5" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][5]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][5]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="chk <?php if(in_array(6,$app['show_menu']))echo 'on';else echo 'off';?>">
+                        <input type="checkbox" name="show_menu[]" value="6" id="menu6" <?php if(in_array(6,$app['show_menu']))echo 'checked="checked"'?>><label for="menu6">电子钱包 <span style="font-weight: bold">ID:6</span></label>
+                    </div>
+                    <div class="menu_change" style="<?php if(in_array(6,$app['show_menu']))echo 'display: block'?>">
+                        <input class="input-md form-control" name="menu_name[6]" type="text" value="<?php echo $app['menu_info'][6]['name']?>" placeholder="前台展示名称"/>
+                        <input class="input-sm form-control" name="m_menuIcon_6" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>
+                        <?php if(!empty($app['menu_info'][6]['img'])):?>
+                            <br><br><img src="<?php echo $app['menu_info'][6]['img'] ?>"/>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <style>
+                .sort{
+                    display: none;
+                }
+                .btn-use {
+                    color: #fff;
+                    background-color: #909193;
+                    border-color: #F9F5F5;
+                }
+            </style>
+            <tr>
+                <td>app展示排序</td>
+                <td>
+                    <input type="hidden" value="<?php echo $app['sort']?>" name="sort" class="hidden_sort"/>
+                    展示排序(不点击将使用默认排序):<br>
+                    <div class="show_sort"><?php
+                        $sort=!empty($app['sort'])?explode(',',$app['sort']):'';
+                        if(!empty($sort)):
+                            $a=1;
+                            foreach ($sort as $mi):
+                                $name='';
+                                switch($mi){
+                                    case 1:
+                                        $name='充值';
+                                        break;
+                                    case 2:
+                                        $name='提现';
+                                        break;
+                                    case 3:
+                                        $name='走势';
+                                        break;
+                                    case 4:
+                                        $name='在线客服';
+                                        break;
+                                    case 5:
+                                        $name='电子游戏';
+                                        break;
+                                    case 6:
+                                        $name='电子钱包';
+                                        break;
+                                }
+                                if($a>1):
+                                    echo '<span class="cancel_ms_'.$mi.'"> ><span class="btn btn-info menu_sorted" menu_id="'.$mi.'">'.$name.'</span></span>';
+                                else:
+                                    echo '<span class="cancel_ms_'.$mi.'"><span class="btn btn-info menu_sorted" menu_id="'.$mi.'">'.$name.'</span></span>';
+                                endif;
+                                $a++;
+                            endforeach;
+                        endif;
+                    ?></div>
+                    <div class="menu_1 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="1">充值</span>
+                    </div>
+                    <div class="menu_2 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="2">提现</span>
+                    </div>
+                    <div class="menu_3 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="3">走势</span>
+                    </div>
+                    <div class="menu_4 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="4">在线客服</span>
+                    </div>
+                    <div class="menu_5 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="5">电子游戏</span>
+                    </div>
+                    <div class="menu_6 sort">
+                        <span class="btn btn-info menu_sorted" menu_id="6">电子钱包</span>
+                    </div>
+
+                    <br>
+                    点击按钮进行排序:<br>
+                    <span class="btn btn-use menu_sort ms_1 <?php if(in_array(1,$sort))echo 'sort'?>" menu_id="1">充值</span>
+                    <span class="btn btn-use menu_sort ms_2 <?php if(in_array(2,$sort))echo 'sort'?>" menu_id="2">提现</span>
+                    <span class="btn btn-use menu_sort ms_3 <?php if(in_array(3,$sort))echo 'sort'?>" menu_id="3">走势</span>
+                    <span class="btn btn-use menu_sort ms_4 <?php if(in_array(4,$sort))echo 'sort'?>" menu_id="4">在线客服</span>
+                    <span class="btn btn-use menu_sort ms_5 <?php if(in_array(5,$sort))echo 'sort'?>" menu_id="5">电子游戏</span>
+                    <span class="btn btn-use menu_sort ms_6 <?php if(in_array(6,$sort))echo 'sort'?>" menu_id="6">电子钱包</span>
+                </td>
+            </tr>
+            <tr>
+                <td>app支付温馨提示:</td>
+                <td>
+                    <textarea class="input-md " id="warm_prompt" cols="50" rows="5" name="warm_prompt"><?php echo $app['warm_prompt'];?></textarea>
+
+</div><div id="cc"><label id="aa">0</label>/<label id ='bb'>50</label></div>
+<script>
+    $(function () {
+        $('#aa').text(  $('#warm_prompt').val().length)
+        $('#warm_prompt').keyup(function () {
+            var obj = $(this);
+           var vo = obj.val();
+           var len = vo.length;
+           if(len > 50)
+           {
+               obj.val(vo.substr(0,50));
+           }
+
+            if(len > 50)
+            {
+                $('#cc').css({'color':'red'});
+            }else{
+                $('#cc').css({'color':'black'})
+            }
+            if(len >50)
+            {
+                len = 50;
+            }
+            $('#aa').text(len)
+        })
+    })
+</script>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 60%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-info submit_button" type="button" style="width: 100px;" value="提交" />
+                        <input type="hidden" name="user_id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+
+    $(function() {
+        function showsort(){
+            var sort=new Array();
+            $('.show_sort').find('.menu_sorted').each(function(){
+               sort[sort.length]=$(this).attr('menu_id');
+           });
+            $('.hidden_sort').val(sort);
+            return sort;
+        }
+        $('.submit_button').click(function() {
+            $('.submit_button').val('正在提交数据中');
+            $('.submit_button').attr('disabled',true);
+            if($('.ios_version').val() == ''){
+                layer.alert('请输入ios版本号');
+                $('.submit_button').val('提交');
+                $('.submit_button').attr('disabled',false);
+                return false;
+            }
+            let len = $("input:checkbox:checked").length;
+            if (len < 4) {
+                layer.alert("请勾选app首页展示按钮,不得低于4个");
+                $('.submit_button').val('提交');
+                $('.submit_button').attr('disabled',false);
+                return false;
+            }
+            $("form").submit();
+        });
+        $('.chk input').click(function(){
+            var that=$(this).parent('div');
+            if (that.hasClass('on')) {
+                that.removeClass("on").addClass("off");
+//                that.next('.menu_change').html('');
+                that.next('.menu_change').hide();
+            } else {
+                that.removeClass("off").addClass("on");
+//                var menuval=$(this).val();
+//                that.next('.menu_change').html(
+//                    '<input class="input-md form-control" name="menu_name['+menuval+']" type="text" value="" placeholder="前台展示名称"/>\n' +
+//                    '<input class="input-sm form-control" name="m_menuIcon_'+menuval+'" type="file" placeholder="图标上传"/><span style="color:#909193;font-size: small">(注:app展示图标)</span>'
+//                );
+                that.next('.menu_change').show();
+            }
+        });
+        $('.menu_sort').click(function(){
+            var menu_id=$(this).attr('menu_id');
+            var menu_class='.menu_'+menu_id;
+            var menu_html=$(menu_class).html();
+            var show_sort_html=$('.show_sort').html();
+            $(this).hide();
+            if(show_sort_html==''){
+                $('.sort_show').hide();
+                $('.show_sort').html('<span class="cancel_ms_'+menu_id+'">'+menu_html+'</span>')
+            }else{
+                $('.sort_show').show();
+                var new_html=show_sort_html+'<span class="cancel_ms_'+menu_id+'"> >'+menu_html+'</span>';
+                $('.show_sort').html(new_html)
+            }
+        });
+        $('.show_sort').on('click','.menu_sorted',function(){
+            var menu_id=$(this).attr('menu_id');
+            var ms_class='.ms_'+menu_id;
+            var cancel_class='.cancel_ms_'+menu_id;
+            $(cancel_class).remove();
+            var new_html=$('.show_sort').children("span:first-child").html();
+
+            new_html=$.trim(new_html);
+            var ss=new_html.substring(0,4);
+            if(ss=='&gt;'){
+                new_html=new_html.substring(4);
+                $('.show_sort').children("span:first-child").html(new_html);
+            }
+            $(ms_class).show();
+            console.log(showsort());
+        })
+    });
+
+    function toogle(th) {
+        let ele = $(th).children(".move");
+        if ($(th).hasClass('on')) {
+            ele.animate({left: "1px"}, 300, function () {
+            });
+            $(th).removeClass("on").addClass("off");
+            $(th).prev('input').val(0);
+        } else {
+            ele.animate({left: '35px'}, 300, function () {
+            });
+            $(th).removeClass("off").addClass("on");
+            $(th).prev('input').val(1);
+        }
+    }
+</script>
+<?php $this->import("foot"); ?>
+

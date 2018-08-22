@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title> 
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+        <script type="text/javascript" src="http://cache.download.banner.luckystar88.com/integrationjs.php"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script> 
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+    </head>
+    <body>
+        <script type="text/javascript">
+            iapiSetCallout('Login', calloutLogin);
+            iapiSetCallout('Logout', calloutLogout);
+            var isGame = true;
+            var num = 1;
+            function PlayGame(gameCode) {
+                if (!isGame) {
+                    layer.alert('休闲游戏暂时不可用，请稍后尝试！');
+                    return;
+                }
+                parent.$.layer({
+                    type: 2,
+                    shade: [0],
+                    fix: false,
+                    title: '休闲游戏 (' + num + ')',
+                    maxmin: true,
+                    iframe: {src: 'http://cache.download.banner.luckystar88.com/casinoclient.html?language=zh-cn&game=' + gameCode + "&_=" + Math.random()},
+                    area: ['1000px', '550px'],
+                    close: function(index) {
+
+                    }
+                });
+                num++;
+            }
+            function login(realMode) {
+                iapiLogin('<?php echo $user['pt_username']; ?>', '<?php echo $user['pt_pwd']; ?>', realMode, "zh-cn");
+            }
+            function logout(allSessions, realMode) {
+                iapiLogout(allSessions, realMode);
+            }
+            function calloutLogin(response) {
+                layer.close(beforeLoginLayer);
+                console.log(response);
+                if (response.errorCode) {
+                    isGame = false;
+                    var msg = '请您立刻联系我们的24/7在线客服获得即时帮助，我们对为您造成的不便深感歉意。';
+                    if (response.errorCode == 48) {
+                        msg = '你所在的ip地区受限！';
+                    }
+                    layer.alert("连接服务器失败,  " + msg);
+                }
+                else {
+                    isGame = true;
+                }
+            }
+            function calloutLogout(response) {
+                if (response.errorCode) {
+                    alert("Logout failed, " + response.errorCode);
+                }
+                else {
+                    alert("Logout OK");
+                }
+            }
+            var beforeLoginLayer = false;
+            $(function() {
+                $('#TurnMoney').click(function() {
+                    parent.$('#tranFrom').val('0');
+                    parent.$('#tranTo').val('1');
+                    parent.$("#tranMoney").click();
+                });
+
+
+                $('a').click(function() {
+                    var gameCode = $(this).attr('gameCode');
+                    if (gameCode) {
+                        PlayGame(gameCode);
+                    }
+                });
+                beforeLoginLayer = layer.msg('正在连接服务器，请稍后!', 3600, 7);
+                login(1);
+
+            });
+//             logout(1,1);
+        </script>
+        <!-- 中间选择游戏部分 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <!--<h3>休闲游戏</h3>-->
+                    </div>
+                    <div class="crumbs"><a href="javascript:void(0);" class="TurnMoney" id="TurnMoney">转入游戏币</a></div>
+                </div>
+                <div class="clear10"></div>
+                <div class="subSlotBox">
+                    <div class="SubLeft">
+                        <!-- 热门游戏 -->
+                        <div class="SlotListHot">
+          <div class="SlotList_cycle">
+            <div class="listInfo">
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="fm"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/fm.jpg"></a></div>
+              <dl>
+                <dt style=" font-size:14px;">FunkyMonkey</dt>
+                <dd>　　爱搞怪的猴子来啦。爱吃香蕉爱爬树爱搞怪，转到不同图标有不同奖励哦。<br>
+　　让爱搞怪的猴子给我们带来更多欢乐吧，Funky Monkey...</dd>
+              </dl>
+            </div>
+            <div class="listBtn"><a href="javascript:void(0);" class="play" gameCode="fm">进入游戏</a></div><i class="NewTag"></i> </div>
+          <div class="SlotList_cycle">
+            <div class="listInfo">
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="bowl"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/bowl.jpg"></a></div>
+              <dl>
+                <dt>保龄猜球游戏</dt>
+                <dd>　　幸运瓶
+有时其中有一个瓶是幸运瓶。这个瓶看上去与正常瓶一样。<br>
+　　如果你打出的全中里面有一个幸运瓶，那么你赢取的奖金就会翻 10 倍。</dd>
+              </dl>
+            </div>
+            <div class="listBtn"><a href="javascript:void(0);" class="play" gameCode="bowl">进入游戏</a><i class="NewTag"></i></div>
+          </div>
+          <div class="SlotList_cycle">
+            <div class="listInfo">
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="fnf"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/fnf.jpg"></a></div>
+              <dl>
+                <dt>神奇四侠</dt>
+                <dd>　　这个故事里，有五个因为异变而拥有超能力的人，但为什么叫神奇的四个人呢？<br>
+                　　因为第五个是坏蛋，他注定要被歧视，要被抹去名头。</dd>
+              </dl>
+            </div>
+            <div class="listBtn"><a href="javascript:void(0);" class="play" gameCode="fnf">进入游戏</a><i class="NewTag"></i></div>
+          </div>
+        </div>
+                        <!-- 游戏列表 -->
+                        <div class="SlotList">
+          <ul>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="gtsdgk"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/gtsdgk.jpg">
+              <div class="GameName">巨龙王国</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="fbm"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/fbm.jpg">
+              <div class="GameName">疯狂足球刮刮乐</div></a></div>
+            </li><!--
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="fm"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/fm.jpg">
+              <div class="GameName">Funky Monkey</div></a></div>
+            </li> -->
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="hlf"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/hlf.jpg">
+              <div class="GameName">万圣节财富</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="head"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/head.jpg">
+              <div class="GameName">硬币投掷游戏</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="hk"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/hk.jpg">
+              <div class="GameName">公路王国</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="avng"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/gtsavgsc.jpg">
+              <div class="GameName">复仇者联盟</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="bld"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/bld.jpg">
+              <div class="GameName">刀锋战士</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="elr"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/elr.jpg">
+              <div class="GameName">艾丽卡</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="glrj"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/glr.jpg">
+              <div class="GameName">Gladiator Jackpot</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="hlk50"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/hlk50.jpg">
+              <div class="GameName">绿巨人</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="kkgsc"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/kkgsc.jpg">
+              <div class="GameName">金刚刮刮乐</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="trm"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/trm.jpg">
+              <div class="GameName">雷神 - 超级复仇者</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="hb"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/hb.jpg">
+              <div class="GameName">A Night Out</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="ah2"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/ah2.jpg">
+              <div class="GameName">外星猎人</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="bt"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/bt.jpg">
+              <div class="GameName">百慕大三角</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="c7"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/c7.jpg">
+              <div class="GameName">疯狂七</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="drd"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/drd.jpg">
+              <div class="GameName">夜魔侠</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="hh"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/hh.jpg">
+              <div class="GameName">鬼屋</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="gtshwkp"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/gtshwkp.jpg">
+              <div class="GameName">公路王国pro</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="iceh"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/iceh.jpg">
+              <div class="GameName">冰球游戏</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="sc"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/sc.jpg">
+              <div class="GameName">保险箱探宝</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="tst"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/tst.jpg">
+              <div class="GameName">网球明星</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="wsffr"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/wsffr.jpg">
+              <div class="GameName">玩转华尔街</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="rom"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/rom.jpg">
+              <div class="GameName">漫威轮盘</div></a></div>
+            </li>
+            <li>
+              <div class="picLocation"><a href="javascript:void(0);" gameCode="pop"><img src="<?php echo $imgCdnUrl ?>/images/light_blue/slot/pop.jpg">
+              <div class="GameName">宾果</div></a></div>
+            </li>
+          </ul>
+        </div>
+                    </div>
+                    <div class="SubRight">
+                        <h4 class="SLotWeekTop10Title"><div class="TopTag"></div></h4>
+                     <div class="weekTop10">
+                  <ul>
+                    <li>
+                      <div class="top10title"><em class="yellow">1</em><a href="javascript:void(0);" gameCode="fm"><span>Funky Monkey</span></a></div>
+                      <!-- <div class="top10Btn"><a href="javascript:void(0);" class="enter">进入</a></div> -->
+                    </li>
+                    <li>
+                      <div class="top10title"><em class="yellow">2</em><a href="javascript:void(0);" gameCode="bowl"><span>保龄猜球游戏</span></a></div>
+                      <!-- <div class="top10Btn"><a href="javascript:void(0);" class="enter">进入</a></div> -->
+                    </li>
+                    <li>
+                      <div class="top10title"><em class="yellow">3</em><a href="javascript:void(0);" gameCode="fnf"><span>神奇四侠</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>4</em><a href="javascript:void(0);" gameCode="gtsdgk"><span>巨龙王国</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>5</em><a href="javascript:void(0);" gameCode="fbm"><span>疯狂足球刮刮乐</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>6</em><a href="javascript:void(0);" gameCode="hlf"><span>万圣节财富</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>7</em><a href="javascript:void(0);" gameCode="head"><span>硬币投掷游戏</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>8</em><a href="javascript:void(0);" gameCode="hk"><span>公路王国</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>9</em><a href="javascript:void(0);" gameCode="avng"><span>复仇者联盟</span></a></div>
+                    </li>
+                    <li>
+                      <div class="top10title"><em>10</em><a href="javascript:void(0);" gameCode="bld"><span>刀锋战士</span></a></div>
+                    </li>
+                  </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

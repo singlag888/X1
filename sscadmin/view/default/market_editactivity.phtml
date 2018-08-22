@@ -1,0 +1,87 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    function checkform(ob) {
+        var msg = "";
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+
+</script>
+<div class="list-div" id="addDiv">
+    <form  class="form-inline " role="form" name="form1" id="form1" action="./?c=market&a=<?php echo ACTION; ?>" method="post" enctype ="multipart/form-data">
+    <h3>注意：仅支持jpg,png,gif格式,小于2M的图片。图片尺寸请商户根据自己实际页面设计规格上传。</h3>
+        <table class="table table-responsive table-bordered" style="width:60%;">
+            <tr>
+                <td>活动标题:</td>
+                <td><input class="form-control" name="title" size="50" maxlength="16" placeholder="请输入活动标题" value="<?php echo $activity['title'] ?>" /></td>
+            </tr>
+            <tr>
+                <td>活动对象:</td>
+                <td><input class="form-control" name="target" size="50" maxlength="16" placeholder="请输入活动对象" value="<?php echo $activity['target'] ?>" /></td>
+            </tr>
+            <tr>
+                <td>活动内容:</td>
+                <td><input class="form-control" name="content" size="50" maxlength="16" placeholder="请输入活动表述" value="<?php echo $activity['content'] ?>" /></td>
+            </tr>
+            <tr>
+                <td>活动开始时间:</td>
+                <td>
+                    <input class="input-md form-control Wdate" style="height:34px;" type="text" name="start_time" value="<?php echo $activity['start_time'] ?>" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr>
+                <td>活动到期时间:</td>
+                <td>
+                <input class="input-md form-control Wdate" style="height:34px;" type="text" name="end_time" value="<?php echo $activity['end_time'] ?>" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                </td>
+            </tr>
+            <tr>
+                <td>排序:</td>
+                <td>
+                <input class="form-control" name="sort" size="50" maxlength="16" placeholder="请输入活动排序" value="<?php echo $activity['sort'] ?>" />
+                </td>
+            </tr>
+            <tr>
+                <td>PC活动轮播图</td>
+                <td><input class="input-sm form-control" name="banner_img" type="file"/>缩略图:<img src="<?php echo $activity['banner_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td>PC活动简介图</td>
+                <td><input class="input-sm form-control" name="thumb_img" type="file"/>缩略图:<img src="<?php echo $activity['thumb_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td>PC活动图</td>
+                <td><input class="input-sm form-control" name="main_img" type="file"/>缩略图:<img src="<?php echo $activity['main_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td>手机活动轮播图</td>
+                <td><input class="input-sm form-control" name="m_banner_img" type="file"/>缩略图:<img src="<?php echo $activity['m_banner_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td>手机活动简介图</td>
+                <td><input class="input-sm form-control" name="m_thumb_img" type="file"/>缩略图:<img src="<?php echo $activity['m_thumb_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td>手机活动图</td>
+                <td><input class="input-sm form-control" name="m_main_img" type="file"/>缩略图:<img src="<?php echo $activity['m_main_img_thumb'] ?>"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                        <input name="edit" type="hidden" value="1" />
+                        <input name="id" type="hidden" value="<?php echo $activity['id'] ?>" />
+                        <button type="submit" class="btn btn-info  submit" name="submit">更改</button>
+                        <button type="button" class="btn btn-info submit" onclick="javascript:history.go(-1);" value="返回">返回</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

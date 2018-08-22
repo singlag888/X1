@@ -1,0 +1,759 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+    });
+</script>
+<form name="form1" class="form-top mt15" id="form1" action="" method="GET">
+    <div class="form-inline">
+    <div class="form-group has-default has-feedback">
+        <label>日期</label>
+        <input class="input-md form-control Wdate" type="text" name="startDate" id="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD'})" />
+        <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+    </div>
+    <div class="form-group has-default has-feedback">
+        <label>到</label>
+        <input class="input-md form-control Wdate" type="text" name="endDate" id="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD'})"/>
+        <span class="glyphicon glyphicon-calendar form-control-feedback "></span>
+    </div>
+    <input type="hidden" name="c" value="market"/>
+    <input type="hidden" name="a" value="reportDay"/>
+    <input class="btn btn-info submit" style="width: 60px;" type="submit" name="inquiry"  value="提交"/>
+    <input style="margin-left: 20px" class="btn btn-danger  excel" type="button" table=".mainList" excelFile="日度报表"  value="导出Excel"/>
+    </div>
+</form>
+<div class="mt10"><b>注一：按惯例，为正表示客户赢钱，为负表示客户输钱；</b></div>
+
+<script>
+    $(document).ready(function(){
+        var oldtop = $(".fix").position().top;
+        var now_top = 0;
+        $(window).bind("scroll", function(){
+            var ftop = window.pageYOffset || document.documentElement.scrollTop || 0;
+            var fleft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+            now_top = oldtop - ftop;
+            $(".fix").css({"top":now_top+"px"});
+            if(ftop > 0){
+                $(".fix_scroll").removeClass("fix_scroll");
+                $("#newlistDiv").css("margin","0px 0px 15px -2px");
+            }
+            if(fleft > 0){
+                $("#newlistDiv").css("margin","-1px 0px 10px 80px");
+                $(".fix").addClass("fix_scroll");
+            }
+        });
+        var len = $(".so > tr").length;
+        var first_so = $(".first_so").height();
+        $(".fix_top").css({"height":first_so+"px","line-height":first_so+"px"});
+        for(var i = 0;i < len ; i++){
+           var hei=$($(".so > tr")[i]).height();
+            $($(".lo")[i]).css({"height":hei+"px","line-height":hei+"px"});
+        }
+    });
+</script>
+<style>
+    ul,li{list-style: none;display: block;margin: 0px;padding: 0px;}
+    .reportTal{width: 100%;display: inline-block;}
+    .fix_scroll{position:fixed;}
+    .fix{height:auto;float: left;display: inline-block;}
+    .fix ul{width:100%;height: auto;}
+    .fix li{width:80px;border-bottom: #fff solid 1px;background: #336699;color:#fff;text-align: center;}
+    .fix .fix_top{width:80px;background: #336699;color:#fff;text-align: center;}
+    #newlistDiv{margin:-1px 0px 10px 80px; padding:0px; width:91%;height: 100%;display: inline-block; float:left}
+    #newlistDiv td{text-align: center;vertical-align: middle;padding:0;}
+    #newlistDiv .reportTds td{display: block;line-height: 22px;width: 22px;}
+    .jedatehms{display: none!important;}
+</style>
+<div class="reportTal">
+    <div class="fix fix_scroll">
+        <li class="fix_top">日期</li>
+        <?php foreach ($reportDays as $v): ?>
+        <li class="lo"><?php echo $v['date']; ?></li>
+        <?php endforeach; ?>
+    </div>
+<div class="list-div" id="newlistDiv">
+    <table class="table table-responsive table-bordered" width="100%">
+        <thead>
+            <tr class="first_so">
+                <td>rd_id</td>
+                <td>总代数量</td>
+                <td>新增总代数</td>
+                <td>新增用户数</td>
+                <!-- <td>登录用户数</td> -->
+                <!-- <td>游戏用户数</td> -->
+                <td>订单数量</td>
+                <td>充值笔数</td>
+                <!------------------------------再次修改名称------------------------>
+                <td>存款量</td>
+                <!------------------------------再次修改名称------------------------>
+                <!---------------------------snow  取消显示以下三行-------------------------------------------->
+                <!---------------------------snow  又要恢复,真心-------------------------------------------->
+                <td><div style="width:65px;display: block;height: auto">首存人数</div></td>
+                <td>有效首存人数</td>
+                <td>首存量</td>
+                <td>提款量</td>
+                <td>总销量</td>
+                <td title="总盈亏 = 中奖量 + 返点量 - 投注量">总游戏盈亏</td>
+                <!------------------------------再次修改名称------------------------>
+                <td>充值优惠</td>
+                <td>日投注返水</td>
+                <!------------------------------再次修改名称------------------------>
+                <td title="净盈亏 = 优惠 + 中奖量 + 返点量 - 投注量">净盈亏</td>
+                <!-- <td>人均销量</td> -->
+                <td>低频游戏销量</td>
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">低频游戏盈亏</td>
+                <td>分分彩销量</td>
+                <!-- <td>分分彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">分分彩盈亏</td>
+                <td>秒秒彩销量</td>
+                <!-- <td>秒秒彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">秒秒彩盈亏</td>
+                <!-- <td>pt老虎机销量</td>
+                <td>pt老虎机人数</td>
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">pt老虎机盈亏</td> -->
+                <td>重庆时时彩销量</td>
+                <!-- <td>重庆时时彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">重庆时时彩盈亏</td>
+
+                <td>山东11选5销量</td>
+                <!-- <td>山东11选5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">山东11选5盈亏</td>
+                <td>新疆时时彩销量</td>
+                <!-- <td>新疆时时彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">新疆时时彩盈亏</td>
+                <td>江苏11选5销量</td>
+                <!-- <td>江苏11选5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">江苏11选5盈亏</td>
+                <td>江西11选5销量</td>
+                <!-- <td>江西11选5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">江西11选5盈亏</td>
+                <td>广东11选5销量</td>
+                <!-- <td>广东11选5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">广东11选5盈亏</td>
+                <td>天津时时彩销量</td>
+                <!-- <td>天津时时彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">天津时时彩盈亏</td>
+                <td>福彩3D销量</td>
+                <!-- <td>福彩3D人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">福彩3D盈亏</td>
+                <td>体彩P3P5销量</td>
+                <!-- <td>P3P5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">体彩P3P5盈亏</td>
+                <td>江苏快三销量</td>
+                <!-- <td>江苏快三人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">江苏快三盈亏</td>
+                <td>快三分分彩销量</td>
+                <!-- <td>快三分分彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">快三分分彩盈亏</td>
+                <td>快乐扑克销量</td>
+                <!-- <td>快乐扑克人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">快乐扑克盈亏</td>
+                <td>115分分彩销量</td>
+                <!-- <td>115分分彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">115分分彩盈亏</td>
+                <td>PK10销量</td>
+                <!-- <td>PK10人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">PK10盈亏</td>
+                <td>东京1.5销量</td>
+                <!-- <td>东京1.5人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">东京1.5盈亏</td>
+                <td>安徽快三销量</td>
+                <!-- <td>安徽快三人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">安徽快三盈亏</td>
+                <td>福建快三销量</td>
+                <!-- <td>福建快三人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">福建快三盈亏</td>
+                <td>六合彩销量</td>
+                <!-- <td>六合彩人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">六合彩盈亏</td>
+                <td>双色球销量</td>
+                <!-- <td>双色球人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">双色球盈亏</td>
+                <td>幸运28销量</td>
+                <!-- <td>幸运28人数</td> -->
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">幸运28盈亏</td>
+                <td>腾讯分分彩销量</td>
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">腾讯分分彩盈亏</td>
+                <td>极速六合彩销量</td>
+                <td title="游戏盈亏 = 中奖量 + 返点量 - 投注量">极速六合彩盈亏</td>
+            </tr>
+        </thead>
+        <tbody class="so">
+        <?php
+        $i = 0;
+        foreach ($reportDays as $v): ?>
+            <tr class="reportsTds">
+                <td><?php echo $v['rd_id']; ?></td>
+                <td><?php echo $v['top_num']; ?></td>
+                <td><?php echo $v['new_top_num']; ?></td>
+                <td><?php echo $v['new_user_num']; ?></td>
+                <!-- <td><?php echo $v['login_user_num']; ?></td> -->
+                <!-- <td><?php echo $v['play_user_num']; ?></td> -->
+                <td><?php echo $v['package_num']; ?></td>
+                <td><?php echo $v['deposit_num']; ?></td>
+                <td><?php echo number_format($v['deposit_amount'], 2); ?></td>
+                <!---------------------------snow  取消显示以下三行-------------------------------------------->
+                <!---------------------------snow  又要恢复,真心-------------------------------------------->
+                <td><?php echo $v['first_deposit_num'];
+                if($v['first_deposit_user_id']):?>
+                    <a target='_blank' href='?c=market&a=reportDay&sa=firstDepositList&first_deposit_user_id=<?php echo $v['first_deposit_user_id']; ?>' >详细</a></td>
+                <?php endif;?>
+                <td><?php echo $v['avail_first_deposit_num']; ?></td>
+                <td><?php echo number_format($v['first_deposit_amount'], 2); ?></td>
+                <!---------------------------snow  取消显示三行-------------------------------------------->
+                <td><?php echo number_format($v['withdraw_amount'], 2); ?></td>
+                <td><?php echo number_format($v['buy_amount'], 2); ?></td>
+                <td>
+                    <?php if ($v['win_amount'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['promo_amount'], 2); ?></td>
+                <td><?php echo number_format($v['back_water_amount'], 2); ?></td>
+                <td><font color="<?php echo $v['real_win_amount'] > 0 ? 'red' : '#000000' ?>"><?php echo number_format(-$v['real_win_amount'], 2); ?></font></td>
+
+                <!-- <td><?php echo ceil($v['buy_amount']/$v['play_user_num']); ?></td> -->
+                <td><?php echo number_format($v['low_buy_amount'], 2); ?></td>
+                <td>
+                    <?php if ($v['low_win_amount'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['low_win_amount'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['low_win_amount'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_11'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_11']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_11'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_11'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_11'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_15'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_15']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_15'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_15'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_15'], 2); ?>
+                    <?php endif; ?>
+                </td>
+     <!--            <td><?php echo number_format($v['buy_amount_pt'], 2); ?></td>
+                <td><?php echo $v['play_user_num_pt']; ?></td>
+                <td>
+                    <?php if ($v['win_amount_pt'] > 0): ?>
+                        <font color="red"><?php echo number_format($v['win_amount_pt'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format($v['win_amount_pt'], 2); ?>
+                    <?php endif; ?>
+                </td> -->
+
+                <td><?php echo number_format($v['buy_amount_1'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_1']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_1'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_1'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_1'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_2'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_2']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_2'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_2'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_2'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_4'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_4']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_4'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_4'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_4'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_5'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_5']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_5'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_5'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_5'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_6'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_6']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_6'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_6'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_6'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_7'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_7']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_7'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_7'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_7'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_8'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_8']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_8'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_8'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_8'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_9'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_9']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_9'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_9'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_9'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_10'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_10']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_10'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_10'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_10'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_12'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_12']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_12'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_12'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_12'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_13'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_13']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_13'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_13'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_13'], 2); ?>
+                    <?php endif; ?>
+                </td>
+                <td><?php echo number_format($v['buy_amount_14'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_14']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_14'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_14'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_14'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_16'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_16']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_16'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_16'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_16'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+
+                <td><?php echo number_format($v['buy_amount_17'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_17']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_17'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_17'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_17'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_18'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_18']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_18'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_18'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_18'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_19'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_19']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_19'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_19'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_19'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_20'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_20']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_20'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_20'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_20'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_21'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_21']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_21'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_21'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_21'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_22'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_22']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_22'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_22'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_22'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_23'], 2); ?></td>
+                <!-- <td><?php echo $v['play_user_num_23']; ?></td> -->
+                <td>
+                    <?php if ($v['win_amount_23'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_23'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_23'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_24'], 2); ?></td>
+                <td>
+                    <?php if ($v['win_amount_24'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_24'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_24'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+                <td><?php echo number_format($v['buy_amount_25'], 2); ?></td>
+                <td>
+                    <?php if ($v['win_amount_25'] > 0): ?>
+                        <font color="red"><?php echo number_format(-$v['win_amount_25'], 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$v['win_amount_25'], 2); ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php $i++;endforeach; ?>
+        <tr style="background:#228855;font-weight: bold">
+            <td colspan="2">本页小计</td>
+            <td><?php echo $totalInfo['new_top_num']; ?></td>
+            <td><?php echo $totalInfo['new_user_num']; ?></td>
+            <!-- <td><?php echo $totalInfo['login_user_num']; ?></td> -->
+            <!-- <td><?php echo $totalInfo['play_user_num']; ?></td> -->
+            <td><?php echo $totalInfo['package_num']; ?></td>
+            <td><?php echo $totalInfo['deposit_num']; ?></td>
+            <td><?php echo number_format($totalInfo['deposit_amount'], 2); ?></td>
+            <!-------------------- snow 取消显示以下三行--------------------------------------------->
+            <!-------------------- snow 又要恢复 真心--------------------------------------------->
+            <td><?php echo $totalInfo['first_deposit_num']; ?></td>
+            <td><?php echo $totalInfo['avail_first_deposit_num']; ?></td>
+            <td><?php echo number_format($totalInfo['first_deposit_amount'], 2); ?></td>
+            <!-------------------- snow 取消显示以下三行--------------------------------------------->
+            <td><?php echo number_format($totalInfo['withdraw_amount'], 2); ?></td>
+            <td><?php echo number_format($totalInfo['buy_amount'], 2); ?></td>
+            <td>
+                <?php if ($totalInfo['win_amount'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['promo_amount'], 2); ?></td>
+            <td><?php echo number_format($totalInfo['back_water_amount'], 2); ?></td>
+            <td><font color="<?php echo $totalInfo['real_win_amount'] > 0 ? 'red' : '#000000' ?>"><?php echo number_format(-$totalInfo['real_win_amount'], 2); ?></font></td>
+1
+            <!-- <td><?php echo ceil($totalInfo['user_avg_buy']);  ?></td> -->
+            <td><?php echo number_format($totalInfo['low_buy_amount'], 2); ?></td>
+            <td>
+                <?php if ($totalInfo['low_win_amount'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['low_win_amount'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['low_win_amount'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_11'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_11']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_11'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_11'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_11'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_15'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_15']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_15'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_15'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_15'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <!-- <td><?php echo number_format($totalInfo['buy_amount_pt'], 2); ?></td>
+            <td><?php echo $totalInfo['play_user_num_pt']; ?></td>
+            <td>
+                <?php if ($totalInfo['win_amount_pt'] > 0): ?>
+                    <font color="red"><?php echo number_format($totalInfo['win_amount_pt'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format($totalInfo['win_amount_pt'], 2); ?>
+                <?php endif; ?>
+            </td> -->
+
+            <td><?php echo number_format($totalInfo['buy_amount_1'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_1']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_1'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_1'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_1'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_2'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_2']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_2'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_2'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_2'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_4'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_4']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_4'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_4'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_4'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_5'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_5']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_5'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_5'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_5'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_6'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_6']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_6'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_6'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_6'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_7'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_7']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_7'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_7'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_7'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_8'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_8']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_8'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_8'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_8'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_9'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_9']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_9'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_9'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_9'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_10'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_10']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_10'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_10'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_10'], 2); ?>
+                <?php endif; ?>
+            </td>
+            <td><?php echo number_format($totalInfo['buy_amount_12'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_12']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_12'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_12'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_12'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_13'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_13']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_13'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_13'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_13'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_14'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_14']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_14'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_14'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_14'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_16'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_16']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_16'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_16'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_16'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+
+            <td><?php echo number_format($totalInfo['buy_amount_17'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_17']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_17'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_17'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_17'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_18'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_18']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_18'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_18'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_18'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_19'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_19']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_19'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_19'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_19'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_20'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_20']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_20'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_20'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_20'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_21'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_21']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_21'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_21'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_21'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_22'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_22']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_22'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_22'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_22'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_23'], 2); ?></td>
+            <!-- <td><?php echo $totalInfo['play_user_num_23']; ?></td> -->
+            <td>
+                <?php if ($totalInfo['win_amount_23'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_23'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_23'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_24'], 2); ?></td>
+            <td>
+                <?php if ($totalInfo['win_amount_24'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_24'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_24'], 2); ?>
+                <?php endif; ?>
+            </td>
+
+            <td><?php echo number_format($totalInfo['buy_amount_25'], 2); ?></td>
+            <td>
+                <?php if ($totalInfo['win_amount_25'] > 0): ?>
+                    <font color="red"><?php echo number_format(-$totalInfo['win_amount_25'], 2); ?></font>
+                <?php else: ?>
+                    <?php echo number_format(-$totalInfo['win_amount_25'], 2); ?>
+                <?php endif; ?>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+<div style="clear:both;"></div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,133 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/js/jquery.dialog.js?_=1" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" />
+<script>
+//预设查询值
+    $(function () {
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=type]').val('<?php echo $type; ?>');
+        $('input[name=start_input_time]').val('<?php echo $startInputTime; ?>');
+        $('input[name=end_input_time]').val('<?php echo $endInputTime; ?>');
+        $('input[name=input_admin]').val('<?php echo $inputAdmin; ?>');
+        $('select[name=status]').val('<?php echo $status; ?>');
+    });
+</script>
+
+<div class="mt20" id="query">
+    <form name="form1" action="" method="get">
+        <div class="form-inline">
+            <div class="form-group has-default has-feedback">
+                <label>创建时间：</label>
+                <input class="input-md form-control Wdate"  type="text" name="start_input_time" onclick="jeDate({dateCell:'#input_time_start',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="input_time_start" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>到</label>
+                <input class="input-md form-control Wdate"  type="text" name="end_input_time" onclick="jeDate({dateCell:'#input_time_end',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="input_time_end"
+             value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label>代理账号：</label>
+            <input class="input-md form-control" name="username" size="12"/>
+            <label>创建人：</label>
+            <input class="input-md form-control" name="input_admin" size="12"/>
+            <label>调整类型：</label>
+            <select class="input-md form-control" name="type">
+                <option value="-1">不限</option>
+                <option value="1">总代降一代</option>
+                <option value="2">一代升总代</option>
+            </select>
+            <label>状态：</label>
+            <select class="input-md form-control" name="status">
+                <option value="-1">不限</option>
+                <option value="0">未处理</option>
+                <option value="8">已执行</option>
+                <option value="9">已取消</option>
+            </select>
+            <input type="hidden" name="c" value="user"/>
+            <input type="hidden" name="a" value="levelAdjustList"/>
+            <input class="btn btn-info btn-info submit ml15" style="width:90px;" type="submit" name="submit" value=">>查 询<<"/>
+        </div>
+        <!--代理账号: <input name="username" size="12"/>
+
+        创建人: <input name="input_admin" size="12"/>
+        调整类型: <select name="type">
+            <option value="-1">不限</option>
+            <option value="1">总代降一代</option>
+            <option value="2">一代升总代</option>
+        </select>&nbsp;&nbsp;&nbsp;
+        状态: <select name="status">
+            <option value="-1">不限</option>
+            <option value="0">未处理</option>
+            <option value="8">已执行</option>
+            <option value="9">已取消</option>
+        </select>&nbsp;&nbsp;&nbsp;&nbsp;
+
+        创建时间: <input type="text" name="start_input_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="input_time_start" value="" size="13"/>
+        到<input type="text" name="end_input_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" id="input_time_end" value="" size="13"/>
+        <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="levelAdjustList"/>
+        <input type="submit" name="submit" value=">> 查 询 <<"/>-->
+    </form>
+</div>
+
+<div class="list-div form-top mt20" id="listDiv">
+    <table class="table table-responsive table-bordered mainList" >
+        <thead>
+            <tr>
+                <td>提案ID</td>
+                <td>代理账号</td> 
+                <td>调整类型</td>
+                <td>转移后的上级</td>                
+                <td>备注</td>
+                <td>创建人</td>
+                <td>创建时间</td>
+                <td>处理时间</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php if ($results): ?>
+            <?php foreach ($results as $v): ?>
+                <tr>
+                    <td><?php echo $v['la_id']; ?></td>
+                    <td><?php echo $v['username']; ?></td>
+                    <td>
+                        <?php if ($v['type'] == 1): ?>总代降一代
+                        <?php else : ?>一代升总代
+                        <?php endif; ?>
+                    </td>
+                    <td><?php if ($v['type'] == 1):?> 
+                        <?php echo $v['parent_name'] . '(ID:' . $v['parent_id'] . ')'; ?>                        
+                        <?php else: ?>
+                        <?php echo '无上级'; ?>
+                        <?php endif; ?> 
+                    </td>
+                    <td><?php echo $v['remark']; ?></td>
+                    <td><?php if (isset($admins[$v['input_admin_id']])) {echo $admins[$v['input_admin_id']]['username'];} ?></td>
+                    <td><?php echo $v['input_time']; ?></td>
+                    <td><?php if ($v['status'] != 0 ) { echo $v['finish_time']; } ?></td>
+                    <td>
+                        <?php if ($v['status'] == 0): ?><font color="red">未处理</font>
+                        <?php elseif ($v['status'] == 8): ?><font color="green">已执行</font>
+                        <?php elseif ($v['status'] == 9): ?>已取消
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                <?php if ($v['status'] == 0): ?>						
+                            <a class="btn btn-mini btn-info" onclick="return confirm('确认取消？该操作不可恢复！');" href="./?c=user&a=cancelLevelAdjust&id=<?php echo $v['la_id'] ?>">取消</a>
+                <?php endif; ?>
+                    </td>
+                </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+            <tr><td colspan="11">暂无数据！</td></tr>
+<?php endif; ?>
+    </table>
+</div>
+<input type="hidden" name="hide">
+<div class="pageTal"><?php echo $pageList; ?></div>
+<div class="tip">
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,131 @@
+<?php $this->import("head"); ?>
+<script>
+    //AJAX取得用户信息
+    function getUser()
+    {
+        var token =getRandChar();
+        $('input[name=token]').val(token)
+        if ($('input[name=username]').val() == '' || $('input[name=username]').val().length < 4) {
+            /******************************** snow 添加调用layer 弹出层 ****************************************/
+            window.parent.layer.alert('用户名输入不规范');
+            /******************************** snow 添加调用layer 弹出层 ****************************************/
+            return false;
+        }
+
+        $.post(
+            '?c=user&a=showBalance',
+            {username: $('input[name=username]').val()},
+            function(json_data) {
+                /********************* snow  添加判断 看返回值是否出错,再进行赋值*****************************/
+                if(json_data.errCode === 1){
+                    //>>如果报错,打印错误信息
+                    window.parent.layer.alert(json_data.errMsg);
+
+                }else{
+                    //>>没有报错,返回正常信息
+                    if (json_data.user_id == '') {
+                        $('#result').html('没有这个用户');
+                    } else {
+                        $('#result').html('￥' + parseFloat(json_data.balance));
+                    }
+                }
+                /********************* snow  添加判断 看返回值是否出错,再进行赋值*****************************/
+            }, "json");
+    }
+
+    function checkform(ob) {
+        var msg = "";
+        /********************** snow 修改弹出提示信息 让显示更准确***************************************/
+
+        if($('#result').text() == '没有这个用户'){
+            window.parent.layer.alert('无效的用户,请检查你的输入');
+            return false;
+        }
+        if (ob.username.value == '' || ob.username.value.length < 4) {
+            msg = "用户名输入不规范";
+        }
+
+        if (ob.amount.value == ''|| parseFloat(ob.amount.value) <= 0) {
+            msg += msg == '' ? "请输入操作正数金额 " : ",请输入操作正数金额 ";
+        }
+
+        var before_amout = parseFloat(($('#result').text()).substring(1));
+        if(before_amout + parseFloat(ob.amount.value) > 99999999999.99){
+            //>>超出了数据限制
+            msg += msg == '' ? "超出了数据限制 " : ",超出了数据限制 ";
+        }
+
+		if (ob.remark.value == '') {
+            msg += msg == '' ? '请输入备注' : ',请输入备注';
+		}
+
+        /********************** snow 修改弹出提示信息 让显示更准确***************************************/
+        if (msg != "") {
+            window.parent.layer.alert(msg);
+            return false;
+        }
+        return true;
+    }
+
+    function getRandChar(len){
+        len = len || 36;
+        var timestamp = new Date().getTime();
+        var x = "0123456789qwertyuiopasdfghjklzxcvbnm";
+        random = '';
+        for (i = 0; i < len; i++) {
+            random += x.charAt(Math.floor(Math.random() * x.length));
+        }
+
+        return timestamp + random;
+    }
+</script>
+<div class="list-div form-top mt20" id="addDiv">
+    <form name="form1" id="form1" action="" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 50%;">
+            <tr>
+                <td colspan="2" class="rowTitle">
+                    <b>修改余额</b>
+                </td>
+            </tr>
+            <tr>
+                <td>接收人</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" type="text" name="username" value="" />
+                        <input class="btn btn=info" type="button" name="check" value="检测用户" onclick='getUser()' />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td> 用户余额</td>
+                <td>
+                    <span id="result"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>金额</td>
+                <td><input class="input-md form-control" style="width: 34%" type="text" name="amount" value="" /></td>
+            </tr>
+			<tr>
+                <td>
+                <span class="red">*</span>
+                 备注</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" type="text" name="remark" value="" maxlength="10" />（此栏为必填，且最多不超过10个字)
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:50%;margin:0 auto;text-align: center;">
+                        <input type="hidden" name="orderType" value="202" />
+                        <input type="hidden" name="token" value="" />
+                        <input class="btn btn-info submit" type="submit" style="width: 100px;"  name="submit" value="提交" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

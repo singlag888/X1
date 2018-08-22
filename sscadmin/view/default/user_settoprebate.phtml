@@ -1,0 +1,80 @@
+<?php $this->import("head"); ?>
+<script>
+function setRebate(user_id, property_id) {
+    if ($('#rebate_' + user_id + "_" + property_id).val() < 0) {
+        alert('请选择返点');
+        return false;
+    }
+    if (!confirm('请仔细确认，返点设置好后一般不要修改！\r\n如果是降级总代返点，此总代下级的返点高于此返点将会批量下降一级！')) {
+        return false;
+    }
+
+    $.post(
+        '?c=user&a=saveTopRebate',
+        {'property_id':property_id, 'user_id':user_id, 'rebate':$('#rebate_' + user_id + "_" + property_id).val()},
+        function(jdata) {
+            if (jdata.errno == 0) {
+                alert('设置成功');
+            }
+            else {
+                alert('设置失败：'+jdata.errstr);
+            }
+            window.location.reload();
+    }, 'json');
+}
+
+$(function(){
+
+});
+
+</script>
+
+<h3>注：降级总代返点的时候，会批量下降有冲突的下级一个返点阶级.</h3>
+<div class="list-div" id="listDiv">
+<form name="form1" id="form1" action="./?c=user&a=updateTopPrizeGroup" method="post">
+<table class="mainList">
+    <thead>
+    <tr>
+    	<td>总代</td>
+        <?php foreach ($properties as $property_id => $property): ?>
+        <td><?php echo $property; ?></td>
+        <?php endforeach; ?>
+    </tr>
+    </thead>
+    <?php foreach ($tops as $v): ?>
+    <tr>
+    	<td><?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></td>
+        <?php foreach ($properties as $property_id => $property): ?>
+        <td>
+            <?php if (isset($userRebates[$v['user_id']][$property_id]['rebate'])): ?>
+                <?php echo $userRebates[$v['user_id']][$property_id]['rebate']; ?>（<?php echo $userRebates[$v['user_id']][$property_id]['prize']; ?>）
+                <?php if ($canSaveTopRebate) : ?>
+                    <select id="rebate_<?php echo $v['user_id']; ?>_<?php echo $property_id; ?>">
+                        <option value="-1">请选择</option>
+                        <?php for ($i=0; $i<count($gaps[$property_id]) ; $i++): ?>
+                        <option value="<?php echo $gaps[$property_id][$i]['rebate']; ?>"><?php echo $gaps[$property_id][$i]['prize']; ?> (<?php echo $gaps[$property_id][$i]['rebate']; ?>)</option>
+                        <?php endfor; ?>
+                    </select>
+                    <input type="button" value="设置" onclick="setRebate(<?php echo $v['user_id']; ?>, <?php echo $property_id; ?>)"/>
+                <?php else: ?><i>不可设置！</i>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if ($canSaveTopRebate): ?>
+                    <select id="rebate_<?php echo $v['user_id']; ?>_<?php echo $property_id; ?>">
+                        <option value="-1">请选择</option>
+                        <?php foreach ($gaps[$property_id] as $vv): ?>
+                        <option value="<?php echo $vv['rebate']; ?>"><?php echo $vv['prize']; ?> (<?php echo $vv['rebate']; ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <input type="button" value="设置" onclick="setRebate(<?php echo $v['user_id']; ?>, <?php echo $property_id; ?>)"/>
+                <?php endif; ?>
+            <?php endif; ?>
+        </td>
+        <?php endforeach; ?>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

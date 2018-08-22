@@ -1,0 +1,41 @@
+.Recharge{width:1180px;margin:0 auto;margin-top: 15px;font-size: 14px;letter-spacing: 2px;border-radius: 5px;}
+.Recharge_top{background: #dedede;height:50px;width:100%;text-align: center;line-height: 50px;margin:0;}
+.Rechargetable{width:1180px;height:auto;margin:auto;background:#f1f1f1;padding-top:85px;}
+.Rechargetable .Receipts{width:1100px;height:100px;margin:auto;position: relative;z-index: 1;}
+.Rechargetable .Receipts .receipts_item{position:relative;border-left: 1px solid #c4c4c4;width:220px;height:100px;border-top:1px solid #c4c4c4;border-right:1px solid #c4c4c4;border-bottom:1px solid #444141;padding:26px 0;float:left;font-size:18px;cursor: pointer;}
+.receipts_item_current{background: #fff;position:relative;width:220px;height:100px;padding:26px 0;float:left;font-size:18px;border-left:1px solid #444141;border-right:1px solid #444141;border-top:1px solid #444141;border-bottom:1px solid #fff;}
+.Rechargetable .Receipts li .receipts_item_name{height:48px;line-height:48px}
+.Rechargetable .Receipts li .receipts_item_bg{display:none;width:38px;height:38px;position:absolute;top:0;right:0;background: url(../images/receipts_item_img.png) 0 38px;}
+.Rechargetable .Receipts li span{margin-right: 15px;background-image: url(../images/receipts_item_img.png);display: inline-block;float: left;margin-left: 34px;}
+.Rechargetable .Receipts li span.receipts_item_img04{width:48px;height:48px;background-position: 0 0;}  /* 微信 */
+.Rechargetable .Receipts li span.receipts_item_img05{width:48px;height:48px;background-position: -48px 0;} /* 支付宝 */
+.Rechargetable .Receipts li span.receipts_item_img02{width:48px;height:48px;background-position: -96px 0;} /* 在线 */
+.Rechargetable .Receipts li span.receipts_item_img03{width:48px;height:48px;background-position: -144px 0;} /* 扫码 */
+.Rechargetable .Receipts li span.receipts_item_img01{width:76px;height:48px;background-position: -192px 0;margin-left: 13px;} /* 银行卡 */
+.Rechargetable .Receipts_body{background: #fff;width: 1100px;height:500px;margin: auto;border: 1px solid #444141;position: relative;
+    top:-1px;}
+.iframe_body{width: 100%;padding: 2px;}
+.recharge_bank_top{width:1180px;margin:auto;}
+.recharge_bank{width:1180px;margin:auto;margin-top: 40px;}
+.recharge_input{width:155px;height:28px;border:1px solid #666;}
+.recharge_bank p{font-size: 16px;margin-bottom: 10px;margin-left: 5px;}
+.recharge_bank_body tr,.recharge_bank_body tr td{border:1px solid #ccc;height:60px;line-height: 60px;font-weight: bold;text-align: center;}
+.recharge_bank_body {width: 100%;text-align: center;font-size: 16px;margin-bottom: 20px;}
+.recharge_bank_body .recharge_bank_td{text-align: left;padding-left: 30px;}
+.recharge_bank_body td .bank_btn{text-align: center;margin-right: 8px;width: 70px;height: 40px;line-height: 40px;color: #333;display: inline-block;border-radius: 5px;background:#fff;border: 1px solid #ccc;}
+.recharge_bank_body td .bank_btn:hover{color:red;border: 1px solid red;}
+.recharge_bank_body td .third_party_btn{height: 40px;line-height: 40px;background: #fff;color: #333;display: inline-block;border-radius: 5px;padding: 0 3px;border: 1px solid #fff}
+.recharge_bank_body td .third_party_btn:hover{color:red;border: 1px solid red;}
+.currentNow{background:#fff;color:red;width: 70px;height: 40px;line-height: 40px;display: inline-block;border-radius: 5px;border: 1px solid red;}
+.recharge_bank_body span{display:inline-block;font-size:14px;}
+.thirdPartyCurrentNow{color:red;border: 1px solid red;height: 40px;line-height: 40px;display: inline-block;border-radius: 5px;background: #fff;padding: 0 3px;}
+#icbcAuto1,#icbcAuto2{display: none;}
+.bankPay_btn{width: 100px;height: 40px;line-height: 40px;font-size: 18px;background: red;color: #fff;font-weight: bold;margin: auto;display: block;border-radius: 5px;text-align: center;cursor:pointer;}
+.third_party_next_btn{width: 100px;height: 40px;line-height: 40px;font-size: 18px;background: red;color: #fff;margin: auto;display: block;border-radius: 5px;}
+.recharge_bank_content{width: 1180px;margin: auto;margin-top:20px;}
+.recharge_detail{position: relative;text-align:left;padding-left: 30px;}
+.recharge_detail_list{position: relative;background: #fff;bottom:2px;width:400px;border:1px solid #76b142;z-index: 999;margin:0 auto; }
+.recharge_detail_list h5{height: 40px;line-height: 40px;border-bottom: 1px dashed #ccc;text-align: left;padding-left: 5px;}
+.recharge_detail_list p{height: 26px;line-height: 30px;font-size: 12px;padding-left: 90px;text-align: left;}
+.recharge_detail_list_bg{width: 20px;height: 20px;position: absolute;top: 0;right:0;background: url(../images/receipts_item_img.png) -38px -48px; }
+.recharge_detail_list .recharge_detail_list03{padding-left: 5px;border-top: 1px dashed #ccc;}

@@ -1,0 +1,188 @@
+<!DOCTYPE HTML><!-- 会员管理 -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+<div class="operate_middle_page">
+       <!--/*头部*/-->
+        <header class="headerbg">
+            <a class="headbox01" href="javascript:history.back(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+            <p class="headtetle">会员管理</p>
+        </header>
+        <div class="defoperate_record_tablist">
+            <ul class="defoperate_record_tabtitleUl4">
+                <li>账户</li>
+                <li>奖金/返点</li>
+                <li onclick="javascript:switch_sort('balance');">
+                    <span class="Orderby">余额
+                        <i class="<?php if ($sortKey == 'balance' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'balance' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i>
+                    </span>
+                </li>
+                <li onclick="javascript:switch_sort('last_time');">
+                    <span class="Orderby">最近登录
+                        <i class="<?php if ($sortKey == 'last_time' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'last_time' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i>
+                    </span></li>
+            </ul>
+            <?php if ($flag): ?>
+                <?php foreach ($users as $k=>$v): ?>
+                   <ul class="defoperate_record_tabtitleUL4">
+                        <li>
+                        <?php if ($v['user_id']!=$user['user_id']): ?>
+                            <a href="index.jsp?c=user&a=<?php echo ACTION; ?>&username=<?php echo $v['username']; ?>&range=<?php echo $range; ?>" ><?php echo $v['username'];if($v['group_id'] < 4) echo '(代)';else echo '(会)'; ?></a>
+                        <?php else: ?>
+                            <?php echo $v['username']; ?>(自己)
+                        <?php endif; ?>
+                        </li>
+                        <li><?php echo $v['prize_mode'] . '/'. $v['rebate']; ?></li>
+                        <li><?php echo number_format($v['balance'], 2); ?></li>
+                        <li><?php echo $v['last_time']; ?></li>
+                    </ul>
+                        <div class="OrderbyDiv DisplayNone">
+                            <li class="OrderbyText">注册时间：</li><li><?php echo $v['reg_time']; ?></li>
+                            <button class="OrderbyDivX">关闭</button>
+                        </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li colspan="7" class="bom">您无权查看此用户或此用户不存在！</li>
+            <?php endif; ?>
+
+        </div>
+    </div>
+    <div>
+    <?php echo $pageList; ?>
+ </div>
+</div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=range]').val('<?php echo $range; ?>');
+
+
+        $.ajaxSetup({
+            async : false
+        });
+
+        $('a.fandianBtn').on('click', function(){       // 返点按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '设置返点',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','380px'],
+                content: ['index.jsp?c=user&a=setRebate&user_id='+user_id]
+            });
+            $('div.xubox_title', parent.document).addClass('layui-layer-title');
+        });
+
+        $('a.daiChongBtn').on('click', function(){       // 代充按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '为下级充值',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','480px'],
+                content: ['index.jsp?c=user&a=transferMoney&user_id='+user_id]
+            });
+            $('div.xubox_title', parent.document).addClass('layui-layer-title');
+        });
+
+        $('a.quotaBtn').on('click', function(){       //  配额按钮点击事件
+            var user_id = $(this).attr('user_id');
+
+            var show_layer = true;
+            $.get(
+                'index.jsp?c=user&a=sendOutQuota',
+                {
+                    'user_id': user_id,
+                    'check': 1,
+                },
+                function(response){
+                    if(response.errno　!= 0){
+                        show_layer = false;
+                        parent.layer.alert(response.errstr,{icon:7});
+                    }
+                }, 'json');
+
+            if(!show_layer) return false;
+
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '下级配额管理',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','380px'],
+                content: ['index.jsp?c=user&a=sendOutQuota&user_id='+user_id]
+            });
+            $('div.xubox_title', parent.document).addClass('layui-layer-title');
+        });
+
+        $('a.recoverBtn').on('click', function(){       //  回收按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '回收帐号',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','480px'],
+                content: ['index.jsp?c=user&a=recycle&user_id='+user_id]
+            });
+            $('div.xubox_title', parent.document).addClass('layui-layer-title');
+        });
+
+    });
+
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+
+        //submit
+        $('#form2').submit();
+    }
+            $(".defoperate_record_tabtitleUL4").each(function(i){
+       $(".defoperate_record_tabtitleUL4").eq(i).click(function(){
+           $(".OrderbyDiv").eq(i).addClass("DisplayBlock").siblings().removeClass("DisplayBlock");
+        })
+    })
+    $(".OrderbyDivX").click(function(){
+        $(".OrderbyDiv").removeClass("DisplayBlock");
+    })
+</script>
+
+
+
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

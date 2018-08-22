@@ -1,0 +1,57 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="addDiv">
+    <form name="form1" id="form1" action="./?c=user&a=deleteMsg&msg_id=<?php echo $message['msg_id']; ?>" method="post" >
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td colspan="2" class="rowTitle">
+                    <b>消息详情</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="narrow-label">标题</td>
+                <td><?php echo htmlspecialchars($message['title']); ?></td>
+            </tr>
+            <tr>
+                <td>发送人</td>
+                <td>
+                    <?php if ($message['type'] == '2'): ?>系统管理员
+                    <?php else: ?>
+                        <?php if ($user['user_id'] == ''): ?>用户已删除
+                        <?php else: ?>
+                            <?php echo $user['username']; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>接收人</td>
+                <td><?php echo $toUserName; ?></td>
+            </tr>
+            <tr>
+                <td>发送时间</td>
+                <td><?php echo $message['create_time']; ?> </td>
+            </tr>
+            <tr>
+                <td>内容</td>
+                <td><?php echo nl2br(htmlspecialchars($message['content'])); ?></td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <div style="width: 50%;margin:0 auto;text-align:center;">
+                        <input class="btn btn-info submit" type="button"  name="submit" value="回 复" onclick="$('#form2').submit();"/>
+                        <input class="btn btn-info submit" type="button"  name="submit" value="删除这条消息" onclick="return confirm('真的删除？该操作不可恢复！');" />
+                        <input class="btn btn-info submit" type="button" onclick="javascript:history.go(-1);" value="返回"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+    <form name="form1" id="form2" action="./?c=user&onlyuser=1&a=batchSendMessage&user_id=<?php echo $message['from_user_id']; ?>" method="post" >
+        <input type="hidden" name="pretitle" value="Re:<?php echo htmlspecialchars($message['title']); ?>"/>
+        <input type="hidden" name="precontent" value="您在<?php echo $message['create_time']; ?>发表的消息:\r\n<?php echo htmlspecialchars($message['content']); ?>\r\n------<?php echo date('Y-m-d H:i:s'); ?>回复-------\r\n"/>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

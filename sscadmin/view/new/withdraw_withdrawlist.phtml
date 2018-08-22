@@ -1,0 +1,498 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+    <script src="/js/progress.js"></script>
+    <script src="/js/base64.js"></script>
+    <script>
+        //预设查询值
+        $(document).ready(function () {
+
+            $("#pay_bank_id").change(function () {
+
+                str = "<option value=0>请选择</option>";
+                $("#pay_card_id").html(str);
+                <?php foreach ($bankWithdrawCards as $k => $v): ?>
+                if ($("#pay_bank_id").val() == "<?php echo $k; ?>") {
+                    <?php foreach ($v as $kk => $vv): ?>
+                    str = str + "<option value=<?php echo $vv['card_id']; ?>><?php echo $vv['card_name']; ?>&nbsp;<?php echo $vv['card_num']; ?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?></option>";
+                    <?php endforeach; ?>
+                    <?php if ($vv['usage'] == 2): ?>ATM<?php endif; ?>
+                    $("#pay_card_id").html(str);
+                }
+                <?php endforeach; ?>
+            });
+
+            //预选中值
+            $('select[name=top_username]').val('<?php echo $top_username; ?>');
+            $('input[name=username]').val('<?php echo $username; ?>');
+            $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+            $('select[name=is_test]').val('<?php echo $is_test; ?>');
+            $("#bank_id").val('<?php echo $bank_id; ?>');
+            $("#pay_bank_id").val('<?php echo $pay_bank_id; ?>').change();
+            $('#pay_card_id').val('<?php echo $pay_card_id; ?>');
+            $('input[name=startDate]').val('<?php echo $startDate; ?>');
+            $('input[name=endDate]').val('<?php echo $endDate; ?>');
+            $('select[name=status]').val('<?php echo $status; ?>');
+            $('select[name=page_size]').val('<?php echo $pageSize; ?>');
+
+        });
+        $(function(){
+            $('#sel').submit(function () {
+                var start_amount =$("input[name='start_amount']").val();
+                var end_amount =$("input[name='end_amount']").val();
+                if(start_amount != '' && end_amount != '')
+                {
+                    if((!/^\d+$/.test(start_amount) && !/^\d+\.\d{1,2}$/.test(start_amount)) || (!/^\d+$/.test(end_amount) && !/^\d+\.\d{1,2}$/.test(end_amount)))
+                    {
+                        $("input[name='start_amount']").val('');
+                        $("input[name='end_amount']").val('');
+                        alert('请输入正确金额，小数点后最多保持两位!');
+                        return false;
+                    }
+                    if(Number(start_amount) > Number(end_amount))
+                    {
+                        alert('开始金额不能大于结束金额');
+                        return false;
+                    }
+                }
+            });
+
+            //>>author snow 添加跳转点击事件
+            $('.go-back-url').click(function () {
+                //>>1.获取当前页面完整url 包括参数
+                back_url = location.href;
+                next_url = $(this).data('url')
+
+                var myBase = new Base64();
+                var str = myBase.encode(back_url);
+
+                next_url =next_url + '&back_url=' + str;
+
+                location.href = next_url
+
+            })
+
+        });
+        function checkEndAmount(obj) {
+            var startAmount = $(obj).val();
+            if(startAmount!=''){
+                if(!/^\d+$/.test(startAmount) && !/^\d+\.\d{1,2}$/.test(startAmount))
+                {
+                    $(obj).val('');
+                    alert('请输入正确金额，小数点后最多保持两位!');
+                    return false;
+                }
+            }
+            if(startAmount.length > 11)
+            {
+                $(obj).val(startAmount.substring(0,11));
+            }
+        }
+    </script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+    <div id="query">
+        <form class="mt20" id="sel" name="form1" action="./" method="get">
+            <table class="table table-responsive">
+                <tr>
+                    <td>
+                        <div class="form-inline">
+                            <div class="form-group has-default has-feedback">
+                                <label>执行时间:</label>
+                                <input class="input-sm form-control" type="text" name="startDate"
+                                       onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                                       id="startDate" value="" size="21"/>
+                                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                            <div class="form-group has-default has-feedback">
+                                <label>到</label>
+                                <input class="input-sm form-control" type="text" name="endDate"
+                                       onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"
+                                       id="endDate" value="" size="21"/>
+                                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                            </div>
+                            <label>客户提现银行:</label>
+<!--                            <select class="input-sm form-control" name="bank_id" id="bank_id">-->
+<!--                                <option value="0">请选择</option>-->
+<!--                                --><?php //foreach ($withdrawBankList as $k => $v): ?>
+<!--                                    <option value="--><?php //echo $k; ?><!--">--><?php //echo $v; ?><!--</option>-->
+<!--                                --><?php //endforeach; ?>
+<!--                            </select>-->
+                            <select class="selectpicker deposit_bank_id" name="bank_id" id="bank_id" data-live-search="true" title="请选择 ...">
+                                <option value="">请选择…</option>
+                                <?php foreach ($withdrawBankList as $k => $v): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label class="ml10">付款银行:</label>
+<!--                            <select class="input-sm form-control" name="pay_bank_id" id="pay_bank_id">-->
+<!--                                <option value="0">请选择</option>-->
+<!--                                --><?php //foreach ($withdrawBankList as $k => $v): ?>
+<!--                                    <option value="--><?php //echo $k; ?><!--">--><?php //echo $v; ?><!--</option>-->
+<!--                                --><?php //endforeach; ?>
+<!--                            </select>-->
+                            <select class="selectpicker deposit_bank_id" name="pay_bank_id" id="pay_bank_id" data-live-search="true" title="请选择 ...">
+                                <option value="">请选择…</option>
+                                <?php foreach ($withdrawBankList as $k => $v): ?>
+                                    <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label class="ml10">收款卡:</label>
+                            <select class="input-sm form-control" name="pay_card_id" id="pay_card_id"></select>
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:0px">
+                        <div class="form-inline">
+                            <input type="radio" name="name_style" value="1" id="radio1"/>
+                            <label>所属总代:</label>
+                            <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+                                <option value="">请选择…</option>
+                                <?php foreach ($json_topUsers as $k => $v): ?>
+                                    <option value="<?=$v['username']?>"><?=$v['username']?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label class="mr10">或</label>
+                            <input type="radio" name="name_style" value="2" id="radio2"/>
+                            <label for="radio2">用户名:</label>
+                            <input class="input-sm form-control" name="username" size="10"/>
+                            <input type="checkbox" name="include_childs" id="include_childs" value="1"/>
+                            <label for="include_childs">包含下级</label>
+                            <label>是否测试账号:</label>
+                            <select class="input-sm form-control" name="is_test">
+                                <option value="-1">请选择</option>
+                                <option value="0">正式帐号</option>
+                                <option value="1">测试帐号</option>
+                            </select>
+                            <label class="ml10">状态:</label>
+                            <select class="input-sm form-control" name="status">
+                                <option value="-1">请选择</option>
+                                <option value="0">未处理</option>
+                                <option value="1">已受理</option>
+                                <option value="2">已审核</option>
+                                <option value="3">已交给机器受理</option>
+                                <option value="4">机器正在受理</option>
+                                <option value="8">已执行</option>
+                                <option value="9">不符取消</option>
+                            </select>
+                            <label  class="ml10"> 每页几条:</label>
+                            <select class="input-sm form-control" name="page_size">
+                                <option value="30" selected="selected">30</option>
+                                <option value="60">60</option>
+                            </select>
+                            <label  class="ml10"> 金额区间:</label>
+                            <input class="input-sm form-control " type="text" name="start_amount" onblur="checkEndAmount(this)" size="10" value="<?php if(isset($startAmount)) echo $startAmount;?>" placeholder="最小金额"/>
+                            -
+                            <input class="input-sm form-control " type="text" name="end_amount" onblur="checkEndAmount(this)" size="10" value="<?php if(isset($endAmount)) echo $endAmount;?>"  placeholder="最大金额"/>
+                            <input type="hidden" name="c" value="withdraw"/>
+                            <input type="hidden" name="a" value="withdrawList"/>
+                            <input class="btn btn-info ml10" type="submit" name="submit" value=">> 查 询 <<"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <span>提款条件: </span>
+    <p>1.本次提款到上次充值时间段内的总打码量必须达到上次充值额度的一倍。<br>
+        2.本次提款到上次提款之间总打码量必须达到总充值量一倍，若无上次提款则计算到会员注册时间。</p>
+    <div class="list-div form-top" id="listDiv">
+        <table class="table table-responsive table-bordered mainList" width="100%">
+            <thead>
+            <tr>
+                <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+<!--                <td><input type="button"  value="批量删除" class="snow-delete-all btn btn-info btn-danger" data-url="?&c=withdraw&a=deleteWithdrawMany" data-id="data-withdraw_id"/></td>-->
+                <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                <td>提案id</td>
+                <td>用户id</td>
+                <td>用户名</td>
+                <td>类型</td>
+                <td>所属总代</td>
+                <td>提款银行</td>
+                <td>户名</td>
+                <td>提款金额</td>
+                <td>客户发起时间</td>
+                <td>执行时间</td>
+                <td>付款卡</td>
+                <td>上次充提</td>
+                <td>期间充值</td>
+                <td>打码量</td>
+                <td>打码状态</td>
+                <td>备注</td>
+                <td>状态</td>
+                <td>操作</td>
+
+            </tr>
+            </thead>
+            <?php foreach ($withdraws as $v): ?>
+                <tr data-withdraw_id="<?php echo $v['withdraw_id']; ?>">
+                    <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+<!--                    <td><input type="checkbox" class="snow-id" data-withdraw_id="--><?php //echo $v['withdraw_id']; ?><!--"/></td>-->
+                    <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                    <td><?php echo $v['withdraw_id']; ?></td>
+                    <td><?php echo $v['user_id']; ?></td>
+                    <td><?php echo $v['username']; ?>
+                        <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                        <?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                        <?php if ($v['user_status'] == 0): ?><b style="color:red">[已删除]</b>
+                        <?php elseif ($v['user_status'] == 1): ?><b style="color:red">[已冻结]</b>
+                        <?php elseif ($v['user_status'] == 5): ?><b style="color:red">[已回收]</b>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $v['level'] != 100 ? $v['level'] . '代' : '会员'; ?></td>
+                    <td><?php echo $topUsers[$v['top_id']]['username']; ?></td>
+                    <!--author snow 改变取值方式-->
+                    <td><?php echo $withdrawBankList[$v['bank_id']]['name']; ?></td>
+                    <td><?php echo $v['card_name']; ?></td>
+                    <td><?php echo $v['amount']; ?></td>
+                    <td><?php echo $v['create_time']; ?></td>
+                    <td><?php echo $v['finish_time']; ?></td>
+                    <td><?php echo $withdrawBankList[$v['pay_bank_id']]['name']; ?><?php echo $cards[$v['pay_card_id']]['card_name']; ?></td>
+                    <td><?php echo $v['traffic_status']['datetime']; ?></td>
+                    <td><?php echo $v['traffic_status']['deposit']; ?></td>
+                    <td><?php echo $v['traffic_status']['betAmount']; ?></td>
+                    <td><?php echo $v['traffic_status']['status']; ?></td>
+                    <td id="td_remark_<?php echo $v['withdraw_id']; ?>"><?php echo $v['remark']; ?></td>
+                    <td id="td_status_<?php echo $v['withdraw_id']; ?>">
+                        <?php if ($v['status'] == 0): ?><b>未处理</b>
+                        <?php elseif ($v['status'] == 1): ?>
+                            <?php if ($GLOBALS['SESSION']['admin_id'] != $v['verify_admin_id']): ?><?php echo $admins[$v['verify_admin_id']]['username']; ?> 正在审核
+                            <?php else: ?><b>我 正在审核</b>
+                            <?php endif; ?>
+                        <?php elseif ($v['status'] == 2): ?>
+                            <span style="color:blue;">已审核</span>
+                        <?php elseif ($v['status'] == 3): ?><font color="blue">已交给机器处理</font>
+                        <?php elseif ($v['status'] == 4): ?><font color="red">机器正在处理</font>
+                        <?php elseif ($v['status'] == 8): ?><?php echo $admins[$v['finish_admin_id']]['username']; ?>已执行
+                        <?php elseif ($v['status'] == 9): ?>不符拒绝提款
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <button class="btn btn-mini btn-info go-back-url" data-url="?c=withdraw&a=viewWithdraw&withdraw_id=<?php echo $v['withdraw_id']; ?>">查看</button>
+<!--                        <a class="btn btn-mini btn-info go-back-url"-->
+<!--                           href="?c=withdraw&a=viewWithdraw&withdraw_id=--><?php //echo $v['withdraw_id']; ?><!--">查看</a>-->
+                        <?php if ($v['status'] == 0): ?>
+                            <?php if ($canAcceptRequest): ?>
+                                <span>
+                                     <button class="btn btn-mini btn-info go-back-url" data-url="?c=withdraw&a=acceptRequest&withdraw_id=<?php echo $v['withdraw_id']; ?>">我要受理</button>
+<!--                                <a class="btn btn-mini btn-info"
+                                   href="?c=withdraw&a=acceptRequest&withdraw_id=<?php /*echo $v['withdraw_id']; */?>">我要受理
+                                </a>-->
+                                </span>
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+                        <?php if (in_array($v['status'], [0, 1, 2])): ?>
+                            <span>
+                            <br/>
+                            <a class="btn btn-mini btn-info btn-quickVerify" data-user_id = '<?=$v['user_id']?>'  data-withdraw_id="<?php echo $v['withdraw_id']; ?>" href="javascript:void(0)">一键审核</a>
+                            <a class="btn btn-mini btn-info btn-quickCancel"
+                               data-withdraw_id="<?php echo $v['withdraw_id']; ?>"
+                               href="javascript:void(0)">一键拒绝</a>
+                            </span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    </div>
+    <div class="pageTal">
+        <span>本页小计：<b> <?php echo count($withdraws); ?></b> 笔记录，本页金额 <b><?php echo (float)(array_sum(array_column($withdraws,'amount'))); ?></b>
+            元，总金额 <b><?php echo $trafficInfo['total_amount']; ?></b>元</span>
+        <?php echo $pageList; ?>
+    </div>
+
+    <!--<input  type="button"  onclick="playSound2();" class="button" value="点击播放" />-->
+    <!--<embed id="devUnknown" src="images/knock.wav" width="0" height="0" loop="false" autostart="false"></embed>-->
+    <div id="soundDiv"></div>
+
+    <script src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+    <script type="text/javascript">
+        var originTitle = window.parent.document.title;
+        var isBelowIe8 = navigator.userAgent.indexOf("MSIE") > 0 && navigator.userAgent.match(/MSIE (\d{1,2}).0;/)[1] <= 8;
+        var $ableReload = true;
+        var $defenseTimer = 0;
+
+        $(function () {
+            if (isBelowIe8) {
+                $('#soundDiv').html('<embed id="devUnknown" src="images/knock.wav" width="0" height="0" loop="false" autostart="false" />');
+            } else {
+                $('#soundDiv').html(
+                    '<audio id="devUnknown" hidden="true" autostart="false">' +
+                    '<source src="images/knock.wav" type="audio/wav" loop="false">' +
+                    '</audio>'
+                );
+            }
+            playSound2();
+
+            function closeReload(){
+                $ableReload = false;
+                $defenseTimer = setTimeout(function(){
+                    $ableReload = true;
+                },30000);
+            }
+
+            function openReload() {
+                $ableReload = true;
+                clearTimeout($defenseTimer);
+            }
+
+            /* 一键审核 */
+            $('.btn-quickVerify').click(function () {
+
+                var $this = $(this);
+                var $withdraw_id = $this.data('withdraw_id');
+                closeReload();
+                /*********************** author snow 添加判断是否有多笔提款请求.*****************************************/
+                var user_id = $this.data('user_id');
+
+                /*********************** author snow 添加判断是否有多笔提款请求.*****************************************/
+                layer.confirm('确定一键审核吗？', {}, function ($index) {
+                    $.post('?c=withdraw&a=quickVerify', {'withdraw_id': $withdraw_id, 'user_id' : user_id}, function ($data) {
+                        if ($data.errCode > 0) {
+                            layer.alert($data.errMsg);
+                            return false;
+                        }
+
+                        $this.parents('td').eq(0).find('span').remove();
+                        $('#td_status_' + $withdraw_id).html($data.data.handler_username + '已执行');
+
+                    }, 'JSON');
+                    layer.close($index);
+                    openReload();
+                },function(){
+                    openReload();
+                });
+            });
+
+            /* 一键拒绝 */
+            $('.btn-quickCancel').click(function () {
+                var $aThis = $(this);
+                var $withdraw_id = $aThis.data('withdraw_id');
+                closeReload();
+
+                var $layerIndex = layer.open({
+                    type: 1,
+                    title: '一键拒绝',
+                    anim: 2,
+                    fixed: false, //不固定
+                    shade: 0, //遮罩
+                    shadeClose: true, //开启遮罩关闭
+                    area: ['', ''],
+                    content: '<div class="cancel-box">' +
+                    '<form action="">' +
+                    '<div class="form-inline"><label>错误类型</label>' +
+                    '<select class="input-sm form-control" title="错误类型" name="errno">' +
+                    <?php foreach ($errorList as $key => $item): ?>
+                    '<option value="<?php echo $key ?>"><?php echo $item ?></option>' +
+                    <?php endforeach; ?>
+                    '</select></div>' +
+                    '<div class="form-inline"><label>拒绝原因</label><input class="input-sm form-control" title="前台自定义备注" name="order_remark" /></div>' +
+                    '<div class="form-inline"><label>后台备注</label><input class="input-sm form-control" title="后台自定义备注" name="remark" /></div>' +
+                    '<div class="form-inline pb6 fr" style="display:inline-block;">' +
+                    '<a class="btn btn-mini btn-info btn-execCancel mr10" href="javascript:void(0)">执行</a>' +
+                    '<a class="btn btn-mini btn-info btn-cancel" href="javascript:void(0)">取消</a>' +
+                    '</div>' +
+                    '</form>' +
+                    '</div>'
+                });
+
+                $('.btn-execCancel').live('click', function () {
+
+                    var $execThis = $(this);
+                    var $tempData = $execThis.parents('form').eq(0).serializeArray();
+                    var $postData = {};
+
+                    $tempData.forEach(function ($item) {
+                        eval('$postData.' + $item.name + '=$item.value;');
+                    });
+
+                    $postData.withdraw_id = $withdraw_id;
+
+                    $.post('?c=withdraw&a=quickCancel', $postData, function ($data) {
+                        if ($data.errCode > 0) {
+                            layer.alert($data.errMsg);
+                            return false;
+                        }
+
+                        $aThis.parents('td').eq(0).find('span').remove();
+                        $('#td_status_' + $withdraw_id).html('不符拒绝提款');
+                        $('#td_remark_' + $withdraw_id).html($postData.remark);
+
+                        layer.close($layerIndex);
+                        openReload();
+                    }, 'JSON');
+                });
+
+                $('.btn-cancel').live('click', function () {
+                    layer.close($layerIndex);
+                    openReload();
+                });
+            });
+        });
+
+        function playSound2() {
+            var node = document.getElementById('devUnknown');
+            if (node) node.play();
+        }
+
+        function checkNew() {
+            $.post(
+                '?c=withdraw&a=checkNew',
+                {'check': 1},
+                function (result) {
+                    eval("data=" + result + ";");
+                    if (data.newNum) {
+                        playSound2();
+                        window.parent.document.title = '有 ' + data.newNum + ' 笔提款待处理！';
+                        if (data.newNum > 0 && $ableReload) {
+                            window.setTimeout("window.location.reload()", 10000);
+                        }
+                    }
+                    else {
+                        window.parent.document.title = originTitle;
+                    }
+                });
+        }
+        // 测试时把这个关掉
+        window.setInterval(checkNew, 10000);
+
+    </script>
+    <style>
+        .layui-layer-title {
+            background: #333 !important;
+            text-align: center;
+        }
+
+        .layui-layer-btn0 {
+            background: #333 !important;
+            border-color: #333 !important;
+        }
+
+        .cancel-box {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .cancel-box label {
+            margin-right: 8px;
+        }
+
+        .cancel-box input {
+            width: 202px !important;
+        }
+
+        .cancel-box .form-inline {
+            padding-top: 12px;
+        }
+
+        .cancel-box .pb6 {
+            padding-bottom: 6px;
+        }
+    </style>
+<?php $this->import("foot"); ?>

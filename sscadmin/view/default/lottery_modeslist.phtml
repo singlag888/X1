@@ -1,0 +1,73 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<div class="list-div mt20" id="listDiv">
+    <h3 style="display: inline-block">提示:</h3><span style="color: blue">暂时只用于app和新版wap</span>
+    <form class="form-top">
+        <table class="table table-responsive table-bordered">
+        <thead>
+                <tr>
+                    <td>模式名称</td>
+                    <td>模式值</td>
+                    <td>模式位</td>
+                    <td>状态</td>
+                    <td>操作</td>
+                </tr>
+        </thead>
+        <?php foreach ($list as $v): ?>
+                <tr>
+                    <td><?php echo $v['modes_name']; ?></td>
+                    <td><?php echo $v['modes_value']; ?></td>
+                    <td><?php echo $v['modes_area']; ?></td>
+                    <td>
+                        <select id="sel" onchange="change(this)" data-area = "<?php echo $v['modes_area'];?>">
+                            <option value="1" <?php if($v['status'] == 1):?> selected="selected"<?php endif;?>>使用中</option>
+                            <option value="0" <?php if($v['status'] == 0):?> selected="selected"<?php endif;?>>禁用</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a class="btn btn-mini btn-info" href="./?c=lottery&a=editModes&modes_area=<?php echo $v['modes_area']; ?>">编辑</a>&nbsp;
+                    </td>
+                </tr>
+        <?php endforeach; ?>
+    </table>
+    </form>
+    <script>
+        function change(obj) {
+            var that = $(obj);
+            var status = that.find("option:selected").val();
+            var area = that.data('area');
+           if(area == '')
+           {
+              layer.msg('参数不正确',{icon:2,time:1500});
+               return false;
+           }
+            layer.confirm('此操作将会影响所有彩种,是否继续？', {
+                btn: ['继续','取消'] //按钮
+            }, function(){
+                $.post("?c=lottery&a=delModesAjax",{"status":status,'area':area},function (data) {
+                    var data = eval('('+data+')');
+                    if(data.code == 0)
+                    {
+                        layer.closeAll();
+                        layer.msg('操作成功!',{icon:1,time:1500})
+                    }
+
+                    if(data.code == 1)
+                    {
+                        layer.closeAll();
+                        layer.msg(data.msg,{icon:2,time:1500});
+                        window.setTimeout(function () {
+                            window.location.reload();
+                        },1500)
+                    }
+                })
+            }, function(){
+
+            });
+
+        }
+    </script>
+</table>
+</div>
+
+<?php $this->import("foot"); ?>

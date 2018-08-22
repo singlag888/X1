@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+<input type="hidden" name="signData" value="<?php echo $postData['signData'] ?>"/>
+<input type="hidden" name="versionId" value="<?php echo $postData['versionId'] ?>"/>
+<input type="hidden" name="orderAmount" value="<?php echo $postData['orderAmount'] ?>"/>
+<input type="hidden" name="orderDate" value="<?php echo $postData['orderDate'] ?>"/>
+<input type="hidden" name="currency" value="<?php echo $postData['currency'] ?>"/>
+<input type="hidden" name="transType" value="<?php echo $postData['transType'] ?>"/>
+<input type="hidden" name="asynNotifyUrl" value="<?php echo $postData['asynNotifyUrl'] ?>"/>
+<input type="hidden" name="synNotifyUrl" value="<?php echo $postData['synNotifyUrl'] ?>"/>
+<input type="hidden" name="signType" value="<?php echo $postData['signType'] ?>"/>
+<input type="hidden" name="merId" value="<?php echo $postData['merId'] ?>"/>
+<input type="hidden" name="prdOrdNo" value="<?php echo $postData['prdOrdNo'] ?>"/>
+<input type="hidden" name="payMode" value="<?php echo $postData['payMode'] ?>"/>
+<input type="hidden" name="tranChannel" value="<?php echo $postData['tranChannel'] ?>"/>
+<input type="hidden" name="accountType" value="<?php echo $postData['accountType'] ?>"/>
+<input type="hidden" name="receivableType" value="<?php echo $postData['receivableType'] ?>"/>
+<input type="hidden" name="prdName" value="<?php echo $postData['prdName'] ?>"/>
+<input type="hidden" name="prdDesc" value="<?php echo $postData['prdDesc'] ?>"/>
+<input type="hidden" name="pnum" value="<?php echo $postData['pnum'] ?>"/>
+<input type="hidden" name="url" value="<?php echo $postData['url']; ?>" />
+<input type="button" name="pay" value="启动 微信/支付宝/QQ 支付" />
+<script>
+    $(document).ready(function(){
+        $("input[name=pay]").click(function(){
+            var url = $('[name=url]').val();
+            url += '?signData=' + $('[name=signData]').val();
+            url += '&versionId=' + $('[name=versionId]').val();
+            url += '&orderAmount=' + $('[name=orderAmount]').val();
+            url += '&orderDate=' + $('[name=orderDate]').val();
+            url += '&currency=' + $('[name=currency]').val();
+            url += '&transType=' + $('[name=transType]').val();
+            url += '&asynNotifyUrl=' + $('[name=asynNotifyUrl]').val();
+            url += '&synNotifyUrl=' + $('[name=synNotifyUrl]').val();
+            url += '&signType=' + $('[name=signType]').val();
+            url += '&merId=' + $('[name=merId]').val();
+            url += '&prdOrdNo=' + $('[name=prdOrdNo]').val();
+            url += '&payMode=' + $('[name=payMode]').val();
+            url += '&tranChannel=' + $('[name=tranChannel]').val();
+            url += '&accountType=' + $('[name=accountType]').val();
+            url += '&receivableType=' + $('[name=receivableType]').val();
+            url += '&receivableType=' + $('[name=receivableType]').val();
+            url += '&prdName=' + $('[name=prdName]').val();
+            url += '&prdDesc=' + $('[name=prdDesc]').val();
+            url += '&pnum=' + $('[name=pnum]').val();
+            window.open(url, "_blank");
+        });
+    });
+</script>
+</body>
+</html>
+
+
+
+

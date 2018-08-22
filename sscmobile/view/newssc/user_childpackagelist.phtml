@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>  <!-- 个人帐变 -->
+<html>
+<head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+<?php echo $pageList ?>
+<body>
+<div class="operate_middle_page">
+    <!--/*头部*/-->
+        <header>
+            <img style="width:0.3rem" src="<?php echo $imgCdnUrl ?>/images/mobile/arrows_left.png"/>
+            <a href="index.jsp?c=game&a=packageList">返回</a>
+            <p>个人帐变</p>
+        </header>
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitleG">
+                <th >帐变时间</th>
+                <th >类型</th>
+                <th >帐变金额</th>
+            </tr>
+            </thead>
+              <tbody>
+            <?php if ($orders): ?>
+                <?php foreach ($orders as $v): ?>
+                    <tr class="recordsContent">
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php echo $orderTypes[$v['type']]; ?></td>
+                        <td><?php echo $v['amount']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <th colspan="8"><div class="bottom_info">注：只能查询15天以内的数据</div></th>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <th colspan="8" class="text_center">暂无数据显示</th>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src=" type="text/javascript"js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $('#form1').submit(function() {
+            /*                    if ($('input[name=username]').val() == '') {
+             alert('请输入下级帐号！');
+             return false;
+             }*/
+
+            return true;
+        });
+
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=status]').val('<?php echo $status; ?>');
+        $('select[name=is_trace]').val('<?php echo $is_trace; ?>');
+        $('select[name=check_prize_status]').val('<?php echo $check_prize_status; ?>');
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('input[name=issue]').val('<?php echo $issue; ?>');
+        $('select[name=include_childs]').val('<?php echo $include_childs; ?>').change();
+        $('#start_time').val('<?php echo date("Y-m-d", strtotime($start_time)); ?>');
+        $('#end_time').val('<?php echo date("Y-m-d", strtotime($end_time)); ?>');
+        $('input[name=wrap_id]').val('<?php echo $wrap_id; ?>');
+
+        $('a.orderNumberBtn').on('click', function(){
+            var str_award = '普通玩法';
+
+            layer.open({
+                type: 2,
+                shadeClose: true,
+                title: str_award+'&nbsp;&nbsp;订单编号：'+$(this).text(),
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','550px'],
+                content: ['index.jsp?c=game&a=packageDetail&wrap_id='+$(this).text()]
+            });
+            $('div.xubox_title', document).addClass('layui-layer-title');
+        });
+
+        $('a.closeDialogBtn').on('click', function(){
+            layer.close(orderDetailsDal);
+        });
+
+        var lottery_issue_format = <?php echo $lotteryIssueFormat; ?>;
+
+        $('select[name=lottery_id]').change(function(){
+            if ($('select[name=lottery_id]').val() == '0') {
+                return;
+            }
+            var select_value = $('select[name=lottery_id]').val();
+            if(lottery_issue_format[select_value] != undefined){
+                $('input[name="issue"]').attr('placeholder',lottery_issue_format[select_value]);
+            }else{
+                $('input[name="issue"]').attr('placeholder','');
+            }
+        });
+    });
+</script>
+
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

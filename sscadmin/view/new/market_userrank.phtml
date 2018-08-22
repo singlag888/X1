@@ -1,0 +1,97 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('select[name=rankType]').val('<?php echo $rankType; ?>');
+        $('input[name=limit]').val('<?php echo $limit; ?>');
+        $('#start_time').val('<?php echo $start_time; ?>');
+        $('#end_time').val('<?php echo $end_time; ?>');
+    });
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label class="ml10">游戏时间：</label>
+            <input class="input-md form-control" type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+             <input class="input-md form-control Wdate" type="text" name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"/>
+             <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <select class="input-md form-control" name="rankType">
+            <option value="1">按照流水从大到小</option>
+            <option value="2">按照流水从小到大</option>
+            <option value="3">按照输赢从大到小</option>
+            <option value="4">按照输赢从小到大</option>
+        </select>
+        <label class="ml10" style="font-weight: normal;">排行总数：</label>
+        <input class="input-md form-control" name="limit" size="10" id="limit" value="100"/>
+        <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit ml10" type="submit" name="submit"  style="width: 60px;" value="查询"/>
+    </div>
+    <!--<select name="rankType">
+        <option value="1">按照流水从大到小</option>
+        <option value="2">按照流水从小到大</option>
+        <option value="3">按照输赢从大到小</option>
+        <option value="4">按照输赢从小到大</option>
+    </select>
+    排行总数<input name="limit" size="10" id="limit" value="100"/>
+    游戏时间<input name="start_time" id="start_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>到
+    <input name="end_time" id="end_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+    <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="submit" class="submit" value="查询"/>-->
+</form>
+
+<div class="mt15 mb15"> <b>注一：按惯例，为正表示客户赢钱，为负表示客户输钱；</b></div>
+<div class="list-div" id="listDiv">
+    <table class="table table-responsive  table-bordered mainList">
+        <thead>
+            <tr>
+                <td>排行</td>
+                <td>用户名</td>
+                <td>资金数目</td>
+                <td>银行开户名</td>
+                <td>银行卡号</td>
+                <td>注册IP</td>
+                <td>最近登录IP</td>
+
+            </tr>
+        </thead>
+        <?php if ($users): ?>
+            <?php foreach ($users as $k => $v): ?>
+                <tr>
+                    <td>
+                        <?php echo $k + 1; ?>
+                    </td>
+                    <td>
+                        <?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                    </td>
+                    <td>
+                        <?php echo number_format($v['total_amount'], 2); ?>
+                    </td>
+                    <td>
+                        <?php echo $v['bank_username']; ?>
+                    </td>
+                    <td>
+                        <?php echo $v['card_num']; ?>
+                    </td>
+                    <td>
+                        <?php echo $v['reg_ip']; ?>
+                    </td>
+                    <td>
+                        <?php echo $v['last_ip']; ?>
+                    </td>
+
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="11" class="no-records">没有数据！</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php $this->import("foot"); ?>

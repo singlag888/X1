@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>   <!-- 服务中心下充值相关 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>帮助中心-<?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <div class="help_center_content">
+           <div class="latestnew_cont_title help_center_title">充值相关</div>
+           <div class="help_center_txt">
+              <p>游戏目前支持的充值方式包括：银行转账及快捷充值两种方式。</p>
+              <p>银行转账业务目前支持：工商银行</p>
+              <p>我们一直在努力为用户创造最便捷、最全面的充值渠道，游戏后续将支持更多银行及第三方支付渠道。</p>
+              <p>我们届时将会以公告的形式通知您，敬请期待。</p>
+              <span class="help_center_subtitle">快捷充值</span>
+              <p>目前游戏快捷充值支持下列银行：</p>
+              <p>工行、建行、招行、农行、交行、中信、浦发、民生、光大、兴业、广发、华夏、中行、平安、邮政</p>
+              <span class="help_center_subtitle">充值相关</span>
+              <p>游戏充值正常情况下一分钟内到账，如超过5分钟未到账，请联系客服咨询。</p>
+              <span class="help_center_subtitle">1、充值时间</span>
+              <p>工商银行充值时间为每天的早9点至第二天凌晨2点。</p>
+              <p>快捷充值时间为24小时。</p>
+              <span class="help_center_subtitle">2、充值限额</span>
+              <p>银行转账：</p>
+              <p>工商银行最低限额100元，最高限额100,000元；</p>
+              <span class="help_center_subtitle">快捷充值：</span>
+              <p>单笔最低限额100元，最高限额50,000元。</p>
+           </div>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+</body>
+</html>

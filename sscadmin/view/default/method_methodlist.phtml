@@ -1,0 +1,67 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div" id="listDiv">
+<form name="form1" class="form-top" id="form1" action="?c=method&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>&mg_id=<?php echo $mg_id; ?>" method="post">
+<table class="table table-responsive table-bordered  mt20" width="100%">
+    <thead>
+        <tr class="trhead">
+            <td>method_id</td>
+            <td>中文全称</td>
+            <td>玩法简写</td>
+            <td>所属彩种</td>
+            <td>所属玩法组</td>
+            <td>全包注数</td>
+            <td>全包金额</td>
+            <td>奖级</td>
+            <td>转直注数</td>
+            <td>说明</td>
+            <td>封锁</td>
+            <td>状态</td>
+            <td>排序</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <?php foreach ($methods as $v): ?>
+    <tr>
+        <td><?php echo $v['method_id']; ?></td>
+        <td><?php echo $v['cname']; ?></td>
+        <td><?php echo $v['name']; ?></td>
+        <td><?php echo $lottery['name']; ?></td>
+        <td><?php echo $v['mg_name']; ?></td>
+        <td><?php echo $v['max_comb']; ?></td>
+        <td><?php echo $v['max_money']; ?></td>
+        <td><?php if ($v['levels'] > 1): ?>
+            <b><?php echo $v['levels']; ?></b>
+            <?php else: ?>
+                <?php echo $v['levels']; ?>
+            <?php endif; ?>
+        </td>
+        <td>
+            <?php foreach ($v['expands'] as $kk => $vv): ?>
+                <?php echo $vv['expand_num']; ?>&nbsp;
+            <?php endforeach; ?>
+        </td>
+
+        <td class="tl"><?php echo $v['description']; ?></td>
+        <td><?php if ($v['is_lock'] == 0): ?>否<?php else: ?><font color="red">是</font><?php endif; ?></td>
+        <td><?php if ($v['status'] == 8): ?>正常<?php else: ?><font color="red">禁用</font><?php endif; ?></td>
+        <td><input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['method_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"/></td>
+        <td>
+            <a class="btn btn-mini btn-info" href="./?c=method&a=editMethod&method_id=<?php echo $v['method_id']; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>">修改</a>&nbsp;
+            <!--<a href="./?c=method&a=deleteMethod&method_id=<?php echo $v['method_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>-->
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="12">&nbsp;</td>
+        <td>
+            <input class="btn btn-default submit " type="submit" name="submit"  value="保存"/>
+        </td>
+        <td></td>
+    </tr>
+</table>
+    <input type="hidden" name="sa" value="saveSort"/>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

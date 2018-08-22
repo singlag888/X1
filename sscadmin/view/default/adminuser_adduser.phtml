@@ -1,0 +1,115 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div add-main form-top mt20" id="addDiv">
+<form name="form1" id="form1" action="./?c=adminUser&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 50%;">
+    <tr>
+        <td width="20%">用户名</td>
+        <td><input class="input-md form-control" name="username" maxlength="19"/></td>
+    </tr>
+    <tr>
+        <td>密码<?php if (ACTION == "editUser"): ?><br/>说明：不修改请留空。<?php endif; ?></td>
+        <td><input class="input-md form-control" type="password" name="pwd" /></td>
+    </tr>
+    <tr>
+        <td>密码确认</td>
+        <td><input class="input-md form-control" type="password" name="pwd2" /></td>
+    </tr>
+    <tr>
+        <td>所属组别</td>
+        <td>
+            <select class="input-md form-control" name="group_id" id="group_id">
+                <option value="0">请选择</option>
+                <?php foreach ($firstSecondThirdItems as $v): ?>
+                <option value="<?php echo $v['group_id']; ?>"><?php echo $v['name']; ?></option>
+                    <?php foreach ($v['childs'] as $vv): ?>
+                    <option value="<?php echo $vv['group_id']; ?>">&nbsp;&nbsp;<?php echo $vv['name']; ?></option>
+                        <?php foreach ($vv['childs'] as $vvv): ?>
+                        <option value="<?php echo $vvv['group_id']; ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $vvv['name']; ?></option>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>是否启用？</td>
+        <input type="hidden" name="is_enabled"  <?php if (ACTION == "addUser"): ?>value=1<?php endif; ?> <?php if (ACTION == "editUser"): ?>value="<?php if ($user['is_enabled'] == 1): ?>1<?php else: ?>0<?php endif; ?>"<?php endif; ?> />
+        <td>
+            <div class="switch">
+                <div class="btn_fath clearfix on" id="switch" onclick="toogle(this)">
+                    <div class="move"></div>
+                    <div class="btnSwitch btn1">开</div>
+                    <div class="btnSwitch btn2">关</div>
+                </div>
+            </div>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <div style="width: 60%;margin: 0 auto;text-align: center;"> 
+                <input class="btn btn-info submit" type="submit" style="width: 60px;" name="submit" value="<?php if (ACTION == "addUser"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button" style="width: 60px" onclick="window.location.href='?c=adminUser&a=userList';" value="返回"/>
+                <input type="hidden" name="user_id" value="" />
+            </div>
+        </td>
+
+</table>
+    </form>
+</div>
+<script>
+    $(function() {
+        var action = "<?php echo ACTION; ?>";
+        if (action == 'editUser') {
+            $("input[name=user_id]").val("<?php echo $user['admin_id']; ?>");
+            $("input[name=username]").val("<?php echo $user['username']; ?>");
+            $("input[name=pwd]").val("");
+            $("input[name=pwd2]").val("");
+            $("select[name=group_id]").val("<?php echo $user['group_id']; ?>");
+            let enableStatus = <?php if ($user['is_enabled'] == 1): ?>true<?php else: ?>false<?php endif; ?>;
+            if(!enableStatus){$('#switch').removeClass("on").addClass("off");}else{$('#switch').removeClass("off").addClass("on");}
+            //状态值已与数据库同步但是切换状态没变
+        }
+        else if (action == 'editPwd') {
+            $("input[name=user_id]").val("<?php echo $user['admin_id']; ?>");
+            $("input[name=username]").val("<?php echo $user['username']; ?>").attr('disabled', true);
+            $("input[name=pwd]").val("");
+            $("input[name=pwd2]").val("");
+            $("select[name=group_id]").val("<?php echo $user['group_id']; ?>").attr('disabled', true);
+
+        }
+
+
+
+
+
+
+
+
+
+
+    });
+
+    function toogle(th) {
+        let ele = $(th).children(".move");
+        if ($(th).hasClass('on')) {
+            ele.animate({left: "1px"}, 300, function () {
+            });
+            $(th).removeClass("on").addClass("off");
+            $("input[name=is_enabled]").val(0);
+        } else {
+            ele.animate({left: '35px'}, 300, function () {
+            });
+            $(th).removeClass("off").addClass("on");
+            $("input[name=is_enabled]").val(1);
+        }
+
+
+    }
+
+
+
+</script>
+<?php $this->import("foot"); ?>
+

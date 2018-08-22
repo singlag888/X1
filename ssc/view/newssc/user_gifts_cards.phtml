@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo config::getConfig('site_title'); ?></title>
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/forCard.css" />
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer/layer.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jqueryui.js"></script>
+</head>
+<body>
+    <div id="topContainer">
+        <div class="main">
+            <div id="headerArea">
+                <div class="count">
+                    * 每日最多抽取卡片 20 次 | 您已使用 <em><?php echo $runCount; ?></em> 次
+                </div>
+                <div class="remainWater">
+                    当前可用流水 : <em><?php echo number_format($userWater['remainWater'], 2); ?></em> ￥
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div id="lotteryArea" class="fix">
+                <ul id="cat_4" class="cat">
+                    <?php for ($i = 1; $i<=11 ; $i++): ?>
+                    <li><img src="../images/light_blue/kapai/default_4.png" /></li>
+                    <?php endfor; ?>
+                </ul>
+                <ul id="cat_3" class="cat">
+                    <?php for ($i = 1; $i<=11 ; $i++): ?>
+                    <li><img src="../images/light_blue/kapai/default_3.png" /></li>
+                    <?php endfor; ?>
+                </ul>
+                <ul id="cat_2" class="cat">
+                    <?php for ($i = 1; $i<=11 ; $i++): ?>
+                    <li><img src="../images/light_blue/kapai/default_2.png" /></li>
+                    <?php endfor; ?>
+                </ul>
+                <ul id="cat_1" class="cat">
+                    <?php for ($i = 1; $i<=11 ; $i++): ?>
+                    <li><img src="../images/light_blue/kapai/default_1.png" /></li>
+                    <?php endfor; ?>
+                </ul>
+                <div class="clear"></div>
+                <span class="bottomScroll"></span>
+            </div>
+            <div id="myCardArea">
+                <div class="relative">
+                    <ul class="cardList">
+                        <?php foreach ($userCards AS $userCard): ?>
+                        <li><img src="../images/light_blue/kapai/<?php echo $cardConfig[$userCard['card_id']]['icon'];?>"  class="enableMouse" id="<?php echo $userCard['ugc_id']; ?>" prize="<?php echo $cardConfig[$userCard['card_id']]['prize'];?>" /></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="exchange">
+                        <div class="checkAll">
+                            <input type="hidden" id="ugcIds" value="" />
+                            <span id="checkAll"></span>
+                            <em >全选</em>
+                        </div>
+                        <input type="button" class="exchangeButton"  />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottomContainer">
+        <div class="main">
+            <div id="recordArea">
+                    <div class="recordList">
+                        <table class="listHeader">
+                            <colgroup><col width="40%"><col width="30%"><col></colgroup>
+                            <tbody><tr><td>兑换时间</td><td>兑换奖金</td><td>操作</td></tr></tbody>
+                        </table>
+                        <div class="listmain">
+                            <table>
+                                <colgroup><col width="40%"><col width="30%"><col></colgroup>
+                                <tbody>
+                                    <?php foreach ($userPromos AS $key => $userPromo) :?>
+                                    <tr class="<?php echo ($key+1) % 2 == 0 ? 'even' : 'odd';?>">
+                                        <td><?php echo $userPromo['finish_time']; ?></td>
+                                        <td><?php echo $userPromo['amount']; ?> 元</td>
+                                        <td><a class="viewdetail" href="javascript:void(0);" id="<?php echo $userPromo['promo_id']; ?>">查看明细</a></td>
+                                    </tr>
+                                    <?php endforeach;?>
+                                    <?php for ($i = $userPromosCount + 1; $i <= 1; $i++) : ?>
+                                    <tr class="<?php echo $i % 2 == 0 ? 'even' : 'odd';?>" ><td></td><td></td><td></td></tr>
+                                    <?php endfor; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div id="awardWindow">
+        <div class="awardBg"></div>
+        <div class="awardPic"></div>
+        <div class="crossBg"><strong>恭喜！</strong><p>您抽到了<span>卡牌</span>，可兑换<b>0</b>元</p></div>
+        <div class="awardConfirm"></div>
+    </div>
+    <div id="detailed">
+        <p>本次共兑换了<b></b>张卡牌</p>
+        <div class="dedcard fix">
+            <ul></ul>
+        </div>
+        <div class="dedcardfoot fix">
+            <div class="dedcardtime">
+                <p class="time">兑换时间：<em></em></p>
+                <p class="amount">兑换金额：<em></em>元</p>
+            </div>
+            <div class="dedcardBtn">
+                <a href="javascript:void(0);">确认</a>
+            </div>
+        </div>
+    </div>
+    <div class="geDetailed">
+    	<a href="javascript:void(0);">查看活动规则</a>
+    	<a class="geDetclose" href="javascript:void(0);">×</a>
+    </div>
+    <div class="geDetimg">
+    	<img src="../images/light_blue/kapai/kapai_rule.png">
+    </div>
+    <script type="text/javascript">
+        $(function() {
+            // 初始化
+            init;
+
+            // 鼠标经过牌面
+            $("#lotteryArea .cat li img").mouseover(function(){
+                $(this).addClass('cardSelected');
+            })
+            .mouseout(function(){
+                $(this).removeClass('cardSelected');
+            })
+            // 鼠标点击牌 进行抽奖
+            .click(function(){
+                if (init.cardFlag && !$(this).parent().hasClass('open')){
+                    init.cardFlag = false;
+                    // 判断是否在活动期
+                    var now = (new Date()).format("yyyy-MM-dd hh:mm:ss");
+                    if (now < init.activeStartTime || now > init.activeEndTime ) {
+                        parent.layer.alert(init.tips[403].msg);
+                        init.cardFlag = true;
+                        return false;
+                    }
+
+                    // 判断用户抽奖次数
+                    if (parseInt($('#topContainer .count em').html()) >= init.maxRunCount) {
+                        parent.layer.alert(init.tips[402].msg);
+                        init.cardFlag = true;
+                        return false;
+                    }
+
+                    /\w+_(\d+)/.test($(this).parent().parent().attr('id'));
+                    var id = RegExp.$1;
+                    if (parseFloat($('#topContainer .remainWater em').html().replace(/,/g, '')) < init.cardCategory[id].water) {
+                        var oldMsg = init.tips[401].msg;
+                        var newMsg = oldMsg.replace("{water}", init.cardCategory[id].water);
+                        parent.layer.alert(newMsg);
+                        init.cardFlag = true;
+                        return false;
+                    }
+
+                    var self = this;
+                    parent.layer.confirm(
+                        init.tips[200].msg.replace("{water}", init.cardCategory[id].water),
+                        function(index){
+                            sendCard(self, id);
+                            parent.layer.close(index);
+                        },
+                        function(index){
+                            parent.layer.close(index);
+                            init.cardFlag = true;
+                            return false;
+                        }
+                    );
+                }
+            });
+
+            //点击目标平滑滚到指定位置
+            $('.bottomScroll').click(function(){$('html,body').animate({scrollTop:$('#myCardArea').offset().top}, 800);});
+
+            // 我的卡牌区鼠标滑动点击
+			mouseMovesclick($("#myCardArea .cardList li img"));
+
+            // 全选
+            $('#checkAll').click(function(){
+                // 存在我的卡牌时执行
+                if ($('#myCardArea .cardList li').length > 0) {
+                    if ($(this).hasClass('checked')) {
+                        $(this).css('background-position', "0 -24px").removeClass('checked');
+                        $('#myCardArea .cardList li img').each(function(){
+                            $(this).removeClass('cardSelected').addClass('enableMouse');
+                        });
+                    }
+                    else {
+                        $(this).css('background-position', "0 0").addClass('checked');
+                        $('#myCardArea .cardList li img').each(function(){
+                            $(this).removeClass('enableMouse').addClass('cardSelected');
+                        });
+                    }
+                }
+            });
+
+            // 兑换现金
+            $('.exchangeButton').click(function(){
+                // 存在我的卡牌时执行
+                if (init.prizeFlag && $('#myCardArea .cardList li').length > 0) {
+                    var now = (new Date()).format("yyyy-MM-dd hh:mm:ss");
+                    if (now < init.exchangeStartTime || now > init.exchangeEndTime) {
+                        parent.layer.alert(init.tips[404].msg);
+                        init.prizeFlag = true;
+                        return false;
+                    }
+                    parent.layer.confirm(
+                        '是否确认兑换？',
+                        function(index){
+                            sendPrize();
+                            parent.layer.close(index);
+                        },
+                        function(index){
+                            parent.layer.close(index);
+                            init.prizeFlag = true;
+                            return false;
+                        }
+                    );
+                }
+            });
+
+            //明细弹出框
+            detailClick($('#recordArea .viewdetail'));
+            $('.dedcardBtn a').click(function(){
+                $('.shelter').remove();
+                $('#detailed').hide();
+                $('#detailed .dedcard ul').html('');
+            });
+
+            // 手动关闭弹窗时将flag值变为true
+            $('.xubox_close').live('click', function(){
+                init.cardFlag = true;
+                init.prizeFlag = true;
+            });
+
+            //查看规则弹出
+			$(".geDetailed a:first").on("click", function(e){
+				if($(".geDetimg").is(":hidden")){
+					$('body').append(init.shelter);
+			    	$(".geDetimg").fadeIn(300);
+			    }else{
+			    	$('.shelter').remove();
+			    	$(".geDetimg").fadeOut(300);
+			    }
+			    $(document).one("click", function(){
+					$('.shelter').remove();
+			        $(".geDetimg").fadeOut(300);
+			    });
+			    e.stopPropagation();
+			});
+			$(".geDetailed a:first").on("click", function(e){
+			    e.stopPropagation();
+			});
+			$(".geDetclose").click(function(){
+				$(this).parent().fadeOut(300);
+			});
+        });
+
+        var init = {
+            activeStartTime: '<?php echo userGiftsCard::ACTIVITY_START_TIME ;?>',
+            activeEndTime: '<?php echo userGiftsCard::ACTIVITY_END_TIME;?>',
+            exchangeStartTime: '<?php echo userGiftsCard::EXCHANGE_START_TIME;?>',
+            exchangeEndTime: '<?php echo userGiftsCard::EXCHANGE_END_TIME;?>',
+            maxRunCount: <?php echo userGiftsCard::MAX_LOTTERY_NUM; ?>,
+            remainWater: <?php echo $userWater['remainWater']; ?>,
+            runCount: <?php echo $runCount; ?>,
+            requestUrl: 'index.jsp?c=user&a=userGifts&option=kapai',
+            shelter: '<div class="shelter" id="light"></div>',
+            iconDir: '../images/light_blue/kapai/',
+            cardCategory: <?php echo json_encode(userGiftsCard::getCardCategoryConfig());?>, 
+            tips: <?php echo json_encode(userGiftsCard::getTipsConfig()); ?>,
+            cardOffset: [{'width':0,'left':'46px'},{'width':'92px','left':'0'}],
+            cardOffsetTime: 100,
+            cardFlag: true,
+            prizeFlag: true,
+        };
+		// 鼠标滑动牌点击
+		var mouseMovesclick = function(obj){
+            // 鼠标经过我的卡牌
+            obj.mouseover(function(){
+                $(this).after('<p>' + $(this).attr('prize') + '元'+'</p>').next().fadeIn(300);
+                if ($(this).hasClass('enableMouse')) {
+                    $(this).addClass('cardSelected');
+                }
+            })
+            .mouseout(function(){
+                $(this).next().remove();
+                if ($(this).hasClass('enableMouse')) {
+                    $(this).removeClass('cardSelected');
+                }
+            })
+            // 选中卡牌
+            .click(function(){
+                if ($(this).hasClass('enableMouse')) {
+                    $(this).removeClass('enableMouse');
+                    if (!$(this).hasClass('cardSelected')) {
+                        $(this).addClass('cardSelected');
+                    }
+                }
+                else {
+                    $(this).removeClass('cardSelected').addClass('enableMouse');
+                }
+            });
+        };
+
+        var detailClick = function(obj){
+            obj.click(function(){
+                viewDetail(this);
+            });
+        };
+
+		var bgheight = function(){
+            document.getElementById("light").style.height=document.body.clientHeight + "px";
+        };
+
+        // 点击发卡牌
+        var sendCard = function(obj, id){
+            $.ajax({
+                type: "POST",
+                url: init.requestUrl,
+                data: {'sa': 'lottery', 'id':id},
+                dataType: "json", //返回错误号和用户流水
+                cache : false,
+                async : true,
+                timeout : 10000,   //超时10S
+                success: function(data){
+                    if (data.errno > 0) {
+                        parent.layer.alert(data.msg);
+                        return false;
+                    }
+                    else {
+                        //此处为中奖卡牌的函数放置位置
+                        var parentObj = $(obj).parent();// img 上级 li
+                        //添加此标签的卡牌将不能再次触发操作
+                        parentObj.addClass('open');
+                        // 在原来位置增加一个卡牌
+                        $(obj).after("<img src='" + init.iconDir + data.card.icon + "' />");
+                        //卡牌翻转效果
+                        $(obj).stop().animate(init.cardOffset[0], init.cardOffsetTime, function(){
+                            $(this).next().animate(init.cardOffset[1], init.cardOffsetTime);
+                        });
+
+                        // 修改弹窗大图内部的图片
+                        $('#awardWindow .awardPic').html("<img src='" + init.iconDir + data.card.largeIcon + "'/>");
+                        // 修改弹窗大图内部的文字和
+                        $('#awardWindow .crossBg p span').html(data.card.title);
+                        $('#awardWindow .crossBg p b').html(data.card.prize);
+
+                        // 给“确定”按钮绑定点击事件
+                        $('.awardConfirm').live('click', function(){
+                            $('.shelter').remove();
+                            $('#awardWindow').fadeOut(300);
+                            $('#awardWindow .awardPic').html('');
+                            // 将卡牌反转回来
+                            $(obj).next().animate(init.cardOffset[0], init.cardOffsetTime, function(){
+                                $(this).prev().animate(init.cardOffset[1], init.cardOffsetTime);
+                                $(this).remove();
+                                parentObj.removeClass('open');
+                            });
+                        });
+
+                        //给我的卡牌新加的li添加新图片
+                        $('#myCardArea .cardList').prepend("<li><img src='" + init.iconDir + data.card.icon + "' class='enableMouse' id='" + data.ugcId + "' prize='" + data.card.prize + "' /></li>");
+                        mouseMovesclick($('#myCardArea .cardList li:first img'));
+
+                        $('.count em').html(data.runCount);
+                        $('.remainWater em').html(data.userWater);
+
+                        // 等待一秒弹窗
+                        setTimeout(function(){
+                            $('body').append(init.shelter);
+                            bgheight();
+                            $('#awardWindow').fadeIn(400);
+                            init.cardFlag = true;
+                        }, 500);
+                        return true;
+                    }
+                },
+                error: function() {
+                    parent.layer.alert('网络超时，请刷新页面！');
+                    init.cardFlag = true;
+                    return false;
+                }
+            });
+        };
+        // 兑奖
+        var sendPrize = function(){
+            var ids = new Array();
+            $('#myCardArea .cardList li img.cardSelected').each(function(){
+                if (parseInt($(this).attr('id')) > 0) {
+                    ids.push($(this).attr('id'));
+                }
+            });
+            if (ids.length <= 0) {
+                init.prizeFlag = true;
+                parent.layer.alert('请选择要兑奖的卡牌！');
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: init.requestUrl,
+                data: {'sa': 'prize', 'ids':ids},
+                dataType: "json", //返回错误号和用户流水
+                cache : false,
+                async : true,
+                timeout : 10000,   //超时10S
+                success: function(data){
+                    if (data.errno > 0) {
+                        parent.layer.alert(data.msg);
+                        return false;
+                    }
+                    else {
+                        $('#myCardArea .cardList li img.cardSelected').parent().remove();
+
+                        $.layer({
+                            dialog: {
+                                msg: '您已成功兑换奖金' + data.prize + ' 元！',
+                                btns: 1,
+                                type: 9,
+                                yes: function(index){
+                                    $('#checkAll').css('background-position', "0 -24px").removeClass('checked');
+                                    // 向兑奖记录中插入一条记录
+                                    var firstClass = $('#recordArea .listmain table tbody tr:first-child').attr('class');
+                                    var html = '<tr class="' + (firstClass == 'odd' ? 'even' : 'odd') + '"><td>' + data.time + '</td><td>' + data.prize + ' 元</td><td><a id="' + data.id + '" href="javascript:void(0);" class="viewdetail">查看明细</a></td></tr>';                                    $('#recordArea .listmain table tbody').prepend(html);
+
+                                    detailClick($('#recordArea .listmain table tbody tr:first-child .viewdetail'));
+                                    init.prizeFlag = true;
+                                    parent.layer.close(index);
+                                }
+                            }
+                        });
+
+                        return true;
+                    }
+                },
+                error: function() {
+                    parent.layer.alert('网络超时，请刷新页面！');
+                    init.prizeFlag = true;
+                    return false;
+                }
+            });
+        };
+
+        // 查看明细
+        var viewDetail = function(obj){
+            var id = $(obj).attr('id');
+
+            $.ajax({
+                type: "POST",
+                url: init.requestUrl,
+                data: {'sa': 'detail', 'id':id},
+                dataType: "json", //返回错误号和用户流水
+                cache : false,
+                async : true,
+                timeout : 10000,   //超时10S
+                success: function(data){
+                    if (data.errno > 0) {
+                        parent.layer.alert(data.msg);
+                        return false;
+                    }
+                    else {
+                        $('body').append(init.shelter);
+                        bgheight();
+                        $('#detailed').show();
+
+                        // 替换内容
+                        var cardList = '';
+                        $.each(data.card, function(index, item){
+                            cardList += '<li><img src="' + init.iconDir + item.icon+ '" /></li>';
+                        });
+
+                        $('#detailed .dedcard ul').append(cardList);
+                        //获取卡牌数量给总数
+                        $('#detailed p b').text($('#detailed .dedcard ul li').length);
+                        // 兑换时间
+                        $('#detailed .dedcardtime .time em').text(data.time);
+                        $('#detailed .dedcardtime .amount em').text(data.amount);
+
+                        return true;
+                    }
+                },
+                error: function() {
+                    parent.layer.alert('网络超时，请刷新页面！');
+                }
+            });
+        };
+        /**
+        * 时间对象的格式化;
+        */
+       Date.prototype.format = function(format) {
+           /*
+            * eg:format="yyyy-MM-dd hh:mm:ss";
+            */
+           var o = {
+               "M+" : this.getMonth() + 1, // month
+               "d+" : this.getDate(), // day
+               "h+" : this.getHours(), // hour
+               "m+" : this.getMinutes(), // minute
+               "s+" : this.getSeconds(), // second
+               "q+" : Math.floor((this.getMonth() + 3) / 3), // quarter
+               "S" : this.getMilliseconds()
+               // millisecond
+           }
+
+           if (/(y+)/.test(format)) {
+               format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4
+                               - RegExp.$1.length));
+           }
+
+           for (var k in o) {
+               if (new RegExp("(" + k + ")").test(format)) {
+                   format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                                   ? o[k]
+                                   : ("00" + o[k]).substr(("" + o[k]).length));
+               }
+           }
+           return format;
+       }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.dingyiPay.submit();">
+<form name='dingyiPay' id="diy" action='<?php echo $apiUrl; ?>' method='post'>
+    <input type="hidden" name="MerId" value="<?php echo $postFields['MerId'] ?>"/>
+    <input type="hidden" name="OrdId"		  value="<?php echo $postFields['OrdId'] ?>" />
+    <input type="hidden" name="OrdAmt" value="<?php echo $postFields['OrdAmt'] ?>" />
+    <input type="hidden" name="PayType"     value="<?php echo $postFields['PayType'] ?>"/>
+    <input type="hidden" name="CurCode"  value="<?php echo $postFields['CurCode'] ?>"/>
+    <input type="hidden" name="BankCode" value="<?php echo $postFields['BankCode'] ?>"/>
+    <input type="hidden" name="ProductInfo" value="<?php echo $postFields['ProductInfo'] ?>"/>
+    <input type="hidden" name="Remark" value="<?php echo $postFields['Remark'] ?>"/>
+    <input type="hidden" name="ReturnURL" value="<?php echo $postFields['ReturnURL'] ?>"/>
+    <input type="hidden" name="NotifyURL" value="<?php echo $postFields['NotifyURL'] ?>"/>
+    <input type="hidden" name="SignType" value="<?php echo $postFields['SignType'] ?>"/>
+    <input type="hidden" name="SignInfo" value="<?php echo $postFields['SignInfo'] ?>"/>
+</form>
+</body>
+</html>
+

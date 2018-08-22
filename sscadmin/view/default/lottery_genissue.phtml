@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(document).ready(function(){
+   $("input[name=lottery_id]").val("<?php echo $lottery['lottery_id']; ?>");
+});
+</script>
+<div class="list-div mt20" id="addDiv">
+<form name="form1" id="form1" action="./?c=lottery&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>" method="post">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 60%;">
+    <tr>
+        <td class="fb">所属彩种</td>
+        <td><?php echo $lottery['name']; ?></td>
+    </tr>
+    <?php foreach ($lottery['settings'] as $k => $v): ?>
+    <tr>
+        <td class="fb">分段销售时间<?php echo $k+1; ?></td>
+        <td>
+            开始时间：<?php echo $v['start_time']; ?><br/>
+            结束时间：<?php echo $v['end_time']; ?><br/>
+            游戏周期：<?php echo $v['cycle']; ?>秒<br/>
+            停售时间：<?php echo $v['end_sale']; ?>秒之前<br/>
+            撤单时间：<?php echo $v['drop_time']; ?>秒之前<br/>
+            开奖号码录入时间：<?php echo $v['code_time']; ?>秒之后<br/>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td class="fb">休市日期</td>
+        <td>
+            <?php echo $lottery['yearly_start_closed']; ?> 至 <?php echo $lottery['yearly_end_closed']; ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">奖期生成日期</td>
+        <td>
+            <div class="form-inline">
+                    From<input class="input-sm form-control" name="startDate" value="" size="10"/>To<input class="input-sm form-control" name="endDate" value="" size="10"/>（YYYY-MM-DD）
+            </div>  
+        </td>
+    </tr>
+    <?php if ($needFirst): ?>
+    <tr>
+    <td class="fb" class="narrow-label">奖期生成开始奖期</td>
+    <td>第&nbsp;<input class="input-sm form-control" type="text" name="firstDate"  size="11">&nbsp;期（请正确输入将要生成的起始期号）</td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+        <td></td>
+        <td colspan="2">
+            <div style="width:60%;margin:0 auto;text-align: center;">
+                <input class="btn btn-info submit" type="submit"  name="submit" value="<?php if ($sa == ""): ?>批量生成奖期<?php else: ?>确认生成奖期<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/><input type="hidden" name="sa" value="confirm">
+                <input type="hidden" name="lottery_id" value="" />   
+            </div>
+        </td>
+       
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

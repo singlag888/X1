@@ -1,0 +1,55 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+     //准备数据
+    var json_topUsers = <?php echo $json_topUsers; ?>;
+    var tmp = '';
+    //总代选择框
+    $.each(json_topUsers, function(i,v){
+        tmp = '<option value=' + v.user_id + '>' + v.username + '</option>';
+        $('select[name=top_id]').append(tmp);
+    });
+    $("input[name=startDate]").val("<?php echo $startDate; ?>");
+    $("input[name=endDate]").val("<?php echo $endDate; ?>");
+    $("input[name=show2]").attr('checked', <?php if ($show2 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show3]").attr('checked', <?php if ($show3 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show4]").attr('checked', <?php if ($show4 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show5]").attr('checked', <?php if ($show5 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $('select[name=top_id]').val('<?php echo $top_id; ?>');
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="" method="get" onsubmit="return checkform(this)">
+    所属总代<select name="top_id" id="top_id"><option value="-1">请选择</option></select>
+    <input type="hidden" name="c" value="game"/>
+    <input type="hidden" name="a" value="userChart"/>
+    开始时间: <input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+    结束时间: <input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+    <label for='show2' style='color:#FF0000'><input type="checkbox" id="show2" name="show2" value="1"/>参与游戏用户数</label>&nbsp;&nbsp;
+    <label for='show3' style='color:#00FF00'><input type="checkbox" id="show3" name="show3" value="1"/>中奖用户数</label>&nbsp;&nbsp;
+    <label for='show4' style='color:#00FFCC'><input type="checkbox" id="show4" name="show4" value="1"/>开户量</label>&nbsp;&nbsp;
+    <label for='show5' style='color:#0000CC'><input type="checkbox" id="show5" name="show5" value="1"/>首存量</label>&nbsp;&nbsp;
+    <input type="submit" value="查看" class="button" />
+<div>
+    <?php if($user['username']) :?>总代<?php echo $user['username'];?>团队数据
+    <?php else: ?>
+    系统总用户图表
+    <?php endif;?>
+</div>
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tr>
+        <td>
+            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="100%" height="280" id="chart" >
+                <param name="movie" value="js/chart.swf?" />
+                <param name="FlashVars" value='&dataURL=?c=game%26a=userChart%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26show4=<?php echo $show4; ?>%26show5=<?php echo $show5; ?>%26top_id=<?php echo $top_id; ?>'>
+                <param name="quality" value="high" />
+                <embed src="js/chart.swf?" flashVars='&dataURL=?c=game%26a=userChart%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26show4=<?php echo $show4; ?>%26show5=<?php echo $show5; ?>%26top_id=<?php echo $top_id; ?>' quality="high" width="100%" height="280" name="chart" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+            </object>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

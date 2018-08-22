@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $apiUrl; ?>' method='post'>
+    <input type="hidden" name="mch_id"		  value="<?php echo $postFields['mch_id'] ?>" />
+    <input type="hidden" name="trade_type" value="<?php echo $postFields['trade_type'] ?>" />
+    <input type="hidden" name="out_trade_no" value="<?php echo $postFields['out_trade_no'] ?>" />
+    <input type="hidden" name="body" value="<?php echo $postFields['body'] ?>" />
+    <input type="hidden" name="attach" value="<?php echo $postFields['attach'] ?>" />
+    <input type="hidden" name="total_fee" value="<?php echo $postFields['total_fee'] ?>" />
+    <input type="hidden" name="bank_id" value="<?php echo $postFields['bank_id'] ?>" />
+    <input type="hidden" name="notify_url" value="<?php echo $postFields['notify_url'] ?>" />
+    <input type="hidden" name="return_url" value="<?php echo $postFields['return_url'] ?>" />
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>" />
+    <input type="hidden" name="time_start" value="<?php echo $postFields['time_start'] ?>" />
+    <input type="hidden" name="nonce_str" value="<?php echo $postFields['nonce_str'] ?>" />
+</form>
+</body>
+</html>

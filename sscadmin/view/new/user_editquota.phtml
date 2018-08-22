@@ -1,0 +1,90 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   if ("<?php echo ACTION; ?>" == "editQuota") {
+       $("input[name=user_id]").val("<?php echo $user['user_id']; ?>");
+   }
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=<?php echo ACTION; ?>" method="post" onsubmit="return true;">
+<table class="table table-responsive table-bordered table-hover " cellpadding="0" cellspacing="0"  style="width: 75%;">
+    <tr>
+        <td colspan="2" class="rowTitle">
+            <b>修改配额</b>
+        </td>
+    </tr>
+    <tr>
+        <td>user_id</td>
+        <td><?php echo $user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td>用户帐号</td>
+        <td><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td>昵称</td>
+        <td><?php echo $user['nick_name']; ?></td>
+    </tr>
+<!--    <?php /*foreach ($count as $k => $v): */?>
+    <tr>
+        <td width="10%">目前已开高点号<?php /*echo $k; */?></td>
+        <td width="90%"><?php /*echo $v; */?></td>
+    </tr>
+    <?php /*endforeach; */?>
+
+    <tr><td>公共配额</td>
+        <td width="90%">
+        <?php /*foreach ($pubQuotas as $k => $v): */?>
+            <?php /*echo $k; */?>：<?php /*echo $v; */?><br/>
+        <?php /*endforeach; */?>
+        </td>
+    </tr>
+
+    <?php /*foreach ($user['quota'] as $k => $v): */?>
+    <tr>
+        <td>设置高点号额外配额<?php /*echo $k; */?></td>
+        <td><input type="text" name="quota[<?php /*echo $k; */?>]" id="quota_<?php /*echo $k; */?>" value="<?php /*echo $v; */?>"/> 当前用户数：<?php /*echo $currentQuota[$k]; */?></td>
+    </tr>
+    --><?php /*endforeach; */?>
+
+    <tr>
+        <td>操作</td>
+        <td>
+            <div class="form-inline">
+                <label style="font-weight:normal;margin-left:15px;">
+                    <input type="radio" name="is_add" value="1" checked="checked">增加 
+                </label>
+                <label style="font-weight:normal;">
+                    <input type="radio" name="is_add" value="0">减少
+                </label>
+            </div>
+        </td>
+    </tr>
+    <?php foreach ($aPrizeModes as $prizeMode=>$rebate): ?>
+        <tr>
+            <td>设置高点号额外配额<?php echo $prizeMode; ?></td>
+            <td>
+               <div class="form-inline">
+                    <input class="input-md form-control" type="text" name="quota[<?php echo $prizeMode; ?>]" value="0"/>
+                配额总量：<?php echo $currentQuota[$prizeMode]['available']?:0; ?>&nbsp;&nbsp;
+                已使用：<?php echo $currentQuota[$prizeMode]['used']?:0; ?>
+                剩余配额：<?php echo ($currentQuota[$prizeMode]['available']?:0) - ($currentQuota[$prizeMode]['used']?:0); ?>
+               </div>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+
+    <tr>
+        <td colspan="2">
+            <div style="width:100%;margin:0 auto;text-align:center;">
+                <input class="btn btn-info" type="submit"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                <input class="btn btn-info" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                <input type="hidden" name="user_id" value="" />
+            </div>
+        </td>
+</table>
+</form>
+</div>
+<?php $this->import("foot"); ?>

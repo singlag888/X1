@@ -1,0 +1,59 @@
+<?php $this->import("head"); ?>
+
+    <div class="list-div mt10" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered  mainList" width="100%">
+                <thead>
+                <tr>
+                    <td>notice_id</td>
+                    <td>标题</td>
+                    <td>公告类型</td>
+                    <td>建立时间</td>
+                    <td>到期时间</td>
+                    <td>状态</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <?php foreach ($notices as $v): ?>
+                    <tr>
+                        <td><?php echo $v['notice_id']; ?></td>
+                        <td><?php echo $v['title']; ?></td>
+                        <td><?php if ($v['type'] == 1): ?>主站公告<?php elseif ($v['type'] == 2): ?>cp<?php elseif ($v['type'] == 3): ?>手机端banner<?php elseif ($v['type'] == 4): ?>手机端公告<?php else: ?>新闻<?php endif; ?></td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php echo $v['expire_time']; ?></td>
+                        <td>
+                            <?php if (strtotime($v['expire_time']) < time()): ?>
+                                <font color="red">过期</font>
+                            <?php elseif ($v['status'] == 1): ?>
+                                正常
+                            <?php else: ?>
+                                <font color="red">标记删除</font>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($canEdit): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=notice&a=editNotice&notice_id=<?php echo $v['notice_id']; ?>">编辑</a>
+                            <?php endif; ?>
+                            <?php if ($canDelete): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=notice&a=deleteNotice&notice_id=<?php echo $v['notice_id']; ?>"
+                                   onclick="return confirm('真的要标记删除？');">删除</a>
+                            <?php endif; ?>
+                            <?php if ($v['is_stick'] == 1): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=notice&a=topNotice&is_stick=0&notice_id=<?php echo $v['notice_id']; ?>">解除置顶</a>
+                            <?php else: ?><a class="btn btn-mini btn-info"
+                                             href="./?c=notice&a=topNotice&is_stick=1&notice_id=<?php echo $v['notice_id']; ?>">
+                                    置顶</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+        <div class="pageTal"><?php echo $pageList; ?></div>
+        <div class="tip"></div>
+    </div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,129 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+   if (action == 'editGroup') {
+       $("select[name=parent_id]").val("<?php echo $group['parent_id']; ?>");
+       $("input[name=group_id]").val("<?php echo $group['group_id']; ?>");
+       $("input[name=name]").val("<?php echo $group['name']; ?>");
+       $("textarea[name=description]").val("<?php echo $group['description']; ?>");
+       $("input[name=sort]").val("<?php echo $group['sort']; ?>");
+       <?php if ($group['is_enabled'] == 1): ?>
+           $("input[name=is_enabled][value=1]").attr("checked", true);
+       <?php else: ?>
+           $("input[name=is_enabled][value=1]").attr("checked", false);
+        <?php endif; ?>
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.name.value == "") {
+        msg = "请输入名称";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="list-div form-top" id="addDiv">
+    <h4>注：最多支持3级人事结构。如CFO->资金部经理->出纳</h4>
+<form name="form1" id="form1" action="./?c=userGroup&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+  <table class="table table-responsive table-bordered" style="width:60%">
+    <tr>
+        <td colspan="2" class="rowTitle">
+            <b>增加分组</b>
+        </td>
+    </tr>
+    <tr>
+        <td width="25%">所属层级</td>
+        <td>
+            <select class="input-sm form-control" name="parent_id">
+                <option value="0">作为顶级</option>
+                <?php foreach ($firstSecondItems as $v): ?>
+                <option value="<?php echo $v['group_id']; ?>"><?php echo $v['name']; ?></option>
+                    <?php foreach ($v['childs'] as $vv): ?>
+                    <option value="<?php echo $vv['group_id']; ?>">&nbsp;&nbsp;<?php echo $vv['name']; ?></option>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>分组名称</td>
+        <td><input class="input-md form-control" name="name" maxlength="19"/></td>
+    </tr>
+    <tr>
+        <td>描述</td>
+        <td><textarea class="input-md form-control" name="description"/></textarea></td>
+    </tr>
+    <tr>
+        <td>排序（越小越靠前）</td>
+        <td><input class="input-md form-control" name="sort" value="100"/></td>
+    </tr>
+    <tr>
+        <td>启用？</td>
+        <td>
+          <label>
+            <input type="checkbox" name="is_enabled" value="1" checked/>
+          </label>
+        
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+          <div style="width:60%;margin:0 auto;text-align: center;">
+            <input class="btn btn-info submit" type="submit" style="width: 60px;" name="submit" value="<?php if (ACTION == "addGroup"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+            <input class="btn btn-info submit" type="button"  style="width: 60px;" onclick="javascript:history.go(-1);" value="返回"/>
+            <input type="hidden" name="group_id" value="" />
+          </div>
+        </td>    
+  </table>
+<!--<table cellpadding="0" cellspacing="0" width="40%" border="0">
+    <tr>
+        <td>所属层级</td>
+        <td>
+            <select name="parent_id">
+                <option value="0">作为顶级</option>
+                <?php foreach ($firstSecondItems as $v): ?>
+                <option value="<?php echo $v['group_id']; ?>"><?php echo $v['name']; ?></option>
+                    <?php foreach ($v['childs'] as $vv): ?>
+                    <option value="<?php echo $vv['group_id']; ?>">&nbsp;&nbsp;<?php echo $vv['name']; ?></option>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>分组名称</td>
+        <td><input name="name" maxlength="19"/></td>
+    </tr>
+    <tr>
+        <td>描述</td>
+        <td><textarea name="description"/></textarea></td>
+    </tr>
+    <tr>
+        <td>排序（越小越靠前）</td>
+        <td><input name="sort" value="100"/></td>
+    </tr>
+    <tr>
+        <td>启用？</td>
+        <td><input type="checkbox" name="is_enabled" value="1" checked/></td>
+    </tr>
+
+    <tr>
+        <td colspan="2"><input type="submit" class="submit" name="submit" value="<?php if (ACTION == "addGroup"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+            <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/>
+            <input type="hidden" name="group_id" value="" />
+</table>-->
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,92 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <?php $this->import('public_cssjs') ?>
+    </head>
+    <body>
+    <!-- 顶部导航信息部分 -->
+<?php $this->import('public_header') ?>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>账户管理</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href="index.jsp?c=user&a=editProfile">基本资料</a></li>
+                            <li><a class="subcur" href="index.jsp?c=user&a=editSecurity">安全资料</a></li>
+                            <li><a href="index.jsp?c=user&a=editPwd">修改登陆密码</a></li>
+                            <li><a href="index.jsp?c=user&a=editSecPwd">修改资金密码</a></li>
+                            <li><a href="index.jsp?c=user&a=editSafePwd">修改安全码</a></li>
+                            <li><a href="index.jsp?c=fin&a=bindCard">卡号绑定</a></li>
+                            <li><a href="index.jsp?c=fin&a=orderList">个人帐变</a></li>
+                            <li><a href="index.jsp?c=user&a=prizeDetail">玩法奖金查询</a></li>
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <div class="FormTitle"><h2>安全资料</h2></div>
+                            <div class="FormTab2 w75b FromInfo">
+                                <form name="form1" id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post"> 
+                                    <ul>
+                                        <li>
+                                            <label>取款人姓名：</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanRealName"></strong></span>
+                                            <div class="FormInfoTip">仅支持中文，必须和取款卡开户姓名一致，否则无法提款</div>
+                                        </li>
+                                        <li>
+                                            <label>资金密码：</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanSecPass"></strong></span>
+                                            <div class="FormInfoTip">密码必须是6-20位字母数字混合，且不能为全是数字或</div></li>
+                                        </li>
+                                        <li>
+                                            <label>确认密码：</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanSecPass2"></strong></span></li>
+                                        <li>
+                                            <label>邮　　箱：</label><div class="must">&nbsp;</div><span class="mail_info"><strong id="spanEmail"></strong></span></li>
+                                        <li>
+                                            <label>&nbsp;</label><div class="must">&nbsp;</div>
+                                            <?php if ($user['real_name']): ?>
+                                                <p><strong>提示：您已经设置了安全资料，不可更改</strong></p>
+                                            <?php else: ?>
+                                                <input type="submit" class="submit btnStyle" name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                                            <?php endif; ?>
+                                            <input type="hidden" name="user_id" value="" />
+                                        </li>
+                                    </ul>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php $this->import('public_foot') ?>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script>
+            $(document).ready(function() {
+                $("input[name=user_id]").val("<?php echo $user['user_id']; ?>");
+<?php if ($user['real_name']): ?>
+                    $('#spanRealName').html('<?php echo mb_substr($user['real_name'], 0, 1, 'UTF-8'); ?>***');
+                    $('#spanSecPass').html('***************');
+                    $('#spanSecPass2').html('***************');
+                    $('#spanEmail').html('***************');
+<?php else: ?>
+                    $('#spanRealName').html('<input name="real_name" class="txtStyle"/>');
+                    $('#spanSecPass').html('<input type=password name="secpassword"  class="txtStyle"/>');
+                    $('#spanSecPass2').html('<input type=password name="secpassword2"  class="txtStyle"/>');
+                    $('#spanEmail').html('<input  name="email"  class="txtStyle"/>');
+<?php endif; ?>
+            });
+        </script>
+    </body>
+</html>

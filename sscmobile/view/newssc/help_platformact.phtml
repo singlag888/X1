@@ -1,0 +1,166 @@
+<!DOCTYPE HTML> <!--平台活动 -->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+        <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+        <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+        <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+        <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+        <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+    </head>
+
+    <body>
+        <div class="operate_middle_page">
+            <!--/*头部*/-->
+            <header class="headerbg">
+                <a class="headbox01" href="javascript:history.back(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+                <p class="headtetle">优惠活动</p>
+                <a class="headboxright" href="index.jsp?c=game&a=packageList"><img src="<?php echo $imgCdnUrl ?>/images/mobile/personage.png"/></a>
+            </header>
+            <div>
+            </div>
+            <div class="notice_activity">
+                <?php foreach($activities as $v): ?>
+                    <?php if($v['m_thumb_img'] == '' || $v['m_main_img'] == '') continue; ?>
+                <div class="notice_activity_box">
+                <a class="promo_main">
+                    <div class="slide">
+                    <img class="batplay" src="<?php echo $imgCdnUrl ?>/<?php echo $v['m_thumb_img'] ?>">
+                    </div>
+                    <div class="info">
+                        <p class="t_i">
+                        <img src="<?php echo $imgCdnUrl ?>/<?php echo $v['m_main_img'] ?>">
+                        </p>
+                   </div>
+                </a>
+                </div>
+            <?php endforeach; ?>
+                <!--优惠详情展开-->
+                <script type="text/javascript">
+                $(function(){
+                    $(".promo_main").eq(0).find(".info").height(".info");
+                    $(".promo_main").eq(0).find(".batplay").html("+展开查看详情");
+                    $(".promo_main").each(function(){
+                        $(this).find(".batplay").click(function(){
+                              var oindex = $(this).parent(".slide").siblings(".info");
+                                if(oindex.height()==0){
+                                    var curHeight = oindex.height();
+                                    var autoHeight = oindex.css("height","auto").height();
+                                    oindex.height(curHeight);
+                                    oindex.animate({height:autoHeight},500);
+                                    //$(this).html("-收起");
+                                }
+                                else{
+                                    oindex.animate({height:"0"});
+                                    //$(this).html("+展开查看详情");
+                                }
+                             })
+
+                     })
+                    // $(".t_i img").eq(2).attr('usemap','#planetmap');
+                    //  var questionnaireUrl ='<map name="planetmap"><area href="https://wj.qq.com/s/1583642/9d15" shape="rectangle" coords="33,226,52,267">Sun</a></map>'
+                    // $(".t_i").eq(2).append(questionnaireUrl);
+                    })
+                </script>
+            </div>
+            <!--弹窗-->
+               <div class="toolTipBox DisplayNone">
+                   <p>温馨提示   <a class="toolTipBoxG"><img class="toolTipBoxClose FloatRight" src="<?php echo $imgCdnUrl ?>/images/mobile/toolTipBoxClose.png"/></a></p>
+                   <div class="rechargeBoxText">
+                       <pre>只有代理可以进入</pre>
+                   </div>
+               </div>
+           <!--充值弹窗-->
+               <div class="rechargeBoxBox DisplayNone">
+                   <p>温馨提示   <a class="rechargeBoxBoxG"><img class="rechargeBoxBoxClose FloatRight" src="<?php echo $imgCdnUrl ?>/images/mobile/toolTipBoxClose.png"/></a></p>
+                   <div class="rechargeBoxBoxText">
+                       <pre>正在开发，请到PC端充值提现</pre>
+                   </div>
+
+
+        <footer class="dtbg">
+            <div class="FootMain"><a href="index.jsp?&a=welcome"><i class="footimg01"><img
+                                src="<?php echo $imgCdnUrl ?>/images/mobile/footimg01-f.png"></i>
+                    <p>首页</p></a></div>
+            <div class="FootMain"><a href="index.jsp?c=fin&a=pay"><i class="footimg02"><img
+                                src="<?php echo $imgCdnUrl ?>/images/mobile/footimg02.png"></i>
+                    <p>立即存款</p></a></div>
+            <div class="FootMain"><a href="index.jsp?c=game&a=lobby"><i class="footimg04"><img
+                                src="<?php echo $imgCdnUrl ?>/images/mobile/footimg04.png"></i>
+                    <p>购彩大厅</p></a></div>
+            <div class="FootMain"><a href="index.jsp?c=game&a=packageList"><i class="footimg05"><img
+                                src="<?php echo $imgCdnUrl ?>/images/mobile/footimg05.png"></i>
+                    <p>投注记录</p></a></div>
+            <div class="FootMain"><a href="index.jsp?c=game&a=packageList"><i class="footimg03"><img
+                                src="<?php echo $imgCdnUrl ?>/images/mobile/footimg03.png"></i>
+                    <p>会员中心</p></a></div>
+        </footer>
+        </div>
+        <script type="text/javascript">
+            <?php $this->import("default_Df"); ?>
+          $(document).ready(function(){
+
+            $("#withdrawMoney").click(function() {
+            $.ajax({
+                type: "GET",
+                url: "index.jsp?c=fin&a=withdraw",
+                data: {flag: 'ajax'},
+                dataType: "json", //返回0和1
+                success: function(data) {
+                    if(data.errno == 0){
+                        var i = layer.open({
+                            type: 2,
+                            title: '提取余额到银行卡',
+                            offset: ['0', '0'],
+                            shade: [0.3, '#000'],
+                            border: [0],
+                            area: ['100%', '28.44rem'],
+                            content: ['index.jsp?&a=withdraw&c=fin']
+                        });
+
+                    }else if(data.errno == 1){
+                        layer.alert("非法请求，该用户不存在或已被冻结",{icon:7});
+                    }else if(data.errno == 2){
+                        layer.alert("您尚未设置安全码，请先 <a style='vertical-align:top;color:#ef984b;' href='javascript:void(0);' onclick=window.parent.document.getElementById('mainFrame').src='?c=user&a=editSafePwd';parent.layer.closeAll();>点此设置安全码</a>",{icon:7});
+                    }
+                    else if(data.errno == 3){
+                        layer.alert("您尚未设置资金密码，请先 <a style='vertical-align:top;color:#ef984b;' href='javascript:void(0);' onclick=window.parent.document.getElementById('mainFrame').src='?c=user&a=editSecPwd';parent.layer.closeAll();>点此设置资金密码</a>",{icon:7});
+                    }
+                    else if(data.errno == 4){
+                        layer.alert("您尚未绑定任何银行卡，请先 <a style='vertical-align:top;color:#ef984b;' href='index.jsp?c=fin&a=bindCard' onclick=parent.layer.closeAll();>点此绑定卡号</a>方可提款",{icon:7});
+                    }
+                }
+            });
+         });
+        })
+        // <!-- 关闭按钮 -->
+        $(".toolTipBoxG").click(function(){
+            $(".toolTipBox").removeClass("DisplayBlock");
+        })
+        $('a.pay').on('click', function(){
+                layer.open({
+                    type: 2,
+                    shadeClose: false,
+                    title: '充值',
+                    shade: [0.3, '#000'],
+                    border: [0],
+                    offset: ['0', '0'],
+                    area: ['100%', '28.44rem'],
+                    content: ['index.jsp?c=fin&a=deposit']
+                });
+                // $('#mainFrame').attr('src','index.jsp?c=fin&a=deposit')
+            });
+        </script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

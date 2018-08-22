@@ -1,0 +1,481 @@
+<?php $this->import("head"); ?>
+<!-- <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/calendar/jquery.dyndatetime.js"></script> -->
+<!-- <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/calendar/lang/calendar-utf8.js"></script> -->
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<!-- <link rel="stylesheet" type="text/css" media="all" href="<?php echo $imgCdnUrl ?>/js/calendar/css/calendar-blue2.css"  /> -->
+<script>
+$(document).ready(function(){
+    /*jQuery("#yearly_start_closed").dynDateTime({
+        ifFormat: "%Y-%m-%d",
+        daFormat: "%l;%M %p, %e %m,  %Y",
+        align: "Br",
+        electric: true,
+        singleClick: true,
+        //button: ".next()", //next sibling
+        showOthers: true,
+        weekNumbers: true,
+        showsTime: true
+    });
+    jQuery("#yearly_end_closed").dynDateTime({
+        ifFormat: "%Y-%m-%d",
+        daFormat: "%l;%M %p, %e %m,  %Y",
+        align: "Br",
+        electric: true,
+        singleClick: true,
+        //button: ".this()", //next sibling
+        showOthers: true,
+        weekNumbers: true,
+        showsTime: true
+    });*/
+    $("#addissueset").click(function(){
+        var chinessnum = Array('一','二','三','四','五','六','七','八','九','十');
+        var issuesetnum = $(".issuesettitle").size();
+        var shtml = '<tr><td class="issuesettitle"  style="color:green"><hr><b>第'+chinessnum[issuesetnum];
+        shtml += '段销售时间设置 <span class="delissue"><font color="red">[删除]</font></span></b></td></tr>';
+        shtml += '<tr><td>';
+        shtml += '有效状态:<select name="is_use[]" class="is_use"><option value="0">无效</option><option value="1" selected>有效</option></select>&nbsp;&nbsp;&nbsp;';
+        shtml += '序号:<input value="'+issuesetnum+'" size="3" class="fragsort" type="text" name="fragsort[]" onkeyup="limitnumerinput(this)" onafterpaste="limitnumerinput(this)">&nbsp;&nbsp;&nbsp;';
+        shtml += '销售开始时间:&nbsp';
+        shtml += '<select name="starthour[]"><?php foreach ($hours as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="startminute[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="startsecond[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select><br/>';
+        shtml += '官方第一期销售截止时间:';
+        shtml += '<select name="firstendhour[]"><?php foreach ($hours as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="firstendminute[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="firstendsecond[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '&nbsp;&nbsp;官方销售结束时间:';
+        shtml += '<select name="endhour[]"><?php foreach ($hours as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="endminute[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '：<select name="endsecond[]"><?php foreach ($minutes as $v): ?><option value="<?php echo $v; ?>"><?php echo $v; ?></option><?php endforeach; ?></select>';
+        shtml += '<br>';
+        shtml += '销售周期:<input value="600" size="6" class="cycle" type="text" name="cycle[]" value=""  onkeyup="limitnumerinput(this)" onafterpaste="limitnumerinput(this)">&nbsp;秒, ';
+        shtml += "&nbsp;&nbsp;等待开奖时间:<input value='90' size='3' type='text' class = 'end_sale' name='end_sale[]' value='' onkeyup='limitnumerinput(this)' onafterpaste='limitnumerinput(this)'>&nbsp;秒, ";
+        shtml += "&nbsp;&nbsp;撤单时间:<input value='90' size='3' type='text'  class = 'drop_time' name='drop_time[]' value='' onkeyup='limitnumerinput(this)' onafterpaste='limitnumerinput(this)'>&nbsp;秒, ";
+        shtml += "&nbsp;&nbsp;号码录入时间:<input value='30' size='3' type='text' class='code_time' name='code_time[]' value='' onkeyup='limitnumerinput(this)' onafterpaste='limitnumerinput(this)'>&nbsp;秒";
+        shtml += '</td></tr>';
+        $("#issueset").append(shtml);
+        $(".delissue").click(function(){
+            var tempobj = $(this).parent().parent().parent().next();
+            $(this).parent().parent().parent().remove();
+            tempobj.remove();
+        });
+        $(".delissue").mouseover(function(){
+            $(this).css('cursor','default');
+        });
+    });
+    $(".delissue").click(function(){
+        var tempobj = $(this).parent().parent().parent().next();
+        $(this).parent().parent().parent().remove();
+        tempobj.remove();
+    });
+    $(".delissue").mouseover(function(){
+        $(this).css('cursor','default');
+    });
+
+    $('#form1').submit(function(){
+        if ($('input[name=name]').val() == '') {
+            alert('中文名称不能为空');
+            return false;
+        }
+        if ($('input[name=ename]').val() == '') {
+            alert('英文名称不能为空');
+            return false;
+        }
+        if ($('input[name=type]:checked').val() == '') {
+            alert('请选择彩种类型');
+            return false;
+        }
+        if ($('input[name=issue_rule]').val() == '') {
+            alert('奖期规则不能为空');
+            return false;
+        }
+        if ($('input[name=min_rebate_gap]').val() == '') {
+            alert('最小返点差不能为空');
+            return false;
+        }
+
+        return true;
+    });
+
+    if ("<?php echo ACTION; ?>" == 'editLottery') {
+        $("input[name=lottery_id]").val("<?php echo $lottery['lottery_id']; ?>");
+        $("input[name=name]").val("<?php echo $lottery['name']; ?>");
+        $("input[name=cname]").val("<?php echo $lottery['cname']; ?>");
+        $("input[name=lottery_type][value=<?php echo $lottery['lottery_type']; ?>]").attr('checked', true);
+        $("input[name=property_id][value=<?php echo $lottery['property_id']; ?>]").attr('checked', true);
+        $("textarea[name=description]").val("<?php echo $lottery['description']; ?>");
+        $("input[name=issue_rule]").val("<?php echo $lottery['issue_rule1']; ?>");
+        $("select[name=resetrule_year]").val("<?php echo $lottery['issue_rule2'][0]; ?>");
+        $("select[name=resetrule_month]").val("<?php echo $lottery['issue_rule2'][1]; ?>");
+        $("select[name=resetrule_day]").val("<?php echo $lottery['issue_rule2'][2]; ?>");
+        $("input[name=zx_max_comb]").val("<?php echo $lottery['zx_max_comb']; ?>");
+        $("input[name=total_profit]").val("<?php echo $lottery['total_profit']; ?>");
+        $("input[name=min_profit]").val("<?php echo $lottery['min_profit']; ?>");
+        $("input[name=yearly_start_closed]").val("<?php echo $lottery['yearly_start_closed']; ?>");
+        $("input[name=yearly_end_closed]").val("<?php echo $lottery['yearly_end_closed']; ?>");
+        $("input[name=catch_delay]").val("<?php echo $lottery['catch_delay']; ?>");
+        $("input[name=catch_retry]").val("<?php echo $lottery['catch_retry']; ?>");
+        $("input[name=catch_interval]").val("<?php echo $lottery['catch_interval']; ?>");
+        $("input[name=sort]").val("<?php echo $lottery['sort']; ?>");
+        $("input[name=status][value=<?php echo $lottery['status']; ?>]").attr("checked", true);
+    }
+});
+function limitnumerinput(obj){
+    obj.value = obj.value.replace(/\D/g,'');
+}
+</script>
+<div class="list-div add-main" id="addDiv">
+    <form name="form1" id="form1" class="form-top" action="./?c=lottery&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered" style="width: 80%;">
+            <tr>
+                <td class="fb" style="width: 15%;">彩种名称首字母缩写:</td>
+                <td><input class="input-md form-control" type="text" name="name" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">中文全称:</td>
+                <td><input class="input-md form-control" type="text" name="cname" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">彩种类型:</td>
+                <td>
+                <?php  foreach ($GLOBALS['cfg']['lottery_type'] as $k => $val): ?>
+                    <input type="radio" name="lottery_type" value=<?php echo $k; ?> /><?php echo $val; ?>&nbsp;
+                <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">性质:</td>
+                <td>
+                    <?php foreach ($properties as $k => $v): ?>
+                        <input type="radio" name="property_id" value=<?php echo $k; ?> /><?php echo $v; ?>&nbsp;
+                    <?php endforeach; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">彩种描述:</td>
+                <td><textarea class="input-md form-control" name="description" cols="100"></textarea></td>
+            </tr>
+            <tr>
+                <td  class="narrow-label">奖期时间设置<br/><span id="addissueset"><font color="Blue">[增加时间段]</font></span></td>
+                <td>
+                    <table class="table table-responsive table-bordered" id="issueset">
+                        <?php if (empty($lottery['settings'])): ?>
+                        <tr><td class="issuesettitle" style="color:green;"><b>第一段销售时间设置</b></td></tr>
+                        <tr>
+                            <td>
+                                <div class="form-inline">
+                                    <label >有效状态:</label>
+                                    <select class="input-sm form-control" name="is_use[]" class="is_use">
+                                        <option value="0">无效</option>
+                                        <option value="1" selected>有效</option>
+                                    </select>
+                                    <label class="ml10" > 序号:</label>
+                                    <input size="3" class="input-sm form-control fragsort" type="text" name="fragsort[]" value="0" onkeyup="limitnumerinput(this)" onafterpaste="limitnumerinput(this)">&nbsp;&nbsp;&nbsp;
+                                    <label class="ml10" >销售开始时间:</label>
+                                    <select class="input-sm form-control" name="starthour[]">
+                                        <?php foreach ($hours as $v): ?>
+                                        <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label  >：</label>
+                                    <select class="input-sm form-control" name="startminute[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                        <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label  >：</label>
+                                    <select class="input-sm form-control" name="startsecond[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                        <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <br>
+                                <div class="form-inline">
+                                    <label>官方第一期销售截止时间:</label>
+                                    <select class="input-sm form-control" name="firstendhour[]">
+                                        <?php foreach ($hours as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label>：</label>
+                                    <select class="input-sm form-control" name="firstendminute[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label>:</label>
+                                    <select class="input-sm form-control" name="firstendsecond[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label class="ml10">官方销售结束时间:</label>
+                                    <select class="input-sm form-control" name="endhour[]">
+                                        <?php foreach ($hours as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label>:</label>
+                                    <select class="input-sm form-control" name="endminute[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <label>：</label>
+                                    <select class="input-sm form-control" name="endsecond[]">
+                                        <?php foreach ($minutes as $v): ?>
+                                            <option value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            <br>
+                                <div class="form-inline">
+                                    <label>销售周期:</label>
+                                    <input size="6" value="600" type="text"  class="input-sm form-control cycle" name="cycle[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                                    <label class="ml10">等待开奖时间：</label>
+                                    <input size="3" value="90" type="text" class="input-sm form-control end_sale" name="end_sale[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                                    <label class="ml10">撤单时间：</label>
+                                    <input value="90" size="3" type="text" class="input-sm form-control drop_time" name="drop_time[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                                    <label class="ml10">号码录入时间：</label>
+                                    <input value="30" size="3" type="text" class="input-sm form-control code_time" name="code_time[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒
+                                </div>
+                            </td>
+                        </tr>
+                        <?php else: ?>
+                        <?php foreach ($lottery['settings'] as $k => $setting): ?>
+                        <tr>
+                            <td class="issuesettitle" style="color:green">
+                                <b>第<?php echo $k+1; ?>段销售时间设置<?php if ($k != 0): ?> <span class="delissue"><font color="red">[删除]</font></span><?php endif; ?></b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <div class="form-inline">
+                                <label>有效状态:</label>
+                            <select class="input-sm form-control is_use" name="is_use[]" >
+                                <option value="0" <?php if ($setting['is_use'] == 0): ?> selected<?php endif; ?>>无效</option>
+                                <option value="1" <?php if ($setting['is_use'] == 1): ?> selected<?php endif; ?>>有效</option>
+                            </select>
+                            <label class="ml10">序号:</label>
+                            <input size="3" class="input-sm form-control fragsort" type="text" name="fragsort[]" value="<?php echo $setting['frag_sort']; ?>" onkeyup="limitnumerinput(this)" onafterpaste="limitnumerinput(this)">&nbsp;&nbsp;&nbsp;
+                            <label class="ml10" >销售开始时间:</label>
+                            <select class="input-sm form-control" name="starthour[]">
+                                <?php foreach ($hours as $v): ?>
+                                <option value="<?php echo $v; ?>" <?php if($setting['starthour'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label >:</label>
+                            <select class="input-sm form-control" name="startminute[]">
+                                <?php foreach ($minutes as $v): ?>
+                                <option value="<?php echo $v; ?>" <?php if($setting['startminute'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <label>：</label>
+                            <select class="input-sm form-control" name="startsecond[]">
+                                <?php foreach ($minutes as $v): ?>
+                                    <option value="<?php echo $v; ?>" <?php if($setting['startsecond'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            </div>
+                            <br/>
+                            <div class="form-inline">
+                                <label>官方第一期销售截止时间:</label>
+                                <select class="input-sm form-control" name="firstendhour[]">
+                                    <?php foreach ($hours as $v): ?>
+                                    <option value="<?php echo $v; ?>" <?php if($setting['firstendhour'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>：</label>
+                                <select class="input-sm form-control" name="firstendminute[]">
+                                    <?php foreach ($minutes as $v): ?>
+                                    <option value="<?php echo $v; ?>" <?php if($setting['firstendminute'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>：</label>
+                                <select class="input-sm form-control" name="firstendsecond[]">
+                                    <?php foreach ($minutes as $v): ?>
+                                        <option value="<?php echo $v; ?>" <?php if($setting['firstendsecond'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label class="ml10">官方销售结束时间:</label>
+                                <select class="input-sm form-control" name="endhour[]">
+                                    <?php foreach ($hours as $v): ?>
+                                        <option value="<?php echo $v; ?>" <?php if($setting['endhour'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>：</label>
+                                <select class="input-sm form-control" name="endminute[]">
+                                    <?php foreach ($minutes as $v): ?>
+                                        <option value="<?php echo $v; ?>" <?php if($setting['endminute'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <label>：</label>
+                                <select class="input-sm form-control" name="endsecond[]">
+                                    <?php foreach ($minutes as $v): ?>
+                                        <option value="<?php echo $v; ?>" <?php if($setting['endsecond'] == $v): ?>selected<?php endif; ?>><?php echo $v; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        <br>
+                        <div class="form-inline">
+                            <label>销售周期:</label>
+                            <input class="input-sm form-control cycle" type="text" name="cycle[]" size="6" value="<?php echo $setting['cycle']; ?>"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                            <label class="ml10">等待开奖时间：</label>
+                            <input class="input-sm form-control end_sale" type="text" size="3" value="<?php echo $setting['end_sale']; ?>"  name="end_sale[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                            <label class="ml10">撤单时间：</label>
+                            <input class=" input-sm form-control drop_time" type="text" size="3" value="<?php echo $setting['drop_time']; ?>"  name="drop_time[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒,
+                            <label class="ml10">号码录入时间:</label>
+                            <input  class="input-sm form-control code_time"size="3" type="text" value="<?php echo $setting['code_time']; ?>"  name="code_time[]" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">&nbsp;秒
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                <?php endif; ?>
+            </table>
+        </td>
+    </tr>
+    <tr>
+    <td class="fb ">奖期规则:</td>
+    <td><input class="input-md form-control" type="text" name="issue_rule" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">清零规则:</td>
+                <td>
+                    <div class="form-inline">
+                        <label>年：</label>
+                        <select class="input-md form-control" name="resetrule_year">
+                            <option selected="" value="0">清零</option>
+                            <option value="1">不清零</option>
+                        </select>
+                        <label class="ml10">月：</label>
+                        <select class="input-md form-control" name="resetrule_month">
+                            <option value="0">清零</option>
+                            <option value="1">不清零</option>
+                        </select>
+                        <label class="ml10">日：</label>
+                        <select class="input-md form-control" name="resetrule_day">
+                            <option selected="" value="0">清零</option>
+                            <option value="1">不清零</option>
+                    </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">直选转直注数:</td>
+                <td><input class="input-md form-control" type="text" name="zx_max_comb" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">总水率:</td>
+                <td><input class="input-md form-control" type="text" name="total_profit" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">公司最少留水:</td>
+                <td><input class="input-md form-control" type="text" name="min_profit" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">最小返点差:</td>
+                <td>
+                    <div class="form-inline">
+                        <label>从</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[0][from]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][0]['from'])) echo $lottery['min_rebate_gaps'][0]['from']; ?>"/>
+                        <label>到</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[0][to]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][0]['to'])) echo $lottery['min_rebate_gaps'][0]['to']; ?>"/>
+                        <label>返点差</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[0][gap]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][0]['gap'])) echo $lottery['min_rebate_gaps'][0]['gap']; ?>"/>
+                    <div/>
+                    <br/>
+                    <div class="form-inline">
+                        <label>从</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[1][from]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][1]['from'])) echo $lottery['min_rebate_gaps'][1]['from']; ?>"/>
+                        <label>到</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[1][to]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][1]['to'])) echo $lottery['min_rebate_gaps'][1]['to']; ?>"/>
+                        <label>返点差</label>
+                        <input class="input-md form-control" type="text" name="min_rebate_gaps[1][gap]" size="5" value="<?php if (isset($lottery['min_rebate_gaps'][1]['gap'])) echo $lottery['min_rebate_gaps'][1]['gap']; ?>"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">年度休市开始时间:</td>
+                <td>
+                   <div class="form-inline">
+                       <div class="form-group has-default has-feedback">
+                            <!--  <input class="input-md form-control" type="text" name="yearly_start_closed" id="yearly_start_closed" value=""/> -->
+                            <input class="input-md form-control" onclick="jeDate({dateCell:'#yearly_start_closed',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" type="text" name="yearly_start_closed"   id="yearly_start_closed" value="" size="23"/>
+                            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+                       </div>
+                   </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">年度休市结束时间:</td>
+                <td>
+                    <!-- <input class="input-md form-control" type="text" name="yearly_end_closed" id="yearly_end_closed" value=""/> -->
+                    <div class="form-inline">
+                        <div class="form-group has-feedback has-default">
+                           <input class="input-md form-control" onclick="jeDate({dateCell:'#yearly_end_closed',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" type="text" name="yearly_end_closed" id="yearly_end_closed" value="" size="23"/>
+                           <span class="glyphicon glyphicon-calendar form-control-feedback"></span> 
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">抓号延后秒数:</td>
+                <td><input class="input-md form-control" type="text" name="catch_delay" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">抓号次数:</td>
+                <td><input class="input-md form-control" type="text" name="catch_retry" value=""/></td>
+            </tr>
+            <tr>
+                <td class="fb">重试间隔秒数：</td>
+                <td><input class="input-md form-control" type="text" name="catch_interval" value="30"/>抓号频率最低不得低于30秒，最高不得高于300秒</td>
+            </tr>
+            <tr>
+                <td class="fb">显示顺序:</td>
+                <td><input class="input-md form-control" type="text" name="sort" value="100"/></td>
+            </tr>
+            <tr>
+                <td class="fb">支持模式:</td>
+                <td>
+                    <?php if(!empty($modes)):?>
+                        <?php foreach ($modes as $k => $v):?>
+                    <?php echo $v['modes_name'];?>
+                            <?php if($lottery['modes']&$v['modes_area']):?>
+                                <input class="input-md" checked="checked" type="checkbox" name="modes[]" value="<?php echo $v['modes_area'];?>"/>
+                                <?php else:?>
+                            <input class="input-md" type="checkbox" name="modes[]" value="<?php echo $v['modes_area'];?>"/>
+
+                            <?php endif;?>
+
+                            <?php endforeach;;?>
+                        <?php else:?>
+                        暂无模式支持
+                    <?php endif;;?>
+                    <span style="color: #ff2a2a">暂时只用于app与新版wap--但是数据需要产生</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">状态:</td>
+                <td>
+                    <div class="form-inline">
+                        <input  type="radio" name="status" value="8"/><span style="vertical-align: middle;">启用</span>
+                        <input type="radio" name="status" value="0"/><span style="vertical-align: middle">禁用</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-md btn-info submit" style="width: 60px;" type="submit"  name="submit" value="<?php if (ACTION == "addLottery"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                        <input class="btn btn-md btn-info submit ml30" style="width: 60px;" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="lottery_id" value="" />
+                    </div>
+                </td>
+                    
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

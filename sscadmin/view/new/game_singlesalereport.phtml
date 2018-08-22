@@ -1,0 +1,100 @@
+<?php $this->import("head"); ?>
+<script>
+$(function(){
+    //准备数据
+    var json_lotterys = <?php echo $json_lotterys; ?>;
+    var tmp = '';
+
+    //彩种选择框
+    $.each(json_lotterys, function(i,v){
+        tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+        $('select[name=lottery_id]').append(tmp);
+    });
+
+    //设置默认值
+    $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+    $('select[name=startDate]').val('<?php echo $startDate; ?>');
+    $('select[name=is_test]').val('<?php echo $is_test; ?>');
+    $('select[name=modes]').val('<?php echo $modes; ?>');
+});
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <label>游戏名称</label>
+        <select class="input-md form-control" name="lottery_id"><option value="0">请选择</option></select>
+        <label class="ml10">日期</label>
+        <select class="input-md form-control" name="startDate">
+            <?php foreach ($dates as $v): ?>
+            <option value="<?php echo $v;?>"><?php echo $v;?></option>
+            <?php endforeach; ?>
+        </select>
+        <label class="ml10">投注模式</label>
+        <select class="input-md form-control" name="modes"><option value="0">请选择<option value="1">元</option><option value="0.1">角</option><option value="0.01">分</option></select>
+        <label class="ml10">帐号类型</label>
+        <select class="input-md form-control" name="is_test">
+            <option value="-1">请选择</option>
+            <option value="0">正式帐号</option>
+            <option value="1">测试帐号</option>
+        </select>
+        <input type="hidden" name="c" value="game"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit" style="width: 60px;" type="submit" name="submit"  value="提交"/>
+        <hr>
+    </div>
+</form>
+
+<div class="list-div mt15" id="listDiv">
+<table class="table table-responsive table-bordered mainList">
+    <thead>
+    <tr>
+        <td>游戏</td>
+        <td>奖期</td>
+        <td>截止投注时间</td>
+        <td>开奖时间</td>
+        <td>开奖号码</td>
+        <td>总投注额</td>
+        <td>总返点</td>
+        <td>中奖金额</td>
+        <td>盈亏值</td>
+    </tr>
+    </thead>
+    <?php if ($issueSales): ?>
+    <?php foreach ($issueSales as $v): ?>
+    <tr>
+        <td><?php echo $lotterys[$lottery_id]['cname']; ?></td>
+        <td><?php echo $v['issue']; ?></td>
+        <td><?php echo $issues[$v['issue']]['end_sale_time']; ?></td>
+        <td><?php echo $issues[$v['issue']]['input_time']; ?></td>
+        <td><?php echo $issues[$v['issue']]['code']; ?></td>
+        <td><?php echo number_format($v['total_amount'], 2); ?></td>
+        <td><?php echo number_format($v['total_rebate'], 2); ?></td>
+        <td><?php echo number_format($v['total_prize'], 2); ?></td>
+        <td>
+            <?php if (($v['total_rebate']+$v['total_prize']-$v['total_amount']) > 0): ?>
+                <font color="red"><?php echo number_format(-($v['total_rebate']+$v['total_prize']-$v['total_amount']), 2); ?></font>
+            <?php else: ?>
+                <?php echo number_format(-($v['total_rebate']+$v['total_prize']-$v['total_amount']), 2); ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+    <tr>
+        <td colspan="9" class="no-records">请选择游戏后才能查询！</td>
+    </tr>
+    <?php endif; ?>
+    <tr>
+        <td colspan="5">小计</td>
+        <td><?php echo number_format($totalInfo['amount'], 2); ?></td>
+        <td><?php echo number_format($totalInfo['rebate'], 2); ?></td>
+        <td><?php echo number_format($totalInfo['prize'], 2); ?></td>
+        <td><?php if ($totalInfo['final'] > 0): ?>
+                <font color="red"><?php echo number_format(-$totalInfo['final'], 2); ?></font>
+            <?php else: ?>
+            <?php echo number_format(-$totalInfo['final'], 2); ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+</table>
+</div>
+
+<?php $this->import("foot"); ?>

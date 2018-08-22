@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title><?php echo config::getConfig('site_title'); ?></title>
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <!-- 中间选择游戏部分 -->
+    <div class="GameBoxall">
+        <!-- 系统消息样式 -->
+        <div class="sub_ContBox_NoNav" >
+            <h3>提示</h3>
+            <div class="MsgBoxCont">
+                <div class="MsgBoxMid">
+                    <p class="<?php if ($msg_type > 0): ?>Ok<?php else: ?>Sigh<?php endif; ?> Tipicon"><?php echo $msg_detail; ?></p><!-- 感叹号图标样式用“Sigh”，勾勾图标用“Ok” -->
+                </div>
+                <div class="MsgBoxBtn">
+                    <?php if ($links): ?>
+                        <?php foreach ($links as $link): ?>
+                            <input type="button" value="<?php echo $link['title']; ?>" onclick="
+                            <?php
+                            if($diy){
+                                echo $link['url'];
+                            } else {
+                                echo "window.parent.location.href='" . $link['url'] . "';parent.layer.closeAll();";
+                            }
+                            ?>
+                            " />
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                            <input type="button" onclick="javascript:history.go(-1);parent.layer.closeAll();" value="返回" name="返回" />
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

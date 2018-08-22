@@ -1,0 +1,78 @@
+<?php $this->import("head"); ?>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<script>
+    function checkform(ob) {
+//        var title=$.trim($("input[name=title]").val());
+//        var alert=$.trim($("input[name=alert]").val());
+//        if(title=='' || alert==''){
+//            layer.alert('请输入标题和推送内容');
+//            return false;
+//        }
+        return true;
+    }
+//预设编辑值
+    $(document).ready(function() {
+        var action = "<?php echo ACTION; ?>";
+        if (action == 'editVersion') {
+            $("input[name=id]").val("<?php echo $version['id']; ?>");
+            $("input[name=ios_title]").val("<?php echo $version['ios_title']; ?>");
+            $("input[name=ios_alert]").val("<?php echo $version['ios_alert']; ?>");
+            $("input[name=andr_title]").val("<?php echo $version['andr_title']; ?>");
+            $("input[name=andr_alert]").val("<?php echo $version['andr_alert']; ?>");
+        }
+    });
+</script>
+<div class="list-div form-top" id="addDiv">
+    <form  class="form-inline " role="form" name="form1" id="form1" action="./?c=app&a=<?php echo empty($id)? ACTION:ACTION.'&id='.$id; ?>" method="post" onsubmit="return checkform(this)" enctype ="multipart/form-data">
+        <table class="table table-responsive table-bordered" style="width:60%;">
+            <?php if($type==0):?>
+                <tr>
+                    <td>ios推送标题:</td>
+                    <td><input class="form-control" name="ios_title" value="<?php echo $title['ios']?>" size="30" maxlength="20"/></td>
+                </tr>
+                <tr>
+                    <td>ios推送内容:</td>
+                    <td><input class="form-control" name="ios_alert" value="<?php echo $alert['ios']?>" size="100" maxlength="50"/></td>
+                </tr>
+                <tr>
+                    <td>安卓推送标题:</td>
+                    <td><input class="form-control" name="andr_title" value="<?php echo $title['andr']?>" size="30" maxlength="20"/></td>
+                </tr>
+                <tr>
+                    <td>安卓推送内容:</td>
+                    <td><input class="form-control" name="andr_alert" value="<?php echo $alert['andr']?>" size="100" maxlength="50"/></td>
+                </tr>
+                <?php elseif($type==1):?>
+                <tr>
+                    <td>ios推送标题:</td>
+                    <td><input class="form-control" name="ios_title" value="<?php echo $title['ios']?>" size="30" maxlength="20"/></td>
+                </tr>
+                <tr>
+                    <td>ios推送内容:</td>
+                    <td><input class="form-control" name="ios_alert" value="<?php echo $alert['ios']?>" size="100" maxlength="50"/></td>
+                </tr>
+                <?php elseif($type==2):?>
+                <tr>
+                    <td>安卓推送标题:</td>
+                    <td><input class="form-control" name="andr_title" value="<?php echo $title['andr']?>" size="30" maxlength="20"/></td>
+                </tr>
+                <tr>
+                    <td>安卓推送内容:</td>
+                    <td><input class="form-control" name="andr_alert" value="<?php echo $alert['andr']?>" size="100" maxlength="50"/></td>
+                </tr>
+            <?php endif;?>
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                         <button type="submit" class="btn btn-info  submit " style="width: 60px;" name="submit" value="提交" >提交</button>
+                        <button type="button" class="btn btn-info submit" style="width: 60px;" onclick="javascript:history.go(-1);" value="返回">返回</button>
+
+                        <input type="hidden" name="id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

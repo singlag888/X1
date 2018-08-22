@@ -1,0 +1,165 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+    $(function() {
+        //准备数据
+        var json_lotterys = <?php echo $json_lotterys; ?>;
+        var json_methods = <?php echo $json_methods; ?>;
+        var tmp='';
+
+        var initMethod=function(lottery_id){
+            var content='';
+            if ($('select[name=lottery_id]').val() == '-1') {
+                return;
+            }
+            $.each(json_methods[lottery_id], function (i, v) {
+                content += '<option value="' + v.mg_name + '" style="color:#00f;">' + v.mg_name + '</option>';//玩法组没有method_id
+                $.each(v.childs, function (ii, vv) {
+                    content += '<option value="' + vv.method_id + '">&nbsp;&nbsp;' + vv.cname + '</option>';
+                });
+            });
+            $('select[name=method_id]').append(content);
+        };
+
+         //彩种选择框
+        $.each(json_lotterys, function (i, v) {
+            tmp = '<option value=' + v.lottery_id + '>' + v.name + '</option>';
+            $('select[name=lottery_id]').append(tmp);
+        });
+        $('select[name=lottery_id]').change(function () {
+            $('select[name=method_id]').empty().append('<option value="-1">请选择</option>');
+            initMethod($('select[name=lottery_id]').val());
+        });
+
+        //设置默认值
+        $('select[name=types]').val('<?php echo $types; ?>');
+        $('select[name=group]').val('<?php echo $group; ?>');
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>');
+        initMethod(<?php echo $lottery_id; ?>);
+        $('select[name=method_id]').val('<?php echo $method_id; ?>');
+        $('select[name=rankType]').val('<?php echo $rankType; ?>');
+        $('input[name=limit]').val('<?php echo $limit; ?>');
+        $('#start_time').val('<?php echo $start_time; ?>');
+        $('#end_time').val('<?php echo $end_time; ?>');
+
+    });
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label>游戏时间</label>
+            <input class="input-md form-control Wdate" type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text" name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>游戏名称</label>
+        <select class="input-md form-control" name="lottery_id">
+            <option value="-1">请选择</option>
+        </select>
+        <label>玩法名称</label>
+        <select class="input-md form-control" name="method_id">
+            <option value="-1">请选择</option>
+        </select>
+        <label>查询项</label>
+        <select class="input-md form-control" name="types">
+            <option value="sale">销量</option>
+            <option value="prize">奖金</option>
+            <option value="profit">盈亏</option>
+        </select>
+        <label>分组</label>
+        <select class="input-md form-control" name="group">
+            <option value="issue">奖期</option>
+            <option value="method">玩法</option>
+        </select>
+        <select class="input-md form-control" name="rankType">
+            <option value="1">降序</option>
+            <option value="2">升序</option>
+        </select>
+        <label>排行总数</label>
+        <input class="input-md form-control"  name="limit" size="6" id="limit" value="100"/>
+        <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info " style="width: 60px;" type="submit" name="submit"  value="查询"/>
+    </div>
+     <!--游戏名称<select name="lottery_id"><option value="-1">请选择</option></select>
+     玩法名称<select name="method_id"><option value="-1">请选择</option></select>
+     查询项<select name="types">
+         <option value="sale">销量</option>
+         <option value="prize">奖金</option>
+         <option value="profit">盈亏</option>
+     </select>
+    分组<select name="group">
+         <option value="issue">奖期</option>
+         <option value="method">玩法</option>
+     </select>
+    <select name="rankType">
+        <option value="1">降序</option>
+        <option value="2">升序</option>
+    </select>
+    排行总数<input name="limit" size="6" id="limit" value="100"/>
+    游戏时间<input name="start_time" id="start_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>到
+    <input name="end_time" id="end_time" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+    <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="submit"  style="width:90px" value="查询"/>-->
+</form>
+<h4> </h4>
+<div class="list-div mt15" id="listDiv">
+    <table class="table table-responsive table-bordered   mainList">
+        <thead>
+            <tr>
+                <td>排行</td>
+                <td>奖期</td>
+                <td>资金数目</td>
+            </tr>
+        </thead>
+        <?php if ($issues): ?>
+            <?php 
+            $i=1;
+            foreach ($issues as $k => $v): ?>
+                <tr>
+                    <td>
+                        <?php echo $i; ?>
+                    </td>
+                    <td width="400">
+                        <?php 
+                        if($group == 'issue'){
+                             if($method_id != -1){
+                                 echo $v['method_name'] . ' '.$v['issue'] . ' (有效订单数：' . $v['total_count'] . ')';
+                             }else{
+                                 echo $v['cname'] . ' '.$v['issue'] . ' (有效订单数：' . $v['total_count'] . ')';
+                             }
+                        }
+                        if($group == 'method'){
+                            echo $v['cname'] . ' '. $v['method_name'] . ' (有效订单数：' . $v['total_count'] . ')'; 
+                        }
+
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                            if($types == 'sale'){
+                                echo number_format($v['total_amount'], 2); 
+                            }
+                            if($types == 'prize'){
+                                echo number_format($v['total_prize'], 2); 
+                            }
+                            if($types == 'profit'){
+                                echo number_format($v['total_profit'], 2); 
+                            }
+
+                    ?></td>
+                </tr>
+            <?php
+            $i++;
+            endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="11" class="no-records">没有数据！</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php $this->import("foot"); ?>

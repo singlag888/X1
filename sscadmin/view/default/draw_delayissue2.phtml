@@ -1,0 +1,70 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+    $('#form1').submit(function(){
+        $("#btsubmit").attr("disabled", true);
+        if ($('#end_issue').val() < $('#start_issue').val()) {
+            alert('结束奖期必须大于开始奖期！');
+            $("#btsubmit").attr("disabled", false);
+            return false;
+        }
+        return true;
+    });
+});
+
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=draw&a=<?php echo ACTION; ?>" method="post">
+<table class="mainList">
+<tr><td colspan="4"><font size="3"><b>彩种 <?php echo $lottery['name']; ?>(id=<?php echo $lottery['lottery_id']; ?>) 的奖期延迟记录</font></b></td></tr>
+<tr>
+    <td>登记时间</td>
+    <td>开始奖期</td>
+    <td>结束奖期</td>
+    <td>延时</td>
+</tr>
+    <?php foreach ($issueDelays as $v): ?>
+    <tr>
+        <td><?php echo $v['ts']; ?></td>
+        <td><?php echo $v['start_issue']; ?></td>
+        <td><?php echo $v['end_issue']; ?></td>
+        <td><?php echo $v['delay']; ?>秒</td>
+    </tr>
+    <?php endforeach; ?>
+<tr><td colspan="4"><font size="3"><b>新增一个奖期延时：</font></b></td></tr>
+</table>
+<br/>
+<table class="mainList">
+    <tr>
+    <td class="narrow-label">选择要延后的开始奖期</td>
+    <td><select name="start_issue" id="start_issue">
+        <option value="-1">请选择</option>
+        <?php foreach ($issues as $v): ?>
+        <option value="<?php echo $v['issue']; ?>"><?php echo $v['issue']; ?>期（<?php echo $v['start_sale_time']; ?> - <?php echo $v['end_sale_time']; ?>）</option>
+        <?php endforeach; ?>
+        </select>
+    </td>
+    </tr>
+    <tr>
+    <td class="narrow-label">选择要延后的结束奖期</td>
+    <td><select name="end_issue" id="end_issue">
+        <option value="-1">请选择</option>
+        <?php foreach ($issues as $v): ?>
+        <option value="<?php echo $v['issue']; ?>"><?php echo $v['issue']; ?>期（<?php echo $v['start_sale_time']; ?> - <?php echo $v['end_sale_time']; ?>）</option>
+        <?php endforeach; ?>
+        </select>
+    </td>
+    </tr>
+    <td class="narrow-label">延长时间</td>
+    <td><input type="text" name="delay" size="6" value=""/>秒</td>
+    </tr>
+    <tr>
+        <td colspan="2"><input type="submit" class="submit" name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+            <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/>
+            <input type="hidden" name="sa" value="setDelay" /> <input type="hidden" name="lottery_id" value="<?php echo $lottery['lottery_id']; ?>" />
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

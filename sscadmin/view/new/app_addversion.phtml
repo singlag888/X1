@@ -1,0 +1,134 @@
+<?php $this->import("head"); ?>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+<script>
+    function toogle(th) {
+        let ele = $(th).children(".move");
+        if ($(th).hasClass('on')) {
+            ele.animate({left: "1px"}, 300, function () {
+            });
+            $(th).removeClass("on").addClass("off");
+            $(th).prev('input').val(0);
+        } else {
+            ele.animate({left: '35px'}, 300, function () {
+            });
+            $(th).removeClass("off").addClass("on");
+            $(th).prev('input').val(1);
+        }
+    }
+    function checkform(ob) {
+        var ios_version=$.trim($("input[name=ios_version]").val());
+        var andr_version=$.trim($("input[name=andr_version]").val());
+        if(ios_version=='' && andr_version==''){
+            layer.alert('请输入ios或安卓版本号');
+            return false;
+        }
+        if(ios_version!=''){
+            var ios_describe=$.trim($("input[name=ios_describe]").val());
+            if(ios_describe==''){
+                layer.alert('请填写ios版本描述');
+                return false;
+            }
+        }
+        if(andr_version!=''){
+            var andr_describe=$.trim($("input[name=andr_describe]").val());
+            if(andr_describe==''){
+                layer.alert('请填写安卓版本描述');
+                return false;
+            }
+        }
+        return true;
+    }
+//预设编辑值
+    $(document).ready(function() {
+        var action = "<?php echo ACTION; ?>";
+        if (action == 'editVersion') {
+            $("input[name=id]").val("<?php echo $version['id']; ?>");
+            $("input[name=ios_version]").val("<?php echo $version['ios_version']; ?>");
+            $("input[name=andr_version]").val("<?php echo $version['andr_version']; ?>");
+            $("input[name=ios_describe]").val("<?php echo $version['ios_describe']; ?>");
+            $("input[name=andr_describe]").val("<?php echo $version['andr_describe']; ?>");
+        }
+    });
+</script>
+<div class="list-div form-top" id="addDiv">
+    <form  class="form-inline " role="form" name="form1" id="form1" action="./?c=app&a=<?php echo empty($version['id'])? ACTION:ACTION.'&id='.$version['id']; ?>" method="post" onsubmit="return checkform(this)" enctype ="multipart/form-data">
+        <table class="table table-responsive table-bordered" style="width:60%;">
+            <tr>
+                <td>ios版本号:</td>
+                <td><input class="form-control" name="ios_version" size="30" maxlength="11"/></td>
+            </tr>
+            <tr>
+                <td>ios此版本是否强制更新:</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="ios_update"
+                            <?php if (isset($version['ios_update'])): ?>
+                                value="<?php if ($version['ios_update'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                            <?php else: ?>
+                                value=0
+                            <?php endif; ?> />
+                        <div class="btn_fath clearfix
+                            <?php if (isset($version['ios_update'])): ?>
+                                    <?php if ($version['ios_update'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                            <?php else: ?>
+                                off
+                            <?php endif; ?>
+                            " id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">开</div>
+                            <div class="btnSwitch btn2">关</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>ios版本描述:</td>
+                <td><input class="form-control" name="ios_describe" size="100" maxlength="255"/></td>
+            </tr>
+            <tr>
+                <td>安卓版本号:</td>
+                <td><input class="form-control" name="andr_version" size="30" maxlength="11"/></td>
+            </tr>
+            <tr>
+                <td>安卓此版本是否强制更新:</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="andr_update"
+                            <?php if (isset($version['andr_update'])): ?>
+                                value="<?php if ($version['andr_update'] == 1): ?> 1 <?php else: ?> 0 <?php endif; ?>"
+                            <?php else: ?>
+                                value=0
+                            <?php endif; ?> />
+                        <div class="btn_fath clearfix
+                            <?php if (isset($version['andr_update'])): ?>
+                                    <?php if ($version['andr_update'] == 1): ?> on <?php else: ?> off <?php endif; ?>
+                            <?php else: ?>
+                                off
+                            <?php endif; ?>
+                            " id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">开</div>
+                            <div class="btnSwitch btn2">关</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>安卓版本描述:</td>
+                <td><input class="form-control" name="andr_describe" size="100" maxlength="255"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width:60%;margin:0 auto;text-align: center;">
+                         <button type="submit" class="btn btn-info  submit " style="width: 60px;" name="submit" value="<?php if (ACTION == "addVersion"): ?>提交<?php else: ?>更新<?php endif; ?>" >更新</button>
+                        <button type="button" class="btn btn-info submit" style="width: 60px;" onclick="javascript:history.go(-1);" value="返回">返回</button>
+
+                        <input type="hidden" name="id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

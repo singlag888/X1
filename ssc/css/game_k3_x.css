@@ -1,0 +1,283 @@
+﻿@charset "utf-8";
+
+.NumberBox_k3{width:1190px;height:auto;margin:0 auto;padding:0;border-radius:0;box-shadow:none;position:relative;overflow:inherit;background: rgba(255, 255, 255, 0.88);}
+.NumberBox_k3 .playNav ul li div{display:none !important;}
+.NumberBox_k3 .playNav ul li label:after{border-bottom-color:#d3212a;}
+.NumberBox_k3 .playNav ul li:hover,.NumberBox_k3 .playNav ul li.methodGroup_selected{color:#d3212a;box-shadow:none;background:#fff; line-height:34px;}
+.NumberBox_k3 .playNav ul li label{border-right:0;}
+.NumberBox_k3 .playNav ul li{width:auto;min-width:80px;height:42px;border-right:0;line-height:40px;padding:0 10px;}
+.NumberBox_k3 .subTopBar{height:42px;box-shadow:none;background: #dedede;border-bottom: 1px solid #ccc;}
+.LottLeft{float:left;border-bottom:1px solid #d3212a;}
+.LottLeft hr{width:1px;height:100px;margin:10px auto;background-color:#d3212a;background:linear-gradient(#fff 0%,#d3212a 50%,#fff 100%);float:left;}
+.k3icon{float:left;margin:6px 22px;}
+.PlayGame_way{width:100px;height:30px;color:#5c5c5c;font-weight:normal;float:none;padding:0;}
+.PlayGame_way p{padding-left:24px;background:url(../images/k3PlayGame_icon.png) no-repeat 0 -32px;display:inline;font-size:14px;line-height:30px;}
+.Lottstr{padding:10px 14px;text-align:center;float:left;margin-top: 20px;}
+.question{float:none;margin:0;display:block;line-height:30px;color:#5c5c5c;font-size:14px;}
+.question label{color:#d95e5e;float:none;display:inline-block;margin:8px 4px 0 4px;font-size:12px;}
+.thisIssue{width:190px;padding:10px 14px;margin-top: 20px;}
+.thisIssue .issue,.thisIssue .clock,.thisIssue .lock{color:#5c5c5c;font-size:14px;font-weight:normal;}
+.thisIssue .issue span{min-width:124px;display:inline-block;padding:0 2px;}
+.thisIssue span{display:block;line-height:30px;}
+.thisIssue span label{color:#5c5c5c;font-size:14px;margin-right:6px;}
+.playTimer{width:160px;;padding:10px 14px;}
+.playTimer .Timer{height:32px;font-size:16px;line-height:34px;color:#de4136;float:left;margin:18px 0 0 0;}
+.playTimer .Timer span{width:32px;height:32px;background:url(../images/k3PlayGame_icon.png) no-repeat 0 0;float:left;text-align:center;}
+.playTimer .Timer em{float:left;font-weight:normal;margin:0 4px;font-weight:normal;}
+.openChart{padding:10px 14px;float:left;    margin-top: 20px;}
+#thisIssueSpan{ color:#f34649;}
+.chart{margin-top:20px;display:block;font-szie:14px;background:url(../images/k3PlayGame_icon.png) no-repeat 0 -52px;padding-left:24px;}
+.Lottmain{width:400px;height:250px;float:none;background:url(../images/k3NumALLBg.png) no-repeat center;position:absolute;top:70px;right:15px;}
+.NumberBox_k3 .GameName{width:auto;height:auto;padding:0;line-height:36px;background:none;color:#fff;font-size:16px;text-align:center;}
+.NumberBox5 .GameName label{color:#fff;display:block;}
+.NumberBox_k3 .GameName em{float:none;}
+.GameResult_tit{width:100%;height:40px;line-height:42px;margin:0;position:absolute;left:0;top:36px;}
+.NumberBox_k3 .GameName span{font-size:16px;float:none;color:#ff0;}
+.GameNuberFont{margin:0;height:212px;}
+.GameNumberResult_k3{width:100%;background:none;float:none;padding:0;position:absolute;bottom:34px;left:0;}
+.playControlBox{width:746px;}
+.locate .lotteryNumber li.areaPrefix{width:95px;height:34px;line-height:34px; color:#000;display:block;margin-right:34px;margin-top: 2px;float:left;text-align:center;font-size:14px; font-weight:bold;background-color:#e6e6e6;border-radius:34px;border: 1px solid #cecece;}
+/*.ball_Selected {background: yellow;}*/
+.locate .lotteryNumber li ul.ballList_x li{width: 24%;margin: 0px;display: inline-block;float: left;padding: 5px 0;border-bottom: 1px dashed #ccc;position:relative;text-align: center;}
+.locate .lotteryNumber li ul.ballList_x li span{width: 28px;height: 28px;display:inline-block;text-align: center;line-height: 28px;color: #fff;margin:0;font-size: 18px; border-radius: 50%;cursor: pointer;z-index: 1000;position: relative;background:linear-gradient(#ff0000,#c00000);}
+.locate .lotteryNumber li ul.ballList_x li b {display: inline-block;width: 60px;height: 28px;line-height: 28px;text-align: center;color: red;}
+/*.locate .lotteryNumber li ul.ballList_x li .txtStyle {vertical-align: bottom;width: 70px;height: 23px;text-align: center;margin: 2px;border: 1px solid #999;border-radius: 4px;font-size: 14px;color: #ffa019;background: none;margin-bottom: 2px;}*/
+
+.areaPrefix_2{width: 100%}
+.areaPrefix_2 ul li{width:48%;margin: 5px;}
+.areaPrefix_2 ul li b{display:inline-block;width: 56px;height: 44px;line-height: 44px;text-align: center;color: red;font-size: 13px;float: left;}
+.areaPrefix_2 ul li .txtStyle{width: 70px;height: 28px;text-align: center;margin: 2px;border: 1px solid #999;border-radius: 4px;font-size: 14px;color: #ffa019;background: none;margin-top:10px;}
+
+
+.areaPrefix_2 ul li span{display:inline-block;height: 44px;border-radius: 0;box-shadow: none;transition: none;background: url(../images/dice.png) no-repeat;margin: 0 8px 0px 0;text-shadow: none;float: left;}
+.k3_x span{text-indent: -9999px;display:inline-block;height: 44px;border-radius: 0;box-shadow: none;transition: none;background: url(../images/dice.png) no-repeat;margin: 0 8px 0px 0;text-shadow: none;}
+.areaPrefix_2 ul li span:hover{display:inline-block;height: 44px;border-radius: 0;box-shadow: none;transition: none;background: url(../images/dice.png) no-repeat;margin: 0 8px 0px 0;text-shadow: none;}
+.k3_x span:hover{display:inline-block;height: 44px;border-radius: 0;box-shadow: none;transition: none;background: url(../images/dice.png) no-repeat;margin: 0 8px 10px 0;text-shadow: none;}
+.areaPrefix_2 ul li span.ts11{width: 88px;background-position: 0 -48px;}
+.areaPrefix_2 ul li span.ts22{width: 88px;background-position: 0 -97px;}
+.areaPrefix_2 ul li span.ts33{width: 88px;background-position: 0 -145px;}
+.areaPrefix_2 ul li span.ts44{width: 88px;background-position: 0 -194px;}
+.areaPrefix_2 ul li span.ts55{width: 88px;background-position: 0 -242px;}
+.areaPrefix_2 ul li span.ts66{width: 88px;background-position: 0 -291px;}
+.areaPrefix_2 ul li span.ts11:hover,.areaPrefix_2 ul li span.ts11.x_spanball_selected {width: 88px;background-position: -195px -48px;}
+.areaPrefix_2 ul li span.ts22:hover,.areaPrefix_2 ul li span.ts22.x_spanball_selected {width: 88px;background-position: -195px -97px;}
+.areaPrefix_2 ul li span.ts33:hover,.areaPrefix_2 ul li span.ts33.x_spanball_selected {width: 88px;background-position: -195px -145px;}
+.areaPrefix_2 ul li span.ts44:hover,.areaPrefix_2 ul li span.ts44.x_spanball_selected {width: 88px;background-position: -195px -194px;}
+.areaPrefix_2 ul li span.ts55:hover,.areaPrefix_2 ul li span.ts55.x_spanball_selected {width: 88px;background-position: -195px -242px;}
+.areaPrefix_2 ul li span.ts66:hover,.areaPrefix_2 ul li span.ts66.x_spanball_selected {width: 88px;background-position: -195px -291px;}
+.areaPrefix_2 ul li span.ts1{width: 88px;background-position: 0 -48px;}
+.areaPrefix_2 ul li span.ts2{width: 88px;background-position: 0 -97px;}
+.areaPrefix_2 ul li span.ts3{width: 88px;background-position: 0 -145px;}
+.areaPrefix_2 ul li span.ts4{width: 88px;background-position: 0 -194px;}
+.areaPrefix_2 ul li span.ts5{width: 88px;background-position: 0 -242px;}
+.areaPrefix_2 ul li span.ts6{width: 88px;background-position: 0 -291px;}
+.areaPrefix_2 ul li span.ts1:hover,.areaPrefix_2 ul li span.ts1.x_spanball_selected {width: 88px;background-position: -195px -48px;}
+.areaPrefix_2 ul li span.ts2:hover,.areaPrefix_2 ul li span.ts2.x_spanball_selected {width: 88px;background-position: -195px -97px;}
+.areaPrefix_2 ul li span.ts3:hover,.areaPrefix_2 ul li span.ts3.x_spanball_selected {width: 88px;background-position: -195px -145px;}
+.areaPrefix_2 ul li span.ts4:hover,.areaPrefix_2 ul li span.ts4.x_spanball_selected {width: 88px;background-position: -195px -194px;}
+.areaPrefix_2 ul li span.ts5:hover,.areaPrefix_2 ul li span.ts5.x_spanball_selected {width: 88px;background-position: -195px -242px;}
+.areaPrefix_2 ul li span.ts6:hover,.areaPrefix_2 ul li span.ts6.x_spanball_selected {width: 88px;background-position: -195px -291px;}
+.areaPrefix_2 ul li span.ts111{width: 132px;background-position: 0 -48px;float: left;}
+.areaPrefix_2 ul li span.ts222{width: 132px;background-position: 0 -97px;}
+.areaPrefix_2 ul li span.ts333{width: 132px;background-position: 0 -145px;}
+.areaPrefix_2 ul li span.ts444{width: 132px;background-position: 0 -194px;}
+.areaPrefix_2 ul li span.ts555{width: 132px;background-position: 0 -242px;}
+.areaPrefix_2 ul li span.ts666{width: 132px;background-position: 0 -291px;}
+.areaPrefix_2 ul li span.ts111:hover,.areaPrefix_2 ul li span.ts111.x_spanball_selected {width: 132px;background-position: -195px -48px;}
+.areaPrefix_2 ul li span.ts222:hover,.areaPrefix_2 ul li span.ts222.x_spanball_selected {width: 132px;background-position: -195px -97px;}
+.areaPrefix_2 ul li span.ts333:hover,.areaPrefix_2 ul li span.ts333.x_spanball_selected {width: 132px;background-position: -195px -145px;}
+.areaPrefix_2 ul li span.ts444:hover,.areaPrefix_2 ul li span.ts444.x_spanball_selected {width: 132px;background-position: -195px -194px;}
+.areaPrefix_2 ul li span.ts555:hover,.areaPrefix_2 ul li span.ts555.x_spanball_selected {width: 132px;background-position: -195px -242px;}
+.areaPrefix_2 ul li span.ts666:hover,.areaPrefix_2 ul li span.ts666.x_spanball_selected {width: 132px;background-position: -195px -291px;}
+
+.ballList_k3no_sttx_x{width: 100%;padding-left: 35%; padding-top: 80px;}
+.k3_sthtx{width:100%;}
+.areaPrefix_2 ul li span.ts_sthtx{width: 132px;background-position: 0 -388px;text-indent: -9999px;float: left;}
+.areaPrefix_2 ul li span.ts_sthtx:hover{width: 132px;background-position: no-repeat -195px -388px;}
+.areaPrefix_2 ul li span.ts_slhtx{width: 132px;background-position: 0 -341px;text-indent: -9999px;}
+.areaPrefix_2 ul li span.ts_slhtx:hover{width: 132px;background-position: -195px -341px;}
+
+
+
+
+.locate .lotteryNumber li ul.ballList_k3no_square li{width:44px;height:44px;text-indent:-9999px;background:url(../images/dice.png) no-repeat 0 0;text-shadow:none;border-radius:0;margin:0 8px 10px 0;box-shadow:none;transition:none;}
+.locate .lotteryNumber li ul.ballList_k3no_square li:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ball_Selected{height:44px;border-radius:0;box-shadow:none;transition:none;background:url(../images/dice.png) no-repeat -195px 0;margin:0 8px 10px 0;text-shadow:none;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts1{width:44px;background-position:0 -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts2{width:44px;background-position:0 -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts3{width:44px;background-position:0 -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts4{width:44px;background-position:0 -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts5{width:44px;background-position:0 -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts6{width:44px;background-position:0 -291px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts1:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts1.ball_Selected{width:44px;background-position:-195px -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts2:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts2.ball_Selected{width:44px;background-position:-195px -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts3:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts3.ball_Selected{width:44px;background-position:-195px -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts4:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts4.ball_Selected{width:44px;background-position:-195px -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts5:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts5.ball_Selected{width:44px;background-position:-195px -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts6:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts6.ball_Selected{width:44px;background-position:-195px -291px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts11{width:88px;background-position:0 -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts22{width:88px;background-position:0 -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts33{width:88px;background-position:0 -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts44{width:88px;background-position:0 -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts55{width:88px;background-position:0 -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts66{width:88px;background-position:0 -291px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts11:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts11.ball_Selected{width:88px;background-position:-195px -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts22:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts22.ball_Selected{width:88px;background-position:-195px -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts33:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts33.ball_Selected{width:88px;background-position:-195px -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts44:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts44.ball_Selected{width:88px;background-position:-195px -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts55:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts55.ball_Selected{width:88px;background-position:-195px -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts66:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts66.ball_Selected{width:88px;background-position:-195px -291px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts111{width:132px;background-position:0 -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts222{width:132px;background-position:0 -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts333{width:132px;background-position:0 -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts444{width:132px;background-position:0 -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts555{width:132px;background-position:0 -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts666{width:132px;background-position:0 -291px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts111:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts111.ball_Selected{width:132px;background-position:-195px -48px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts222:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts222.ball_Selected{width:132px;background-position:-195px -97px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts333:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts333.ball_Selected{width:132px;background-position:-195px -145px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts444:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts444.ball_Selected{width:132px;background-position:-195px -194px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts555:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts555.ball_Selected{width:132px;background-position:-195px -242px;}
+.locate .lotteryNumber li ul.ballList_k3no_square li.ts666:hover,.locate .lotteryNumber li ul.ballList_k3no_square li.ts666.ball_Selected{width:132px;background-position:-195px -291px;}
+.ballList_k3no_sttx{margin:0;}
+.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_sthtx{width:150px;height:44px;background:url(../images/dice.png) no-repeat 0 -388px;text-shadow:none;padding:0;text-indent:-9999px;margin:60px auto;}
+.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_sthtx:hover,.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_sthtx.ball_Selected{background:url(../images/dice.png) no-repeat -195px -388px;}
+.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_slhtx{width:150px;height:44px;background:url(../images/dice.png) no-repeat 0 -341px;text-shadow:none;padding:0;text-indent:-9999px;margin:60px auto;}
+.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_slhtx:hover,.chooseNO .locate ul.k3 ul.ballList_k3no_sttx li.ts_slhtx.ball_Selected{background:url(../images/dice.png) no-repeat -195px -341px;}
+
+
+/*.Selectnumber{height: 136px;}*/
+.Selectnumber .bettingPick{height:44px;display: none;}
+.bonusSlide{float: left;height: 30px;line-height: 30px;margin-left:10px;}
+
+
+.multiplePrize{padding:6px 0 0 0px;float: left;margin-left: 6px;display: none;}
+
+.moneySlide .SingleInfo{float: right;margin-left:10px;}
+.moneySlide .SingleInfo .multipleNumber{height:24px;line-height: 24px;margin-top: 8px;display: none;}
+.SingleInfo .txtaddSty{vertical-align: bottom;width:46px;height:26px;text-align:center;margin:0 3px;border:1px solid #999;line-height:20px;border-radius:4px;font-size:14px;color:#ffa019;background:none;}
+
+.betAmount,.totalText em{color:#d95e5e;display:inline-block;margin-right:6px;font-weight:normal;}
+.moneyMode{display:inline-block;margin-right:6px;}
+.moneyMode a{width:34px;height:30px;border:1px solid #999;line-height:30px;border-radius:4px;font-size:14px;display:inline-block;text-align:center;padding:0 4px;margin:1px;color:#666;}
+.moneySlide{width:100%;float:left;margin-right:6px;}
+.displayBtn{float:left;}
+.gameLeftLI{float:left;font-size:14px;line-height:28px;margin-left: 12px;display: none;}
+.gameLeftLI em{color:#d95e5e;display:inline-block;margin-right:6px;font-weight:normal;}
+.selectCodeBtn{width:62px;height:30px;background:linear-gradient(#fdbd4a,#cc3947);box-shadow:0 2px 2px #D21E2F;float:right;margin:0 4px;text-align:center;font-size:14px;line-height:30px;color:#fff;border-radius:4px;cursor:pointer !important;}
+.clearProjectBtn{width: 48px;height: 34px;background-color: #e6e6e6;border: 1px solid #d9d9d9;margin: 0 4px;text-align: center;font-size: 16px;line-height: 34px;color: #999;border-radius: 4px;box-shadow: 0 2px 2px #a0a0a0;}
+.clearProjectBtn:hover{color:#fff;}
+.mutiChoose{overflow:hidden;margin:5px auto 0 auto;padding:0 8px;display: none;}
+.totalcont{}
+.totalText{float:left;display: none;}
+.betAmount,.totalText em{color:#d95e5e;display:inline-block;margin-right:6px;font-weight:normal;}
+.totalBtn{float:right;}
+.totalBtn .Chasing_ball{display:none;width:68px;height:30px;float:left;margin-right:4px;text-align:center;font-size:16px;line-height:30px;color:#fff;border-radius:4px;}
+.totalBtn .CantapCodeBtn{width: 96px;
+    height: 34px;
+    margin: 0 auto;text-align: center;line-height: 34px; border: none;background: linear-gradient(#0fbd0f, #0c9907);color: #fff; border-radius: 4px;font-size: 18px;float: left;margin-left: 4px;}
+.selectCodeBtn:hover,.clearProjectBtn:hover{background: linear-gradient(#ffb227,#D21E2F);box-shadow:0 0 0 #000;margin-top: 2px;}
+.GameNumber{width:440px;margin:250px 0 0 0;}
+.TodayReward{margin:0;padding-right:10px;background:none;}
+.TodayReward .nav{border-bottom:2px solid #de4136;}
+.TodayReward .lotteryTodayMain{min-height:192px;height:192px;padding:0;border-radius:0 0 6px 6px;}
+.TodayReward ul.navul{background:none;padding-left:18px;}
+.lotteryTodayBox{margin-top:0;}
+.lotteryTodayContent{height:100%;overflow:hidden;overflow-y:auto;}
+.TodayReward ul.navul li{width:108px;margin-right:10px;}
+.todayDrawBtn{background-color:none;}
+.TodayReward ul.navul li a{border-radius:6px 6px 0 0;background:none;color:#666;}
+.TodayReward ul.navul li a:hover,.TodayReward ul.navul li a.cur{background-color:#d33c31;transition: all .1s linear;color:#fff;}
+.TodayReward ul.navul li a.cur:after{content:'\20';width:0;height:0;border-top:8px solid #d33c31;border-left:6px solid transparent;border-right:6px solid transparent;display:block;position:absolute;left:50%;bottom:-8px;margin-left:-8px;}
+.todayDrawBtn:after{content:'';border:0;}
+.TodayReward ul.navul li a.cur:hover:after{border-top:8px solid #d33c31;}
+.lotteryTodayContent ul,.prizeScrollContent ul{border-left: 3px solid #e9e9e9;}
+.GameNuberFont span{width:54px;height:54px;margin:0 18px;background:none;}
+
+.NumdiceMove{height:100%;padding-top:64px;background:url(../images/diceGIF3.gif) no-repeat center;position:relative;}/* �����ȴ����� */
+
+.GameNuberFont .NumdiceMove.stop span.pendingNum_k31{width:100%;height:100%;background:url(../images/diceGIF3.gif) no-repeat center;margin:0;position:absolute;left:0;top:0;z-index:4;}/* �������ڿ��� */
+.GameNuberFont .NumdiceMove.stop span.pendingNum_k32{width:100%;height:100%;background:url(../images/diceGIF2.gif) no-repeat center;margin:0;position:absolute;left:0;top:0;z-index:3;}/* �������ڿ��� */
+.GameNuberFont .NumdiceMove.stop span.pendingNum_k33{width:100%;height:100%;background:url(../images/diceGIF1.gif) no-repeat center;margin:0;position:absolute;left:0;top:0;z-index:2;}/* �������ڿ��� */
+
+.GameNuberFont .NumdiceMove.stop span{width:54px;height:54px;display:inline-block;margin-top:0px;border:0;}
+
+.NumdiceMove.stop{background:none;}/* ֹͣ�������� */
+
+.k3_1{position:absolute;left:74px;top:60px;z-index:4;}
+.k3_2{position:absolute;left:156px;top:60px;z-index:3;}
+.k3_3{position:absolute;left:240px;top:60px;z-index:2;}
+
+.GameNuberFont span.pendingNum_k3_1{background:url(../images/diceOpen.png) no-repeat 0 0;}
+.GameNuberFont span.pendingNum_k3_2{background:url(../images/diceOpen.png) no-repeat 0 -54px;}
+.GameNuberFont span.pendingNum_k3_3{background:url(../images/diceOpen.png) no-repeat 0 -108px;}
+.GameNuberFont span.pendingNum_k3_4{background:url(../images/diceOpen.png) no-repeat 0 -162px;}
+.GameNuberFont span.pendingNum_k3_5{background:url(../images/diceOpen.png) no-repeat 0 -216px;}
+.GameNuberFont span.pendingNum_k3_6{background:url(../images/diceOpen.png) no-repeat 0 -270px;}
+
+.locate .lotteryNumber li ul.prizeList{ width:530px; float:left;}
+
+.locate .lotteryNumber li ul.prizeList li{width:56px;height:44px;display:block; text-align:center;line-height:36px;color:#333;float:left;margin:0 3px; font-size:11px;z-index:1000;position:relative;}
+.ballList_k3no_square_x{width:80%;margin: auto;}
+.locate > ul > li.areaPrefix_3{width: 580px;height: 44px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x{width:100%;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.k3m_x{float: left;background: url(../images/dice.png) no-repeat;height:44px;margin-right: 8px;text-indent: -999px;overflow: hidden;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts1,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts1.k3m_x{width: 44px;background-position: 0 -48px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts2,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts2.k3m_x{width: 44px;background-position: 0 -97px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts3,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts3.k3m_x{width: 44px;background-position: 0 -145px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts4,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts4.k3m_x{width: 44px;background-position: 0 -194px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts5,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts5.k3m_x{width: 44px;background-position: 0 -242px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts6,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts6.k3m_x{width: 44px;background-position: 0 -291px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts1:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts1.ball_Selected{width: 44px;background-position: -195px -48px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts2:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts2.ball_Selected{width: 44px;background-position: -195px -97px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts3:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts3.ball_Selected{width: 44px;background-position: -195px -145px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts4:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts4.ball_Selected{width: 44px;background-position: -195px -194px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts5:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts5.ball_Selected{width: 44px;background-position: -195px -242px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts6:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts6.ball_Selected{width: 44px;background-position: -195px -291px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts1.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts1.k3m_x.ball_Selected{width: 44px;background-position: -195px -48px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts2.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts2.k3m_x.ball_Selected{width: 44px;background-position: -195px -97px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts3.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts3.k3m_x.ball_Selected{width: 44px;background-position: -195px -145px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts4.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts4.k3m_x.ball_Selected{width: 44px;background-position: -195px -194px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts5.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts5.k3m_x.ball_Selected{width: 44px;background-position: -195px -242px;}
+.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts6.k3m_x:hover,.locate > ul > li.areaPrefix_2 .ballList_k3no_square_x li.ts6.k3m_x.ball_Selected{width: 44px;background-position: -195px -291px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts11{width: 88px;background-position: 0 -48px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts22{width: 88px;background-position: 0 -97px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts33{width: 88px;background-position: 0 -145px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts44{width: 88px;background-position: 0 -194px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts55{width: 88px;background-position: 0 -242px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts66{width: 88px;background-position: 0 -291px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts11:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts11.ball_Selected{width: 88px;background-position: -195px -48px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts22:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts22.ball_Selected{width: 88px;background-position: -195px -97px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts33:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts33.ball_Selected{width: 88px;background-position: -195px -145px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts44:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts44.ball_Selected{width: 88px;background-position: -195px -194px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts55:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts55.ball_Selected{width: 88px;background-position: -195px -242px;}
+.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts66:hover,.locate > ul > li.areaPrefix_3 .ballList_k3no_square_x li.ts66.ball_Selected{width: 88px;background-position: -195px -291px;}
+#field_1
+.chooseNO .locate ul.k3 li.areaPrefix_2 ul.ballList_k3no_square_x{width:80%;height:400px;border:1px solid red;}
+.chooseNO .locate ul.k3 li.areaPrefix_2 ul.ballList_k3no_square_x li.k3_x{float:left;width: 48%;}
+#multiple{vertical-align: bottom;
+    width: 70px;
+    height: 23px;
+    text-align: center;
+    margin: 2px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #ffa019;
+    background: none;
+    margin-bottom: 2px;}
+.areaPrefix_2 ul.ballList_x li .txtStyle {
+    width: 70px;
+    height: 23px;
+    text-align: center;
+    margin: 2px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #ffa019;
+    background: none;
+}
+.gameMoney{padding:18px 0;}
+.ballList_x .ball_Selected{background: #FFF8B6;}
+#quickSelect{float:right;margin-right: 20px;margin-bottom: 10px;}
+.ballList_k3no_square_x .ball_Selected{background: #FFF8B6;}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance: none !important;}

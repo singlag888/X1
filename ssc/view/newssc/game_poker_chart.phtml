@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta content="no-cache" http-equiv="Pragma">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css"/>
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <link href="<?php echo $imgCdnUrl ?>/css/chart.css" rel="stylesheet" type="text/css"/>
+    <script language="JavaScript">
+        window.onload = function () {
+            //显示遗漏
+            $("#no_miss").click(function () {
+                var checked = $(this).attr("checked");
+                if (checked == 'checked') {
+                    $('.miss').css('display', 'none');
+                } else {
+                    $('.miss').css('display', 'block');
+                }
+            });
+        };
+    </script>
+    <style>
+        esun\: * {
+            behavior: url(#default#VML)
+        }
+
+        .num {
+            position: relative;
+            /*index-x: 8;*/
+            background: #DA8028;
+            width: 14px;
+            height: 14px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border: 1px solid #fff;
+            color: #fff;
+            display: block;
+            top: -30px;
+            left: 13px;
+            line-height: 14px;
+            text-align: center;
+        }
+
+        .hrc_list, table {
+            margin: 0px auto;
+            display: block
+        }
+
+        #rightcon_k3 {
+            display: block;
+            width: 100%;
+        }
+
+        #rightcon_k3 .history .history_code {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div id="rightcon_k3">
+    <div style="display:none;" class="win_bot" id="msgbox">
+        <h5 id="msgtitle"></h5>
+        <div class="clear"></div>
+        <div class="wb_con">
+            <p id="msgcontent"></p>
+        </div>
+        <div class="clear"></div>
+        <a id="msgpre" onClick="prenotice();" href="#" class="wb_p">上一条</a><a
+                onClick="nextnotice();" href="#" class="wb_n">下一条</a></div>
+    <div class="rc_con history">
+        <div class="rc_con_lt"></div>
+        <div class="rc_con_rt"></div>
+        <div class="rc_con_lb"></div>
+        <div class="rc_con_rb"></div>
+        <div class="rc_con_to">
+            <div class="rc_con_ti">
+                <div class="history_code">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="tm">
+                        <tbody>
+                        <tr>
+                            <td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>
+                                    <font><?php echo $lottery['cname']; ?>：</font> 基本走势 </strong></td>
+                            <td align="right">
+                                <div class="Tabfixed">
+                                    <form method="POST">
+                                            <span>
+                                            <label for="no_miss">
+                                                <input type="checkbox" id="no_miss" value="checkbox" name="checkbox"/>
+                                                不带遗漏</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            </span>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="hrc_list">
+                    <div class="hrl_list">
+                        <table border="0" cellspacing="1" cellpadding="0" id="chartsTable">
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="layer"></div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/template-web.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/ext.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/game_poker_chart.js"></script>
+<!--定义模板-->
+<script type="text/html" id="head_poker">
+    <tr class="th">
+        <td rowspan="2">
+            <div style="width:auto;">期号</div>
+        </td>
+        <td colspan="6" rowspan="2">开奖号码</td>
+        <td colspan="13">号码分布</td>
+        <td colspan="6">号码形态走势</td>
+        <td colspan="4">花色走势</td>
+    </tr>
+    <tr class="th">
+        <td class="wdh">A</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">J</td>
+        <td class="wdh">Q</td>
+        <td class="wdh">K</td>
+
+        <td width="45" class="wdh">散牌</td>
+        <td width="45" class="wdh">同花</td>
+        <td width="45" class="wdh">顺子</td>
+        <td width="45" class="wdh">同花顺</td>
+        <td width="45" class="wdh">豹子</td>
+        <td width="45" class="wdh">对子</td>
+
+        <td width="45" class="wdh">红桃</td>
+        <td width="45" class="wdh">梅花</td>
+        <td width="45" class="wdh">黑桃</td>
+        <td width="45" class="wdh">方块</td>
+    </tr>
+</script>
+<script type="text/html" id="content_poker">
+    {{each list value}}
+    <tr>
+        <!-- 奖期 -->
+        <td class="issue">
+            <div>{{value.issue}}</div>
+        </td>
+
+        <!-- 奖号 -->
+        {{each value.code codeItem}}
+        <td align="center">
+            <div class="pork_wth">
+                <span class="poker_kj_num {{codeItem.suitClass}}"><i></i></span>
+            </div>
+        </td>
+        <td align="center">
+            <div class="pork_wth" style="{{codeItem.style}}">{{codeItem.point}}</div>
+        </td>
+        {{/each}}
+
+        <!-- 号码分布 -->
+        {{each points point}}
+        <% if(value.codeList.indexOf(point) > -1){ %>
+        <td align="center" class="charball">
+            <div class="tenthousand">
+                <div class="ball01">{{point}}</div>
+                <% if(value.codeCount['c'+point] > 1){ %>
+                <em class="num">{{value.codeCount['c'+point]}}</em>
+                <% } %>
+            </div>
+        </td>
+        <% }else{ %>
+        <td align="center" class="wdh">
+            <div class="tenthousand">
+                <div class="miss"></div>
+            </div>
+        </td>
+        <% } %>
+        {{/each}}
+
+        <!-- 号码形态走势 -->
+        {{each formList form}}
+        <% if(value.form.name == form.name){ %>
+
+        <td align="center" class="charball">
+            <div class="tenthousand_pork" style="background-color: #CCACDF!important;">
+                <div class="tenthousand_pork1" style="{{form.style}}">{{form.name}}
+                </div>
+            </div>
+        </td>
+
+        <% }else{ %>
+
+        <td align="center" class="wdh">
+            <div class="tenthousand_pork" style="background-color: #CCACDF!important;">
+                <div class="miss"></div>
+            </div>
+        </td>
+
+        <% } %>
+
+        {{/each}}
+
+        <!-- 花色走势 -->
+        {{each suitList suit}}
+
+        <% if(value.suitCount[suit] > 0){ %>
+        <td align="center" class="charball">
+            <div class="tenthousand_pork" style="background-color: #ACDFB2!important;">
+                <div class="pork_form"><span class="poker_kj_num {{suitClass[suit]}}"><i></i></span></div>
+                <% if(value.suitCount[suit] > 1){ %>
+                <em class="num">{{value.suitCount[suit]}}</em>
+                <% } %>
+            </div>
+        </td>
+        <% }else{ %>
+
+        <td align="center" class="wdh">
+            <div class="tenthousand_pork" style="background-color: #ACDFB2!important;">
+                <div class="miss"></div>
+            </div>
+        </td>
+
+        <% } %>
+
+        {{/each}}
+        <!--花色走势end-->
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/html" id="foot_poker">
+    <tr class="th">
+        <td rowspan="2">
+            <div style="width:200px; margin: 0 auto; text-align: center;">期号</div>
+        </td>
+        <td colspan="6" rowspan="2">开奖号码</td>
+        <td class="wdh">A</td>
+        <td class="wdh">2</td>
+        <td class="wdh">3</td>
+        <td class="wdh">4</td>
+        <td class="wdh">5</td>
+        <td class="wdh">6</td>
+        <td class="wdh">7</td>
+        <td class="wdh">8</td>
+        <td class="wdh">9</td>
+        <td class="wdh">10</td>
+        <td class="wdh">J</td>
+        <td class="wdh">Q</td>
+        <td class="wdh">K</td>
+
+        <td width="45" class="wdh">散牌</td>
+        <td width="45" class="wdh">同花</td>
+        <td width="45" class="wdh">顺子</td>
+        <td width="45" class="wdh">同花顺</td>
+        <td width="45" class="wdh">豹子</td>
+        <td width="45" class="wdh">对子</td>
+
+        <td width="45" class="wdh">红桃</td>
+        <td width="45" class="wdh">梅花</td>
+        <td width="45" class="wdh">黑桃</td>
+        <td width="45" class="wdh">方块</td>
+
+    </tr>
+    <tr class="th">
+        <td colspan="13" rowspan="2">号码分布</td>
+        <td colspan="6">号码形态走势</td>
+        <td colspan="4">花色走势</td>
+    </tr>
+</script>
+
+<script type="text/javascript">
+    $("#issueNum").change(function (i) {
+        window.location = "?c=game&a=chart&lottery_id=<?php echo $lottery['lottery_id']; ?>&issueNum=" + $(this).val();
+    });
+</script>
+</body>
+</html>

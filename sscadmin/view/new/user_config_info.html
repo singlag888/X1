@@ -1,0 +1,360 @@
+<head>
+  <link rel="stylesheet" href="/view/new/layui/css/layui.css" />
+  <link rel="stylesheet" href="/view/new/css/user-management-tools.css" />
+  <script type="text/javascript" src="/view/new/layui/layui.js"></script>
+  <script type="text/javascript" src="/view/new/js/jquery-3.2.1.min.js"></script>
+</head>
+<style>
+body {
+    width: 1040px;
+    height: 720px;
+    overflow-y: hidden;
+}
+</style>
+<div id="user_config_info" class="custom-defind-common">
+	
+	<div id="user_config_info_lc" class="layui-tab layui-tab-card">
+	  <ul class="layui-tab-title">
+	    <li class="layui-this">基本资料</li>
+	    <li>银行资料</li>
+	    <li>设置奖金组</li>
+	    <li>用户统计</li>
+	    <li>资金流向</li>
+	    <li>注单列表</li>
+	  </ul>
+	  <div class="layui-tab-content" style="height: 100px;">
+	    <div class="layui-tab-item layui-show">
+		  <div id="config_info_baseinfo" >
+		    <div id="tab1_user_nickname" >
+		      <span>用户名：</span>
+		      <input type="text" id="info_baseinfo_nickname" name="" disabled="disabled" class="layui-input layui-input-disbaled layui-disabled user-config-tab1" />
+		    </div>
+		    <div id="tab1_user_poassword" >
+		      <span>登录密码：</span>
+		      <input type="password" id="info_baseinfo_password" name="" class="layui-input user-config-tab1" />
+		    </div>
+		    <div id="tab1_user_phoneno" >
+		      <span>手机号码：</span>
+		      <input type="text" id="info_baseinfo_phoneno" name="" class="layui-input user-config-tab1" />
+		    </div>
+		    <div id="tab1_user_email" >
+		      <span>邮   箱：</span>
+		      <input type="text" id="info_baseinfo_email" name="" class="layui-input user-config-tab1" />
+		    </div>
+		    <div id="tab1_user_isproxy" >
+		      <span>是否代理：</span>
+		      <input type="text" id="info_baseinfo_isproxy" disabled="disabled" name="" class="layui-input layui-input-disbaled layui-disabled user-config-tab1" />
+		    </div>
+		    <div id="tab1_user_status" >
+		      <span>用户状态：</span>
+		      <select id="info_baseinfo_status" name="" class=" user-config-tab1 " >
+		      	<option value="0">启用</option>
+		      	<option value="1">禁用</option>
+		      </select>
+		    </div>
+		    <div id="tab1_user_remark" >
+	          <span>备注：</span>
+	          <input type="text" id="info_baseinfo_remark" name="" class="layui-input user-config-tab1" />
+	        </div>
+	        <div id="user_config_save1" class="info_baseinfo_save info_baseinfo_save1"><span>保存设置</span></div>
+	        <h4>真实姓名</h4>
+		  </div>
+		  <div id="config_info_nameinfo" >
+		    <div id="tab1_user_realname" >
+		      <span>真实姓名：</span>
+		      <input type="text" id="info_baseinfo_realname" name="" class="layui-input user-config-tab1" />
+		    </div>
+		    <div id="user_config_save2" class="info_baseinfo_save info_baseinfo_save2"><span>保存设置</span></div>
+		    <h4>资金密码</h4>
+		  </div>
+		  
+		  <div id="config_info_moneyinfo" >
+		    <div id="tab1_user_moneypass" >
+		      <span>资金密码：</span>
+		      <input type="password" id="info_baseinfo_moneypass" name="" class="layui-input user-config-tab1" />
+		    </div>
+		    <div id="user_config_save3" class="info_baseinfo_save info_baseinfo_save2"><span>保存设置</span></div>
+		    <h4>用户层级</h4>
+		  </div>
+		  <div id="config_info_levelinfo" >
+		    <div id="tab1_user_userlevel" >
+		      <span>用户层级：</span>
+		      <select id="info_baseinfo__userlive" name="" >
+			    <option value="1">默认层级</option>
+			    <option value="2">小户</option>
+			    <option value="3">大户</option>
+			    <option value="4">新人</option>
+  	          </select>
+		    </div>
+		    <div id="user_config_save4" class="info_baseinfo_save info_baseinfo_save2"><span>保存设置</span></div>
+		  </div>
+		</div>
+	    
+	    <div class="layui-tab-item">
+	     <div id="table_display_control">
+	      <table id="user_config_bank_table">
+	        <thead>
+	          <tr>
+	            <th>真实姓名</th>
+	            <th>银行名称</th>
+	            <th>户名</th>
+	            <th>银行账号</th>
+	            <th>开户行</th>
+	            <th>操作</th>
+	          </tr>
+	        </thead>
+	        <tbody>
+	          <tr>
+	            <td>小明</td>
+	            <td>华夏银行</td>
+	            <td>小明</td>
+	            <td>6212264000000000001</td>
+	            <td>XXXXX支行</td>
+	            <td>
+	              <span onclick="changeBankInfo()">编辑</span>
+	              <span>删除</span>
+	            </td>
+	          </tr>
+	        </tbody>
+	      </table>
+	     </div>
+	     <div id="div_display_control" style="display: none;">
+	      <ul>
+	        <li>
+	          <div>
+		        <span >真实姓名：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled" value="姓名"/>
+		      </div>
+	        </li>
+	        <li>
+	          <div>
+		        <span >银行名称：</span>
+		        <input type="text" name="" class="user-config-tab1"/>
+		      </div>
+	        </li>
+	        <li>
+	          <div>
+		        <span >开户姓名：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled" value="户名"/>
+		      </div>
+	        </li>
+	        <li>
+	          <div>
+		        <span >银行账号：</span>
+		        <input type="text" name="" class="user-config-tab1"/>
+		      </div>
+	        </li>
+	        <li>
+	          <div>
+		        <span >开户支行：</span>
+		        <input type="text" name="" class="user-config-tab1"/>
+		      </div>
+	        </li>
+	      </ul>
+	      
+	      <hr />
+	      <div id="bank_config_save" onclick="bankConfigSave()"><span>保存设置</span></div>
+	     </div>
+	    </div>
+	    
+	    <div class="layui-tab-item">
+	      <div>
+	        <div id="user_proze_group" >
+		      <span>UserName 的奖金组：</span>
+		      <select name="" class=" user-config-tab1 " >
+		      	<option value="0">1990/9.5</option>
+		      	<option value="1">1988/9.4</option>
+		      	<option value="2">1986/9.3</option>
+		      	<option value="3">1984/9.2</option>
+		      	<option value="4">1982/9.1</option>
+		      	<option value="5">1981/9.0</option>
+		      </select>
+		    </div>
+		    <div id="prize_group_save"><span>保存设置</span></div>
+	      </div>
+	    </div>
+	    
+	    <div class="layui-tab-item">
+	      <ul id="user_statistics">
+			<li>
+			  <div>
+		        <span >账户余额：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li>
+			  <div>
+		        <span >重置总额：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li>
+			  <div>
+		        <span >提现次数：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li>
+			  <div>
+		        <span >登陆次数：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li>
+			  <div>
+		        <span >优惠总额：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li>
+			  <div>
+		        <span >提款总额：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+			<li style="margin-left: -32px;">
+			  <div>
+		        <span >最后登录时间：</span>
+		        <input type="text" name="" disabled="disabled" class="user-config-tab1 layui-input-disbaled layui-disabled"/>
+		      </div>
+			</li>
+	      </ul>
+	      <hr>
+	    </div>
+	    
+	    <div class="layui-tab-item">
+	      <div id="user_funds_div"><table id="user_funds_table" lay-filter="user_funds_table"></table></div>
+	    </div>
+	    
+	    <div class="layui-tab-item">
+	      <div id="user_info_specise">
+	        <span>彩种：</span>
+		      <select id="user_specise" name="specise" class="user-condition-input">
+		        <option value="0">全部</option>
+		        <option value="1">双色球</option>
+		        <option value="2">时时彩</option>
+		        <option value="3">跑得快</option>
+		      </select>
+	      </div>
+	      <div id="user_bet_time_start">
+            <p><span>投注时间：</span></p>
+            <input type="text" id="bet_time_start" name="bettingDateStart" class="user-condition-input" >
+            <img alt="" src="/view/new/img/date.png">
+          </div>
+          <div id="user_bet_time_end">
+    	    <p><span>至：</span></p>
+            <input type="text" id="bet_time_end" name="bettingDateEnd" class="user-condition-input" > 
+            <img alt="" src="/view/new/img/date.png"> 	    
+          </div>
+	      <div id="user_stat_bet_issue">
+	        <span>期号：</span>
+	        <input type="text" id="user_bet_issue" placeholder="请输入期号" class="user-condition-input"/>
+	      </div>
+	      <div id="user_bet_info_status">
+	        <span>状态：</span>
+		      <select id="user_bet_status" name="betStatus" class="user-condition-input">
+		        <option value="0">全部</option>
+		        <option value="1">已中奖</option>
+		        <option value="2">未中奖</option>
+		      </select>
+	      </div>
+	      <div id="user_bet_inquire" class="layui-btn custom-defind-common dc-user-tab1-button">
+		    <span class="layui-btn-radius" >查询</span>
+		  </div>
+		  <div id="user_bet_reset" class="layui-btn custom-defind-common dc-user-tab1-button" onclick="resetBetCond()">
+		    <span class="layui-btn-radius" >重置</span>
+		  </div>
+	      <div id="user_order_list_div"><table id="user_order_list" lay-filter="user_order_list"></table></div>
+	    
+	    </div>
+	    
+	  </div>
+	</div>
+
+</div>
+
+
+
+<script>
+layui.use('element', function(){
+  var element = layui.element;
+  element.render({
+  });
+});
+layui.use('laydate', function(){
+	var laydate = layui.laydate;
+	laydate.render({
+	  elem: '#bet_time_start'
+	});
+	laydate.render({
+	  elem: '#bet_time_end'
+	});
+});
+layui.use('table', function(){
+	  var table = layui.table;
+	  table.render({
+	    elem: '#user_funds_table',
+	    height: 460,
+	    width: 805,
+	    url: '', //数据接口
+	    page: true, //开启分页
+	    limit: 10,
+	    cols: [[ //表头
+	      {field: 'sendTime', title: '发起时间', width:110},
+	      {field: 'finishTime', title: '完成时间', width:110},
+	      {field: 'sendType', title: '流向类型', width:110},
+	      {field: 'amount', title: '金额', width: 110},
+	      {field: 'beforeAmount', title: '操作前金额', width: 120},
+	      {field: 'afterAmount', title: '操作后金额', width: 120},
+	      {field: 'remark', title: '备注', width: 120}
+	    ]]
+	  });
+});
+layui.use('table', function(){
+	  var table = layui.table;
+	  table.render({
+	    elem: '#user_order_list',
+	    height: 460,
+	    width: 930,
+	    url: '', //数据接口
+	    page: true, //开启分页
+	    limit: 10,
+	    cols: [[ //表头
+	      {field: 'species', title: '彩种', width:80, align:'center'},
+	      {field: 'issue', title: '期号', width:80, align:'center'},
+	      {field: 'playMethod', title: '玩法', width:80, align:'center'},
+	      {field: 'betAmount', title: '下注总额', width: 110, align:'center'},
+	      {field: 'winAmount', title: '中奖金额', width: 110, align:'center'},
+	      {field: 'winOrlose', title: '实际输赢', width: 110, align:'center'},
+	      {field: 'betTimes', title: '投注时间', width: 135, align:'center'},
+	      {field: 'awardTimes', title: '派奖时间', width: 135, align:'center'},
+	      {field: 'status', title: '状态', width: 80, align:'center'}
+	    ]]
+	  });
+});
+function changeBankInfo() {
+	var tableDiv = $("#table_display_control");
+	var infoDiv = $("#div_display_control");
+	setTimeout(function(){
+		tableDiv.attr("style", "display: none;");
+		infoDiv.attr("style", "display: block;");
+	}, 500);
+}
+function bankConfigSave() {
+	var tableDiv = $("#table_display_control");
+	var infoDiv = $("#div_display_control");
+	// .....
+	
+	setTimeout(function(){
+		tableDiv.attr("style", "display: block;");
+		infoDiv.attr("style", "display: none;");
+	}, 500);
+}
+function resetBetCond() {
+	$("#user_specise").val(0);
+	$("#bet_time_start").val("");
+	$("#bet_time_end").val("");
+	$("#user_bet_issue").val("");
+	$("#user_bet_status").val(0);
+}
+</script>

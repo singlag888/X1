@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.frmSubmit.submit();">
+<form id="frmSubmit" name="frmSubmit" action="<?php echo $parameter['pay_url'];?>" method="post">
+    <input name="out_trade_no" type="hidden" value="<?php echo $parameter['out_trade_no'];?>"></input>
+    <input name="version" type="hidden" value="<?php echo $parameter['version'];?>"></input>
+    <input name="merchant_no" type="hidden" value="<?php echo $parameter['merchant_no'];?>"></input>
+    <input name="payment_type" type="hidden" value="<?php echo $parameter['payment_type'];?>"></input>
+    <input name="payment_bank" type="hidden" value="<?php echo $parameter['payment_bank']?>"></input>
+    <input name="notify_url" type="hidden" value="<?php echo $parameter['notify_url'];?>"></input>
+    <input name="page_url" type="hidden" value="<?php echo $parameter['page_url'];?>"></input>
+    <input name="total_fee" type="hidden" value="<?php echo $parameter['total_fee'];?>"></input>
+    <input name="trade_time" type="hidden" value="<?php echo $parameter['trade_time'];?>"></input>
+    <input name="user_account" type="hidden" value="<?php echo $parameter['user_account'];?>"></input>
+    <input name="body" type="hidden" value="<?php echo $parameter['body'];?>"></input>
+    <input name="channel" type="hidden" value="<?php echo $parameter['channel'];?>"></input>
+    <input name="sign" type="hidden" value="<?php echo $parameter['sign'];?>"></input>
+</form>
+
+</body>
+</html>

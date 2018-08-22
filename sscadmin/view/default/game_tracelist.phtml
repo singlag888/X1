@@ -1,0 +1,195 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    #start_time,#end_time{width: 160px;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+$(function(){
+    //准备数据
+    var json_lotterys = <?php echo $json_lotterys; ?>;
+    var tmp = '';
+
+
+    $.each(json_lotterys, function(i,v){
+        tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+        $('select[name=lottery_id]').append(tmp);
+    });
+    $('select[name=lottery_id]').change(function(){
+        $('select[name=method_id]').empty().append('<option value="0">请选择</option>');
+        if ($('select[name=lottery_id]').val() == '0') {
+            return;
+        }
+
+        getIssue();
+    });
+    $('select[name=dates]').change(function(){
+        if ($('select[name=dates]').val() == '') {
+            return;
+        }
+        getIssue();
+    });
+
+    //动态读取彩种奖期
+    function getIssue()
+    {
+        if ($('select[name=lottery_id]').val() == 0) {
+            return;
+        }
+        $.post(
+            '?c=game&a=getIssue',
+            {'lottery_id':$('select[name=lottery_id]').val(), 'start_time':$('select[name=dates]').val()},
+            function(json_data) {
+                $('select[name=issue]').empty().append('<option value="">请选择</option>');
+                $.each(json_data, function(i,v){
+                    tmp = '<option value="' + v.issue + '">' + v.issue + '（' + v.code + '）'  + ' (' + v.start_sale_time + '~)</option>';
+                    $('select[name=issue]').append(tmp);
+                });
+                //预选中奖期
+                $('select[name=issue]').val('<?php echo $issue; ?>');
+        }, 'json');
+    }
+
+
+    //设置默认值
+    $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+    $('select[name=is_test]').val('<?php echo $is_test; ?>');
+    $('select[name=method_id]').val('<?php echo $method_id; ?>');
+    $('select[name=top_username]').val('<?php echo $top_username; ?>');
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+    $('#start_time').val('<?php echo $start_time; ?>');
+    $('#end_time').val('<?php echo $end_time; ?>');
+    $('select[name=modes]').val('<?php echo $modes; ?>');
+    if ($('input[name=username]').val() == '') {
+        $('input[name=name_style][value=1]').attr('checked', true).click();
+    }
+    else {
+        $('input[name=name_style][value=2]').attr('checked', true).click();
+    }
+});
+function unlock(wrapId){
+    $.post(
+            '?c=game&a=unlockTrace',
+            {'wrap_id':wrapId},
+            function(response) {
+                if (response.errno == 0) {
+                    alert('解锁成功');
+                    window.location.reload();
+                }
+                else {
+                    alert('操作失败' + response.errstr);
+                }
+        }, 'json');
+}
+</script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label>游戏时间:</label>
+            <input class="input-md form-control Wdate"  type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text"  name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>游戏名称:</label>
+        <select class="input-md form-control" name="lottery_id"><option value="0">请选择</option></select>
+        <label>日期:</label>
+        <select class="input-md form-control" name="dates">
+            <option value="">请选择</option>
+            <?php foreach ($dates as $v): ?>
+            <option value="<?php echo $v;?>"><?php echo $v;?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>开始追号奖期:</label>
+        <select class="input-md form-control" name="issue"><option value="">请选择</option></select>
+
+    </div>
+    <div class="form-inline mt15">
+        <label>投注模式:</label>
+        <select class="input-md form-control" name="modes"><option value="0">请选择<option value="1">元</option><option value="0.1">角</option><option value="0.01">分</option></select>
+        <label>是否测试帐号:</label>
+        <select class="input-md form-control" name="is_test">
+            <option value="-1">请选择</option>
+            <option value="1">是</option>
+            <option value="0">否</option>
+        </select>
+        <input type="radio" name="name_style" id="radio1" value="1"/>
+        <label for="radio1">所属总代:</label>
+        <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+            <option value="">请选择…</option>
+            <?php foreach ($json_topUsers as $k => $v): ?>
+                <option value="<?=$v['username']?>"><?=$v['username']?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>或</label>
+        <input type="radio" name="name_style" value="2" id="radio2"/>
+        <label for="radio2">用户名:</label>
+        <input class="input-md form-control mr10" name="username" size="10"/>
+        <input type="checkbox" name="include_childs" id="include_childs" value="1" />
+        <label for="include_childs">包含下级</label> &nbsp;
+        <input type="hidden" name="c" value="game"/>
+        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit ml10" style="width: 90px;" type="submit" name="submit" class="submit" value="提交"/>
+    </div>
+</form>
+
+<div class="list-div mt15" id="listDiv">
+<table class="table table-responsive  table-bordered mainList" width="80%">
+    <thead>
+    <tr class="default">
+    	<td>追号单编号</td>
+        <td>用户</td>
+        <td>彩种</td>
+        <td>开始追号奖期</td>
+        <td>追号期数</td>
+        <td>单倍注数</td>
+        <td>总倍数</td>
+        <td>总金额</td>
+        <td>完成期数</td>
+        <td>模式</td>
+        <td>追中即停？</td>
+        <td>购买时间</td>
+        <td>追号状态</td>
+        <td>撤单状态</td>
+        <td>是否锁定</td>
+    </tr>
+    </thead>
+    <?php foreach ($traces as $v): ?>
+    <tr>
+    	<td><a target="_blank" href="?c=game&a=traceDetail&wrap_id=<?php echo $v['wrap_id']; ?>"><?php echo $v['wrap_id']; ?></a></td>
+        <td><?php echo $v['username']; ?></td>
+        <td><?php echo $lotterys[$v['lottery_id']]['name']; ?></td>
+        <td><?php echo $v['start_issue']; ?></td>
+        <td><?php echo $v['trace_times']; ?></td>
+        <td><?php echo $v['single_num']; ?></td>
+        <td><?php echo $v['total_multiple']; ?></td>
+        <td><?php echo $v['total_amount']; ?></td>
+        <td><?php echo $v['finish_times']; ?></td>
+        <td><?php echo $GLOBALS['cfg']['modes'][$v['modes']]; ?></td>
+        <td><?php if ($v['stop_on_win'] == 0): ?><font color="red">否</font><?php elseif ($v['stop_on_win'] == 1): ?>是<?php endif; ?></td>
+        <td><?php echo $v['create_time']; ?></td>
+        <td><?php if ($v['status'] == 0): ?>未开始<?php elseif ($v['status'] == 1): ?>正在进行<?php elseif ($v['status'] == 2): ?>已完成<?php elseif ($v['status'] == 3): ?>已取消<?php endif; ?></td>
+        <td><?php if ($v['is_cancel'] == 0): ?>-<?php elseif ($v['is_cancel'] == 1): ?>自己撤单<?php elseif ($v['is_cancel'] == 2): ?>公司撤单<?php endif; ?></td>
+        <td>
+            <?php if ($v['is_locked'] == 0): ?>-<?php elseif ($v['is_locked'] == 1): ?><b>已锁定</b><?php endif; ?>
+            <?php if ($canUnlockTrace): ?>
+                <?php if ($v['is_locked'] == 1): ?><a class="btn btn-mini btn-info" href="#" onclick="if(confirm('确定要解锁吗？')) unlock('<?php echo $v['wrap_id']; ?>');">解锁</a><?php endif; ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,222 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+$(function(){
+    //准备数据
+    var json_lotterys = <?php echo $json_lotterys; ?>;
+    var json_methods = <?php echo $json_methods; ?>;
+    var tmp = '';
+
+    //彩种选择框
+    $.each(json_lotterys, function(i,v){
+        tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+        $('select[name=lottery_id]').append(tmp);
+    });
+    $('select[name=lottery_id]').change(function(){
+        $('select[name=method_id]').empty().append('<option value="0">请选择</option>');
+        if ($('select[name=lottery_id]').val() == '0') {
+            return;
+        }
+
+        getIssue();
+    });
+
+    $('select[name=dates]').change(function(){
+        if ($('select[name=dates]').val() == '') {
+            return;
+        }
+        getIssue();
+    });
+
+
+    //动态读取彩种奖期
+    function getIssue()
+    {
+        $.post(
+            '?c=game&a=getIssue',
+            {'lottery_id':$('select[name=lottery_id]').val(), 'start_time':$('select[name=dates]').val()},
+            function(json_data) {
+                $('select[name=issue]').empty().append('<option value="">请选择</option>');
+                $.each(json_data, function(i,v){
+                    tmp = '<option value="' + v.issue + '">' + v.issue + ' (' + v.start_sale_time + '~' + v.end_sale_time + ')</option>';
+                    $('select[name=issue]').append(tmp);
+                });
+                //预选中奖期
+                $('select[name=issue]').val('<?php echo $issue; ?>');
+        }, 'json');
+    }
+
+    //设置默认值
+    //$('select[name=type]').val('<?php echo $type; ?>').change();
+    $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+    $('select[name=method_id]').val('<?php echo $method_id; ?>');
+    $('select[name=top_username]').val('<?php echo $top_username; ?>');
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+    $('input[name=start_amount]').val('<?php if ($start_amount > 0) echo $start_amount; ?>');
+    $('input[name=end_amount]').val('<?php if ($end_amount > 0) echo $end_amount; ?>');
+    $('#start_time').val('<?php echo $start_time; ?>');
+    $('#end_time').val('<?php echo $end_time; ?>');
+
+
+    //帐变类型 ： 展开/收缩   选择层
+    $('#selectTypes').click(function(){
+		if($('#tradeTypesTable').is(':hidden') == false ){
+			$('#tradeTypesTable').hide();
+			$('#toggleSelectBut').hide();
+			$(this).val(' 请选择 ');
+		}else{
+			$('#tradeTypesTable').show();
+			$('#toggleSelectBut').show();
+			$(this).val(' 隐藏 ');
+		}
+    });
+
+    //帐变类型 ： 反选功能
+    $('#toggleSelectBut').click(function(){
+    	$('.tradeTypes').each(function(){
+        	if($(this).is(':checked') == true){
+            	$(this).attr('checked', false);
+        	}else{
+        		$(this).attr('checked', true);
+        	}
+        });
+    });
+});
+</script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------ author snow引入搜索相关文件--------------------------->
+
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt15">
+        <div class="form-group has-default has-feedback">
+            <label>游戏时间:</label>
+            <input class="input-md form-control" type="text" name="start_time" id="start_time"  onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-md form-control Wdate" type="text" name="end_time" id="end_time"  onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>帐变类型: </label>
+        <input class="btn btn-info" type='button' name='selectTypes' value=' 请选择 ' id='selectTypes' />
+        <input class="btn btn-info"  type='button' name='toggleSelect' value=' 反选 ' id='toggleSelectBut' style='display:none;' />
+        <label>游戏名称:</label>
+        <select class="input-md form-control" name="lottery_id">
+            <option value="0">请选择</option>
+        </select>
+        <label>日期：</label>
+        <select class="input-md form-control" name="dates">
+            <option value="">请选择</option>
+            <?php foreach ($dates as $v): ?>
+            <option value="<?php echo $v;?>"><?php echo $v;?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>游戏玩法:</label>
+        <select class="input-md form-control" name="method_id">
+            <option value="0">请选择</option>
+        </select>
+        
+    </div>
+<div id='tradeTypesTable' style='border:0px;margin:5px 0px 10px 0px;display:none;'>
+	<?php foreach ($orderTypes as $k => $v): ?>
+    <div style='border:0px;float:left;width:120px;text-align:left;'>
+    	<input class='tradeTypes' id='tradeTypes_<?php echo $k;?>' type='checkbox' name='type[<?php echo $k;?>]' value='<?php echo $k;?>' <?php if (isset($types[$k])): ?>checked<?php endif; ?> />
+    	<label for='tradeTypes_<?php echo $k;?>'><?php echo $v; ?></label>
+    </div>
+    <?php endforeach; ?>
+    <div style="clear:both;"></div>
+</div>
+    <div class="form-inline mt15 mb15">
+        <label>游戏奖期:</label>
+        <select class="input-md form-control" name="issue"><option value="">请选择</option></select>
+        <input type="radio" name="name_style" id="radio1" value="1"/>
+        <label  for="radio1">所属总代:</label>
+        <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+            <option value="">请选择…</option>
+            <?php foreach ($json_topUsers as $k => $v): ?>
+                <option value="<?=$v['username']?>"><?=$v['username']?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>或</label>
+        <input type="radio" name="name_style" value="2" id="radio2"/>
+        <label style="font-weight: normal;" for="radio2">用户名:</label>
+        <input class="input-md form-control" name="username" size="10"/>
+        <input type="checkbox" name="include_childs" id="include_childs" value="1" />
+        <label for="include_childs">包含下级</label> &nbsp;
+        <label>&nbsp;&nbsp;帐变金额:</label>
+        <input class="input-md form-control"  name="start_amount" size="10"/>
+        <label>到</label>
+        <input class="input-md form-control"  name="end_amount" size="10"/>
+        <input type="hidden" name="c" value="game"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit" style="width: 60px;" type="submit" name="submit"  value="查询"/>
+        <input class="btn btn-info excel" style="margin-left: 10px" type="button" table=".mainList" excelFile="用户日投注"  value="导出Excel"/>
+</form>
+    </div>
+    <div class="list-div mt20" id="listDiv">
+        <table class="table table-responsive  table-bordered mainList" width="80%">
+            <thead>
+                <tr>
+                	<td>order_id</td>
+                    <td>用户</td>
+                    <td>目标</td>
+                    <td>彩种</td>
+                    <td>奖期</td>
+                    <td>资金变化量</td>
+                    <td>帐变前余额</td>
+                    <td>帐变后余额</td>
+                    <td>帐变类型</td>
+                    <td>业务id</td>
+                    <td>处理人</td>
+                    <td>原因</td>
+                    <td>帐变时间</td>
+                </tr>
+            </thead>
+            <?php if ($isCanSearch): ?>
+            <?php foreach ($orders as $v): ?>
+                <tr>
+    	           <td><?php echo $v['order_id']; ?></td>
+                    <td>
+                        <a href="?c=game&a=orderList&user_id=<?php echo $v['from_user_id']; ?>&username=<?php echo $v['username']; ?>"><?php echo $v['username']; ?></a>
+                        <?php if ($v['user_type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                        <?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                        <?php if ($v['user_status'] == 0): ?><b style="color:red">[已删除]</b>
+                        <?php elseif ($v['user_status'] == 1): ?><b style="color:red">[已冻结]</b>
+                        <?php elseif ($v['user_status'] == 5): ?><b style="color:red">[已回收]</b>
+                        <?php endif; ?>
+                    </td>
+                    <td<?php if ($v['to_user_id']): ?> title="<?php echo $v['to_user_id']; ?>"<?php endif; ?>><?php echo $v['to_username'];if($v['type'] == 154) echo '(充入)';elseif($v['type'] == 212) echo '(接受)'; ?></td>
+                    <td><?php if ($v['lottery_id'] > 0): ?><?php echo $lotterys[$v['lottery_id']]['cname']; ?><?php endif; ?></td>
+                    <td><?php echo $v['issue']; ?></td>
+                    <td><?php echo $v['amount']; ?></td>
+                    <td><?php echo $v['pre_balance']; ?></td>
+                    <td><?php echo $v['balance']; ?></td>
+                    <td><?php echo $orderTypes[$v['type']]; ?></td>
+                    <td>
+                        <?php if ($v['business_url'] != ''): ?>
+                        <a href="javascript:;" onclick="window.open('<?php echo $v['business_url']; ?>', '_blank', 'resizable=no,width=320,height=420,left=700');">详情</a>
+                        <?php else: ?>
+                        <?php echo $v['business_id']; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php if(isset($admins[$v['admin_id']])){echo $admins[$v['admin_id']];} ?></td>
+                    <td><?php echo $v['remark']; ?></td>
+                    <td><?php echo $v['create_time']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+    <tr>
+        <td colspan="13" class="no-records">至少指定帐变类型或用户名后才能查询！</td>
+    </tr>
+    <?php endif; ?>
+</table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?><div class="smallTal">本页小计:<b><?php echo $totalAmount; ?></b>元，总计:<b><?php echo $trafficInfo['total_amount']; ?></b>元 &nbsp; </div></div>
+
+<?php $this->import("foot"); ?>

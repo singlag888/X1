@@ -1,0 +1,48 @@
+<?php $this->import("head"); ?>
+
+<div class=" mt10" id="listDiv">
+    <form class="form-top">
+        <table class="table table-responsive table-bordered  mainList" width="80%">
+            <thead>
+            <tr>
+                <td>配置id</td>
+                <td>配置标题</td>
+                <td>说明</td>
+                <td>配置key</td>
+                <td>配置value（0禁用 1启用）</td>
+                <td>下级菜单</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <?php foreach ($configs as $v): ?>
+            <tr>
+                <td><?php echo $v['config_id']; ?></td>
+                <td><?php echo $v['title']; ?></td>
+                <td><?php echo $v['description']; ?></td>
+                <td><?php echo $v['cfg_key']; ?></td>
+                <td style="overflow: hidden;white-space:nowrap;max-width: 100px"><?php echo $v['cfg_value']; ?></td>
+                <td><?php if ($v['parent_id'] == 0): ?>
+                        <a href="./?c=config&a=configList&parent_id=<?php echo $v['config_id']; ?>&prev_id=<?php echo $parent_id; ?>">查看下级</a>
+                    <?php else: ?>
+                        无
+                    <?php endif; ?>
+                </td>
+                <td>
+
+                    <a class="btn btn-mini btn-info" href="./?c=config&a=editConfig&config_id=<?php echo $v['config_id']; ?>">编辑</a>
+                    <a class="btn btn-mini btn-info" href="./?c=config&a=deleteConfig&config_id=<?php echo $v['config_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>&nbsp;
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td colspan="5">&nbsp;</td>
+                <td><?php if ($parent_id > 0): ?>
+                    <input type="button" name="button" class="submit" value="上级" onclick="window.location.href='./?c=config&a=configList&parent_id=<?php echo $prev_id; ?>';">
+                <?php endif; ?>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

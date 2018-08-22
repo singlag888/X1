@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title></title>
+</head>
+<body>
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' target="_blank" method='post'>
+    <input type='hidden' name='service' value='<?php echo $postFields['service']; ?>'>
+    <input type='hidden' name='version' value='<?php echo $postFields['version']; ?>'>
+    <input type='hidden' name='merId' value='<?php echo  $postFields['merId']; ?>'>
+    <input type='hidden' name='tradeNo' value='<?php echo  $postFields['tradeNo']; ?>'>
+    <input type='hidden' name='tradeDate' value='<?php echo $postFields['tradeDate']; ?>'>
+    <input type='hidden' name='amount' value='<?php echo $postFields['amount']; ?>'>
+    <input type='hidden' name='notifyUrl' value='<?php echo $postFields['notifyUrl']; ?>'>
+    <input type='hidden' name='summary' value='<?php echo $postFields['summary']; ?>'>
+    <input type='hidden' name='clientIp' value='<?php echo $postFields['clientIp']; ?>'>
+    <input type='hidden' name='typeId' value='<?php echo $postFields['typeId']; ?>'>
+    <input type='hidden' name='sign' value='<?php echo $postFields['sign']; ?>'>
+    <input name="pay" type="submit" value="启动 QQ/微信/支付宝 支付" />
+</form>
+</body>
+</html>

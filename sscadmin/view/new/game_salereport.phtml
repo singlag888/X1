@@ -1,0 +1,226 @@
+
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jquery.tablesorter.js"></script>
+<link href="<?php echo $imgCdnUrl ?>/css/tablesorter.css" rel="stylesheet" type="text/css" />
+<style>
+<!--
+.tablesorter .tablesorter-header {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space:nowrap;
+    padding-right:16px;
+}
+.tablesorter thead .headerSortUp,
+.tablesorter thead .tablesorter-headerSortUp,
+.tablesorter thead .tablesorter-headerAsc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+    border-bottom: #000 2px solid;
+}
+.tablesorter thead .headerSortDown,
+.tablesorter thead .tablesorter-headerSortDown,
+.tablesorter thead .tablesorter-headerDesc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+    border-bottom: #000 2px solid;
+}
+.tablesorter thead .sorter-false {
+    background-image: none;
+    cursor: default;
+    padding: 4px;
+}
+
+.tablesorter td {
+    white-space:nowrap;
+    padding:5px;
+    }
+-->
+</style>
+
+<script>
+    $(function() {
+        //准备数据
+        var json_lotterys = <?php echo $json_lotterys; ?>;
+        var json_methods = <?php echo $json_methods; ?>;
+        var tmp = '';
+
+        //彩种选择框
+        $.each(json_lotterys, function(i, v) {
+            tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+            $('select[name=lottery_id]').append(tmp);
+        });
+        $('select[name=lottery_id]').change(function() {
+            $('select[name=method_id]').empty().append('<option value="0">请选择</option>');
+            if ($('select[name=lottery_id]').val() == '0') {
+                return;
+            }
+            //以下也可改成动态读取每个彩种的玩法，都差不多
+            $.each(json_methods[$('select[name=lottery_id]').val()], function(i, v) {
+                tmp = '<option value="' + v.mg_name + '" style="color:#00f;">' + v.mg_name + '</option>';//玩法组没有method_id
+                $('select[name=method_id]').append(tmp);
+                $.each(v.childs, function(ii, vv) {
+                    tmp = '<option value="' + vv.method_id + '">&nbsp;&nbsp;' + vv.cname + '</option>';
+                    $('select[name=method_id]').append(tmp);
+                });
+            });
+        });
+
+        //设置默认值
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('select[name=method_id]').val('<?php echo $method_id; ?>');
+        $('select[name=parent_id]').val('<?php echo $parent_id; ?>');
+        $('select[name=is_test]').val('<?php echo $is_test; ?>');
+        $('#start_time').val('<?php echo $start_time; ?>');
+        $('#end_time').val('<?php echo $end_time; ?>');
+        $('select[name=modes]').val('<?php echo $modes; ?>');
+        //总投注额  总返点 实际投注额  中奖金额  总结算sort
+        $('.tablesorter').tablesorter({
+            sortList : [[3,1]],
+            // set forced sort on the fourth column and i decending order.
+             headers: {
+                0   : { sorter: true }  ,   //user_id
+                1   : { sorter: true }  ,   //总代用户名
+                2   : { sorter: false } ,   //类型
+                3   : { sorter: true }  ,   //投注量
+                4   : { sorter: true }  ,   //返点量
+                5   : { sorter: true }  ,   //实际投注额
+                6   : { sorter: true }  ,   //中奖金额
+                7   : { sorter: true }      //总结算
+             }
+        });
+    });
+</script>
+<!------------------ author snow引入搜索相关文件--------------------------->
+
+<link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+<script src="/js/jquery-select/bootstrop.min.js"></script>
+<script src="/js/jquery-select/bootstrop-select.js"></script>
+<!------------------ author snow引入搜索相关文件--------------------------->
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt20">
+        <div class="form-group has-feedback has-default">
+            <label>游戏时间:</label>
+            <input class="input-md form-control" type="text" name="start_time" id="start_time" onclick="jeDate({dateCell:'#start_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback has-default">
+            <label>到</label>
+            <input class="input-md form-control" type="text"  name="end_time" id="end_time" onclick="jeDate({dateCell:'#end_time',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" />
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>游戏名称:</label>
+        <select class="input-md form-control" name="lottery_id">
+            <option value="0">请选择</option>
+        </select>
+        <!-- 游戏玩法<select name="method_id"><option value="0">请选择</option></select> -->
+        <label >投注模式:</label>
+        <select class="input-md form-control" name="modes">
+            <option value="0">请选择</option>
+            <option value="1">元</option>
+            <option value="0.1">角</option>
+            <option value="0.01">分</option>
+        </select>
+    </div>
+    <div class="form-inline mt20">
+        <label>所属总代:</label>
+        <select id="top-username" class="selectpicker snow-topUser-search" name="parent_id" data-live-search="true" title="请选择 ...">
+            <option value="">请选择…</option>
+            <?php foreach ($json_topUsers as $k => $v): ?>
+                <option value="<?=$v['user_id']?>"><?=$v['username']?></option>
+            <?php endforeach; ?>
+        </select>
+        <label>帐号类型:</label>
+        <select class="input-md form-control" name="is_test">
+            <option value="-1">所有帐号</option>
+            <option value="0">非测试帐号</option>
+        </select>
+        <label>按绑定域名搜索:</label>
+        <input type="text" class="input-md form-control" value="<?php echo $domain; ?>" name="domain">
+        示例:www.abc.com
+        <input type="hidden" name="c" value="game"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit" type="submit" style="width:60px;" name="submit"  value="提交"/>
+    </div>
+    <hr>
+</form>
+
+<div class="list-div mt15" id="listDiv">
+    <table class="table table-responsive  table-bordered mainList tablesorter">
+        <thead>
+            <tr>
+                <td>user_id</td>
+                <td>用户名</td>
+                <td>类型</td>
+                <!--    /******************** snow 添加累积存款 修改存款为总余额 start*****************************************/-->
+<!--                <td>累积存款</td>-->
+<!--                <td>总余额</td>-->
+                <!--    /******************** snow 添加累积存款 修改存款为总余额 end*******************************************/-->
+                <td id="defaultOrder">总投注额</td>
+                <td>总返点</td>
+                <td title="实际投注额 = 总投注额 - 总返点">实际投注额</td>
+                <td>中奖金额</td>
+                <td title="总结算 = 总投注额 + 总返点 - 中奖金额">总结算</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($childSales as $v): ?>
+                <tr>
+                    <td><?php echo $v['user_id']; ?></td>
+                    <td>
+                        <?php if ($v['user_id'] != $parent_id && $v['level'] < 10): ?>
+                            <a href="?c=game&a=saleReport&parent_id=<?php echo $v['user_id']; ?>&start_time=<?php echo $start_time; ?>&end_time=<?php echo $end_time; ?>"><?php echo $v['username']; ?></a><?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                            <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                        <?php else: ?>
+                                <?php echo $v['username']; ?><?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?>
+                            <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($v['level'] == 0): ?>总代
+                        <?php elseif ($v['level'] == 1): ?>一代
+                        <?php elseif ($v['level'] < 10): ?>代理
+                        <?php else: ?>会员
+                        <?php endif; ?>
+                    </td>
+                    <!--    /******************** snow 添加累积存款 start***************************************************/-->
+<!--                    <td>--><?php //echo number_format(isset($v['deposit_totalAmount']) ? $v['deposit_totalAmount'] : 0, 2); ?><!--</td>-->
+<!--                    <td>--><?php //echo number_format($v['balance'], 2); ?><!--</td>-->
+                    <!--    /******************** snow 添加累积存款 end***************************************************/-->
+                    <td><?php echo number_format($v['total_amount'], 2); ?></td>
+                    <td><?php echo number_format($v['total_rebate'], 2); ?></td>
+                    <td><?php echo number_format($v['total_amount'] - $v['total_rebate'], 2); ?></td>
+                    <td><?php echo number_format($v['total_prize'], 2); ?></td>
+                    <td>
+                        <?php if (($v['total_rebate'] + $v['total_prize'] - $v['total_amount']) > 0): ?>
+                            <font color="red"><?php echo number_format(-($v['total_rebate'] + $v['total_prize'] - $v['total_amount']), 2); ?></font>
+                        <?php else: ?>
+                            <?php echo number_format(-($v['total_rebate'] + $v['total_prize'] - $v['total_amount']), 2); ?>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">小计</td>
+                <!--    /******************** snow 添加累积存款合计 start***************************************************/-->
+<!--                <td>--><?php //echo number_format($totalInfo['deposit_amount'], 2); ?><!--</td>-->
+<!--                <td>--><?php //echo number_format($totalInfo['blance'], 2); ?><!--</td>-->
+                <!--    /******************** snow 添加累积存款合计 end  ***************************************************/-->
+                <td><?php echo number_format($totalInfo['amount'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['rebate'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['real_amount'], 2); ?></td>
+                <td><?php echo number_format($totalInfo['prize'], 2); ?></td>
+                <td><?php if ($totalInfo['final'] > 0): ?>
+                        <font color="red"><?php echo number_format(-($totalInfo['final']), 2); ?></font>
+                    <?php else: ?>
+                        <?php echo number_format(-$totalInfo['final'], 2); ?>
+                    <?php endif; ?>
+                </td>
+
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<?php echo $pageList; ?>
+
+<?php $this->import("foot"); ?>

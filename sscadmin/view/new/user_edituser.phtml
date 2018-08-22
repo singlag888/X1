@@ -1,0 +1,75 @@
+<?php $this->import("head"); ?>
+<script>
+function checkform(ob) {
+    var msg = "";
+    if ($('input[name=type]').val() == '2' && $('select[name=agent_id]').val() > '0') {
+        msg = "不能有多级代理";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=editUser" method="post">
+<table>
+    <tr>
+        <td width="40%">用户id</td>
+        <td width="60%"><?php echo $user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td width="40%">用户名</td>
+        <td width="60%"><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td>用户类型</td>
+        <td>
+            <?php if ($user['level'] == 0): ?>总代
+            <?php elseif ($user['level'] == 1): ?>一代
+            <?php elseif ($user['level'] < 10): ?>代理
+            <?php else: ?>会员
+            <?php endif; ?>
+        </td>
+    </tr> 
+    <tr>
+        <td>真实姓名</td>
+        <td><?php echo $user['real_name']; ?></td>
+    </tr>
+    <tr>
+        <td>昵称</td>
+        <td><input name="nick_name" value="<?php echo $user['nick_name']; ?>"/></td>
+    </tr>
+    <tr>
+        <td>生日</td>
+        <td><?php echo $user['birth']; ?></td>
+    </tr>
+    <tr>
+        <td>备注</td>
+        <td><textarea name="remark"><?php echo $user['remark']; ?></textarea></td>
+    </tr>
+    <tr>
+        <td>记录最后更新时间</td>
+        <td><?php echo $user['ts']; ?></td>
+    </tr>
+    <tr>
+        <td>状态</td>
+        <td>
+            <?php if ($user['status'] == 0): ?>已删除
+            <?php elseif ($user['status'] == 1): ?>冻结
+            <?php elseif ($user['status'] == 8): ?>正常
+            <?php endif; ?>
+        </td>
+    </tr>
+</table>
+    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" /><input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />
+    <input type="hidden" name="op" value="doEditUser" />
+    <input type="button" class="submit" name="submitBtn" value="确认修改" onclick="if(confirm('确定要修改该用户的信息吗？')) {this.form.submit();}"/>
+</form>
+</div>
+<?php $this->import("foot"); ?>

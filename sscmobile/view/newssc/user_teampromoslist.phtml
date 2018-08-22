@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <table width="73%" border="0" cellpadding="0" cellspacing="0" class="tab01">
+                                <tr>
+                                    <th width="15%">账号</th>
+                                    <th width="10%">优惠类型</th>
+                                    <th width="15%">优惠金额</th>
+                                    <th width="20%">优惠完成时间</th>
+                                    <th width="20%">备注</th>
+                                </tr>
+                                <?php if ($error_str == ''): ?>
+                                    <?php foreach ($promos as $v): ?>
+                                        <tr>
+                                            <td>
+                                            	<?php echo $v['username']; ?>
+                                            </td>
+                                            <td>
+                                               <?php echo isset($promoType[$v['type']])?$promoType[$v['type']]:''; ?>
+                                            </td>
+                                            <td><?php echo $v['amount']; ?></td>
+                                            <td><?php echo $v['finish_time']; ?></td>
+                                            <td><?php echo $v['notes']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <th colspan="5" class="bom"><?php echo $error_str; ?></th>
+                                <?php endif; ?>
+                            </table>
+                            <!-- 分页 -->
+                            <div class="Page">
+                                <?php echo $pageList; ?>
+                            </div>
+                            <!-- 分页end -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

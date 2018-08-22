@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+
+    <script>
+        $(document).ready(function () {
+            var action = "<?php echo ACTION; ?>";
+            if (action == 'editGroup') {
+                $("input[name=mg_id]").val("<?php echo $group['mg_id']; ?>");
+                $("input[name=name]").val("<?php echo $group['name']; ?>");
+                $("input[name=description]").val("<?php echo $group['description']; ?>");
+                $("input[name=sort]").val("<?php echo $group['sort']; ?>");
+                $("input[name='group_tag']").eq(<?php echo $group['group_tag']; ?>).attr("checked",true);
+            }else{
+                $("input[name='group_tag']").eq(0).attr("checked",true);
+            }
+        });
+    </script>
+    <div class="list-div add-main form-top" id="addDiv">
+        <form name="form1" id="form1"
+              action="./?c=method&a=<?php echo ACTION; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>"
+              method="post">
+            <table class="table table-responsive table-bordered" style="width:60%;">
+                <tr>
+                    <td class="fb" width="20%">所属彩种</td>
+                    <td><?php echo $lottery['name']; ?></td>
+                </tr>
+                <tr>
+                    <td class="fb">分组名称</td>
+                    <td><input title="分组名称" class="input-md form-control" type="text" name="name" maxlength="19"/></td>
+                </tr>
+                <tr>
+                    <td class="fb">描述</td>
+                    <td><input title="描述" class="input-md form-control" type="text" name="description" maxlength="19"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fb">所属组别</td>
+                    <td>
+                        <span><input title="所属组别" style="margin-top: 0" name="group_tag" value="0" type="radio"/><label>所有</label></span>
+                        <span><input title="所属组别" style="margin-top: 0" name="group_tag" value="1" type="radio"/><label>官方</label></span>
+                        <span><input title="所属组别" style="margin-top: 0" name="group_tag" value="2" type="radio"/><label>信用</label></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fb">排序（越小越靠前）</td>
+                    <td><input title="排序" class="input-md form-control" type="text" name="sort" value="100"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width: 60%;margin:0 auto;text-align: center;">
+                            <input class="btn btn-info submit" type="submit" style="width: 60px;" name="submit"
+                                   value="<?php if (ACTION == "addGroup"): ?>提交<?php else: ?>更新<?php endif; ?>"/>
+                            <input class="btn btn-info submit" type="button" style="width: 60px;"
+                                   onclick="history.go(-1);" value="返回"/>
+                            <input type="hidden" name="mg_id" value=""/>
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+        </form>
+    </div>
+
+<?php $this->import("foot"); ?>

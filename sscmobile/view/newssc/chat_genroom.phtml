@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>   <!-- 联系上下级 团队实时聊天 -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta name="author" content="Wayou">
+    <meta name="description" content="hichat | a simple chat application built with node.js and websocket">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>in8w.com</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/chatjs/styles/main.css?v=<?php echo time(); ?>">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+
+        <div class="servicecent_middle_part sendmsg_middle_part">
+            <dl class="userList"></dl>
+        </div>
+        <div class="wrapper_content">
+            <div class="wrapper_title">
+                <p>团队实时聊天(点击用户可以私聊)</p>
+                <!-- <span id="status"></span> -->
+            </div>
+            <div id="historyMsg"></div>
+            <div class="controls" >
+                <div class="items">
+                    <input id="colorStyle" type="color" placeHolder="#000" title="文字颜色" />
+                    <input id="emoji" type="button" value="表情" title="emoji" />
+                    <label for="sendImage" class="imageLable">
+                        <input type="button" value="图片" />
+                        <input id="sendImage" type="file" value="image"/>
+                    </label>
+                    <p class="textLimit">还可以输入<span id="wordCheck">300</span>个字符</p>
+                </div>
+                <textarea id="messageInput" placeHolder="请输入内容发送" onkeyup="javascript:checkWord(this);" onmousedown="javascript:checkWord(this);" maxlength="300"></textarea>
+                <input type="hidden" name="from" id="from" />
+                <input type="hidden" name="to" id="to" />
+                <input id="sendBtn" class="default_navyblue_btn" type="button" value="发送(Ctrl+Enter)">
+                <div id="emojiWrapper"></div>
+
+            </div>
+        </div>
+        <div id="loginWrapper">
+            <p id="info">connecting to server...</p>
+            <div id="nickWrapper">
+                <input type="text" placeHolder="nickname" id="nicknameInput" />
+                <input type="button" value="OK" id="loginBtn" />
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var chatCurnickname,
+        chatHost = '<?php echo $chatHost;?>',
+        chatToken = '<?php echo $chatToken;?>',
+        chatCurLevel = <?php echo $chatCurLevel;?>;
+</script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/chatjs/scripts/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer/layer.min.js"></script> <!-- 调用弹出层 -->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/chatjs/scripts/socket.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/chatjs/scripts/chat.js?v=<?php echo time(); ?>"></script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

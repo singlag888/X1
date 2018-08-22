@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo config::getConfig('site_title'); ?></title>
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/forRoulette.css" />
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer/layer.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jqueryui.js"></script>
+</head>
+<body>
+	<!--top-->
+	<div class="top">
+		<div class="main">
+			<div class="logo"></div>
+			<div class="nav">
+				<a href="/">返回首页</a>
+			</div>
+		</div>
+	</div>
+	<!--topEnd-->
+
+	<!-- 信息弹出层  -->
+    <div class="layer_xydzpHD hide">
+      <div class="xydzpLayerMain">
+      	<div class="Closebtn"><a href="javascript:void(0);" class="CloseLayer CloseAction"></a></div>
+      	<div class="msg">您抽中了：<span>6 元奖金</span></div>
+
+        <!-- 中奖结果 -->
+        <div class="reward CloseAction">
+        <a href="javascript:void(0);">
+            <span style="font: 24px 宋体;">&gt;&gt;</span>
+            <span style="font: 24px 微软雅黑;">&nbsp;继续抽奖&nbsp;</span>
+            <span style="font: 24px 宋体;">&lt;&lt;</span>
+        </a>
+        </div>
+      </div>
+    </div>
+	<!-- End 信息弹出层 -->
+
+	<div class="paye p-1">
+		<div class="banner"></div>
+		<div class="win-list">
+			<div id='allLotteryMsg4Header' class="main">
+				<ul class="">
+            	<?php echo $allLotteryRows4Header; ?>
+            </ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="paye p-2">
+		<!--background box-->
+		<div class="p-2-bg">
+			<div class="p-2-bg-1"></div>
+			<div class="p-2-bg-2"></div>
+			<div class="p-2-bg-3"></div>
+			<div class="p-2-bg-4"></div>
+		</div>
+		<!--mian box-->
+		<div class="p-2-main main">
+			<div class=" p-2-main-1"></div>
+			<!-- 转盘 - -->
+			<div class=" p-2-main-2 main">
+				<div class="number">若您抽中奖金，则直接派发<br />至游戏账户。<br />
+				若您抽中iphone6s或苹果<br />笔记本电脑，请<a href="javascript:void(0);" onclick="showOnlineHelp();">联系客服</a></div>
+				<div class="iframe-box">
+					<div id="header">
+						<div id="turnplatewrapper" onselectstart="return false;"
+							class="bgfix" style="background-position: 0px 0px;">
+							<div id="turnplate" class="bgfix"
+								style="background-position: 0px -3552px;">
+								<div id="awards" class="bgfix"></div>
+								<div id="platebtn" class="bgfix"></div>
+								<p id="msg"></p>
+								<p id="init" class="dn" style="display: none;">
+									初始化中，请稍后<span>~</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!---------------------------- End 转盘 ----------------------------- -->
+
+			<!---------------------------- 今日抽奖  ----------------------------- -->
+			<div class=" p-2-main-3 main">
+				<div id='runCounts' class="number01"><?php echo ceil($water['usedWater']/userGiftsRoulette::EACH_LOTTERY_SPEND_WATER); ?></div>
+				<div class="number02"><?php echo $water['totalWater']; ?></div>
+				<div id='usedWater' class="number03"><?php echo $water['usedWater']; ?></div>
+				<div id='remainWater' class="number04"><?php echo $water['remainWater']; ?></div>
+				<div class="number-list">
+					<table id="number-list-tb">
+                    <?php foreach ($lotteryRows as $v): ?>
+                    <tr>
+            			<td width="60%"><?php echo date('m月d日 H:i', strtotime($v['plan_time'])); ?></td>
+            			<td><?php echo userGiftsRoulette::getLevelToPrizeString($v['plan_level']); ?></td>
+        			</tr>
+                    <?php endforeach; ?>
+                    </table>
+				</div>
+			</div>
+			<!---------------------------- End今日抽奖  ----------------------------- -->
+
+			<div class="p-2-main-4 main">
+
+			</div>
+
+			<!---------------------------- 这里显示全体中奖信息 ----------------------------- -->
+			<div class="p-2-main-5">
+				<div class="list-box">
+					<div class="biaoti">
+						<ul>
+							<li>用户姓名</li>
+							<li>奖品</li>
+							<li>抽奖时间</li>
+						</ul>
+					</div>
+
+					<div class="table">
+                    <?php foreach ($allLotteryRows as $k => $v) : ?>
+                    <ul>
+                        <li><span class="listpart"><?php echo $v['username']; ?></li>
+                        <li><?php echo userGiftsRoulette::getLevelToPrizeString($v['plan_level']); ?></li>
+                        <li><?php echo date('m月d日 H:i', strtotime($v['plan_time'])); ?></li>
+                    </ul>
+                    <?php endforeach; ?>
+					</div>
+				</div>
+			</div>
+			<!---------------------------- End 这里滚动显示全体中奖信息 ----------------------------- -->
+		</div>
+		<div class="p-2-main-6"></div>
+	</div>
+<script type="text/javascript">
+/**
+ * 时间对象的格式化;
+ */
+Date.prototype.format = function(format) {
+    /*
+     * eg:format="yyyy-MM-dd hh:mm:ss";
+     */
+    var o = {
+        "M+" : this.getMonth() + 1, // month
+        "d+" : this.getDate(), // day
+        "h+" : this.getHours(), // hour
+        "m+" : this.getMinutes(), // minute
+        "s+" : this.getSeconds(), // second
+        "q+" : Math.floor((this.getMonth() + 3) / 3), // quarter
+        "S" : this.getMilliseconds()
+        // millisecond
+    }
+
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4
+                        - RegExp.$1.length));
+    }
+
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1
+                            ? o[k]
+                            : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+}
+
+var turnplate = {
+	turnplateBox : $('#turnplate'),
+	turnplateBtn : $('#platebtn'),
+	lightDom : $('#turnplatewrapper'),
+	msgBox : $('#msg'),
+	lotteryUrl : 'index.jsp?&c=user&a=userGifts&option=roulette',  //后台请求URL
+	height : '592', //帧高度
+	lightSwitch : 0, //闪灯切换开关. 0 和 1间切换
+	minResistance : 5, //基本阻力
+	Cx : 0.01, //阻力系数 阻力公式：  totalResistance = minResistance + curSpeed * Cx;
+	accSpeed : 15, //加速度
+	accFrameLen : 40, //加速度持续帧数
+	maxSpeed : 250, //最大速度
+	minSpeed : 20, //最小速度
+	frameLen : 10, //帧总数
+	totalFrame : 0, //累计帧数,每切换一帧次数加1
+	curFrame : 0, //当前帧
+	curSpeed : 20, //上帧的速度
+	lotteryIndex : undefined, //奖品index
+	runTime : undefined,      //抽奖时间(点击抽奖按钮的时间)
+	errorIndex : 0, //异常时的奖品指针
+	initBoxEle : $('#turnplate #init'),
+	progressEle : $('#turnplate #init span'),
+	initProgressContent : '~~~^_^~~~', //初始化进度条的内容
+	initFreshInterval : 500, //进度条刷新间隔
+	virtualDistance : 10000, //虚拟路程,固定值，速度越快，切换到下帧的时间越快: 切换到下帧的时间 = virtualDistance/curSpeed
+	isStop : false, //抽奖锁,为true时，才允许下一轮抽奖
+	timer2 : undefined, //计时器
+	initTime : undefined,
+	showMsgTime : 2000, //消息显示时间
+	eachLotterySpendWater : 1000, //每次抽奖消耗流水
+	errorCode : undefined,
+	totalWater : <?php echo $water['totalWater']; ?>, //当日总流水
+	lotteryTime : <?php echo floor($water['remainWater']/userGiftsRoulette::EACH_LOTTERY_SPEND_WATER); ?>, //可抽奖次数
+	runCounts : <?php echo ceil($water['usedWater']/userGiftsRoulette::EACH_LOTTERY_SPEND_WATER); ?>, //已抽奖次数
+    dayLimit : <?php echo $dayLimit; ?>,  //每日/每用户抽奖限制
+
+	lotteryErr : {
+		4001 : '您的流水不足，满一千流水才可抽奖哦 ：）',
+		4002 : '请您不要着急，过1分钟再抽奖',
+		4003 : '查不到您的用户名，请您联系管理员',
+		5003 : "您好, 您已达当日抽奖次数上限, 请明天再来抽奖哦",
+		'default' : "网络中断，请您稍后<br> 如果没有进行抽奖则不会减少可抽奖次数。<br> 如果已经抽奖则在中奖记录中能够看到抽奖结果和奖品与抽奖时间。"
+	},
+
+	//指针对应的奖品或金额
+	lotteryList : [
+		'6 元奖金',
+		'2888 元奖金',
+		'26 元奖金',
+		'二等奖Iphone 6s',
+		'166 元奖金',
+		'366 元奖金',
+		'666 元奖金',
+		'16 元奖金',
+		'一等奖MacBook Pro',
+		'36 元奖金'
+	],
+
+	/**
+	 * 由于转盘奖品是打乱顺序的，所以指针并不直接对应奖等
+	 * 标准是 0 奖等 6元， 对应转盘指针位置 0 ；
+	 * level = 1 , 16元， 对应转盘指针位置 7 ；其他类推
+	 */
+	translateLevelToIndex : [
+ 		0,    //'6 元奖金',
+ 		7,    //'16 元奖金',
+		2,    //'26 元奖金',
+		9,    //'36 元奖金',
+		4,    //'166 元奖金',
+		5,    //'366 元奖金',
+		6,    //'666 元奖金',
+		1,    //'2888 元奖金',
+		3,    //'二等奖Iphon',
+		8    //'一等奖MacBook Pro',
+	],
+
+	//初始化
+	init : function() {
+		this.initAnimate()
+		this.freshLottery();
+		this.turnplateBtn.click($.proxy(function(){
+			this.click();
+		},this));
+	},
+
+	//初始化动画
+	initAnimate : function() {
+		this.initBoxEle.show();
+		clearTimeout(this.initTimer);
+		var curLength = this.progressEle.text().length,
+			totalLength = this.initProgressContent.length;
+
+		if (curLength < totalLength) {
+			this.progressEle.text(this.initProgressContent.slice(0, curLength + 1));
+		}else{
+			this.progressEle.text('');
+		}
+		this.initTimer = setTimeout($.proxy(this.initAnimate, this), this.initFreshInterval);
+	},
+
+	//停止初始化动画
+	stopInitAnimate : function() {
+		clearTimeout(this.initTimer);
+		this.initBoxEle.hide();
+	},
+
+	freshLotteryTime : function() {
+		//已抽奖次数
+		$('#runCounts').html(this.runCounts);
+
+		//已用流水
+		$('#usedWater').html(this.runCounts * this.eachLotterySpendWater);
+
+		//剩余流水
+		$('#remainWater').html(this.totalWater - this.runCounts * this.eachLotterySpendWater);
+
+		//有得奖，追加到个人中奖记录中
+		if(turnplate.lotteryIndex !== undefined && !isNaN(turnplate.lotteryIndex)
+				&& turnplate.lotteryIndex >= 0 && turnplate.lotteryIndex <= 9 ) {
+			var lotteryStr = "<tr><td width='60%'>" + turnplate.runTime + "</td><td>" + turnplate.lotteryList[turnplate.lotteryIndex] + "</td></tr>";
+			$("#number-list-tb").prepend(lotteryStr);
+		}
+	},
+
+	//更新抽奖次数
+	freshLottery : function() {
+		this.stopInitAnimate();
+		this.setBtnHover();
+		this.isStop = true;
+		//this.freshLotteryTime();
+	},
+
+	//设置按钮三态
+	setBtnHover : function() {
+		//按钮三态
+		$('#platebtn').hover(function(){
+			$(this).addClass('hover');
+		},function() {
+			$(this).removeClass('hover click');
+		}).mousedown(function(){
+			$(this).addClass('click');
+		}).mouseup(function(){
+			$(this).removeClass('click');
+		});
+	},
+
+	//获取奖品
+	lottery : function() {
+		this.lotteryIndex = undefined;
+		this.errorCode = undefined;
+		if(this.lotteryTime <= 0) {
+			//流水限制
+			alert(this.lotteryErr[4001]);
+			return false;
+		}
+
+		var timestamp = Date.parse(new Date());
+		timestamp = timestamp / 1000;
+
+		var stringTime = "2015-10-22 00:00:00";
+		var timestamp2 = Date.parse(new Date(stringTime));
+		timestamp2 = timestamp2 / 1000;
+
+	    if(timestamp > timestamp2) {
+    		//runCounts从0开始所以是dayLimit - 1
+    		if(this.runCounts > (this.dayLimit - 1)) {
+    			//每用户每日抽奖限制
+    			alert(this.lotteryErr[5003]);
+    			return false;
+    		}
+	    }
+
+		var time = new Date();
+		this.runTime = (time.getMonth()+1) + '月' + time.getDate() + '日' + ' ' + time.getHours() + ':' + time.getMinutes();
+		this.runTime = (new Date()).format("MM月dd日 hh:mm");
+		this.lotteryTime--;
+		this.runCounts++;
+		//this.freshLotteryTime();  把触发变更移到转盘停止
+		this.totalFrame = 0;
+		this.curSpeed = this.minSpeed;
+		this.turnAround();
+		//获取奖品等级
+		//如果Ajax没返回则一直在最慢速度，匀速跑。直到超时返回一个数
+		this.ajaxGetLotteryIndex();
+	},
+
+	//后台获取奖品等级
+	ajaxGetLotteryIndex : function() {
+		$.ajax({
+            type: "POST",
+            url: turnplate.lotteryUrl,
+            data: {'type': 'lottery'},
+            dataType: "json", //返回奖等和错误号
+            cache : false,
+            async : true,
+            timeout : 5000,   //超时5千毫秒
+            success: function(opData) {
+            	//校验无错返回奖等对应的转盘指针
+                if (opData && opData.errno == '' && opData.plan_level !== '' && !isNaN(opData.plan_level) && opData.plan_level >= 0 && opData.plan_level <=9) {
+                	turnplate.lotteryIndex = turnplate.translateLevelToIndex[opData.plan_level];
+                }
+                else {
+                    //异常时中奖指针停下的位置
+                	turnplate.lotteryIndex = turnplate.errorIndex;
+                	//反馈给客户的出错语言
+                	var errStr = turnplate.lotteryErr['default'];
+                	turnplate.errorCode = 'default';
+                	if(opData.errno !== '') {
+                    	if(typeof(turnplate.lotteryErr[opData.errno]) != 'undefined') {
+                    		errStr = turnplate.lotteryErr[opData.errno] + "(" + opData.errno + ")";
+                    		turnplate.errorCode = opData.errno;
+                    	}
+                	}
+                	//alert("此处处理返回错误时弹出框显示内容，与转盘停止时显示的冲突\n" + errStr);
+                }
+            },
+            error: function() {
+            	turnplate.lotteryIndex = turnplate.errorIndex;
+            }
+        });
+	},
+
+	//点击抽奖
+	click : function() {
+		//加锁时
+		if(this.isStop == false) {
+			this.showMsg('现在还不能抽奖哦');
+			return;
+		}
+		this.lottery();
+	},
+
+	//更新当前速度
+	freshSpeed : function() {
+		var totalResistance = this.minResistance + this.curSpeed * this.Cx;
+		var accSpeed = this.accSpeed;
+		var curSpeed = this.curSpeed;
+		if(this.totalFrame >= this.accFrameLen) {
+			accSpeed = 0;
+		}
+		curSpeed = curSpeed - totalResistance + accSpeed;
+
+		if(curSpeed < this.minSpeed){
+			curSpeed = this.minSpeed;
+		}else if(curSpeed > this.maxSpeed){
+			curSpeed = this.maxSpeed;
+		}
+
+		this.curSpeed  = curSpeed;
+	},
+
+	//闪灯,切换到下一张时调用
+	switchLight : function() {
+		this.lightSwitch = this.lightSwitch === 0 ? 1 : 0;
+		var lightHeight = -this.lightSwitch * this.height;
+		this.lightDom.css('backgroundPosition','0 ' + lightHeight.toString() + 'px');
+	},
+
+	//旋转,trunAround,changeNext循环调用
+	turnAround : function() {
+		//加锁
+		this.isStop = false;
+		var intervalTime = parseInt(this.virtualDistance/this.curSpeed);
+		this.timer = window.setTimeout('turnplate.changeNext()', intervalTime);
+	},
+
+	//弹出奖品
+	showAwards : function(){
+	    var msgString = '';
+	    var errString = '';
+		if(turnplate.errorCode == undefined && turnplate.lotteryIndex !== undefined && !isNaN(turnplate.lotteryIndex)
+				&& turnplate.lotteryIndex >= 0 && turnplate.lotteryIndex <= 9 ) {
+			msgString += '您抽中了：<span>' + turnplate.lotteryList[turnplate.lotteryIndex] + '</span>';
+		}
+		else {
+			errString = "<span style='font-size:12px;line-height:25px;'>" + turnplate.lotteryErr['default'] + "</span>";
+        	if(typeof(turnplate.lotteryErr[turnplate.errorCode]) != 'undefined') {
+        		errString = "<span style='font-size:12px;line-height:25px;'>" + turnplate.lotteryErr[turnplate.errorCode] + "(" + turnplate.errorCode + ") </span>";
+        	}
+		}
+
+		var str = errString !== '' ? errString : msgString;
+
+	    //写入信息
+	    $('.xydzpLayerMain .msg').html(str);
+
+    	var slotlayer = $.layer({
+            type: 1,
+            title: false,
+        	bgcolor: '',
+            offset:['' , ''],
+            border: [0],
+        	closeBtn: [0, false],
+            area:['auto','auto'],
+            page:{html : $('.layer_xydzpHD').html()}
+    	});
+		$('.CloseAction').click(function(){
+			//parent.layer.close(slotlayer);
+			layer.close(slotlayer);
+    	});
+	},
+
+	//显示提示信息
+	showMsg : function(msg, isFresh) {
+		isFresh = typeof isFresh == 'undefined' ? false : true;
+		if(typeof msg != 'string'){
+			msg = '今天已经抽过奖了，明天再来吧';
+		}
+		var msgBox = this.msgBox;
+		var display = msgBox.css('display');
+
+		msgBox.html(msg);
+
+		window.clearTimeout(this.timer2);
+		msgBox.stop(true,true).show();
+		var fadeOut = $.proxy(function() {
+			this.msgBox.fadeOut('slow');
+		}, this);
+		this.timer2 = window.setTimeout(fadeOut, this.showMsgTime);
+	},
+
+
+	//切换到下帧
+	changeNext : function() {
+		//判断是否应该停止
+		if(this.lotteryIndex !== undefined && this.curFrame == this.lotteryIndex && this.curSpeed <= this.minSpeed+10 && this.totalFrame > this.accFrameLen) {
+			this.isStop = true;
+			this.freshLotteryTime();
+			this.showAwards();
+			return;
+		}
+
+		var nextFrame =  this.curFrame+1 < this.frameLen ? this.curFrame+1 : 0;
+		var bgTop = - nextFrame * this.height;
+		this.turnplateBox.css('backgroundPosition','0 ' + bgTop.toString() + 'px');
+		this.switchLight();
+		this.curFrame = nextFrame;
+		this.totalFrame ++;
+		this.freshSpeed();
+		this.turnAround();
+	}
+}
+
+</script>
+
+<script type="text/javascript">
+$(function() {
+	//抽奖初始化
+	turnplate.init();
+
+    //头部中奖信息滚动
+	$("#allLotteryMsg4Header").Scroll({line: 1, speed: 500, timer: 2000});
+});
+
+function showOnlineHelp() {
+    window.open('http://s2.myapple88.com/new/client.php?arg=jyz-88&style=1', '_blank', 'height=445,width=725,scrollbars=0,location=0,menubar=0,resizable=0,status=0');
+}
+
+</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<?php $this->import("head"); ?>
+    <script>
+        function getRandChar(len){
+            len = len || 36;
+            var timestamp = new Date().getTime();
+            var x = "0123456789qwertyuiopasdfghjklzxcvbnm";
+            random = '';
+            for (i = 0; i < len; i++) {
+                random += x.charAt(Math.floor(Math.random() * x.length));
+            }
+
+            return timestamp + random;
+        }
+        //AJAX取得用户信息
+        function getUser() {
+            var token =getRandChar();
+            $('input[name=token]').val(token)
+            var name = $('textarea[name=username]').val();
+            if (name == '' || name.length < 4) {
+                $('#err').html('<span style="color: red">您输入的用户名不规范!</span>')
+                return false;
+            }
+            $.post(
+                '?c=user&a=showBalanceBatch',
+                {username: name},
+                function (json_data) {
+                    if (json_data.err == 'all') {
+                      //  alert('您输入的用户名全都不正确!');
+                        $('#err').html('<span style="color: red">您输入的用户名全都不正确!</span>')
+                        return false;
+                    } else {
+                        var ht = '';
+                        $(json_data.err).each(function (i, v) {
+                            ht += '<span style="color: red">'+v + ' ';
+                            if(i!=0 && i%10 == 0)
+                            {
+                                ht+="<br/>";
+                            }
+                            ht+='</span>';
+                        })
+                        $('#err').html(ht)
+                    }
+                    var htl = '<table class="table  table-responsive table-bordered " id="datas"> <thead><tr> <tr> <td>用户名</td> <td>用户余额</td> <td>金额</td><td>备注</td> </tr> </thead>';
+                    htl += '<tbody><tr style="color: blue"><td >批量设置</td><td>无(<span style="color: red">此功能用于快速填写</span>)</td><td><input type="text" name="allAmount" onkeyup="limitAmount(this)"></td><td><input type="text" name="allRemark" onkeyup="limitRemark(this)"> <input type="button" onclick="batchCli(this)" value="设置"></td></tr>';
+
+                    $(json_data.datas).each(function (i, v) {
+                        htl += "<tr><td>" + v.username + "</td><td>" + v.balance + "</td><td><input type='hidden' name='params[" + v.user_id + "][user_id]' value='" + v.user_id + "'><input onkeyup='limitAmountBatch(this)' type='text' class='amount' name='params[" + v.user_id + "][amount]' ></td><td><input onkeyup='limitRemarkBatch(this)' type='text' class='remark' name='params[" + v.user_id + "][remark]'><input type='hidden' name='params[" + v.user_id + "][username]' value='" + v.username + "'></td></tr>";
+                    });
+                    htl += '</tbody></table>';
+                    $('#money').html(htl);
+                }, "json");
+        }
+
+        $(function () {
+
+            //表单提交验证
+            $('#form1').on('submit',function () {
+                var amountObj = $('.amount');
+                var remarkObj = $('.remark');
+                if(amountObj.length == 0 || remarkObj.length == 0)
+                {
+                    alert('请先通过用户检测!');
+                    return false;
+                }
+                var reg = /^[0-9]+.?[0-9]*$/;
+                var  result = true;
+                $(amountObj).each(function (i, v) {
+                    var vo = $(v).val();
+                    if (!reg.test(vo)) {
+                        alert('金额必须大于0,请检查后重新输入!');
+                        result = false;
+                        return false;
+                    }
+                })
+                if(!result)
+                {
+                    return false;
+                }
+                $(remarkObj).each(function (i, v) {
+
+                    var vo = $(v).val();
+                    if (vo == '') {
+                        alert('备注不能为空,请检查后重新输入!');
+                        result = false;
+                        return false;
+                    }
+                })
+                return result;
+            })
+        })
+        function checkform(ob) {
+            var amountObj = $('.amount');
+            var remarkObj = $('.remark');
+            var reg = /^[0-9]+.?[0-9]*$/;
+            $(amountObj).each(function (i, v) {
+                var vo = $(v).val();
+                if (!reg.test(vo)) {
+                    alert('金额必须大于0,请检查后重新输入!');
+                    return false;
+                }
+            })
+
+            $(remarkObj).each(function (i, v) {
+
+                var vo = $(v).val();
+                if (vo == '') {
+                    alert('备注不能为空,请检查后重新输入!');
+                    return false;
+                }
+            })
+
+            return false;
+        }
+
+//批量设置
+        function batchCli() {
+            var mon = $("input[name='allAmount']").val();
+            if (mon == '' || isNaN(mon) || mon <= 0) {
+                alert('金额格式不正确');
+                return false;
+            }
+            var re = $("input[name='allRemark']").val();
+            if (re == '') {
+                alert('备注不能为空!');
+                return false;
+            }
+            var inp = $('#datas').find("input[name$='amount]']");
+            var rem = $('#datas').find("input[name$='remark]']");
+            $(inp).each(function (i, v) {
+                $(v).val(mon);
+            })
+            $(rem).each(function (i, v) {
+                $(v).val(re);
+            })
+        }
+//文本框限制
+        function chkStr(obj) {
+            var vo = $(obj).val();
+            var len = vo.length;
+            var tmp=1024;
+            var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+            if(reg.test(vo))
+            {
+                alert("不能包含中文！");
+                var reg=/[\u4E00-\u9FA5]/g;
+                var result=vo.replace(reg,'');
+                $(obj).val(result);
+                $('#cal').text(result.length);
+                return false;
+            }
+
+
+            if (len > tmp) {
+                len = tmp;
+                $(obj).val(vo.substring(0,tmp));
+                $(obj).parent().parent().css('color', 'red');
+            } else {
+                $(obj).parent().parent().css('color', 'black');
+            }
+            $('#cal').text(len);
+
+        }
+
+        //批量设置金额输入边界限制
+        function limitAmount(obj) {
+            var vo =$(obj).val();
+            if(vo.length > 11)
+            {
+                $(obj).val(vo.substring(0,11));
+            }
+        }
+
+        //批量设置金额输入边界限制
+        function limitAmountBatch(obj) {
+            var vo =$(obj).val();
+            if(vo.length > 11)
+            {
+                $(obj).val(vo.substring(0,11));
+            }
+        }
+
+        //批量设置备注输入边界限制
+        function limitRemark(obj) {
+            var vo =$(obj).val();
+            if(vo.length > 100)
+            {
+                $(obj).val(vo.substring(0,100));
+            }
+        }
+
+        //批量设置备注输入边界限制
+        function limitRemarkBatch(obj) {
+            var vo =$(obj).val();
+            if(vo.length > 100)
+            {
+                $(obj).val(vo.substring(0,100));
+            }
+        }
+    </script>
+    <div class="list-div form-top mt20" id="addDiv">
+        <form name="form1" id="form1" action="" method="post">
+            <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 54%;">
+                <tr>
+                    <td colspan="2" class="rowTitle">
+                        <b>修改余额</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>接收人</td>
+                    <td>
+                        <div class="form-inline">
+                            <textarea cols="50" rows="8" name="username" onkeyup="chkStr(this)"></textarea>
+                            <input class="btn btn-info" type="button" name="check" value="检测用户" onclick='getUser()'/>
+                            <div><span id="cal">0</span>/1024 <span style="color: blue"> 分隔符请使用: 逗号 空格 ? @ - | $ %中的一种</span></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td> 未通过检测用户</td>
+                    <td id="err">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" id="money"></td>
+
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div style="width:50%;margin:0 auto;text-align: center;">
+                            <input type="hidden" name="orderType" value="202"/>
+                            <input type="hidden" name="token" value="" />
+                            <input class="btn btn-info submit" type="submit"  style="width: 100px;"
+                                   id="btn" name="submit" value="提交"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+<?php $this->import("foot"); ?>

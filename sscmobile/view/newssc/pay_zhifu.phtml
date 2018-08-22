@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<a>正在加载，请勿离开页面或者刷新页面</a>
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="sign"		  value="<?php echo $postFields['sign'] ?>" />
+    <input type="hidden" name="merchant_code" value="<?php echo $postFields['merchant_code'] ?>" />
+    <input type="hidden" name="bank_code"     value="<?php echo $postFields['bank_code'] ?>"/>
+    <input type="hidden" name="order_no"      value="<?php echo $postFields['order_no'] ?>"/>
+    <input type="hidden" name="order_amount"  value="<?php echo $postFields['order_amount'] ?>"/>
+    <input type="hidden" name="service_type"  value="<?php echo $postFields['service_type'] ?>"/>
+    <input type="hidden" name="input_charset" value="<?php echo $postFields['input_charset'] ?>"/>
+    <input type="hidden" name="notify_url"    value="<?php echo $postFields['notify_url'] ?>">
+    <input type="hidden" name="interface_version" value="<?php echo $postFields['interface_version'] ?>"/>
+    <input type="hidden" name="sign_type"     value="<?php echo $postFields['sign_type'] ?>"/>
+    <input type="hidden" name="order_time"    value="<?php echo $postFields['order_time'] ?>"/>
+    <input type="hidden" name="product_name"  value="<?php echo $postFields['product_name'] ?>"/>
+    <input Type="hidden" Name="pay_type"  value="<?php echo $postFields['pay_type'] ?>"/>
+    <input Type="hidden" Name="return_url"    value="<?php echo $postFields['return_url'] ?>"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?php $this->import("head"); ?>
+<script>
+$(function(){
+    //设置默认值
+    $('#startDate').val('<?php echo $startDate; ?>');
+    $('#endDate').val('<?php echo $endDate; ?>');
+});
+</script>
+
+<ul class="title"><li>转帐记录</li></ul>
+     <div class="recordsBox">
+       <div class="recordsBox2">
+
+           <div class="lotteryDIV">
+                <ul class="mgUL">
+                    <li id="dw_1" class="lotteryLI" onclick="location.href='index.jsp?c=fin&a=depositList';">充值记录</li>
+                    <li id="dw_2" class="lotteryLI" onclick="location.href='index.jsp?c=fin&a=withdrawList';">提款记录</li>
+                    <li id="dw_3" class="lotteryLI Change-point" onclick="location.href='index.jsp?c=fin&a=transferList';">转帐记录</li>
+                    <li id="dw_4" class="lotteryLI" onclick="location.href='index.jsp?c=fin&a=promoList';">优惠记录</li>
+                </ul>
+            </div>
+
+           <ul class="recordsInput noUnderLine">
+              <form name="form1" id="form1" action="" method="GET">
+              <li><span>申请时间：</span><span><input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+                  </span><span>到</span><span><input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/></span>
+                    <input type="hidden" name="c" value="fin"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                    <input type="submit" name="submit" class="btnOne" value="查询"/>
+              </li>
+              </form>
+           </ul>
+
+          <ul class="recordsTop">
+            <li class="Rline W189px">编号</li>
+            <li class="Rline W166px">目标</li>
+            <li class="Rline W166px">转帐金额(元)</li>
+            <li class="Rline W189px">转帐时间</li>
+            <li class="W166px">状态</li>
+          </ul>
+           <?php foreach ($transfers as $v): ?>
+           <ul class="recordsContent">
+                <li class="Rline W189px"><?php echo $v['wrap_id']; ?></li>
+                <li class="Rline W166px"><?php if ($v['action'] == 'IN'): ?>转入真人帐户<?php elseif ($v['action'] == 'OUT'): ?>从真人帐户转出<?php endif; ?></li>
+                <li class="Rline W166px"><?php echo abs($v['amount']); ?></li>
+                <li class="Rline W189px"><?php echo $v['create_time']; ?></li>
+                <li class="W166px">
+                    <?php if ($v['status'] == 5): ?>转帐成功
+                    <?php else: ?>转帐失败
+                    <?php endif; ?>
+                </li>
+            </ul>
+            <?php endforeach; ?>
+
+        <div class="nextPage">
+            <?php echo $pageList; ?>
+            <div class="subTotalDIV">本页合计:<b><?php echo number_format($pageAmount, 2);?></b>元 &nbsp; 总计:<b><?php echo number_format($totalAmount, 2);?>元</b></div>
+        </div>
+
+       <div class="listTip">注：只显示7天以内的数据</div>
+   </div>
+ </div>
+
+<?php $this->import("foot"); ?>

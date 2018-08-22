@@ -1,0 +1,56 @@
+<?php $this->import("head"); ?>
+    <div class="list-div mt20" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered">
+                <thead>
+                <tr>
+                    <td>游戏名称</td>
+                    <td>接口状态</td>
+                    <td>是否开启游戏</td>
+                </tr>
+                </thead>
+                <?php foreach ($games as $v): ?>
+                    <tr>
+                        <td><?php echo $v['game_name']; ?></td>
+                        <td>
+                            <?php if ($v['mw_status'] == 1): ?>维护中
+                            <?php else: ?>正常
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <?php if ($v['status'] == 1): ?><input name="status" data-id="<?php echo $v['id']; ?>"
+                                                                   title="status"
+                                                                   type="checkbox"
+                                                                   checked="checked">
+                            <?php else: ?><input name="status" data-id="<?php echo $v['id']; ?>" title="status"
+                                                 type="checkbox">
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+    </div>
+    <script>
+        $("input[name=status]").click(function () {
+            let id = $(this).data("id");
+            let status = $(this).prop("checked") === true ? 1 : 0;
+
+            $.ajax({
+                type: "POST",
+                url: "?c=egame&a=gameStatusEdit",
+                dataType: "json",
+                data: "id=" + id + "&status=" + status,
+                success: function (response) {
+                    alert(response.error_message);
+                    location.replace('?c=egame&a=gameSet');
+                },
+                error: function (data) {
+                    alert('调用 ajax 出错：' + data.toString());
+                    location.replace('?c=egame&a=gameSet');
+                    return false;
+                }
+            });
+        });
+    </script>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,185 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    #addDiv .form-control{width:35%;}
+</style>
+<script>
+    $(document).ready(function(){
+        $('input[name=username]').blur(function(){
+
+            if ($(this).val() == '' || $(this).val().length < 4) {
+                    $('#tip1').html('用户账号输入不规范或是无效账号');
+                    return false;
+            }
+            if( $(this).val() == $("select[name=parent]").val()){
+                $('#tip2').html('新上级不能为自己');
+                return false;
+            }
+            $.post('?c=user&a=addLevelAdjust',{sa:'showRealName', username: $('input[name=username]').val()},function (json_data) {
+                    if (json_data.user_id == '') {
+                        $('#tip1').html('您输入的账号有误，请再次确认');
+                        $('input[name=real_name]').val('');
+                    } else {
+                        $('input[name=real_name]').val('暂无真实姓名');
+                        if(json_data.real_name){
+                            $('input[name=real_name]').val(json_data.real_name);
+                        }
+                        if($("select[name=type]").val() == 1 && json_data.level != 0){
+                                $('#tip1').html('此用户必须为总代类型');
+                                $('input[name=errno]').val(1);
+                                return false;
+                        }
+                        if($("select[name=type]").val() == 2 && json_data.level != 1){
+                            $('#tip1').html('此用户必须为一代类型');
+                            $('input[name=errno]').val(1);
+                            return false;
+                        }
+                        $('#tip1').html('');
+                        $('input[name=errno]').val(0);
+                    }
+                },
+                "json"
+            );
+        });
+
+        $("select[name=type]").change(function(){
+            if($(this).val() == 2){
+                $('#tip').html('');
+                $("select[name=parent] option:first").attr('selected', true);
+                $("select[name=parent]").attr('disabled', 'disabled');
+            }else{
+                $('#tip').html('请选择相应总代');
+                $("select[name=parent]").removeAttr('disabled');
+            }
+        });
+        $("select[name=parent]").change(function(){
+            if($(this).val() != 0){
+                $('#tip2').html('');
+                if($(this).val() == $('input[name=username]').val()){
+                    $('#tip2').html('新总代不能设置为自己');
+                }                
+            }
+        });
+        $("textarea").bind({'keyup':function(){
+            if($(this).val().length > 10){
+                $('#tip3').html('');
+            }
+        },'blur':function(){
+            if($(this).val().length < 10){
+                $('#tip3').html('提案原因小于10个字符！');
+            }
+        }});
+        
+        var agentJson = <?php echo $agents ?>;
+        var option = '';
+        $.each(agentJson,function(i,item){
+            option += '<option value='+item.username+'>'+item.username+'</option>';
+        });
+        $("select[name=parent]").append(option);
+        
+        
+        $("input[name=sub]").click( function (){
+            var result = true;
+            if($("input[name=real_name]").val() == ''){
+                $('#tip1').html('代理账号不正确！');
+                result = false;
+            }
+            if($("input[name=username]").val() == '' || $('input[name=errno]').val() != 0){
+                $('#tip1').html('代理账号类型不对！');
+                $('input[name=real_name]').val('');
+                result = false;
+            }
+            if($("select[name=type]").val() == 1 && $("select[name=parent]").val() == 0){
+                $('#tip2').html('必须选择上级代理！');
+                result = false;
+            }
+
+            if($("textarea").val().length < 10){
+                $('#tip3').html('提案原因小于10个字符！');
+                result = false;
+            }
+            
+            $.ajax({
+                url: '?c=user&a=addLevelAdjust',
+                type: 'POST',
+                data:{sa:'checkAdjustLevel', username: $('input[name=username]').val(),parent:$("select[name=parent]").val(),type:$("select[name=type]").val()},
+                dataType: 'json',
+                async: false,
+                success: function(json_data){
+                    if (json_data.errno != 0) {
+                        $('#tip1').html(json_data.errstr);
+                        result = false;
+                    }
+                }
+            });
+            
+            if(result){
+                $("#subform").submit();
+            }
+    });
+});
+</script>
+<div class="list-div form-top mt20" id="addDiv">
+    <form name="form1" id="subform" action="" method="post" >
+        <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 60%;">
+            <tr>
+                <td colspan="2" class="rowTitle">
+                    <b>新增提案</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="25%">调整类型</td>
+                <td>
+                    <select class="input-md form-control" name="type">
+                        <option value="1">总代降一代</option>
+                        <option value="2">一代升总代</option>
+                    </select><span id="tip"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>代理账号</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" type="text" name="username" value=""  />
+                        <font color="red"><span id="tip1"></span></font>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>真实姓名</td>
+                <td>
+                    <input class="input-md form-control" type="text" name="real_name" value="" disabled />
+                </td>
+            </tr>
+            <tr>
+                <td>降级后的上级</td>
+                <td>
+                    <div class="form-inline">
+                        <select class="input-md form-control" name="parent">
+                            <option value="0">请选择</option>                         
+                        </select>
+                        <font color="red"><span id="tip2"></span></font>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td>
+                    <div class="form-inline">
+                        <textarea  class="input-md form-control" name="remark" style="height: 100%;" rows="4" cols="20" placeholder="可在此输入原因"></textarea>
+                        <font color="red"><span id="tip3" ></span></font>
+                    </div>  
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 60%;margin: 0 auto;text-align:center;">
+                        <input type="hidden" name="errno" value="0" />
+                        <input type="hidden" name="op" value="addLevelAdjust" />
+                        <input class="btn btn-info sub" style="width: 100px;" type="button"  name="sub" value="提交" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

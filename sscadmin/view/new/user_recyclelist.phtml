@@ -1,0 +1,53 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    //预设查询值
+    $(document).ready(function() {
+        //预选中值
+    });
+</script>
+<div class="list-div form-top mt20" id="listDiv">
+
+    <table class="table table-responsive table-bordered  mainList">
+        <thead>
+            <tr>
+                <td>recycle_id</td>
+                <td>申请用户</td>
+                <td>要求回收对象</td>
+                <td>原用户名</td>
+                <td>新用户名</td>
+                <td>建立时间</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php foreach ($recycles as $key => $v): ?>
+            <tr>
+                <td><?php echo $v['recycle_id']; ?></td>
+                <td>
+                    <?php echo $users[$v['user_id']]['username']; ?>
+                </td>
+                <td><?php echo $users[$v['target_user_id']]['username']; ?></td>
+                <td><?php echo $v['old_username']; ?></td>
+                <td><?php echo $v['new_username']; ?></td>
+                <td><?php echo $v['create_time']; ?></td>
+                <td>
+                    <?php if ($v['status'] == 0): ?><b>未处理</b>
+                    <?php elseif ($v['status'] == 8): ?>已回收
+                    <?php elseif ($v['status'] == 9): ?>拒绝回收申请
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['status'] == 0): ?>
+                        <a class="btn btn-mini btn-info" href="./?c=user&a=processRecycle&recycle_id=<?php echo $v['recycle_id']; ?>">处理回收</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal">
+    <?php echo $pageList; ?>
+</div>
+
+<?php $this->import("foot"); ?>

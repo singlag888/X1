@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $apiUrl; ?>' method='get'>
+    <input type="hidden" name="spid"		  value="<?php echo $postFields['spid'] ?>" />
+    <input type="hidden" name="orderid" value="<?php echo $postFields['orderid'] ?>" />
+    <input type="hidden" name="mz"     value="<?php echo $postFields['mz'] ?>"/>
+    <input type="hidden" name="spzdy"     value="<?php echo $postFields['spzdy'] ?>"/>
+    <input type="hidden" name="uid"      value="<?php echo $postFields['uid'] ?>"/>
+    <input type="hidden" name="spsuc"  value="<?php echo $postFields['spsuc'] ?>"/>
+    <input type="hidden" name="ordertype"  value="<?php echo $postFields['ordertype'] ?>"/>
+    <input type="hidden" name="interfacetype" value="<?php echo $postFields['interfacetype'] ?>"/>
+    <input type="hidden" name="productname"    value="<?php echo $postFields['productname'] ?>">
+    <input type="hidden" name="notifyurl"    value="<?php echo $postFields['notifyurl'] ?>">
+    <input type="hidden" name="sign"    value="<?php echo $postFields['sign'] ?>">
+</form>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<link rel="stylesheet" href="/view/new/layui/css/layui.css" />
+<link rel="stylesheet" href="/view/new/css/domain.css" />
+<script type="text/javascript" src="/view/new/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/view/new/layui/layui.js"></script>
+
+<div class="domain-bind-title"><span>绑定域名</span></div>
+<hr style="width: 990px;position: absolute;top: 45px;left: 30px;">
+<div id="proxy_account">
+  <span >代理账号：</span>
+  <input type="text" name="proxyAcct" class="layui-input user-config-tab1"/>
+</div>
+<div id="domain_bind_select" onclick="checkProxyAcct()" >
+  <span>查询账号</span>
+</div>
+<div id="domain_bind_list_div"><table id="domain_bind_list" lay-filter="domain_bind_list"></table></div>
+<div id="domain_bind_address_div" >
+  <span class="domain-bind-address-div">域名：</span>
+  <select id="domain_bind_address" name="" >
+    <option value="">与新增域名列表一致</option>
+   	<option value="1">显示系统内空闲域名</option>
+	<option value="2">包括已解绑域名在内</option>
+	<option value="3">点击新增，confirm确认</option>
+	<option value="4">新增逻辑也完成</option>
+  </select>
+</div>
+<div id="domain_bind_remark_div">
+  <span class="domain-bind-address-div">备注：</span>
+  <textarea name="remark" class="domain-bind-textarea"></textarea>
+</div>
+<hr style="width: 990px;position: absolute;top: 520px;left: 30px;">
+<div id="domain_bind_button">
+	<span id="domain_bind_submit" class="layui-btn layui-btn-danger layui-btn-radius">绑定</span>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+	layui.use('table', function(){
+		var table = layui.table;
+		
+		table.render({
+			elem: '#domain_bind_list',
+		    height: 250,
+		    width: 500,
+		    url: '', //数据接口
+		    cols: [[ //表头
+		      {field: 'proxyAccount', title: '代理账号', width: 110, align:'center'},
+		      {field: 'userRealname', title: '真实姓名', width: 125, align:'center'},
+		      {field: 'domainAddress', title: '域名', width: 180, align:'center'},
+		      {field: 'status', title: '状态', width: 85, align:'center'}
+		    ]]
+		});
+	});
+	
+	function checkProxyAcct() {
+		var proxyAcctVal = $("input[name='proxyAcct']").val();
+		if(!proxyAcctVal || proxyAcctVal.length < 1){
+			layer.msg('null');return;
+		}else{
+			$.ajax({
+				async: false,
+				data:proxyAcctVal,
+				url: '',
+				success: function(result){
+					
+				}
+			});
+		}
+	}
+	
+</script>
+
+
+
+
+
+
+
+
+

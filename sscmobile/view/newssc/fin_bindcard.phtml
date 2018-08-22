@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>  <!-- 银行资料管理 -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+
+</head>
+
+<body>
+<div class="operate_middle_page">
+        <!--/*头部*/-->
+        <header class="headerbg">
+            <a class="headbox01" href="javascript:history.go(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+            <p class="headtetle">卡号绑定</p>
+        </header>
+        <?php foreach($bindCards as $v): ?>
+            <table class="moneyBank moneyBankBJ">
+                <tr>
+                    <th>  <?php echo $GLOBALS['cfg']['withdrawBankList'][$v['bank_id']]; ?></th>
+                </tr>
+                <tr>
+                    <th><?php echo $v['bank_username']; ?></th>
+                    <td class="card_default">
+                        <span><?php echo $v['card_num']; ?></span>
+                    </td>
+                </tr>
+            </table>
+        <?php endforeach; ?>
+        <div class="personal_infor_operate martop1875" style="padding-top:1rem;">
+            <?php if(!$bindCards): ?>
+            <form name="form1" id="form1" method="POST"  >
+                <input type="hidden" name="op" value="doBindCard"/>
+                <input type="hidden" name="bind_card_id" value="<?php echo $bind_card_id; ?>">
+                <ul>
+                    <li class="ImportTextYin">
+                        <b>银行名称：</b>
+                        <select class="form_control" reg="[^0]" tip="选择银行名称" name="bind_bank_id" id="bind_bank_id">
+                            <?php foreach ($withdrawBankList as $k => $v): ?>
+                                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li  class="ImportTextYin">
+                        <b for="bind_card_num">银行卡号：</b><input type="text" value="" name="bind_card_num" id="bind_card_num" class="form_control" reg="^\d{15,19}$" tip="输入银行卡/存折号" />
+                    </li>
+                    <li  class="ImportTextYin">
+                        <b for="province">开户银行：</b><select class="form_control sel_province" reg="[^0]" tip="请选择省" name="province"   id="province" onChange="SelChgCity('city', document.getElementById('province').options[document.getElementById('province').selectedIndex].value, arrProvince, arrCity, 'country');"> </select>
+                        <select class="form_control sel_city" reg="[^0]" tip="请选择市" name="city"  id="city"> </select>
+                    </li>
+                    <li  class="ImportTextYin">
+                        <b for="branch_name">支行名称：</b><input type="text" value="" name="branch_name" id="branch_name" class="form_control"  tip="**银行**分行(储蓄)"/>
+                    </li>
+                    <li  class="ImportTextYin">
+                        <b for="bind_bank_username">开户姓名：</b><input type="text" value="" name="bind_bank_username" id="bind_bank_username" class="form_control" reg="^[\u4E00-\u9FA5]+$"/>
+                    </li>
+                    <li  class="ImportTextYin">
+                        <b for="bind_card_num2">确认卡号：</b><input type="text" value="" name="bind_card_num2" id="bind_card_num2" class="form_control" reg="^\d{15,19}$" tip="输入银行卡/存折号" /></li>
+
+                    <li>
+                        <p class="button_top"><a href="javascript:void(0);" class="topLinkBtn" id="logoutBtn"><input name="提交" type="submit" value="提交" class="Button_red"/></a></p>
+                </ul>
+            </form>
+            <?php endif;?>
+            <div class="personal_nocard_tip hide" id="nocardTip">尊敬的用户，您尚未绑定任何银行卡，<a href="#" id="nowBind">立即绑定</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/common.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+<?php if(!$bindCards): ?>
+<script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+
+<script language="javascript">
+  InitArea("province", "city", "country", arrProvince, arrCity, arrCountry, "", "", "");
+
+    $(function(){
+        $('#nowBind').on('click', function(){     // 立即绑定
+            $('#form1').show();
+            $('#nocardTip').hide();
+        });
+    });
+</script>
+
+<?php endif; ?>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

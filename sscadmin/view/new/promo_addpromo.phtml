@@ -1,0 +1,65 @@
+<?php $this->import("head"); ?>
+<script>
+    function checkform(ob) {
+        var msg = "";
+
+        if ($('input[name=username]').val() == '') {
+            msg = '请输入用户名！';
+        }
+        if ($('input[name=promo_amount]').val() == '' || !/\d[\d\.]+/.test($('input[name=promo_amount]').val())) {
+            msg = '请输入正确的金额！';
+        }
+
+        if ($('textarea[name=notes]').val() == '') {
+            msg = '请填写优惠说明！';
+        }
+
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+
+</script>
+<div class="list-div add-main mt20" id="addDiv">
+    <form name="form1" id="form1" class="form-top" action="./?c=promo&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive  table-bordered " cellpadding="0" cellspacing="0" style="width:50%;">
+            <tr>
+                <td class="rowTitle" colspan="2">
+                    <b>手工添加优惠</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="20%">优惠类型<br>
+                	其他优惠</td>
+                <td>
+                    <div id="notes">
+                        请填写优惠说明：<br/>
+                        <input class="input-md form-control" type="text" name="type" id="type_1" value="9" style="display:none" />
+                        <textarea class="input-md form-control" style="height: 50px;" name="notes"></textarea>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>用户名</td>
+                <td><input class="input-md form-control" name="username"/></td>
+            </tr>
+            <tr>
+                <td>优惠金额</td>
+                <td><input class="input-md form-control" name="promo_amount" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;margin:0 auto;text-align:center;">
+                        <input class="btn btn-info submit" style="width: 60px;" type="submit"  name="submit" value="提交" />
+                        <input class="btn btn-info submit" style="width: 60px;"  type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

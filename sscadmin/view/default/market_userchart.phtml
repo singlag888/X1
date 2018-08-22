@@ -1,0 +1,71 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    .jedatehms{display:none !important;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+$(document).ready(function(){
+     //准备数据
+    var json_lotterys = <?php echo $json_lotterys; ?>;
+    var tmp = '';
+    //总代选择框
+    $.each(json_lotterys, function(i,v){
+        tmp = '<option value=' + v.lottery_id + '>' + v.cname + '</option>';
+        $('select[name=lottery_id]').append(tmp);
+    });
+    $("input[name=startDate]").val("<?php echo $startDate; ?>");
+    $("input[name=endDate]").val("<?php echo $endDate; ?>");
+    $("input[name=show1]").attr('checked', <?php if ($show1 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show2]").attr('checked', <?php if ($show2 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show3]").attr('checked', <?php if ($show3 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $("input[name=show4]").attr('checked', <?php if ($show4 == 1): ?>true<?php else: ?>false<?php endif; ?>);
+    $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>');
+});
+</script>
+<div class="list-div" id="addDiv">
+    <form name="form1" class="form-top" id="form1" action="" method="get">
+        <div class="form-inline">
+            <div class="form-group has-default has-feedback">
+                <label class="ml10">开始时间:</label>
+                <input class="input-md form-control Wdate" type="text" name="startDate" id="startDate"  onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD'})" />
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>结束时间</label>
+                <input class="input-md form-control Wdate" type="text" name="endDate" id="endDate"  onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD'})" />
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label style="font-weight: normal;">所属彩种</label>
+            <select class="input-md form-control" name="lottery_id" id="lottery_id"><option value="0">请选择</option></select>
+            <input type="hidden" name="c" value="market"/>
+            <input type="hidden" name="a" value="userChart"/>
+            <label for='show1' style='color:#FF0000;font-weight: normal;'><input type="checkbox" id="show1" name="show1" value="1"/>参与游戏用户数</label>&nbsp;&nbsp;
+            <label for='show2' style='color:#00FFCC;font-weight: normal;'><input type="checkbox" id="show2" name="show2" value="1"/>开户量</label>&nbsp;&nbsp;
+            <label for='show3' style='color:#0000CC;font-weight: normal;'><input type="checkbox" id="show3" name="show3" value="1"/>首存人数</label>&nbsp;&nbsp;
+            <label for='show4' style='color:#EB21BE;font-weight: normal;'><input type="checkbox" id="show4" name="show4" value="1"/>有效首存人数</label>&nbsp;&nbsp;
+            <input class="btn btn-info button"  type="submit" value="查看"  style="width:60px" />
+        </div>
+    </form>
+   
+<div class="mt15 mb15">
+    <?php if($lottery['cname']) :?>彩种<?php echo $lottery['cname'];?>数据
+    <?php else: ?>
+    <b>系统用户图表</b>
+    <?php endif;?>
+</div>
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0">
+    <tr>
+        <td>
+            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="100%" height="280" id="chart" >
+                <param name="movie" value="js/chart.swf?" />
+                <param name="FlashVars" value='&dataURL=?c=market%26a=userChart%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show1=<?php echo $show1; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26show4=<?php echo $show4; ?>%26lottery_id=<?php echo $lottery_id; ?>'>
+                <param name="quality" value="high" />
+                <embed src="js/chart.swf?" flashVars='&dataURL=?c=market%26a=userChart%26op=getXML%26startDate=<?php echo $startDate; ?>%26endDate=<?php echo $endDate; ?>%26show1=<?php echo $show1; ?>%26show2=<?php echo $show2; ?>%26show3=<?php echo $show3; ?>%26show4=<?php echo $show4; ?>%26lottery_id=<?php echo $lottery_id; ?>' quality="high" width="100%" height="280" name="chart" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+            </object>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

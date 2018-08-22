@@ -1,0 +1,111 @@
+<?php $this->import("head"); ?>
+    <div class="list-div form-top mt20" id="addDiv">
+        <form action="" method="post">
+            <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 54%;">
+                <tr>
+                    <td colspan="2" class="rowTitle">
+                        <b>会员转移代理</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>输入会员姓名</td>
+                    <td>
+                        <div class="form-inline">
+                            <input type="hidden" name="uid" class="uid" value=""/>
+                            <input type="text" name="username" class="username" value="" placeholder="输入会员姓名"/>
+                            <input class="btn btn-info check_name" type="button" name="check_name" value="检测用户"/>
+                            <input style="display: none" class="btn btn-info reset_val" type="button" name="reset_val" value="重新输入"/>
+                            <div class="err_msg" style="color:red"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="display: none" class="to_show">
+                    <td> 代理列表</td>
+                    <td>
+                        <div class="form-inline">
+                            <select name="parent_id" class="select">
+                            </select>
+                            <div class="err_msg_1" style="color:red"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="display: none" class="to_show">
+                    <td colspan="2">
+                        <div style="width:50%;margin:0 auto;text-align: center;">
+                            <input class="btn btn-info submit" type="submit"  style="width: 100px;"
+                                   id="btn" name="submit" disabled="disabled" value="提交"/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+<script>
+    $(function(){
+        $(document).on('click','.reset_val',function(){
+            $('.uid').val('');
+            $('.username').val('');
+            $('.select').val(['']);
+            $('.select').html('');
+            $('.to_show').hide();
+            $('.reset_val').hide();
+            $('.username').attr('readonly',false);
+            $('.check_name').show();
+            $('.submit').attr("disabled",true);
+            $('.err_msg').html('');
+            $('.err_msg_1').html('');
+        });
+        $(document).on('change','.select',function(){
+            var pid=$(this).val();
+            var uid=$('.uid').val();
+            var uname=$('.username').val();
+            var type='chk_p';
+            $.post('?c=user&a=transferAgent',{pid:pid,uid:uid,uname:uname,type:type},function(data){
+                $('.err_msg_1').html('');
+                $('.submit').attr("disabled",true);
+                var data=eval('('+data+')');
+                if(data.status==1){
+                    $('.submit').removeAttr("disabled");
+                }else if(data.status==0){
+                    $('.err_msg').html(data.msg);
+                }else{
+                    $('.err_msg_1').html(data.msg);
+                }
+            });
+        });
+        $('.check_name').click(function(){
+            var username=$('.username').val();
+            var type='chk_u';
+            if(username==''){
+                $('.err_msg').html('请填写用户名!');
+                return false;
+            }
+            $.post('?c=user&a=transferAgent',{username:username,type:type},function(data){
+                var data=eval('('+data+')');
+                if(data.status==8){
+                    var show_data=data.info.show;
+                    var uid=data.info.uid;
+                    $('.uid').val(uid);
+                    var html='<option>请选择要转移的代理</option>';
+                    $(show_data).each(function(k,val){
+                        if(val.level==0){
+                            html+='<option value="'+val.user_id+'" level="'+val.level+'">'+'[总代] '+val.username+' </option>';
+                        }else{
+                            html+='<option value="'+val.user_id+'" level="'+val.level+'">'+'['+val.level+' 代] '+val.username+' </option>';
+                        }
+                    });
+                    $('.username').attr('readonly',true);
+                    $('.check_name').hide();
+                    $('.reset_val').show();
+                    $(html).appendTo('.select');
+                    $('.to_show').show();
+                    $('.err_msg').html('');
+                    $('.err_msg_1').html('');
+                }else{
+                    $('.err_msg').html(data.msg);
+                }
+            })
+        })
+    })
+</script>
+<?php $this->import("foot"); ?>

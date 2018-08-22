@@ -1,0 +1,132 @@
+<?php $this->import("head"); ?>
+
+<script>
+    function toogle(th) {
+        let ele = $(th).children(".move");
+        if ($(th).hasClass('on')) {
+            ele.animate({left: "1px"}, 300, function () {
+            });
+            $(th).removeClass("on").addClass("off");
+            $(th).prev('input').val(0);
+        } else {
+            ele.animate({left: '35px'}, 300, function () {
+            });
+            $(th).removeClass("off").addClass("on");
+            $(th).prev('input').val(1);
+        }
+    }
+    $(function() {
+<?php if ($json_topUsers): ?>
+            //准备数据
+            var json_topUsers = <?php echo $json_topUsers; ?>;
+            //总代选择框
+            $.each(json_topUsers, function(i, v) {
+                tmp = '<option value=' + v.user_id + '>' + v.username + '</option>';
+                $('select[name=top_username]').append(tmp);
+            });
+            $('select[name=top_username]').change(function() {
+                var tops = $(this).val();
+                var topNames = [];
+                $("option:selected", $(this)).each(function() {
+                    topNames.push($(this).text());
+                });
+                $('#topUsernames').text(topNames.join(','));
+                $('input[name=userIds]').val(tops.join(','));
+            });
+
+            $('#selectInput').click(function() {
+                $('#selectByInput').show();
+                $('#selectByTopUser').hide();
+            });
+            $('#selectTop').click(function() {
+                $('#selectByInput').hide();
+                $('#selectByTopUser').show();
+            });
+
+            $('#selectInput').click();
+
+<?php endif ?>
+    });
+</script>
+<div class="list-div add-main" id="addDiv">
+    <form name="form1" id="form1" action="?c=user&a=batchSendMessage" method="post">
+        <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 80%;">
+            <tr>
+                <td class="fb" width="10%">发送给</td>
+                <td>
+                    <?php if ($user): ?>
+                        <?php echo $user['username']; ?>（ID： <?php echo $user['user_id']; ?>）
+                        <input type="hidden" name="selectMethod" value="3" />
+                    <?php else : ?>
+                        <div id="selectMethod">
+                            <input type="radio" id="selectInput" name="selectMethod" value="1"/>  <label style="font-weight: normal;" for="selectInput">输入用户名</label>
+                            <input type="radio" id="selectTop" name="selectMethod" value="2"/> <label style="font-weight: normal;" for="selectTop">按照总代选择</label>
+                        </div>
+                        <div id="selectByInput">
+                             <textarea class="input-md form-control" name="input_username" id="input_username" /></textarea><br/>
+                            <label for="input_username">（可批量添加，每行一个用户）</label>
+                        </div>
+                        <div id="selectByTopUser">
+                            <p>（按住Ctrl可以多选）</p>
+                            <select class="input-md form-control" name="top_username" multiple="true" size="10"><option value="-1">所有总代</option></select>
+                            <p>已选：</p>
+                            <p id="topUsernames"></p>
+                        </div>
+                    <?php endif ?>
+                </td>
+            </tr>
+            <?php if ($onlyuser == 1): ?>
+                <input type="hidden" name="messageType" value="1" />
+                
+            <?php else : ?>
+                <tr>
+                    <td class="fb">关联用户</td>
+                    <td>
+                        <select class="input-md form-control" name="messageType"  size="4">
+                            <option value="1" selected>仅该用户</option>
+                            <option value="2">直接下级</option>
+                            <option value="3">所有下级</option>
+                        </select>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <tr>
+                <td class="fb">标题</td>
+                <td>
+                    <input title="标题" maxlength="18" class="input-md form-control fl" type="text"  name="title" size="25" value="<?php if ($pretitle): ?><?php echo $pretitle; ?><?php endif ?>"/>
+                    <b style="line-height: 34px;height: 34px;margin-left: 5px">最长18个字。</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="fb">消息内容</td>
+                <td><textarea title="内容" class="input-md form-control" name="content" value=""><?php if ($precontent): ?><?php echo $precontent; ?><?php endif ?></textarea></td>
+            </tr>
+            <?php if($canPush):?>
+            <tr>
+                <td  class="fb">app推送消息？</td>
+                <td>
+                    <div class="switch">
+                        <input type="hidden" name="is_push" value=0 />
+                        <div class="btn_fath clearfix off" id="switch" onclick="toogle(this)">
+                            <div class="move"></div>
+                            <div class="btnSwitch btn1">是</div>
+                            <div class="btnSwitch btn2">否</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+                <td colspan="2">
+                     <div style="width:60%;margin:0 auto;text-align:center;">
+                        <input type="hidden" name="userIds" value="<?php if ($user): ?><?php echo $user['user_id']; ?><?php endif ?>" />
+                        <input type="hidden" name="op" value="doBatchSendMessage" />
+                        <input class="btn btn-info submit" type="submit" style="width: 100px;"  name="submitBtn" value="发送"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+       
+    </form>
+</div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type='hidden' name='company_oid' value='<?php echo $postFields['company_oid']; ?>'>
+    <input type='hidden' name='order_id' value='<?php echo $postFields['order_id']; ?>'>
+    <input type='hidden' name='item_name' value='<?php echo  $postFields['item_name']; ?>'>
+    <input type='hidden' name='item_info' value='<?php echo $postFields['item_info']; ?>'>
+    <input type='hidden' name='money_num' value='<?php echo $postFields['money_num']; ?>'>
+    <input type='hidden' name='notify_url' value='<?php echo $postFields['notify_url']; ?>'>
+    <input type='hidden' name='return_url' value='<?php echo $postFields['return_url']; ?>'>
+    <input type='hidden' name='bank_id' value='<?php echo $postFields['bank_id']; ?>'>
+    <input type='hidden' name='pay_type' value='<?php echo $postFields['pay_type']; ?>'>
+    <input type='hidden' name='card_id' value=''>
+    <input type='hidden' name='sign' value='<?php echo $postFields['sign']; ?>'>
+</form>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?php $this->import("head"); ?>
+<div class="list-div form-top" id="listDiv">
+    <table class="table table-responsive  table-bordered mainList mt20" width="100%">
+        <thead>
+            <tr class="trhead">
+                <td>所属彩种</td>
+                <td>pg_id</td>
+                <td>奖金组名称</td>
+                <td>前台显示名称</td>
+                <td>说明</td>
+                <td>最高返点</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <?php foreach ($groups as $v): ?>
+            <tr>
+                <td><?php echo $lottery['name']; ?></td>
+                <td><?php echo $v['pg_id']; ?></td>
+                <td><?php echo $v['name']; ?></td>
+                <td><?php echo $v['disp_name']; ?></td>
+                <td><?php echo $v['description']; ?></td>
+                <td><?php echo $v['max_top_rebate']; ?></td>
+                <td>
+                    <a class="btn btn-mini btn-info" href="./?c=prize&a=viewGroup&pg_id=<?php echo $v['pg_id']; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>">查看</a>&nbsp;
+                    <a class="btn btn-mini btn-info" href="./?c=prize&a=editGroup&pg_id=<?php echo $v['pg_id']; ?>&lottery_id=<?php echo $lottery['lottery_id']; ?>">修改</a>&nbsp;
+                    <!--<a href="./?c=prize&a=deleteGroup&group_id=<?php echo $v['group_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>-->
+                </td>
+            </tr>
+            <?php endforeach; ?>
+    </table>
+</div>
+
+<?php $this->import("foot"); ?>

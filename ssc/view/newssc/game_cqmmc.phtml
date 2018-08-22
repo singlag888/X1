@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="webkit" name="renderer">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo config::getConfig('site_title'); ?></title>
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css?v=<?php echo $html_version_num; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/game_cqmmc.css?v=<?php echo $html_version_num; ?>" />
+<?php $this->import('public_cssjs') ?>
+</head>
+<body class="BodyMain">
+    <div class="newMain">
+        <div id="onceShowShade" style="width:1px;height:1px;"></div>
+        <!-- 顶部导航信息部分 -->
+         <?php $this->import('public_header') ?>
+        <!-- End 顶部导航条 -->
+
+        <!-- 彩种主体 -->
+        <div id='Gamepart' class='Gamepart'>
+            <!-- 开号区 -->
+            <div id='GameNumber' class='GameNumber'>
+                <div class=mmclogo><img src="<?php echo $imgCdnUrl?>/images/lottery_logo_15.png" alt="极速秒秒彩"></div>
+                <div id='open_code' class='open_code'>
+                    <div id="machine1" class="slotMachine">
+                        <div class="slot slot0"></div>
+                        <div class="slot slot1"></div>
+                        <div class="slot slot2"></div>
+                        <div class="slot slot3"></div>
+                        <div class="slot slot4"></div>
+                        <div class="slot slot5"></div>
+                        <div class="slot slot6"></div>
+                        <div class="slot slot7"></div>
+                        <div class="slot slot8"></div>
+                        <div class="slot slot9"></div>
+                    </div>
+
+                    <div id="machine2" class="slotMachine">
+                        <div class="slot slot0"></div>
+                        <div class="slot slot1"></div>
+                        <div class="slot slot2"></div>
+                        <div class="slot slot3"></div>
+                        <div class="slot slot4"></div>
+                        <div class="slot slot5"></div>
+                        <div class="slot slot6"></div>
+                        <div class="slot slot7"></div>
+                        <div class="slot slot8"></div>
+                        <div class="slot slot9"></div>
+                    </div>
+
+                    <div id="machine3" class="slotMachine">
+                        <div class="slot slot0"></div>
+                        <div class="slot slot1"></div>
+                        <div class="slot slot2"></div>
+                        <div class="slot slot3"></div>
+                        <div class="slot slot4"></div>
+                        <div class="slot slot5"></div>
+                        <div class="slot slot6"></div>
+                        <div class="slot slot7"></div>
+                        <div class="slot slot8"></div>
+                        <div class="slot slot9"></div>
+                    </div>
+
+                    <div id="machine4" class="slotMachine">
+                        <div class="slot slot0"></div>
+                        <div class="slot slot1"></div>
+                        <div class="slot slot2"></div>
+                        <div class="slot slot3"></div>
+                        <div class="slot slot4"></div>
+                        <div class="slot slot5"></div>
+                        <div class="slot slot6"></div>
+                        <div class="slot slot7"></div>
+                        <div class="slot slot8"></div>
+                        <div class="slot slot9"></div>
+                    </div>
+
+                    <div id="machine5" class="slotMachine">
+                        <div class="slot slot0"></div>
+                        <div class="slot slot1"></div>
+                        <div class="slot slot2"></div>
+                        <div class="slot slot3"></div>
+                        <div class="slot slot4"></div>
+                        <div class="slot slot5"></div>
+                        <div class="slot slot6"></div>
+                        <div class="slot slot7"></div>
+                        <div class="slot slot8"></div>
+                        <div class="slot slot9"></div>
+                    </div>
+
+                    <div style="clear:both;display:none;">
+                        <div id="machine1Result" class="slotMachine noBorder" style="text-align:left">&nbsp;</div>
+                        <div id="machine2Result" class="slotMachine noBorder" style="text-align:left">&nbsp;</div>
+                        <div id="machine3Result" class="slotMachine noBorder" style="text-align:left">&nbsp;</div>
+                        <div id="machine4Result" class="slotMachine noBorder" style="text-align:left">&nbsp;</div>
+                        <div id="machine5Result" class="slotMachine noBorder" style="text-align:left">&nbsp;</div>
+                        <div class="slotMachine noBorder"></div>
+                    </div>
+
+                </div>
+                <!-- 开奖记录 -->
+                <div id="open_code_list" class="open_code_list">
+                <div id="listDiv">
+                    <ul>
+                    </ul>
+                </div>
+                    <!-- <div class="page_bar">
+                        <span class="down_triangle" id="nextCode"></span>
+                        <span class="up_triangle_off" id="prevCode"></span>
+                    </div> -->
+                </div>
+                <div id='search_more' class='search_more'>
+                  <a id="searchMore" href="javascript:void(0);">投注记录</a>
+                </div>
+            </div>
+            <!-- End 开号区 -->
+            <!-- 导航菜单 -->
+            <div class="subTopBar" >
+               <!-- <div class="SubTit">
+                    <div class="curMethod"><em  id="curMethod"></em></div>
+                    <i class="question ShowTips methodTipInfo" id="methodTipInfo" title="">
+                        <div class="methodDesc" id="methodDesc"></div>
+                    </i>
+               </div> -->
+               <!-- 投注玩法 -->
+               <div class="playNav">
+               <ul class="lotteryTab" id="methodGroupContainer">
+
+               </ul>
+               </div>
+               <!-- End投注玩法 -->
+
+               <div class="crumbs"></div>
+            </div>
+            <!-- End 导航菜单 -->
+            <!-- 选号区 -->
+            <div  class="chooseNO selectArea" >
+				<div id="methods" class="methods">
+
+				</div>
+                <!-- 投注球 -->
+                <div class="selectArea_center" id="selectArea">
+
+                </div>
+                <!-- End投注球 -->
+            </div>
+            <!-- End 选号区 -->
+            <!-- 添加按钮 -->
+            <div class="FatherCodeBtn">
+                <input class="selectCodeBtn" id="selectCodeBtn" type="button" value="选好了" />
+            </div>
+            <!-- 确认区 -->
+            <div class="confirmArea" id="confirmArea">
+                <div class="bonusSlide fix">
+                    <span>奖金/返点</span>
+                    <div id="selectRebate" class="selectRebate"></div>
+                    <div id="rebateValue" class="rebateValue"></div>
+                    <i class="question ShowTips methodTipInfo" id="methodTipInfo" title="">玩法介绍<label>?</label>
+                        <div class="methodDesc" id="methodDesc"></div>
+                    </i>
+                    <select id="curPrizeSpan" style="display:none;"></select>
+                </div>
+                <!-- 添加按钮行 -->
+                <div class="confirmArea_top fix">
+                    <div class="select_prize">您当前选择了<span class="important_font" id="betCount">0</span>注，共<span class="important_font" id="betAmount">0.00</span>元, </div>
+                    <!-- 元角分隐藏域 -->
+                    <input type="hidden" id="modesDIV" style='display:none;' value="1" ></input>
+                    <div class="fix">
+                        <div class="selectMode" id="modes">模式：<input type="button" id="yuan" class="yuan_off" value="元" /><input type="button" id="jiao" class="jiao_off" value="角" /><input type="button" id="fen" class="fen_off" value="分" />，</div>
+                        <div class="fl">
+                            <!-- 投注倍数 -->
+                            <!-- <input class='minus' type="button" /> -->
+                            倍数：<span id="minusBtn" type="button" class="minusBtn">-</span><input type="text" value="1" id="multiple" name="multiple" class="multiple" maxlength="5" style="height: 24px;"><span id="plusBtn" type="button" class="plusBtn" />+</span>倍，
+                            <!-- <input class='plus' type="button" /> -->
+                            总注数<span id="totalBetCount" class="important_font">0</span>注, 总金额：￥<span id="totalBetAmount" class="important_font">0.00</span>元, 盈利￥<em class="yellow" id="totalWin">0.00</em>(默认最高奖金盈利)
+                        </div>
+                        <div class="open_counts">
+                            <span class="txt_right">连续开奖：</span>
+                            <input class="txt_right" type="text" name="open_counts" id="open_counts" value="1" />
+                            <div class="arrow"></div>
+                            <span>次</span>
+                            <ul id="open_counts_option">
+                                <li>1</li>
+                                <li>5</li>
+                                <li>10</li>
+                                <li>15</li>
+                                <li>20</li>
+                                <li>25</li>
+                                <li>30</li>
+                            </ul>
+                            <a href="javascript:void(0)" class="del clearProjectBtn" id="clearProjectBtn" title="删除投注内容"></a>
+                        </div>
+                    </div>
+                    <!-- <a href="javascript:void(0)" class="del clearProjectBtn" id="clearProjectBtn" title="删除投注内容"></a>  -->
+                </div>
+                <!-- End 添加按钮行 -->
+
+                <!-- 投注列表行 -->
+                <div class="confirmArea_center">
+                    <ul class=" projectList" id="projectList">
+                    </ul>
+                </div>
+                <!-- End 投注列表行 -->
+
+                <!-- 开始按钮 -->
+                <input type="hidden" value="" id="token" />
+                <input id="confirmBtn" type="button" class="CantapCodeBtn" />
+                <!-- End 开始按钮 -->
+            </div>
+            <!-- End 确认区 -->
+        </div>
+        <!-- End 彩种主体 -->
+        <!-- 开奖结果弹出层 -->
+        <div id="openCodeResult" class="openCodeResult">
+            <div id="resultHeader" class="header">
+                <!-- <div class="getPrizeDiv"><div class="getPrize">123456</div></div>
+                <div class="noPrize"></div> -->
+            </div>
+            <div class="line"></div>
+            <div class="center">
+                <table id="prizeList" class="prizeList">
+                    <tbody>
+                    <tr>
+                        <th>开奖次数</th>
+                        <th>开奖号码</th>
+                        <th>中奖情况</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bottom">
+                <input type="button" name="goBack" id="goBack" class="goBack" value="返回" />
+                <input type="button" name="playAgain" id="playAgain" class="playAgain" value="再玩一次" />
+            </div>
+        </div>
+
+
+        <!-- 连续开奖弹出框 -->
+        <div id="multipleOpenCode" class="multipleOpenCode">
+            <!-- <div class="openCount">
+                <div class="openCountNum">&nbsp;</div>
+            </div>
+            <div class="getPrizeDiv">
+                <div class="getPrize">&nbsp;</div>
+            </div>-->
+        </div>
+  <?php $this->import('public_foot') ?>
+    </div>
+<iframe id="mmcIf" name="mmcIf" scrolling="no" border="0" frameborder="0" marginwidth="0" marginheight="0" allowtransparency="true" width="100%" height="1080" style="display:none;"></iframe>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js?v=<?php echo $html_version_num; ?>"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jqueryui.js?v=<?php echo $html_version_num; ?>"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.slotmachine.js?v=<?php echo $html_version_num; ?>"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.slider.js?v=<?php echo $html_version_num; ?>"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/ext.js"></script>
+
+
+<script type="text/javascript">
+$('#logoutBtn').click(function() {
+    location.href = 'index.jsp?a=logout';
+});
+
+/**
+ * 浮点数计算
+ */
+var floatCaculate = {
+	add : function (a, b) {
+	    var c, d, e;
+	    try {
+	        c = a.toString().split(".")[1].length;
+	    } catch (f) {
+	        c = 0;
+	    }
+	    try {
+	        d = b.toString().split(".")[1].length;
+	    } catch (f) {
+	        d = 0;
+	    }
+	    return e = Math.pow(10, Math.max(c, d)), (floatCaculate.mul(a, e) + floatCaculate.mul(b, e)) / e;
+	},
+
+	sub : function (a, b) {
+	    var c, d, e;
+	    try {
+	        c = a.toString().split(".")[1].length;
+	    } catch (f) {
+	        c = 0;
+	    }
+	    try {
+	        d = b.toString().split(".")[1].length;
+	    } catch (f) {
+	        d = 0;
+	    }
+	    return e = Math.pow(10, Math.max(c, d)), (floatCaculate.mul(a, e) - floatCaculate.mul(b, e)) / e;
+	},
+
+	mul : function (a, b) {
+	    var c = 0,
+	        d = a.toString(),
+	        e = b.toString();
+	    try {
+	        c += d.split(".")[1].length;
+	    } catch (f) {}
+	    try {
+	        c += e.split(".")[1].length;
+	    } catch (f) {}
+	    return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+	},
+
+	div : function (a, b) {
+	    var c, d, e = 0,
+	        f = 0;
+	    try {
+	        e = a.toString().split(".")[1].length;
+	    } catch (g) {}
+	    try {
+	        f = b.toString().split(".")[1].length;
+	    } catch (g) {}
+	    return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), mul(c / d, Math.pow(10, f - e));
+	},
+
+    /*Javascript设置要保留的小数位数，四舍五入。
+     *ForDight(Dight,How):数值格式化函数，Dight要格式化的 数字，How要保留的小数位数。
+     *这里的方法是先乘以10的倍数，然后去掉小数，最后再除以10的倍数。
+     */
+	doRound : function (Dight,How){
+        Dight = Math.round(Dight*Math.pow(10,How))/Math.pow(10,How);
+        return Dight;
+    }
+}
+
+//缓存的开奖记录控件
+var scrollCode = {
+    scrollCode : function (type, showNum){
+        var showPosition = new Array();
+        var obj = $('#open_code_list ul li');
+        var length = obj.length;
+
+        // 判断要显示的li是否大于等于总的li，如果大于等于，说明显示的code不用分页
+        if (showNum >= length) {
+            return false;
+        }
+        if (type == 'next') {
+            $('#prevCode').removeClass('up_triangle_off').addClass('up_triangle');
+        } else if (type == 'prev') {
+            $('#nextCode').removeClass('down_triangle_off').addClass('down_triangle');
+        }
+
+        // 获得显示的code的li的位置，并根据type是进行+1或-1，直接得出点击后的show_code要插入的位置
+        obj.each(function(){
+            if ($(this).hasClass('show_code')) {
+                if (type == 'next') {
+                    showPosition.push($(this).index()+1);
+                } else if (type == 'prev') {
+                    showPosition.push($(this).index()-1);
+                }
+            }
+        });
+
+        if (showPosition[showNum-1] > length-1) {
+            $('#nextCode').removeClass('down_triangle').addClass('down_triangle_off');
+            return false;
+        }
+        if (showPosition[0] < 0) {
+            $('#prevCode').removeClass('up_triangle').addClass('up_triangle_off');
+            return false;
+        }
+        if (type == 'next') {
+            obj.eq(showPosition[0] - 1).removeClass('show_code');
+            obj.eq(showPosition[showNum - 1]).addClass('show_code');
+        } else if (type == 'prev') {
+            obj.eq(showPosition[showNum - 1]+1).removeClass('show_code');
+            obj.eq(showPosition[0]).addClass('show_code');
+        }
+    },
+    //插入一条新纪录后重置显示区
+    init : function() {
+        var obj = $('#open_code_list ul li');
+        obj.removeClass('show_code');
+        obj.each(function(i){
+           $(this).addClass("show_code");
+           i++;
+           if(i>5) {
+               return;
+           }
+        });
+    }
+};
+</script>
+
+<script type="text/javascript">
+$(function() {
+    $("#searchMore").click(function(){
+        layer.open({
+            type: 2,
+            shadeClose: false,
+            title: '查询更多',
+            shade: [0.3, '#000'],
+            offset: ['60px', ''],
+            border: [0],
+            area: ['910px','500px'],
+            content: ["index.jsp?lottery_id=15&c=game&a=packageList&mmcPopup=1"]
+        });
+    });
+    $('.ShowTipsUserInfo').on('mouseover', function() {
+        layer.tips('显示用户信息', this, {
+            tips: [3, '#F26C4F'],
+            time: 1000,
+            maxWidth: 240
+        });
+    });
+
+    //用户弹出层
+    $(".CloseUser").click(function() {
+        $(".UserPopLayer").toggle(150);
+    });
+    $(".User .name").click(function() {
+        $(".UserPopLayer").toggle(150);
+    });
+<?php if(date("H") == '04'): ?>
+            layer.open({
+                closeBtn : 1,
+                btn: 0,
+                area : ['auto' , '150'],
+                maxWidth:350,
+                content: '4:00至5:00为平台维护时间，在此期间，秒秒彩将暂停购彩服务，请您稍后再游戏。给您带来的不便，敬请谅解。'
+            });
+<?php endif; ?>
+    var methods = <?php echo $methods ?>;
+    $.init({
+        lotteryId: <?php echo $lottery['lottery_id']; ?>, lotteryName: '<?php echo $lottery['cname']; ?>', prizeRate: <?php echo 1 - $lottery['total_profit']; ?>, lotteryType: <?php echo $lottery['lottery_type']; ?>, methods: methods[<?php echo $lottery['lottery_id'] ?>], maxCombPrize: <?php echo $maxCombPrize; ?>, openedIssues: <?php echo $json_openedIssues; ?>, minRebateGaps: <?php echo $minRebateGaps; ?>, rebate: <?php echo $rebate; ?>, defaultMode: 1, defaultRebate: <?php echo $rebate; ?>, missHot: <?php echo $json_missHot; ?>
+    });
+
+    //初始化老虎机控件
+    mySlotMachine.init();
+
+    $('#nextCode').click(function(){
+        scrollCode.scrollCode('next', 5);
+    });
+    $('#prevCode').click(function(){
+        scrollCode.scrollCode('prev', 5);
+    });
+
+
+
+    $('.ShowTipsMoney').on('mouseover', function() {
+        layer.tips('点击刷新余额', this, {
+            tips: [3, '#F26C4F'],
+            time: 1000,
+            maxWidth: 240
+        });
+    });
+
+    //mySlotMachine.msgPopUp4Multiple();
+
+    var customerUrl ="http://s2.myapple88.com/new/client.php?arg=jyz-88&style=1",role = '',username = '<?php echo $user['username'] ?>',level = <?php echo $user['level'] ?>,is_test = <?php echo $user['is_test'] ?>;
+
+    if(is_test){
+            role = '&user_level=tester';
+    }else if(level == 0){
+            role = '&user_level=topAgent';
+    }else if(level > 0 && level < 10){
+            role = '&user_level=agent';
+    }else if(level == 10){
+            role = '&user_level=player';
+    }else{
+            role = '&user_level=login';
+    };
+    if(username == ""){
+        username = "Visitor";
+    }
+    var callParams = '&user_name=' + username + role;
+
+    $('#callCenter').click(function(event) {
+        window.open(customerUrl + callParams,"","height=550,width=800,top=0,left=0,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no");
+        return false;
+    });
+});
+
+
+
+</script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/game/min/game_mmc.min.js?v=<?php echo time(); ?>"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('input[name=start_time]').val('<?php echo $startTime; ?>');
+        $('input[name=end_time]').val('<?php echo $endTime; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="get">
+统计时间<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="hidden" name="c" value="market"/>
+<input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+<input type="submit" name="sub"  style="width:90px" value="查询"/>
+</form>
+
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>奖品名称</td>
+                <td>累计派奖数量</td>
+                <td>累计派奖金额</td>
+                <td>累计获奖人数（去掉重复）</td>
+            </tr>
+        </thead>
+        <?php if ($cardsConfig) : ?>
+        <?php foreach($cardsConfig as $card_id => $v):?>
+        <tr class="plansList">
+            <td><?php echo $v['title'];  ?></td>
+            <td><?php echo $cardStaistics['prize'][$card_id]['count'] > 0 ? $cardStaistics['prize'][$card_id]['count'] : 0;  ?></td>
+            <td><?php echo $cardStaistics['prize'][$card_id]['count'] > 0 ? number_format($cardStaistics['prize'][$card_id]['count'] * $v['prize']) : 0;  ?></td>
+            <td><?php echo $cardStaistics['user'][$card_id]['count'] > 0 ? $cardStaistics['user'][$card_id]['count'] : 0 ; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td>总计</td>
+            <td><?php echo $totalCount;  ?></td>
+            <td><?php echo $totalPrize;  ?></td>
+            <td><?php echo $distinctUser; ?></td>
+        </tr>
+        <?php else: ?>
+        <tr class="noneData">
+            <td colspan="6">暂无数据！</td>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,37 @@
+<?php $this->import("head"); ?>
+<script>
+$(document).ready(function(){
+
+});
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="" method="post" >
+<table cellpadding="0" cellspacing="0" width="40%" border="0">
+    <tr>
+        <td>封锁值（元）</td>
+        <td><input name="lock_limit" maxlength="19"/></td>
+    </tr>
+
+    <tr>
+        <td>所属玩法</td>
+        <td>
+            <select name="method_id" id="method_id">
+                <option value="0">请选择</option>
+                <?php foreach ($methods as $v): ?>
+                <option value="<?php echo $v['method_id']; ?>"><?php echo $v['cname']; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+            <input type="submit" class="submit" name="submit" value="提交" />
+            <input type="button" class="submit" onclick="window.location.href='?c=lock&a=lockList';" value="返回"/>
+            </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

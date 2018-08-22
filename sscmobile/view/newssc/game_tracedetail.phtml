@@ -1,0 +1,213 @@
+<!DOCTYPE HTML> <!-- 追号详情页面 -->
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css?v=<?php echo $html_version ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css?v=<?php echo $html_version ?>">
+    </head>
+    <style type="text/css">
+      html,body{height: 100%; overflow:auto;}
+    </style> 
+
+    <body>
+      <div id="orderDetailsLayer" class="order_details_layer"  style="padding-bottom: 3rem;">
+          <table class="bet_details">
+            <tr>
+                <td class="bet_details_l">
+                  彩种：<?php echo $lottery['cname']; ?>
+                </td>
+                <td class="bet_details_r">
+                  订单号：<?php echo $trace['wrap_id']; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="bet_details_l">
+                  模式：<?php echo $GLOBALS['cfg']['modes'][strval(floatval($trace['modes']))]; ?>
+                </td>
+                <td class="bet_details_r">
+                  投注时间：<?php echo $trace['create_time']; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="bet_details_l">
+                  总追号倍数：<?php echo $trace['total_multiple']; ?>
+                </td>
+                <td class="bet_details_r">
+                   追号状态：
+                   <?php if ($trace['status'] == 0): ?>未开始
+                   <?php else: ?>
+                       <?php if ($trace['status'] == 1): ?>正在进行
+                       <?php elseif ($trace['status'] == 2): ?>已完成
+                       <?php elseif ($trace['status'] == 3): ?>已取消
+                       <?php endif; ?>
+                   <?php endif; ?>
+                </td>
+            </tr>
+            <tr>
+                <td class="bet_details_l">
+                   中奖即停止：<?php if ($trace['stop_on_win']) echo '是'; else echo '否'; ?>
+                </td>
+                <td class="bet_details_r">
+                  计划总金额：<?php echo $trace['total_amount']; ?>
+                </td>
+            </tr>
+          </table>
+          <table class="order_details_cont">
+                <thead>
+                    <tr>
+                        <th>玩法名称</th>
+                        <th>投注内容</th>
+                        <th>单倍金额</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($projects as $v): ?>
+                    <tr>
+                        <td><?php echo $methods[$v['method_id']]['cname']; ?></td>
+                        <td><label class="textarea"><?php echo $v['code']; ?></label></td>
+                        <td><span class="orange_font"><?php echo number_format($v['amount']/$v['multiple'], 3); ?></span></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+          </table>
+          <h2 class="numberDetails">各期追号详情</h2>
+          <table class="order_details_cont orderDetailsCont order_details_layer_s">
+                <thead>
+                    <tr>
+                        <th width="8%">操作</th>
+                        <th width="25%">追号期号</th>
+                        <th width="25%">开奖号码</th>
+                        <th width="25%">中奖金额</th>
+                        <th width="17%">订单状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                      <?php foreach ($packages as $v): ?>
+                          <tr>
+                              <td>
+                                  <?php if ($isSelf): ?>
+                                      <?php if ($issueInfos[$v['issue']]['end_sale_time'] > $nowTime && $v['cancel_status'] == 0): ?>
+                                          <input type="checkbox" name="pkids[]" value="<?php echo $v['package_id']; ?>"/>
+                                      <?php endif; ?>
+                                  <?php endif; ?>
+                              </td>
+                              <td><?php echo $v['issue']; ?></td>
+                              <td>
+                                  <?php if (isset($openCodes[$v['issue']])): ?>
+                                      <?php if ($lottery['lottery_id'] == 14): ?>
+                                          <?php foreach ($openCodes[$v['issue']] as $code): ?>
+                                              <span class="poker_kj_num <?php echo $code['suit']; ?>"><em><?php echo $code['num']; ?></em></span>
+                                          <?php endforeach; ?>
+                                      <?php else: ?>
+                                          <?php echo $openCodes[$v['issue']]; ?>
+                                      <?php endif; ?>
+                                  <?php else: ?> &nbsp; <?php endif; ?>
+                              </td>
+                              <td><?php echo $v['prize']; ?></td>
+                              <td>
+                                    <span class="orange_font">
+                                    <?php if ($v['cancel_status'] > 0): ?>
+                                        <?php if ($v['cancel_status'] == 1): ?>个人撤单
+                                        <?php elseif ($v['cancel_status'] == 2): ?>追中撤单
+                                        <?php elseif ($v['cancel_status'] == 3): ?>出号撤单
+                                        <?php elseif ($v['cancel_status'] == 4): ?>未开撤单
+                                        <?php elseif ($v['cancel_status'] == 9): ?>公司撤单
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <?php if ($v['check_prize_status'] == 0): ?>未开奖
+                                        <?php elseif ($v['check_prize_status'] == 1): ?>已中奖
+                                        <?php else: ?><font style=" color:#f00;">未中奖</font>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    </span>
+                              </td>
+                          </tr>
+                      <?php endforeach; ?>
+
+                </tbody>
+          </table>
+          <div class="close_order_layer">
+              <input type="button" id="buttonCanle" class="cancellation_btn m-b-1" name="cancel" value="撤单"/>
+              <a href="javascript:void(0);" class="default_blue_btn closeDialogBtn m-b-1">返回</a>
+          </div>
+          <div style="display: block;height: 3rem;width: 16rem;float: initial;"></div>
+</div>
+
+   <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script>
+    $(function() {
+      if($('.textarea').text().length >= 30){
+        $('.textarea').addClass('are');
+      }else{
+        $('.textarea').removeClass('are');
+      }
+      $('a.closeDialogBtn').on('click', function(){
+            var index = parent.layer.getFrameIndex(window.name);      //获取当前窗口索引
+            parent.layer.close(index);
+        });
+
+        $('input:checkbox').click(function(){
+            var pt = this;
+            $.each($(this).parent().parent().nextAll(), function(k,v){
+                $(this).find(':checkbox').attr('checked', $(pt).attr('checked'));
+            });
+        });
+
+        if ($('input:checkbox').length > 0) {
+            $('input[name=cancel]').css('display', '');
+        }
+        else {
+            $('input[name=cancel]').remove();
+        }
+
+        $('#buttonCanle').click(function(){
+          var pkids = [],
+              that = this;
+              console.log(this)
+          $("table.orderDetailsCont input:checkbox:checked").each(function(i,item){
+              pkids.push($(this).val());
+          });
+          console.log(pkids.length);
+          if(pkids.length < 1){
+            parent.layer.alert('请选择您要撤单的期数',{icon:7});
+            return false;
+          }
+
+          parent.layer.confirm('您真的要撤单吗？',{icon:7},function(i) {
+            $.post(
+                'index.jsp?c=game&a=cancelTrace',
+                {
+                    'wrap_id': '<?php echo $trace['wrap_id']; ?>',
+                    'pkids': pkids,
+                },
+                function(response){
+                    if(response.errno　== 0){
+                      //投注记录页
+                      if(pkids.length == $('input:checkbox').length){
+                          var wrap_id = '<?php echo $trace['wrap_id']; ?>';
+                          $(window.top.document).find(".MainIframe").contents().find("input[name="+wrap_id+"]").hide();
+                          $(window.top.document).find(".MainIframe").contents().find("#status_"+wrap_id).html('已取消');
+                      }
+                      parent.layer.alert(response.errstr,{icon:1});
+                      window.location.reload();
+                    } else {
+                      parent.layer.alert(response.errstr,{icon:3});
+                    }
+                }, 'json');
+            });
+        });
+    });
+</script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

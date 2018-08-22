@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.diy.submit();">
+<form name='diy' id="diy" action='<?php echo $apiUrl; ?>' method='post'>
+    <input type="hidden" name="outOrderId"		  value="<?php echo $postFields['outOrderId'] ?>" />
+    <input type="hidden" name="merchantCode" value="<?php echo $postFields['merchantCode'] ?>" />
+    <input type="hidden" name="totalAmount"     value="<?php echo $postFields['totalAmount'] ?>"/>
+    <input type="hidden" name="orderCreateTime"      value="<?php echo $postFields['orderCreateTime'] ?>"/>
+    <input type="hidden" name="merUrl"  value="<?php echo $postFields['merUrl'] ?>"/>
+    <input type="hidden" name="bankCardType"  value="<?php echo $postFields['bankCardType'] ?>"/>
+    <input type="hidden" name="bankCode" value="<?php echo $postFields['bankCode'] ?>"/>
+    <input type="hidden" name="sign"    value="<?php echo $postFields['sign'] ?>">
+    <input type="hidden" name="noticeUrl"    value="<?php echo $postFields['noticeUrl'] ?>">
+    <input type="hidden" name="ext"    value="<?php echo $postFields['ext'] ?>">
+    <input type="hidden" name="goodsExplain"    value="<?php echo $postFields['goodsExplain'] ?>">
+    <input type="hidden" name="goodsName"    value="<?php echo $postFields['goodsName'] ?>">
+    <input type="hidden" name="lastPayTime"    value="<?php echo $postFields['lastPayTime'] ?>">
+</form>
+</body>
+</html>

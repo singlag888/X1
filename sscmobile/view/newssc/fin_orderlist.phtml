@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>  <!-- 个人帐变 -->
+<html>
+<head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <meta name="apple-touch-fullscreen" content="YES"/><!-- "添加到主屏幕"后，全屏显示 -->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <!--<meta http-equiv="Cache-Control" content="no-cache"/>-->  <!-- 每次打开都清除浏览器页面缓存 -->
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <!--/*头部*/-->
+        <header class="headerbg">
+            <a class="headbox01" href="javascript:history.go(-1)"><img src="<?php echo $imgCdnUrl ?>/images/mobile/head_Box1.png"/></a>
+            <p class="headtetle">个人帐变</p>
+        </header>
+        <div class="defoperate_record_tablist">
+            <ul class="defoperate_record_tabtitleUl">
+                <li>帐变时间</li>
+                <li>类型</li>
+                <li>帐变金额</li>
+            </ul>
+            <?php if ($orders): ?>
+                <?php foreach ($orders as $v): ?>
+            <ul class="defoperate_record_tabtitleUL">
+                <li><?php echo $v['create_time']; ?></li>
+                <li><?php echo $orderTypes[$v['type']]; ?></li>
+                <li><?php echo $v['amount']; ?></li>
+            </ul>
+            <div class="OrderbyDiv DisplayNone">
+            <li class="OrderbyText">用户名：</li><li><?php echo $v['from_username']; ?></li>
+            <li class="OrderbyText">订单编号：</li><li><?php if (!empty($v['wrap_id'])): ?>
+                <?php echo $v['wrap_id']; ?>
+            <?php else: ?>
+                -
+            <?php endif; ?></li>
+            <li class="OrderbyText">游戏：</li><li><?php echo $lotteries[$v['lottery_id']]['cname']; ?></li>
+            <li class="OrderbyText">期号：</li><li><?php echo $v['issue']; ?></li>
+            <li class="OrderbyText">余额：</li><li><?php echo $v['balance']; ?></li>
+            <button class="OrderbyDivX">关闭</button>
+            </div>
+             <?php endforeach; ?>
+              <li colspan="8"><div class="bottom_info">注：只能查询15天以内的数据</div></li>
+            <?php else: ?>
+                    <span colspan="8" class="text_center">暂无数据显示</span>
+            <?php endif; ?>
+
+            <div>
+                <?php echo $pageList; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="<?php echo $imgCdnUrl ?>/js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script> <!-- layer调用弹出层 -->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+
+<script type="text/javascript">
+    $(function() {
+        $('#form1').submit(function() {
+            /*                    if ($('input[name=username]').val() == '') {
+             alert('请输入下级帐号！');
+             return false;
+             }*/
+
+            return true;
+        });
+
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=status]').val('<?php echo $status; ?>');
+        $('select[name=is_trace]').val('<?php echo $is_trace; ?>');
+        $('select[name=check_prize_status]').val('<?php echo $check_prize_status; ?>');
+        $('select[name=lottery_id]').val('<?php echo $lottery_id; ?>').change();
+        $('input[name=issue]').val('<?php echo $issue; ?>');
+        $('select[name=include_childs]').val('<?php echo $include_childs; ?>').change();
+        $('#start_time').val('<?php echo date("Y-m-d", strtotime($start_time)); ?>');
+        $('#end_time').val('<?php echo date("Y-m-d", strtotime($end_time)); ?>');
+        $('input[name=wrap_id]').val('<?php echo $wrap_id; ?>');
+
+        $('a.orderNumberBtn').on('click', function(){
+            var is_award = parseInt($(this).siblings('input[name=is_award]').val());
+            var str_award = is_award ? '奖池玩法':'普通玩法';
+
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: str_award+'&nbsp;&nbsp;订单编号：'+$(this).text(),
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','550px'],
+                content: ['index.jsp?c=game&a=packageDetail&wrap_id='+$(this).text()]
+            });
+            $('div.xubox_title', parent.document).addClass('layui-layer-title');
+        });
+
+        $('a.closeDialogBtn').on('click', function(){
+            layer.close(orderDetailsDal);
+        });
+
+        // var lottery_issue_format = <?php echo $lotteryIssueFormat; ?>;
+
+        $('select[name=lottery_id]').change(function(){
+            if ($('select[name=lottery_id]').val() == '0') {
+                return;
+            }
+            var select_value = $('select[name=lottery_id]').val();
+            if(lottery_issue_format[select_value] != undefined){
+                $('input[name="issue"]').attr('placeholder',lottery_issue_format[select_value]);
+            }else{
+                $('input[name="issue"]').attr('placeholder','');
+            }
+        });
+    });
+      $(".defoperate_record_tabtitleUL").each(function(i){
+           $(".defoperate_record_tabtitleUL").eq(i).click(function(){
+               $(".OrderbyDiv").eq(i).addClass("DisplayBlock").siblings().removeClass("DisplayBlock");
+            })
+        })
+        $(".OrderbyDivX").click(function(){
+            $(".OrderbyDiv").removeClass("DisplayBlock");
+        })
+</script>
+
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

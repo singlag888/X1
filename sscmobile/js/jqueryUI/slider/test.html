@@ -1,0 +1,137 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="js/jquery-1.4.1.min.js"></script>
+</head>
+<script>
+$(function(){
+//======================= 扩展jquery静态方法 =======================
+$.getXY = function(){
+    var scrollX=0, scrollY=0, width=0, height=0, contentWidth=0, contentHeight=0;
+    if (typeof(window . pageXOffset) == 'number') {
+        scrollX=window . pageXOffset;
+        scrollY=window . pageYOffset;
+    }
+    else if (document . body && (document . body . scrollLeft || document . body . scrollTop)) {
+        scrollX=document . body . scrollLeft;
+        scrollY=document . body . scrollTop;
+    }
+    else if (document . documentElement && (document . documentElement . scrollLeft || document . documentElement . scrollTop)) {
+        scrollX=document . documentElement . scrollLeft;
+        scrollY=document . documentElement . scrollTop;
+    }
+    if (typeof(window . innerWidth) == 'number') {
+        width=window . innerWidth;
+        height=window . innerHeight;
+    }
+    else if (document . documentElement && (document . documentElement . clientWidth || document . documentElement . clientHeight)) {
+        width=document . documentElement . clientWidth;
+        height=document . documentElement . clientHeight;
+    }
+    else if (document . body && (document . body . clientWidth || document . body . clientHeight)) {
+        width=document . body . clientWidth;
+        height=document . body . clientHeight;
+    }
+    if (document . documentElement && (document . documentElement . scrollHeight || document . documentElement . offsetHeight)) {
+        if (document . documentElement . scrollHeight > document . documentElement . offsetHeight) {
+            contentWidth=document . documentElement . scrollWidth;
+            contentHeight=document . documentElement . scrollHeight;
+        }
+        else {
+            contentWidth=document . documentElement . offsetWidth;
+            contentHeight=document . documentElement . offsetHeight;
+        }
+    }
+    else if (document . body && (document . body . scrollHeight || document . body . offsetHeight)) {
+        if (document . body . scrollHeight > document . body . offsetHeight) {
+            contentWidth=document . body . scrollWidth;
+            contentHeight=document . body . scrollHeight;
+        }
+        else {
+            contentWidth=document . body . offsetWidth;
+            contentHeight=document . body . offsetHeight;
+        }
+    }
+    else {
+        contentWidth=width;
+        contentHeight=height;
+    }
+    if (height > contentHeight)
+        height=contentHeight;
+    if (width > contentWidth)
+        width=contentWidth;
+    var rect=new Object();
+    rect.scrollX=scrollX;
+    rect.scrollY=scrollY;
+    rect.width=width;
+    rect.height=height;
+    rect.contentWidth=contentWidth;
+    rect.contentHeight=contentHeight;
+    return rect;
+}
+//调用
+var rect = $.getXY();
+console.info(rect);
+
+
+//======================= 扩展jquery对象方法 =======================
+$.fn.paddingList = function(options){
+    var defaults = {
+        animatePadding: 10,
+        hoverColor: "Black"
+    };
+    var options = $.extend({}, defaults, options);
+    return this.each(function(){
+        $this = $(this);
+        $this.hover(function(){
+            $(this).css("color", options.hoverColor);
+            $(this).animate({ paddingLeft: options.animatePadding }, { queue: false, duration: 500 });
+        }, function(){
+            $(this).css("color", "");
+            $(this).animate({ paddingLeft: 0 }, { queue: true, duration: 500 });
+        });
+    });
+};
+//调用
+$('#catagory li').paddingList({animatePadding:20,hoverColor:'red'});
+
+//======================= $.extend =======================
+var ps = $.extend({
+    'a':'平方',
+    'b':function(i){return i*i;}
+});
+console.info($.a + "," + $.b(10));
+console.info(ps.a + "," + ps.b(10));
+
+$.fn.foo = function(i){
+    return i*i*i;
+};
+console.info($().foo(5));
+
+
+
+$('#catagory').bind('click', function(event) {
+    alert('The mouse cursor is at (' + event.pageX + ', ' + event.pageY + ')');
+});
+
+console.log($('#catagory li:eq(2)').html());
+
+
+});
+</script>
+$.extend()如果不指定target，即只有一个参数，则给jQuery命名空间本身进行扩展。即增加静态方法。
+<ul id="catagory">
+    <li>本职工作2<a href="#">jQuery</a></li>
+    <li>本职工作<a href="#">Asp.net</a></li>
+    <li>本职工作<a href="#">Sql Server</a></li>
+    <li>本职工作<a href="#">CSS</a></li>
+</ul>
+</html>

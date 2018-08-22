@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.XidakejiPay.submit();">
+<form name='XidakejiPay' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="merchant_no"     value="<?php echo $postFields['merchant_no'] ?>"/>
+    <input type="hidden" name="order_no"      value="<?php echo $postFields['order_no'] ?>"/>
+    <input type="hidden" name="trans_amount"  value="<?php echo $postFields['trans_amount'] ?>"/>
+    <input type="hidden" name="order_type"		  value="<?php echo $postFields['order_type'] ?>" />
+    <input type="hidden" name="goods" value="<?php echo $postFields['goods'] ?>"/>
+    <input type="hidden" name="page_url" value="<?php echo $postFields['page_url'] ?>" />
+    <input type="hidden" name="bg_url" value="<?php echo $postFields['bg_url'] ?>"/>
+    <?php if(!empty($postFields['bank_code'])):?>
+    <input type="hidden" name="bank_code" value="<?php echo $postFields['bank_code'] ?>"/>
+    <?php endif;?>
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+</form>
+</body>
+</html>

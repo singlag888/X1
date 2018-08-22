@@ -1,0 +1,223 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/js/jquery.dialog.js?_=1" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" />
+<script>
+//预设查询值
+	$(function () {
+		$('input[name=username]').val('<?php echo $username; ?>');
+		$('select[name=depositBankId]').val('<?php echo $depositBankId; ?>');
+		$('select[name=depositCardId]').val('<?php echo $depositCardId; ?>');
+        $('input[name=inputAdmin]').val('<?php echo $inputAdmin; ?>');
+		$('input[name=startInputDate]').val('<?php echo $startInputDate; ?>');
+		$('input[name=endInputDate]').val('<?php echo $endInputDate; ?>');
+		$('input[name=finishAdmin]').val('<?php echo $finishAdmin; ?>');
+		$('input[name=startFinishDate]').val('<?php echo $startFinishDate; ?>');
+		$('input[name=endFinishDate]').val('<?php echo $endFinishDate; ?>');
+		$('input[name=orderNum1]').val('<?php echo $orderNum1; ?>');
+		$('select[name=status]').val('<?php echo $status; ?>');
+	});
+</script>
+
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<div id="query" class="mt20">
+    <form name="form1" action="" method="get">
+    <div class="form-inline ">
+        <div class="form-group has-default has-feedback">
+            <label class="ml10">提交时间:</label>
+            <input class="input-sm form-control"   type="text" name="startInputDate" onclick="jeDate({dateCell:'#startInput',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="startInput" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-sm form-control"  type="text" name="endInputDate" onclick="jeDate({dateCell:'#endInput',isTime:true,format:'yyyy-MM-dd hh:mm:ss'})" id="endInput" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label class="ml10">用户名:</label>
+        <input class="input-sm form-control" name="username" size="12"/>
+        <label class="ml10">支付渠道:</label>
+        <!------------------ author snow 修改成可搜索------------------------------>
+        <select class="selectpicker depositBankId" name="depositBankId" id="depositBankId" data-live-search="true" title="请选择 ...">
+            <option value="-1">请选择…</option>
+            <?php foreach ($banks as $k => $v): ?>
+                <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <!------------------ author snow 修改成可搜索------------------------------>
+        <label class="ml10">收款卡：</label>
+        <select class="input-sm form-control" name="depositCardId">
+            <option value="-1">不限</option>
+            <?php foreach ($depositCards AS $k => $v) : ?>
+            <option value="<?php echo $k; ?>"><?php echo $v['card_name'] . ' ' . $v['card_num']; ?></option>
+            <?php endforeach;?>
+        </select>
+
+        
+    </div>
+    <div class="form-inline mt10">
+        <label class="ml10">提交人:</label>
+        <input class="input-sm form-control" name="inputAdmin" size="12"/>
+        <div class="form-group has-default has-feedback">
+            <label class="ml10">审核时间:</label>
+            <input class="input-sm form-control Wdate"   type="text" name="startFinishDate" onclick="jeDate({dateCell:'#startFinish',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="startFinish" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-sm form-control Wdate"  type="text" name="endFinishDate" onclick="jeDate({dateCell:'#endFinish',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="endFinish" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label class="ml10">订单号:</label>
+        <input class="input-sm form-control" name="orderNum1">
+        <label class="ml10">审核人:</label>
+        <input class="input-sm form-control" name="finishAdmin" size="12"/>
+        <label class="ml10">状态:</label>
+        <select class="input-sm form-control" name="status">
+            <option value="-1">不限</option>
+            <option value="0">未处理</option>
+            <option value="1">已受理</option>
+            <option value="4">已拒绝</option>
+            <option value="5">系统撤单</option>
+            <option value="8">已执行</option>
+        </select>
+        <input type="hidden" name="c" value="deposit"/><input type="hidden" name="a" value="manualDepositList"/>
+        <input class="btn btn-info ml10" type="submit" name="submit" value=">> 查 询 <<"/>
+    </div>
+</div>
+
+<div class="list-div form-top mt20" id="listDiv">
+    <table class="table table-responsive table-bordered  mainList" >
+        <thead>
+            <tr>
+                <td colspan="2"></td>
+                <td colspan="4">
+                    <b>客服数据</b>
+                </td>
+                <td colspan="4">
+                    <b>财务数据</b>
+                </td>
+                <td colspan="6"></td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>客户账号</td>
+                <td>支付渠道</td>
+                <td>汇款户名</td>
+                <td>存款金额</td>
+                <td>订单号</td>
+                <td>收款卡</td>
+                <td>汇款户名</td>
+                <td>付款金额</td>
+                <td>订单号</td>
+                <td>提交人</td>
+                <td>提交时间</td>
+                <td>审核人</td>
+                <td>审核时间</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php if ($manualDeposts): ?>
+		<?php foreach ($manualDeposts as $v): ?>
+			<tr>
+				<td><?php echo $v['md_id']; ?></td>
+                <td><?php echo $v['username']; ?></td>
+                <!------------ author snow 更改了结构,所以要改变取值方式 -------------------------->
+				<td><?php echo $banks[$v['deposit_bank_id']]['name']; ?></td>
+                <!------------ author snow 更改了结构,所以要改变取值方式 -------------------------->
+                <td><?php echo $v['card_name_0']; ?></td>
+				<td><?php echo number_format(abs($v['amount_0']), 4); ?></td>
+				<td><?php echo $v['order_num_0']; ?></td>
+				<td><?php echo $depositCards[$v['deposit_card_id']]['card_name'] . ' ' . $depositCards[$v['deposit_card_id']]['card_num']; ?></td>
+				<td><?php echo $v['card_name_1']; ?></td>
+				<td><?php echo $v['amount_1'] > 0 ? $v['amount_1'] : ''; ?></td>
+				<td><?php echo $v['order_num_1']; ?></td>
+				<td><?php echo $admins[$v['input_admin_id']]['username']; ?></td>
+				<td><?php echo $v['input_time']; ?></td>
+				<td><?php echo $admins[$v['finish_admin_id']]['username']; ?></td>
+				<td><?php echo $v['finish_time']; ?></td>
+				<td><b>
+					<?php if ($v['status'] == 0): ?>未处理
+					<?php elseif ($v['status'] == 1): ?>已受理
+					<?php elseif ($v['status'] == 4): ?>已拒绝
+					<?php elseif ($v['status'] == 5): ?>系统撤单
+					<?php elseif ($v['status'] == 8): ?>已执行
+					<?php endif; ?></b>
+				</td>
+				<td>
+                    <a class="btn btn-mini btn-info" onclick="window.open('./?c=deposit&a=viewManualDeposit&md_id=<?php echo $v['md_id']; ?>', '_blank', 'width=600,height=420,left=700,scrollbars=yes');" href="" >明细</a>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+            <tr>
+                <td colspan="4">当前页小计</td>
+                <td style="text-align:right"><?php echo number_format($totalAmount0, 4); ?></td>
+                <td colspan="3"></td>
+                <td style="text-align:right"><?php echo number_format($totalAmount1, 4); ?></td>
+                <td colspan="7"></td>
+            </tr>
+        <?php else: ?>
+            <tr>
+                <td colspan="16">暂无数据</td>
+            </tr>
+        <?php endif;?>
+    </table>
+</div>
+<input type="hidden" name="hide">
+<div class="pageTal"><?php echo $pageList; ?></div>
+<div class="tip">
+</div>
+<!--<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false"></embed>-->
+<div id="soundDiv"></div>
+
+<script type="text/javascript">
+var originTitle = window.parent.document.title;
+var isBelowIe8 = navigator.userAgent.indexOf("MSIE") > 0 && navigator.userAgent.match(/MSIE (\d{1,2}).0;/)[1] <= 8;
+
+$(function () {
+    if( isBelowIe8 ){
+        $('#soundDiv').html('<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false" />');
+    }else{
+        $('#soundDiv').html(
+            '<audio id="devUnknown" hidden="true" autostart="false">'+
+            '<source src="images/chimes.wav" type="audio/wav" loop="false">'+
+            '</audio>'
+        );
+    }
+    playSound2();
+});
+
+function playSound2()
+{
+    var node=document.getElementById('devUnknown');
+    if( node )  node.play();
+}
+
+function checkNew()
+{
+    $.post(
+        '?c=deposit&a=manualDepositList&sa=checkNew',
+        {'check':1},
+        function(result){
+            eval("data="+result+";");
+            //$('#balance').html(data.balance);
+            if (data.newNum) {
+                playSound2();
+                window.parent.document.title = '提示：有 ' + data.newNum + ' 笔存款待处理！';
+                window.setTimeout("window.location.reload()", 1000);
+            }
+            else {
+                //alert('没有存款提案！');
+                window.parent.document.title = originTitle;
+            }
+        });
+}
+window.setInterval(checkNew, 10000);
+</script>
+
+
+<?php $this->import("foot"); ?>

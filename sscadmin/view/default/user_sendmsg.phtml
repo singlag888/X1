@@ -1,0 +1,61 @@
+<?php $this->import("head"); ?>
+<script>
+    function checkform(ob) {
+        var msg = "";
+        if (ob.title.value == '') {
+            msg = "请输入标题";
+        }
+        if (msg != "") {
+            alert(msg);
+            return false;
+        }
+        return true;
+    }
+</script>
+<div class="list-div" id="addDiv">
+    <form name="form1" id="form1" action="./?c=user&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+        <table cellpadding="0" cellspacing="0" width="100%" border="0">
+            <tr>
+                <td colspan="2" class="rowTitle">发送消息</td>
+            </tr>
+            <tr>
+                <td width="10%">接收人</td>
+                <td width="90%"><?php echo $user['username']; ?></td>
+            </tr>
+            <tr>
+                <td width="10%">关联发送</td>
+                <td width="90%">
+                    <div class="send4">
+                        <input type="radio" name="target" value="self" checked="checked" />只发给本人
+                        <?php if ($user['parent_id'] == 0): ?>
+                            <input type="radio" name="target" value="child"/>直属下级
+                            <input type="radio" name="target" value="allchild"/>全部下级
+                        <?php else: ?>
+                            <?php if ($childs): ?>
+                                <input type="radio" name="target" value="child" />直属下级
+                                <input type="radio" name="target" value="allchild"/>全部下级
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>标题</td>
+                <td><input type="text" name="title" id="title" /></td>
+            </tr>
+            <tr>
+                <td>内容</td>
+                <td><textarea name="content" style="width:400px;height:80px" id="content" ></textarea></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td colspan="2"><input type="submit" class="submit" name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                    <input type="button" class="submit" onclick="javascript:history.go(-1);" value="返回"/>
+                    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

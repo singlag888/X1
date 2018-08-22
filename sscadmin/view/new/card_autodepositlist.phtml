@@ -1,0 +1,100 @@
+<?php $this->import("head"); ?>
+<script src="<?=$imgCdnUrl?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+    $("#bank_id").change(function(){
+        str = "<option value=0>请选择</option>";
+        $("#card_id").html(str);
+        <?php foreach ($bankCards as $k => $v): ?>
+        if ($("#bank_id").val() == "<?=$k?>") {
+            <?php foreach ($v as $kk => $vv): ?>
+                str = str + "<option value=<?=trim($vv['card_id'])?> style=\"background-color:<?=$vv['type'] == 2 ? "#ccc" : ''?>; \"><?=trim($vv['card_name'])?>&nbsp;<?=trim($vv['card_num'])?></option>";
+            <?php endforeach; ?>
+            $("#card_id").html(str);
+        }
+        <?php endforeach; ?>
+    });
+
+    //预设查询框值
+    $('select[name=bank_id]').val('<?=$bank_id?>').change();
+    $('select[name=card_id]').val('<?=$card_id?>');
+    $('input[name=startDate]').val('<?=$startDate?>');
+    $('input[name=endDate]').val('<?=$endDate?>');
+});
+</script>
+
+<div id="query">
+    <form class="form  form-inline mt20" role="form" name="form1" action="./" method="get">
+        <div class="form-group has-default has-feedback">
+            <label class="ml15">账变时间：</label>
+            <input class="input-sm form-control Wdate" type="text"  name="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="startDate" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <div class="form-group has-default has-feedback">
+            <label>到</label>
+            <input class="input-sm form-control Wdate "  type="text" name="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})" id="endDate" value="" size="21"/>
+            <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+        </div>
+        <label>所属银行： </label>
+        <select class="input-sm form-control" name="bank_id" id="bank_id">
+            <option value="0">请选择</option>
+            <?php foreach ($bankList as $k => $v): ?>
+            <option value="<?=$k?>"><?=$v?></option>
+            <?php endforeach; ?>
+        </select>
+        <label class="ml15">收款卡：</label>
+        <select class="input-sm form-control" name="bank_id" id="bank_id">
+            <option value="0">请选择</option>
+            <?php foreach ($bankList as $k => $v): ?>
+            <option value="<?=$k?>"><?=$v?></option>
+            <?php endforeach; ?>
+        </select>
+       
+        <input type="hidden" name="c" value="card"/><input type="hidden" name="a" value="autoDepositList"/>
+        <input class="btn btn-info ml20" type="submit" name="submit" value=">>查 询<<"/>
+    </form>
+</div>
+
+<div class="list-div mt20" id="listDiv">
+    <table class="table table-responsive table-bordered mainList" >
+        <thead>
+        <tr>
+            <td>auto_id</td>
+            <td>充值姓名</td>
+            <td>付款时间</td>
+            <td>付款方式</td>
+            <td>金额</td>
+            <td>手续费</td>
+            <td>流水号</td>
+            <td>收款卡</td>
+            <td>所属银行</td>
+            <td>交易地点</td>
+            <td>当时余额</td>
+            <td>标记</td>
+            <td>入库时间</td>
+        </tr>
+        </thead>
+        <?php foreach ($autoDeposits as $v): ?>
+        <tr>
+            <td><?=$v['auto_id']?></td>
+        	<td><?=$v['player_card_name']?></td>
+            <td><?=$v['player_pay_time']?></td>
+            <td><?=$tradeTypes[$v['trade_type']]?></td>
+            <td><?=$v['amount']?></td>
+            <td><?php if ($v['fee'] >= 0) echo $v['fee']; else echo "未知"; ?></td>
+            <td><?=$v['order_num']?></td>
+            <td><label title="<?=$cards[$v['card_id']]['card_num']?>"><?=$cards[$v['card_id']]['card_name']?></label></td>
+            <td><?=$bankList[$v['bank_id']]?></td>
+            <td><?=$v['trade_place']?></td>
+            <td><?php if ($v['then_balance'] >= 0) echo $v['then_balance']; ?></td>
+            <td style="vertical-align:middle;"><?php if ($v['status'] == -1): ?>首次使用标记<?php elseif ($v['status'] == 0): ?>未充<?php elseif ($v['status'] == 1): ?>已充值<?php else: ?>暂不处理<?php endif; ?>
+            </td>
+            <td><?=$v['ts']?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal"><?=$pageList?> <div>总计 <b><?=$trafficInfo['count']?></b> 笔付款记录，共计支付 <b><?=$trafficInfo['total_amount']?></b> 元 &nbsp; </div></div>
+
+<?php $this->import("foot"); ?>

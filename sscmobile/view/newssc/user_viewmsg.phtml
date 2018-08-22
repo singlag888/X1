@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>  <!-- layer调用弹出层 -->
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <form name="form1" id="form1" action="?c=user&a=sendMsg" method="get">
+            <div class="email_info">
+                <h3 class="email_info_title">
+                    <?php if ($msgType == 'receive'): ?>
+                    发件人：
+                    <?php else: ?>
+                        收件人：
+                    <?php endif; ?>
+                    <?php if ($message['type'] == '2'): ?>系统管理员
+                    <?php elseif (!empty($username)): ?><?php echo $username; ?>
+                    <?php else: ?>-
+                    <?php endif; ?>
+                </h3>
+                <h3 class="email_info_title">标&emsp;题：<strong class="mail_info"><?php echo htmlspecialchars($message['title']); ?></strong></h3>
+                <p class="email_info_txt"><?php echo nl2br(htmlspecialchars($message['content'])); ?><span class="email_datetime"><?php echo $message['create_time']; ?></span></p>
+            </div>
+            <div class="email_send_layer TextAlignC">
+                <span class="email_send_btn">
+                    <input type="button" value="返回" class="default_navyblue_btnSJ" onclick="replyshow(this);return false;" />
+                    <!-- <input type="hidden" name="msg_id" id="msg_id" value="<?php echo $message['msg_id']; ?>" /> -->
+                </span>
+            </div>
+        </form>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script type="text/javascript">
+            function replyshow(e) {
+                var msgid = <?php echo $message['msg_id']; ?>;
+                var url = 'index.jsp?c=user&a=sendMsg&msg_id='+ msgid;
+                $(window.top.document).find("#mainFrame").attr("src",url);
+                }
+            $(".default_navyblue_btnSJ").click(function(){
+                $(window.top.document).find(".email_content_layer").removeClass("DisplayBlock")
+            })
+        </script>
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

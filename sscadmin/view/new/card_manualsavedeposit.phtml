@@ -1,0 +1,218 @@
+<?php $this->import("head"); ?>
+
+<script>
+var tmpUsage = {};
+function checkform(ob) {
+    var msg = "";
+    if (ob.bank_id.value == "0") {
+        msg = "请选择银行";
+    }
+    else if (ob.card_id.value == "0") {
+        msg = "请选择收款卡";
+    }
+    /*
+    else if (ob.player_card_name.value == "") {
+        msg = "请输入卡户名";
+    }
+    else if (ob.player_pay_time.value == "" || (!/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value) && !/\d{4}年\d{2}月\d{2}日 \d{2}:\d{2}:\d{2}/.test(ob.player_pay_time.value))) {
+        msg = "请输入正确的付款时间";
+    }
+    else if (ob.order_num.value == "") {
+        msg = "请输入订单号，24位";
+    }
+    */
+    else if (ob.amount.value == "" && ob.amount2.value == "") {
+        msg = "请输入正确的金额，2位小数";
+    }
+    else if (ob.trade_type.value == "0") {
+        msg = "请选择交易类型";
+    }
+    else if (ob.trade_type.value > "1" && ob.trade_sn.value == "") {
+        msg = "其他方式须填写当天交易序号";
+    }
+    else if (ob.trade_type.value == "5" && ob.fee2.value == "") {
+        msg = "ATM现存必须填写手续费0";
+    }
+    else if (ob.trade_type.value == "7" && ob.trade_place.value == "") {
+        msg = "跨行没有交易地点，请仔细核对数据";
+    }
+    else if (ob.status.value == "-2") {
+        msg = "请选择补单原因";
+    }
+
+    if (msg != "") {
+        alert(msg + "！");
+        return false;
+    }
+    return true;
+}
+
+$(document).ready(function(){
+    $("#bank_id").change(function(){
+        tmpUsage = {};
+        $('#usage').text('');
+        $('#transfer').hide();
+        $('#atm').hide();
+        str = "<option value=0>请选择</option>";
+        $("#card_id").html(str);
+        /************ author snow 有值中有换行,添加trim 去掉******************/
+    <?php foreach ($bankDepositCards as $k => $v): ?>
+        if ($("#bank_id").val() == "<?php echo $k; ?>") {
+            <?php foreach ($v as $kk => $vv): ?>
+                str = str + "<option value=<?php echo $vv['card_id']; ?> <?php if ($vv['status'] == 0) echo 'style=\"color:red;\"'; ?>><?php echo $vv['card_name']; ?>&nbsp;<?php echo trim($vv['card_num']); ?><?php if ($vv['usage'] == 2) echo '(ATM)'; ?></option>";
+            tmpUsage['card_<?php echo $vv['card_id']; ?>'] = <?php echo $vv['usage']; ?>;
+            <?php endforeach; ?>
+            $("#card_id").html(str);
+        }
+    <?php endforeach; ?>
+        /************ author snow 有值中有换行,添加trim 去掉******************/
+    });
+
+    $("#card_id").change(function(){
+        if (tmpUsage['card_' + $("#card_id").val()] == 1) { //网银
+            $('#usagespan1').html('<b>同行网转</b>');
+            $('input[name=usage]').val("1");
+            $('#transfer').show();
+            $('#atm').hide();
+            $('select[name=trade_type]').val('1');
+        }
+        else {  //ATM等其他方式
+            $('input[name=usage]').val("2");
+            $('#usagespan2').html('<font color="red"><b>ATM等其他方式收款</b></font>');
+            $('#transfer').hide();
+            $('#atm').show();
+            $('select[name=trade_type]').val('0');
+        }
+    });
+
+    //交易类型的变化也会反映到不同的表单内容
+    $("#trade_type").change(function(){
+        if ($("#trade_type").val() == "1") {
+            $('#usagespan1').html('<b>同行网转</b>');
+            $('input[name=usage]').val("1");
+            $('#transfer').show();
+            $('#atm').hide();
+        }
+        else {
+            $('input[name=usage]').val("2");
+            $('#usagespan2').html('<font color="red"><b>ATM等其他方式收款</b></font>');
+            $('#transfer').hide();
+            $('#atm').show();
+        }
+    });
+
+    //预设查询值
+    $('#bank_id').val('<?php echo $bank_id; ?>').change();
+    $('#card_id').val('<?php echo $card_id; ?>');
+
+    $('#status').change(function(){
+        if ($('#status').val() == "-1") {
+            $('#desc').text("说明：对于工行网转，仅在第一次投入使用时选择此项；对于工行ATM则不能标记！");
+        }
+        else if ($('#status').val() == "1") {
+            $('#desc').text("说明：当卡已下线时，如果有个别玩家仍然存到该卡上，需要及时手工补单。");
+        }
+        else {
+            $('#desc').text("");
+        }
+    });
+
+    //默认显示今天日期
+    var d = new Date();
+    $('input[name=trade_date]').val(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate());
+
+    //默认显示下线补单
+    //$('#status').val('1');
+    //$('#status').change();
+});
+</script>
+
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<div class="list-div add-main" id="addDiv">
+<p style="color:#FF5151;font-size:14px;">★ 什么情况下需要手工补单？——当工行自动收款因超限等原因下线时，若有玩家继续汇入金额，这时必须补单（否则无法为玩家充值），如果客户提交了存款提案，将自动审核执行提案，补单的意义在于使自动收款列表的记录时时保持最新，保证机器自动收款的正常运行！</p>
+<p style="color:#FF5151;font-size:14px;">★ 对于工行ATM、跨行等收款，是为了方便财务不需要登录网银而显示的，这里只是纯粹显示，提案仍然是人工进行审核执行，所以不补单亦无影响。</p>
+<br/>
+<form name="form1" class="form-top" id="form1" action="?c=card&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:60%;" >
+    <tr>
+        <td class="fb" width="15%">所属银行</td>
+        <td >
+            <!------------------ author snow 修改成可搜索------------------------------>
+            <select class="selectpicker bank_id" name="bank_id" id="bank_id" data-live-search="true" title="请选择 ...">
+                <option value="0">请选择…</option>
+                <?php foreach ($bankList as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <!------------------ author snow 修改成可搜索------------------------------>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">收款卡</td>
+        <td>
+            <select class="input-md form-control" name="card_id" id="card_id"></select>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">交易类型</td>
+        <td >
+            <div class="form-inline">
+                <select class="input-md form-control" name="trade_type" id="trade_type" />
+                    <option value="0">请选择</option>
+                    <?php foreach ($tradeTypes as $k => $v): ?>
+                        <?php if($k==1): ?>
+                            <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </td>
+    </tr>
+</table>
+<br/>
+
+<div id="transfer">
+    <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:60%;">
+    <tr>
+        <td class="fb">会员账号</td>
+        <td width="60%">
+            <input class="input-md form-control" name="user_name" maxlength="19"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">转账人银行户名</td>
+        <td width="60%">
+            <input class="input-md form-control" name="player_card_name" maxlength="19"/>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">付款时间
+            <br/>格式：2017-10-10 09:05:00
+        </td>
+        <td><input class="input-md form-control" name="player_pay_time" id="player_pay_time"/></td>
+    </tr>
+    <tr>
+        <td class="fb">付款金额</td>
+        <td><input class="input-md form-control" name="amount"/></td>
+    </tr>
+    </table>
+</div>
+<table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width:60%; margin-top:10px;">
+    <tr>
+        <td colspan="2">
+            <div style="width:60%;margin:0 auto;text-align:center;">
+                <input class="btn btn-info submit" style="width: 60px;" type="submit"  name="submit" value="提 交" />
+            </div>
+        </td>
+
+    </tr>
+</table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

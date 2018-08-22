@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>  <!-- 会员管理下配额页面 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+  <div class="quota_page_part">
+      <table class="quota_manage_list">
+        <thead>
+          <tr>
+              <th width="30%">奖金/返点</th>
+              <th width="30%">配额剩余</th>
+              <th width="40%">配额数量</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($aQuotas as $aQuota):
+            if($aQuota['prize_mode'] > $subPrizeMode) continue;
+            isset($aSubQuotas[$aQuota['prize_mode']]) or $aSubQuotas[$aQuota['prize_mode']] = 0;
+            ?>
+            <tr>
+                <input type="hidden" name="prize_mode" value="<?php echo $aQuota['prize_mode'];?>"/>
+                <td><?php echo $aQuota['prize_mode'].'/'.$aQuota['rebate'];?></td>
+                <td><?php echo $aSubQuotas[$aQuota['prize_mode']];?></td>
+                <td>
+                    <div class="quota_quantity_btnlist">
+                        <input type="hidden" name="total" value="<?php echo $aSubQuotas[$aQuota['prize_mode']]+$aQuota['available'] - $aQuota['used'];?>">
+                        <a href="javascript:void(0)" class="default_common_btn copy_save_btn add_quota">+</a>
+                        <input type="text" class="form_control" name="count" readonly="true" value="<?php echo $aSubQuotas[$aQuota['prize_mode']]; ?>">
+                        <a href="javascript:void(0)" class="default_common_btn copy_save_btn dec_quota">&minus;</a>
+                    </div>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+     </table>
+      <table class="myquota_manage_list">
+          <caption>我的配额信息</caption>
+          <thead>
+          <tr>
+              <?php foreach ($aQuotas as $aQuota): ?>
+              <th><?php echo $aQuota['prize_mode'].'/'.$aQuota['rebate'];?></th>
+              <?php endforeach; ?>
+
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+              <?php foreach ($aQuotas as $aQuota): ?>
+              <td class="orange_font"><?php echo $aQuota['available'] - $aQuota['used'];?>个</td>
+              <?php endforeach; ?>
+
+          </tr>
+          </tbody>
+      </table>
+      <div class="close_order_layer">
+          <a href="javascript:void(0);" class="default_blue_btn submit">确定</a>
+          <a href="javascript:void(0);" class="default_gray_btn closeDialogBtn">返回</a>
+      </div>
+  </div>
+
+  <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script>
+    $(function() {
+      $('a.closeDialogBtn').on('click', function(){
+            var index = parent.layer.getFrameIndex(window.name);      //获取当前窗口索引
+            parent.layer.close(index);
+        });
+
+        $('a.submit').on('click', function(){
+            var prize_modes = [];
+            $("input[name=prize_mode]").each(function(i,item){
+                prize_modes.push($(item).val());
+            });
+            var counts = [];
+            $("input[name=count]").each(function(i,item){
+                counts.push($(item).val());
+            });
+
+            $.post(
+                'index.jsp?c=user&a=sendOutQuota',
+                {
+                    'user_id': '<?php echo $user['user_id']; ?>',
+                    'prize_mode': prize_modes,
+                    'count': counts,
+                },
+                function(response){
+                    if(response.errno　== 0){
+                        parent.layer.alert(response.errstr);
+                        window.location.reload();
+                    } else {
+                        parent.layer.alert(response.errstr);
+                    }
+                }, 'json');
+        });
+
+        $('.dec_quota').on('click', function(){
+            var cur_count = parseInt($(this).siblings('input[name=count]').val());
+            if((cur_count-1)>=0){
+                $(this).siblings('input[name=count]').val(cur_count-1);
+            }
+        });
+
+        $('.add_quota').on('click', function(){
+            var balance = parseInt($(this).siblings('input[name=total]').val());
+            var cur_count = parseInt($(this).siblings('input[name=count]').val());
+            if((cur_count+1)<=balance){
+                $(this).siblings('input[name=count]').val(cur_count+1);
+            }
+        });
+    });
+</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

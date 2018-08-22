@@ -1,0 +1,423 @@
+﻿<?php $this->import("default_top"); ?>
+<link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/view/new/css/user-management-tools.css" />
+<?php $this->import("default_left"); ?>
+
+<script type="text/html" id="user_tools_edit" >
+	<div class="user-info-config" lay-event="userConfig" ><h>用户设置</h></div>
+</script>
+
+
+<div class="dc-right-body dc-body-common-div custom-defind-common">
+  <div id="dc_user_tools_tab1" style="width: 100%; height: 100%;">
+  	<div id="dc_user_tab1_title">
+  	  <div class="dc-user-management_title"><p><span>用户管理</span></p></div>
+  	</div>
+  	
+  	<div id="dc_user_tab1_adduser" class="layui-btn custom-defind-common dc-user-tab1-button" onclick="addUserToSystem()" >
+	  <a class="layui-btn-radius" href="#" >新增</a>
+	</div>
+  	<div id="dc_user_tab1_clock" class="layui-btn custom-defind-common dc-user-tab1-button" onclick="lockUsers()">
+  	  <a class="layui-btn-radius" href="#" >锁定</a>
+  	</div>
+  	<div id="dc_user_tab1_unclock" class="layui-btn custom-defind-common dc-user-tab1-button" onclick="unlockUsers()">
+  	  <a class="layui-btn-radius" href="#" >解锁</a>
+  	</div>
+  	
+  	<form action="" method="get" >
+	  <div id="user_getdata_condition">
+	  
+	  <div id="user_condition_regdate_start">
+          <p><span>注册时间：</span></p>
+          <input type="text" id="user_regdate_start" name="" class="user-condition-input" >
+          <img alt="" src="<?php echo $imgCdnUrl ?>/view/new/img/date.png">
+        </div>
+        <div id="user_condition_regdate_end">
+    	  <p><span>至：</span></p>
+          <input type="text" id="user_regdate_end" name="" class="user-condition-input" > 
+          <img alt="" src="<?php echo $imgCdnUrl ?>/view/new/img/date.png"> 	    
+      </div>
+  	  <div id="user_condition_usertype">
+  	      <p><span>用户类型：</span></p>
+  	      <select id="user_select_usertype" name="" >
+  	        <option value="0">全部</option>
+		    <option value="1">会员</option>
+		    <option value="2">代理</option>
+  	      </select>
+  	      <select id="user_select_userlive" name="">
+  	        <option value="0">全部层级</option>
+		    <option value="1">新人</option>
+		    <option value="2">小户</option>
+		    <option value="3">大户</option>
+		    <option value="4">默认层级</option>
+  	      </select>
+  	    </div>
+  	    <div id="user_condition_proxy" class="layui-form layui-inline">
+  	    <div class="layui-input-inline">
+  	      <p><span>所属总代：</span></p>
+          <select name="" lay-search="" display="none">
+            <option value="" >可模糊搜索选择</option>
+          	<option value="1" >layer</option>
+			<option value="2" >form</option>
+			<option value="3" >layim</option>
+			<option value="4" >element</option>
+			<option value="5" >laytpl</option>
+			<option value="6" >upload</option>
+			<option value="7" >laydate</option>
+			<option value="8" >laypage</option>
+			<option value="9" >flow</option>
+			<option value="10">util</option>
+			<option value="11">code</option>
+			<option value="12">tree</option>
+			<option value="13">layedit</option>
+			<option value="14">nav</option>
+			<option value="15">tab</option>
+			<option value="16">table</option>
+			<option value="17">select</option>
+			<option value="18">checkbox</option>
+			<option value="19">switch</option>
+			<option value="20">radio</option>
+          </select>
+          <div class="layui-form-select">
+				<div class="layui-select-title">
+					<input type="text" placeholder="可模糊搜索选择" value="" class="layui-input">
+					<i class="layui-edge"></i>
+				</div>
+				<dl class="layui-anim layui-anim-upbit" style="">
+					<dd lay-value="" class="layui-select-tips">可模糊搜索选择</dd>
+					<dd lay-value="1" class="">layer</dd>
+					<dd lay-value="2" class="">form</dd>
+					<dd lay-value="3" class="">layim</dd>
+					<dd lay-value="4" class="">element</dd>
+					<dd lay-value="5" class="">laytpl</dd>
+					<dd lay-value="6" class="">upload</dd>
+					<dd lay-value="7" class="">laydate</dd>
+					<dd lay-value="8" class="">laypage</dd>
+					<dd lay-value="9" class="">flow</dd>
+					<dd lay-value="10" class="">util</dd>
+					<dd lay-value="11" class="">code</dd>
+					<dd lay-value="12" class="">tree</dd>
+					<dd lay-value="13" class="">layedit</dd>
+					<dd lay-value="14" class="">nav</dd>
+					<dd lay-value="15" class="">tab</dd>
+					<dd lay-value="16" class="">table</dd>
+					<dd lay-value="17" class="">select</dd>
+					<dd lay-value="18" class="">checkbox</dd>
+					<dd lay-value="19" class="">switch</dd>
+					<dd lay-value="20" class="">radio</dd>
+				</dl>
+			</div>
+		</div>
+		</div>
+  	    <div id="user_condition_username" >
+  	  	  <p><span>真实姓名：</span></p>
+  	  	  <input type="text" id="user_name" name="" class="user-condition-input" />
+  	  	</div>	
+  	  	<div id="user_condition_nickname" >
+  	  	  <p><span>用  户  名 ：</span></p>
+  	  	  <input type="text" id="user_nickname" name="" class="user-condition-input" />
+  	  	</div>
+  	  	<div id="user_condition_phone_no" >
+  	  	  <p><span>手机号码：</span></p>
+  	  	  <input type="text" id="user_phone_no" name="" class="user-condition-input"  />
+  	  	</div>
+  	  	<div id="user_condition_bank_no" >
+  	  	  <p><span>银行卡号：</span></p>
+  	  	  <input type="text" id="user_bank_no" name="" class="user-condition-input" />
+  	  	</div>
+  	  	<div id="user_condition_isonline">
+  	      <p><span>是否在线：</span></p>
+  	      <select id="user_select_isonline" name="" lay-verify="">
+  	        <option value="0">全部</option>
+		    <option value="1">在线</option>
+		    <option value="2">离线</option>
+  	      </select>
+        </div>
+        <div id="dc_user_tab1_select" class="layui-btn custom-defind-common dc-user-tab1-button">
+		  <a class="layui-btn-radius" href="#" >查询</a>
+		</div>
+		<div id="dc_user_tab1_reset" class="layui-btn custom-defind-common dc-user-tab1-button" onclick="resetUserForm()" >
+		  <a class="layui-btn-radius" href="javascript:;" >重置</a>
+		</div>
+  	  	
+  	  </div>
+  	</form>
+  	
+  	<div id="dc_user_tab1_grid">
+  	  <table lay-filter="loadUserData">
+  	    <thead>
+  	      <tr>
+  	        <th lay-data="{field: 'checkbox', width:40, checkbox: true, fixed: true}"></th>
+  	        <th lay-data="{field: 'userNickname', width:105, align:'center'}">用户名</th>
+  	        <th lay-data="{field: 'userName', width:105, align:'center'}">姓名</th>
+  	        <th lay-data="{field: 'phoneNo', align:'center', width:120}">电话</th>
+  	        <th lay-data="{field: 'userLevel', align:'center', width: 90}">用户层级</th>
+  	        <th lay-data="{field: 'proxyLevel', align:'center', width: 95, sort: true}">代理层级</th>
+  	        <th lay-data="{field: 'balance', align:'center', width: 90, sort: true}">余额</th>
+  	        <th lay-data="{field: 'superAcct', align:'center', width: 115}">上级账号</th>
+  	        <th lay-data="{field: 'regAddress', align:'center', width: 120}">注册IP</th>
+  	        <th lay-data="{field: 'regDate', align:'center', width: 120, sort: true}">注册时间</th>
+  	        <th lay-data="{field: 'status', align:'center', width: 80}">状态</th>
+  	        <th lay-data="{field: 'operation', align:'center', width: 85, toolbar: '#user_tools_edit'}">操作</th>
+  	      </tr>
+  	    </thead>
+  	    <tbody>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td>
+            </td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	      <tr>
+  	      	<td></td>
+            <td>tester</td>
+            <td>Elena</td>
+            <td>123456789</td>
+            <td>5</td>
+            <td>1</td>
+            <td>888.88</td>
+            <td>tester1</td>
+            <td>127.0.0.1</td>
+            <td>2017-1-1</td>
+            <td>正常</td>
+            <td><div class="user-info-config" ><h>用户设置</h></div></td>
+  	      </tr>
+  	    </tbody>
+  	  </table>
+  	</div>
+  	<div id="dc_user_data_pageset"></div>
+  </div>
+</div>
+<script type="text/javascript">
+	
+	
+	layui.use(['form', 'laydate'],function(){
+		var form = layui.form;
+		var laydate = layui.laydate;
+
+		laydate.render({
+			elem: '#regidit_date_start'
+		});
+		laydate.render({
+			elem: '#regidit_date_end'
+		});
+	});
+</script>

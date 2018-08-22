@@ -1,0 +1,236 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+
+    $('input[name=name_style]').click(function(){
+        if ($(this).val() == 1) {
+            $('select[name=top_username]').attr('disabled', false);
+            $('input[name=username]').attr('disabled', true);
+        }
+        else {
+            $('select[name=top_username]').attr('disabled', true);
+            $('input[name=username]').attr('disabled', false);
+        }
+    });
+
+    //预选中值
+    $('select[name=top_username]').val('<?php echo $top_username; ?>');
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $('input[name=include_childs]').attr('checked', <?php if ($include_childs): ?>true<?php else: ?>false<?php endif; ?>);
+    $('select[name=is_test]').val('<?php echo $is_test; ?>');
+    //$('select[name=type]').val('<?php echo $type; ?>');
+    $('input[name=startDate]').val('<?php echo $startDate; ?>');
+    $('input[name=endDate]').val('<?php echo $endDate; ?>');
+    $('select[name=status]').val('<?php echo $status; ?>');
+    if ($('input[name=username]').val() == '') {
+        $('input[name=name_style][value=1]').attr('checked', true).click();
+    }
+    else {
+        $('input[name=name_style][value=2]').attr('checked', true).click();
+    }
+
+    //类型 ： 展开/收缩   选择层
+    $('#selectTypes').click(function(){
+		if($('#tradeTypesTable').is(':hidden') == false ){
+			$('#tradeTypesTable').hide();
+			$('#toggleSelectBut').hide();
+			$(this).val(' 请选择 ');
+		}else{
+			$('#tradeTypesTable').show();
+			$('#toggleSelectBut').show();
+			$(this).val(' 隐藏 ');
+		}
+    });
+
+    //类型 ： 反选功能
+    $('#toggleSelectBut').click(function(){
+    	$('.tradeTypes').each(function(){
+        	if($(this).is(':checked') == true){
+            	$(this).attr('checked', false);
+        	}else{
+        		$(this).attr('checked', true);
+        	}
+        });
+    });
+});
+</script>
+
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<div class="list-div" id="listDiv">
+<div id="query">
+    <form name="form1" action="./" method="get">
+        <div class="form-inline mt20">
+            <div class="form-group has-dafault has-feedback">
+                <label>优惠时间:</label>
+                <input class="input-sm form-control Wdate"  type="text" name="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="startDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-dafault has-feedback">
+                <label>到</label>
+                <input class="input-sm form-control Wdate"  type="text" name="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})"  id="endDate" value="" size="21"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label class="ml10">优惠类型:</label>
+            <input class="input-sm form-control mr10" type='button' name='selectTypes' value=' 请选择 ' id='selectTypes' />
+            <input class="btn btn-sm btn-default" type='button' name='toggleSelect' value=' 反选 ' id='toggleSelectBut' style='display:none;' />
+
+        </div>
+        <div  class="form-inline mt20" >
+            <input type="radio" name="name_style" value="1"/>
+            <label>所属总代:</label>
+            <select id="top-username" class="selectpicker snow-topUser-search" name="top_username" data-live-search="true" title="请选择 ...">
+                <option value="">请选择…</option>
+                <?php foreach ($json_topUsers as $k => $v): ?>
+                    <option value="<?=$v['username']?>"><?=$v['username']?></option>
+                <?php endforeach; ?>
+            </select>
+            <label>或</label>
+            <input type="radio" name="name_style" value="2"/>
+            <label >用户名:</label>
+            <input class="input-sm form-control" name="username" size="10"/>
+            <input type="checkbox" name="include_childs" id="include_childs" value="1" />
+            <label for="include_childs">包含下级</label>
+            <label class="ml10">是否测试账号:</label>
+            <select class="input-sm form-control" name="is_test">
+                <option value="-1">请选择</option>
+                <option value="0">正式帐号</option>
+                <option value="1">测试帐号</option>
+            </select>
+            <label> 状态:</label>
+            <select class="input-sm form-control" name="status">
+                <option value="-1">请选择</option>
+                <option value="0">未处理</option>
+                <option value="1">批量上传未处理</option>
+                <option value="2">已审核</option>
+                <option value="8">已成功</option>
+                <option value="9">因故取消</option>
+            </select>
+            <input type="hidden" name="c" value="promo"/><input type="hidden" name="a" value="promoList"/>
+            <input class="btn btn-sm btn-info ml10" type="submit" name="submit" value=">>查 询<<"/>
+        </div>
+        <div class="form-inline mt10">
+            <div id='tradeTypesTable' style='border:0px;margin:5px 0px 10px 0px;display:none;'>
+                <?php foreach ($promoTypes as $k => $v): ?>
+                <div style='border:0px;float:left;width:120px;text-align:left;'>
+                    <input class='tradeTypes' id='tradeTypes_<?php echo $k;?>' type='checkbox' name='types[<?php echo $k;?>]' value='<?php echo $k;?>' <?php if (isset($types[$k])): ?>checked<?php endif; ?> />
+                    <label for='tradeTypes_<?php echo $k;?>'><?php echo $v; ?></label>
+                </div>
+                <?php endforeach; ?>
+                <div style="clear:both;"></div>
+            </div>      
+        </div>
+    </form>
+</div>
+
+<form class="form-top">
+    <table class="table table-responsive table-bordered  mainList mt20">
+    <thead>
+        <tr>
+            <td>promo_id</td>
+            <td>用户id</td>
+            <td>用户名</td>
+            <td>优惠类型</td>
+            <td>其他优惠说明</td>
+            <td>金额</td>
+            <td>创建时间</td>
+            <td>创建人</td>
+            <td>执行人</td>
+            <td>备注</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <?php foreach ($promos as $v): ?>
+    <tr title="<?php if ($v['type'] == 7): ?><?php echo $v['water_amount']; ?>*<?php echo $v['rebate_rate']; ?>=<?php echo $v['water_amount']*$v['rebate_rate'];?><?php endif;?>">
+        <td><?php echo $v['promo_id']; ?></td>
+        <td><?php echo $v['user_id']; ?></td>
+        <td><?php echo $v['username']; ?><?php if ($v['is_test']): ?><b style="color:red">[测试]</b><?php endif; ?></td>
+        <td><?php echo $promoTypes[$v['type']]; ?></td>
+        <td><?php echo $v['notes']; ?></td>
+        <td><span title=""><?php echo $v['amount']; ?></span></td>
+        <td><?php echo $v['create_time']; ?></td>
+        <td><?php echo $admins[$v['admin_id']]['username']; ?></td>
+        <td><?php echo $admins[$v['finish_admin_id']]['username']; ?></td>
+        <td><?php echo $v['remark']; ?></td>
+        <td>
+            <?php if($v['status'] == 0): ?><b>未处理</b>
+            <?php elseif($v['status'] == 1): ?><b>批量上传未处理</b>
+            <?php elseif($v['status'] == 2): ?>已审核
+            <?php elseif($v['status'] == 8): ?>已执行
+            <?php elseif($v['status'] == 9): ?><font color="red">已取消</font>
+            <?php endif; ?>
+        </td>
+        <td>
+            <a class="btn btn-mini btn-info" href="javascript:;" onclick="window.open('./?c=promo&a=promoDetail&promo_id=<?php echo $v['promo_id']; ?>', '_blank', 'resizable=no,width=320,height=420,left=700');">明细</a>
+            <!--
+            <?php if($v['status'] == 0): ?>
+                <a href="./?c=promo&a=verify&promo_id=<?php echo $v['promo_id']; ?>">审核</a>
+            <?php elseif($v['status'] == 1): ?>
+                <a href="./?c=promo&a=verify&promo_id=<?php echo $v['promo_id']; ?>">审核</a>
+            <?php elseif($v['status'] == 2): ?>
+                <a href="./?c=promo&a=charge&promo_id=<?php echo $v['promo_id']; ?>">执行充值！</a>
+            <?php elseif($v['status'] == 8): ?>
+            <?php elseif($v['status'] == 9): ?>
+            <?php endif; ?>
+            -->
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</form>
+</div>
+<div class="pageTal"><div>本页小计:<b> <?php echo $trafficInfo['count']; ?></b> 笔记录，金额 <b><?php echo $trafficInfo['total_amount']; ?></b> 元 &nbsp; <?php echo $pageList; ?></div></div>
+
+<!--<input  type="button"  onclick="playSound2();" class="button" value="点击播放" />-->
+<!--<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false"></embed>-->
+<div id="soundDiv"></div>
+<script type="text/javascript">
+var isBelowIe8 = navigator.userAgent.indexOf("MSIE") > 0 && navigator.userAgent.match(/MSIE (\d{1,2}).0;/)[1] <= 8;
+
+$(function () {
+    if( isBelowIe8 ){
+        $('#soundDiv').html('<embed id="devUnknown" src="images/chimes.wav" width="0" height="0" loop="false" autostart="false" />');
+    }else{
+        $('#soundDiv').html(
+            '<audio id="devUnknown" hidden="true" autostart="false">'+
+            '<source src="images/chimes.wav" type="audio/wav" loop="false">'+
+            '</audio>'
+        );
+    }
+    playSound2();
+});
+
+function playSound2()
+{
+    var node=document.getElementById('devUnknown');
+    if( node )  node.play();
+}
+function checkNew()
+{
+    $.post(
+        '?c=promo&a=checkNew',
+        {'check':1},
+        function(result){
+            eval("data="+result+";");
+            //$('#balance').html(data.balance);
+            if (data.newNum) {
+                //playSound2();
+                //window.parent.document.title = '提示：有 ' + data.newNum + ' 笔优惠提案！';
+                //window.setTimeout("window.location.reload()", 1000);
+            }
+            else {
+                //alert('没有存款提案。');
+                //window.parent.document.title = '管理系统';
+            }
+        });
+}
+window.setInterval(checkNew, 10000);
+</script>
+
+<?php $this->import("foot"); ?>

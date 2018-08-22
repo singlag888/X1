@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="webkit" name="renderer"><!-- 页面默认用极速核 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- 指定浏览器按照最高的标准模式解析页面针对IE -->
+    <meta content="telephone=no,email=no" name="format-detection" /><!-- 使设备浏览网页时对数字不启用电话功能 -->
+    <!--<meta name="apple-touch-fullscreen" content="YES"/>&lt;!&ndash; "添加到主屏幕"后，全屏显示 &ndash;&gt;-->
+    <meta name="apple-mobile-web-app-capable" content="yes"/>  <!-- 如果内容设置为YES，Web应用程序运行在全屏模式;否则，它不会。默认行为是使用Safari浏览器显示网页内容 -->
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp" /><!-- 度SiteApp转码声明 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <!--<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobileStyle.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/mobile_overallStyle.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />-->
+    <!--<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />-->
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <!--<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/public.js"></script>-->
+    <!--<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script>&lt;!&ndash;jquery小插件&ndash;&gt;-->
+    <!--<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>&lt;!&ndash; layer调用弹出层 &ndash;&gt;-->
+    <!--<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/ZeroClipboard.107.js"></script>-->
+    <!--<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.md5.js"></script>-->
+
+    <style type="text/css">
+        html{
+            font-size: 20rem;
+        }
+        *{
+            margin: 0;
+            padding:0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+        .ali_choice{
+            width: 100%;
+            height: 1.5rem;
+            display: flex;
+            border-top:1px solid #E7DFDF;
+            font-size: 0.3rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .ali_choice div:nth-child(1){
+            width: 30%;
+            font-weight: 700;
+
+
+        }
+        .ali_choice div:nth-child(2){
+            width: 60%;
+
+        }
+        .ali_choice div span{
+            border: 1px solid #E7DFDF;
+        }
+        .balance{
+            border-top: 1px solid #E7DFDF;
+            width: 94%;
+            display: flex;
+            height: 1.5rem;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 auto;
+        }
+        .balance span{
+            font-size: 0.3rem;
+            font-weight:700;
+        }
+        .balance input{
+            height: 0.5rem;
+            width: 4rem;
+        }
+        .success_button{
+            width: 94%;
+            margin: 0 auto;
+            height: 2.5rem;
+            background:#F9F5F5;
+            margin-top: 1rem;
+            /*background-image: url("<?php echo $imgCdnUrl ?>/images/mobile/notice.png");*/
+            background-repeat: no-repeat;
+            background-size: 0.45rem 0.45rem;
+            padding-top: 0.45rem;
+        }
+        .success_button p{
+           font-size: 0.2rem;
+            color: #E83B3E;
+            font-weight: 700;
+        }
+        .success_button button{
+            width: 100%;
+            height: 1rem;
+            background:#E4393C;
+            color: white;
+            border-radius: 10px;
+            font-size: 0.35em;
+        }
+        .qq{
+            width: 94%;
+            height: 1rem;
+            background: #F9F5F5;
+            margin: 0 auto;
+            font-size: 0.2rem;
+        }
+        .qq a{
+            color:#E4393C;
+            font-weight: 700;
+        }
+
+    </style>
+    <script type="application/javascript">
+
+		(function (doc, win) {
+			var docEl = doc.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+				recalc = function () {
+					var clientWidth = docEl.clientWidth;
+					if (!clientWidth) return;
+					if(clientWidth>=640){
+						docEl.style.fontSize = '100px';
+					}else{
+						docEl.style.fontSize = 100 * (clientWidth / 640) + 'px';
+					}
+				};
+			if (!doc.addEventListener) return;
+			win.addEventListener(resizeEvt, recalc, false);
+			doc.addEventListener('DOMContentLoaded', recalc, false);
+		})(document, window);
+    </script>
+</head>
+
+<body>
+    <div class="ali_choice">
+        <div>支付选择</div>
+        <div><span>支付宝支付</span></div>
+    </div>
+   <div class="balance">
+        <span>存款额度</span>
+        <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'0')}else{this.value=this.value.replace(/\D/g,'')}" type="text" placeholder="10-50000">
+    </div>
+    <div class="success_button">
+        <p>支付成功后，</p>
+        <p>请您凭会员账号，交易单号提交至客服QQ或者客服微信</p>
+        <button>确认充值</button>
+    </div>
+    <div class="qq">
+        <p>温馨提示</p>
+        <p>充值有问题请加客服QQ:<?php echo getFloatConfig('qq_number'); ?><a href="#">点击聊天</a></p>
+    </div>
+</body>
+</html>

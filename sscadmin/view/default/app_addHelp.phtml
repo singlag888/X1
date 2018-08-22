@@ -1,0 +1,81 @@
+<?php $this->import("head"); ?>
+    <script>
+
+    </script>
+    <div class="list-div add-main form-top" id="addDiv">
+        <?php if(ACTION=='editHelp'):?>
+        <form name="form1" id="form1" action="?c=app&a=<?php echo ACTION; ?>&id=<?php echo $helpInfo['id']?>" method="post">
+        <?php endif;?>
+            <table class="table table-responsive table-bordered" style="width:80%;">
+                <tr>
+                    <td>标题:</td>
+                    <td><?php echo $helpInfo['name']?></td>
+                </tr>
+                <tr>
+                    <td >内容:</td>
+                    <td>
+                        <textarea class="input-md form-control" id="content" name="content"><?php echo (isset($helpInfo['content'])&&!empty($helpInfo['content']) ? $helpInfo['content'] : ''); ?></textarea>
+                        <script src="/js/ckeditor/ckeditor.js"></script>
+
+                        <script>
+                            <?php if(ACTION=='editHelp'):?>
+                            CKEDITOR.replace('content', {
+                                toolbar: [
+                                            //源代码   加粗     斜体，     下划线      穿过线      下标字        上标字
+                                            ['Source','Bold','Italic','Underline','Strike','Subscript','Superscript'],
+                                            // 数字列表          实体列表            减小缩进    增大缩进
+                                            ['NumberedList','BulletedList','-','Outdent','Indent'],
+                                            //左对 齐             居中对齐          右对齐          两端对齐
+                                            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+                                            //超链接  取消超链接 锚点
+                                            ['Link','Unlink','Anchor'],
+                                            //图片    flash    表格       水平线            表情       特殊字符        分页符
+                                            [/*'Image','Flash',*/'Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+                                            '/',
+                                            // 样式       格式      字体    字体大小
+                                            ['Styles','Format','Font','FontSize'],
+                                            //文本颜色     背景颜色
+                                            ['TextColor','BGColor'],
+                                            //全屏           显示区块
+                                            ['Maximize', 'ShowBlocks','-']
+                                        ],
+                                language: 'zh-cn',
+                                width: '100%',
+                                height: '420'
+                            });
+                            <?php else:?>
+                            CKEDITOR.replace('content', {
+                                toolbar: [
+//                                    全屏           显示区块
+                                    ['Maximize', 'ShowBlocks','-']
+                                ],
+                                language: 'zh-cn',
+                                width: '100%',
+                                height: '420'
+                            });
+                            CKEDITOR.config.readOnly = true;
+                            <?php endif;?>
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <div style="width:60%;margin:0 auto;text-align: center;">
+                            <?php if(ACTION=='editHelp'):?>
+                                <button class="btn  btn-info submit" type="submit" style="width: 60px;" name="submitBtn" value="<?php if (ACTION == "addArticle"): ?>提交<?php else: ?>更新<?php endif; ?>">更新</button>
+                            <?php endif;?>
+                            <button class="btn btn-info submit" type="button" style="width: 60px;"
+                             class="" onclick="javascript:history.go(-1);" value="返回">返回</button>
+                            <input type="hidden" name="article_id" value="" />
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+        <?php if(ACTION=='editHelp'):?>
+        </form>
+        <?php endif;?>
+    </div>
+
+<?php $this->import("foot"); ?>

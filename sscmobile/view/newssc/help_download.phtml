@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>   <!-- 服务中心下客户端下载 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <div class="">
+           客户端下载
+
+        </div>
+    </div>
+</div>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

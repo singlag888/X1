@@ -1,0 +1,232 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script src="/js/layer-v2.4/layer.js"></script>
+    <script src="/js/progress.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+    $('select[name=card_groups]').val('<?php echo $card_group; ?>');
+    $('select[name=type]').val('<?php echo $type; ?>');
+    $('select[name=bank_id]').val('<?php echo $bank_id; ?>');
+    $('select[name=usage]').val('<?php echo $usage; ?>');
+    $('select[name=use_place]').val('<?php echo $use_place; ?>');
+    $('input[name=card_name]').val('<?php echo $card_name; ?>');
+    $('#status').val('<?php echo $status; ?>');
+});
+function editStatus(obj, id){
+
+	if (obj.value == '-1') {
+        return false;
+    }
+	var flag = confirm('确认更换状态？');
+	if(flag == false){
+		return false;
+	}
+	$.post('?c=card&a=editStatus', {'card_id':id, 'status':obj.value}, function(jdata){
+		if(jdata.errno==0){
+			alert('状态更新成功');
+		}else{
+			alert('状态更新失败：'+jdata.errstr);
+		}
+	}, 'json');
+}
+$(function () {
+    $('#sel').on('click', function () {
+        var trade_type_string = '';
+
+        $('input[name="card_groups_checkbox"]').each(function () {
+
+            if ($(this).attr('checked') != undefined) {
+                if (trade_type_string != '') {
+                    trade_type_string += ",";
+                }
+
+                trade_type_string += $(this).val();
+            }
+        });
+        $('input[name="ref_group_id"]').val(trade_type_string);
+    });
+
+    /************** author snow 添加回显,卡层级************************/
+    //>>本来想做,算了
+    /************** author snow 添加回显,卡层级************************/
+})
+
+</script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+<div id="query">
+    <form name="form1" id="sel" action="./" method="get">
+        <input type="hidden" name="ref_group_id">
+        <div class="form-inline mt15">
+            <?php foreach ($card_groups as $k => $v): ?>
+
+                <?php if(in_array($k,$card_group)):?>
+                <?php echo $v['name']; ?>: <input type="checkbox" data-id="<?php echo $k; ?>" name="card_groups_checkbox" checked="checked" value="<?php echo $k; ?>">&nbsp;&nbsp;
+                    <?php else:?>
+                    <?php echo $v['name']; ?>: <input type="checkbox" data-id="<?php echo $k; ?>" name="card_groups_checkbox" value="<?php echo $k; ?>">
+                    <?php endif;?>
+
+            <?php endforeach; ?>
+            <p></p>
+            <label>银行卡类型:</label>
+            <select class="input-md form-control" name="type">
+                <option value="0">请选择</option>
+                <option value="1">收款卡</option>
+                <option value="2">付款卡</option>
+                <option value="3">备用金卡</option>
+            </select>
+            <!------------------ author snow 修改成可搜索------------------------------>
+
+            <label>银行:&nbsp;&nbsp;</label>
+            <select class="selectpicker deposit_bank_id" name="bank_id" id="bank_id" data-live-search="true" title="请选择 ...">
+                <option value="">请选择…</option>
+                <?php foreach ($bankList as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter'] ; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <!------------------ author snow 修改成可搜索------------------------------>
+            <label>充值类别:</label>
+            <select class="input-md form-control" name="usage">
+                <option value="0">请选择</option>
+                <?php foreach ($usageList as $k => $v): ?>
+                    <option value="<?php echo $k; ?>"><?php echo $v['group_name']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <label>使用场景:</label>
+            <select class="input-md form-control" name="use_place">
+                <option selected="selected" value="">请选择</option>
+                <?php foreach ($GLOBALS['cfg']['usePlaceTypes'] as $k => $v): ?>
+                    <option value="<?php echo $k; ?>">
+                        <?php echo $v; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <label>户名:</label>
+            <input class="input-md form-control" type="text" name="card_name" size="12"/>
+            <label>状态：</label>
+            <select class="input-md form-control" name="status" id="status">
+                <option value="-2">请选择</option>
+                <option value="1">启用</option>
+                <option value="2">使用中</option>
+                <option value="3">收款超额下线</option>
+                <option value="4">付款余额不足下线</option>
+                <option value="5">超过当日支付上限下线</option>
+                <option value="0">禁用</option>
+                <option value="-1">已删除</option>
+            </select>
+            <input type="hidden" name="c" value="card"/><input type="hidden" name="a" value="cardList"/>
+         　　 <input class="btn btn-md btn-info" type="submit" name="submit" value=">>查 询<<"/>
+        </div>
+
+    </form>
+</div>
+<div class="cardWord mt20 mb15 pl5 pt5">
+    <p class="red">注一：卡状态为“使用中”时，前台才会显示相应的收款卡号。</p>
+    <p class="red">注二：为了便捷操作状态修改确认之后直接生效，无需点击保存按钮。</p>
+    <p class="red">注三：因程序需要，需要手动设置一张虚拟卡作为付款卡,设置成启用或使用中状态,在出款时方可选用。</p>
+</div>
+<div class="list-div mt20" id="listDiv">
+<form name="form2" class="form-top" action="?c=card&a=cardList" method="post">
+        <table class="table table-responsive table-bordered  mainList" width="100%">
+            <thead>
+                <tr>
+                    <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                    <td><input type="button"  value="批量删除" class="snow-delete-all btn btn-info btn-danger" data-url="?&c=card&a=deleteCardMany" data-id="data-card_id"/></td>
+                    <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                    <td>card_id</td>
+                    <td>层级</td>
+                    <td>户名</td>
+                    <td>卡号</td>
+                    <td>所属银行</td>
+                    <td>类型</td>
+                    <td>充值类别</td>
+                    <td>余额</td>
+                    <td>省份</td>
+                    <td>城市</td>
+                    <td>顺序</td>
+                    <td>状态</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <?php foreach ($cards as $v): ?>
+            <tr>
+                <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                <td><input type="checkbox" class="snow-id" data-card_id="<?php echo $v['card_id']; ?>"/></td>
+                <!---------------------------------------------------添加 批量删除   ------------------------------------------->
+                <td><?php echo $v['card_id']; ?></td>
+                <td><?php echo $v['ref_group_name']; ?></td>
+                <td><?php echo $v['card_name']; ?></td>
+                <td class="pr10"><?php echo substr_replace($v['card_num'], str_pad('*', strlen($v['card_num'])-4, '*',STR_PAD_LEFT ),  0, strlen($v['card_num'])-4); ?></td>
+               <!--------------- auhtor snow    修改取值方式------------->
+                <td><?php echo $bankList[$v['bank_id']]['name']; ?></td>
+                <td><?php if ($v['type'] == 1): ?>收款<?php elseif ($v['type'] == 2): ?><font color="red">付款</font><?php elseif ($v['type'] == 3): ?>备用金<?php endif; ?></td>
+                <td>
+                <?php foreach ($usageList as $key => &$value): ?>
+                    <?php if ($v['usage'] == $key) echo $value['group_name']; ?>
+                <?php endforeach; ?>
+
+                </td>
+                <td><?php echo $v['balance']; ?></td>
+                <td><?php echo $v['province']; ?></td>
+                <td><?php echo $v['city']; ?></td>
+                <td><input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['card_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"></td>
+                <td>
+                    <select class="input-sm form-control" name="status" onchange="editStatus(this, <?php echo $v['card_id']; ?>)">
+                        <option value="-1">请选择</option>
+                        <option value="1" <?php if($v['status']==1) echo 'selected'; ?> >启用</option>
+                        <option value="2" <?php if($v['status']==2) echo 'selected'; ?> >使用中</option>
+                        <option value="3" <?php if($v['status']==3) echo 'selected'; ?> >收款超额下线</option>
+                        <option value="4" <?php if($v['status']==4) echo 'selected'; ?> >付款余额不足下线</option>
+                        <option value="5" <?php if($v['status']==5) echo 'selected'; ?> >超过当日支付上限下线</option>
+                        <option value="0" <?php if($v['status']==0) echo 'selected'; ?> >禁用</option>
+                    </select>
+                </td>
+                <td style=" width: 17%;">
+                    <?php if ($canChangeBalance): ?>
+                        <?php if($v['status'] == 0): ?>
+                            <a href="./?c=card&a=changeBalance&card_id=<?php echo $v['card_id']; ?>">余额</a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if ($canInnerTransfer): ?>
+                        <?php if($v['status'] == 0): ?>
+                            <a class="btn btn-mini btn-info" href="./?c=card&a=innerTransfer&card_id=<?php echo $v['card_id']; ?>">内转</a>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if ($canSetStatus): ?>
+                        <a href="./?c=card&a=setStatus&card_id=<?php echo $v['card_id']; ?>">状态</a>
+                    <?php endif; ?>
+                    <?php if ($canEdit): ?>
+                        <a class="btn btn-mini btn-info" href="./?c=card&a=editCard&card_id=<?php echo $v['card_id']; ?>">编辑</a>
+                    <?php endif; ?>
+                    <?php if ($canDelete): ?>
+                        <a class="btn btn-mini btn-info" href="./?c=card&a=deleteCard&card_id=<?php echo $v['card_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+                <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>
+             　<input  type="hidden" name="sa" value="saveSort"/>
+              <input class="btn btn-default" type="submit" name="submit" value="保存 "/>
+                </td>
+                <td>&nbsp;</td><td>&nbsp;</td>
+            </tr>
+    </table>
+</form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,861 @@
+<?php $this->import("head"); ?>
+
+    <script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+    <script>
+        Date.prototype.yyyymmdd = function () {
+            let MM = this.getMonth() + 1;
+            let dd = this.getDate();
+            let hh = this.getHours();
+            let mm = this.getMinutes();
+            let ss = this.getSeconds();
+
+            return [this.getFullYear(),
+                (MM > 9 ? '' : '0') + MM,
+                (dd > 9 ? '' : '0') + dd,
+                (hh > 9 ? '' : '0') + hh,
+                (mm > 9 ? '' : '0') + mm,
+                (ss > 9 ? '' : '0') + ss
+            ].join('');
+        };
+
+        function checkStatus() {
+            let $tmp = $('input[name="use_place[]"]:checkbox:checked').length;
+            let $use_place = 0;
+
+            if ($tmp > 0) {
+                $.each($('input[type=checkbox][name="use_place[]"]:checked'), function () {
+                    $use_place += ($(this).val() * 1);
+                });
+            }
+
+            let message = "";
+
+            if ($use_place <= 0) message += '请选择支付使用场景,';
+
+            if ($('select[name=status').val() === '-1') {
+                message += "请选择状态,";
+            }
+            if ($('input[name=card_name]').val() === '') {
+                message += "户名不能为空,";
+            }
+
+            let bankIdSelect = $("select[name='bank_id']");
+
+            if (bankIdSelect.val() === '') {
+                message += "所选银行不能为空,";
+            }
+
+            if (bankIdSelect.val() > 100 && $('input[name=login_name]').val() === '') {
+                message += "前台显示名称不能为空,";
+            }
+
+            if (bankIdSelect.val() > 100 && bankIdSelect.val() !== 118 && $('#use_place_4').is(':checked') && $('input[name=obj_name]').val() === '') {
+                message += "如果要在 App 中使用支付类名不能为空,";
+            }
+
+            let usageSelect = $("select[name='usage']");
+
+            if (usageSelect.val() === '1' && bankIdSelect.val() > 100) {
+                message += "此收付方式只允许放银行卡、支付宝转账、微信转账,";
+            }
+
+            if ($('input[name="ref_group_id"]').val().length < 1) {
+                message += "必须选择卡组.";
+            }
+
+            if (message.indexOf('.') === message.length - 1) {
+                message = message.substr(0, message.length - 1)
+            }
+
+            if (message.indexOf(',') === message.length - 1) {
+                message = message.substr(0, message.length - 1)
+            }
+
+            /******************* snow 添加两个个字段 验证************************************/
+                //>>单笔支付的最大值与最小值
+            let pay_small_input = parseInt($('input[name=pay_small_input]').val());
+            let pay_max_input = parseInt($('input[name=pay_max_input]').val());
+
+            if (isNaN(pay_small_input)) {
+                pay_small_input = 0;
+                $('input[name=pay_small_input]').val(10);
+            }
+
+            if (isNaN(pay_max_input)) {
+                pay_max_input = 0;
+                $('input[name=pay_max_input]').val(5000);
+            }
+
+            if (pay_small_input < 1 || pay_small_input > 99999999999 || pay_small_input != $('input[name=pay_small_input]').val()) {
+                message += "最小额度必须是大于1且小于99999999999的整数.";
+                $('input[name=pay_small_input]').val(10);
+            }
+
+            if (pay_max_input < 1 || pay_small_input > 99999999999 || pay_max_input < pay_small_input || pay_max_input != $('input[name=pay_max_input]').val()) {
+                message += "最大额度必须是大于1小于99999999999的整数,且不能小于最小值.";
+                $('input[name=pay_max_input]').val(5000);
+            }
+
+
+            /**************** 添加折扣,判断,没有禁用时才判断 start********************************/
+            if (!$('input[name=discount]').attr('disabled')) {
+                //>>再添加一个字段  折扣
+                let discount = $('input[name=discount]').val();
+                discount = parseFloat(discount);
+                if (isNaN(discount) || discount.toString().length - parseInt(discount).toString().length > 3 || discount < 0 || discount > 10) {
+                    //>>重写为10
+                    $('input[name=discount]').val('10.00');
+                    message += "只能输入0-10之间的整数或两位小数.";
+                }
+            }
+            /**************** 添加折扣,判断,没有禁用时才判断 start********************************/
+            if (message !== "") {
+                try {
+                    window.parent.layer.alert(message);
+                } catch (e) {
+                    alert(message);
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        //预设编辑值
+        $(document).ready(function () {
+            let action = "<?php echo ACTION; ?>";
+            $("#shop_url_wap_tr").hide();
+            $("#call_back_url_tr").hide();
+            $("#return_url_tr").hide();
+            let bank_id_var = $("select[name='bank_id']");
+            let card_type = $("select[name='type']");
+            /********************* snow 默认选中不显示支付账号****************************/
+            $("input[name=pay_id_input][value=0]").attr('checked', 'true');
+            //>>隐藏折扣相关信息
+            $('#discount_tr').hide();
+            $('#discount_tr').find('input[name=discount]').attr({disabled: true});
+
+            $('#obj_name_tr').hide();
+            $('#obj_name_tr').find('input[name=obj_name]').attr({disabled: true});
+            /********************* snow 默认选中不显示支付账号****************************/
+            if (action === 'editCard') {
+                $("input[name=card_id]").val("<?php echo $card['card_id']; ?>");
+                $("input[name=card_name]").val("<?php echo $card['card_name']; ?>");
+                $("input[name=card_num]").val("<?php echo $card['card_num']; ?>");
+                $("input[name=bind_email]").val("<?php echo $card['bind_email']; ?>");
+                $("select[name=province]").val("<?php echo $card['province']; ?>").change();
+                $("select[name=city]").val("<?php echo $card['city']; ?>");
+                $("select[name=type]").val("<?php echo $card['type']; ?>").attr('disabled', true);
+                $("select[name=bank_id]").val("<?php echo $card['bank_id']; ?>").change();
+                $("select[name=usage]").val("<?php echo $card['usage']; ?>");
+                $("input[name=balance]").val("<?php echo $card['balance']; ?>");
+                $('select[name=status]').val("<?php echo $card['status']; ?>");
+                $("input[name=login_name]").val("<?php echo $card['login_name']; ?>");
+                $("input[name=balance_limit]").val("<?php echo $card['balance_limit']; ?>");
+                $("input[name=day_limit]").val("<?php echo $card['day_limit']; ?>");
+                $("input[name=shop_url]").val("<?php echo $card['shop_url']; ?>");
+                $("input[name=shop_url_wap]").val("<?php echo $card['shop_url_wap']; ?>");
+                $("input[name=call_back_url]").val("<?php echo $card['call_back_url']; ?>");
+                $("input[name=return_url]").val("<?php echo $card['return_url']; ?>");
+                $("input[name=netway]").val("<?php echo $card['netway']; ?>");
+                $("select[name=ref_group]").val("<?php echo $card['ref_group_id']; ?>");
+                $("textarea[name=remark]").val("<?php echo $card['remark']; ?>");
+                $("input[name=discount]").val("<?php echo $card['discount']; ?>");
+                /******************* snow 添加三个字段************************************/
+                $("input[name=pay_small_input]").val("<?php echo $card['pay_small_input']; ?>");
+                $("input[name=pay_max_input]").val("<?php echo $card['pay_max_input']; ?>");
+                $("input[name=pay_id_input][value=<?php echo $card['pay_id_input']; ?>]").attr('checked', 'true');
+                $('input[name=discount]').val('<?php echo $card['discount']; ?>');
+                $('input[name=subbranch]').val('<?php echo $card['subbranch']; ?>');
+                //>>snow 添加支付类名 snow
+                $('input[name=obj_name]').val('<?php echo $card['obj_name']; ?>');
+                /******************* snow 添加三个字段************************************/
+                <?php if($card['not_zero'] == 1):  ?>
+                $("input[name=not_zero]").prop("checked", true);
+                <?php else : ?>
+                <?php endif; ?>
+
+                <?php if($card['not_integer'] == 1):  ?>
+                $("input[name=not_integer]").prop("checked", true);
+                <?php else : ?>
+                <?php endif; ?>
+                bank_id_var.change();
+                $("#type_tr").hide();
+                var netway_tr_var = $("#netway_tr");
+
+                if (bank_id_var.val() < 100) {
+                    $("#shop_url_title").text("银行网址：");
+                    $("#shop_url_important_text").text("填写银行的网址，格式为 http://www.xxx.com");
+                    $("#remark_important_text").text("备注");
+
+                    $("#area_tr").show();
+                    $("#bind_email_tr").show();
+                    $("#shop_url_tr").show();
+                    $("#subbranch_tr").show();
+
+                    netway_tr_var.hide();
+                    $("#mer_no_tr").hide();
+                    $("#card_pass_tr").hide();
+                    $("#ukeypwd_tr").hide();
+                    $("#mer_key_tr").hide();
+                    $("#login_name_tr").hide();
+                    $("#not_zero_tr").hide();
+                    $("#not_integer_tr").hide();
+                } else {
+
+                    /****************** 显示折扣 start********************************/
+                    $('#discount_tr').show();
+                    $('#discount_tr').find('input[name=discount]').attr({disabled: false});
+                    /****************** 显示折扣 end********************************/
+                    /****************** 显示支付类名 start********************************/
+                    $('#obj_name_tr').show();
+                    $('#obj_name_tr').find('input[name=obj_name]').attr({disabled: false});
+                    /****************** 显示支付类名 end********************************/
+                    if (bank_id_var.val() === '118' || bank_id_var.val() === '98' || bank_id_var.val() === '99') {
+                        netway_tr_var.show();
+
+                        $("#netway_title").text("二维码地址：");
+                        $("#netway_important_text").text("上传二维码图片大小500K以内。图片尺寸请商户根据自己实际需求规格上传，确保清晰。填写固定二维码的地址，格式为 填写银行的网址，格式为 http://www.xxx.com/xxx.png");
+
+
+                        $("#shop_url_tr").hide();
+                        $("#mer_no_tr").hide();
+                        $("#card_pass_tr").hide();
+                        $("#ukeypwd_tr").hide();
+                        $("#mer_key_tr").hide();
+                    } else {
+                        netway_tr_var.hide();
+                    }
+
+                    $("#area_tr").hide();
+                    $("#subbranch_tr").hide();
+                    $("#bind_email_tr").hide();
+                    $("#not_zero_tr").show();
+                    $("#not_integer_tr").show();
+                }
+            } else {
+
+
+                $("#shop_url_title").text("银行网址：");
+                $("#shop_url_important_text").text("填写银行的网址，格式为 http://www.xxx.com");
+                $("#remark_important_text").text("备注");
+
+                $("#subbranch_tr").show();
+                $("#area_tr").show();
+                $("#bind_email_tr").show();
+                $("#shop_url_tr").show();
+
+                $("#balance_tr").hide();
+                $("#netway_tr").hide();
+                $("#mer_no_tr").hide();
+                $("#card_pass_tr").hide();
+                $("#ukeypwd_tr").hide();
+                $("#mer_key_tr").hide();
+                $("#login_name_tr").hide();
+                $("#balance_limit_tr").hide();
+                $("#day_limit_tr").hide();
+
+                if (card_type.val() === '1') {
+                    $("input[name=balance_limit]").val("9999999999");
+                    $("input[name=day_limit]").val("9999999999");
+                    $("input[name=balance]").val("0");
+                } else if (card_type.val() === '2') {
+                    $("input[name=balance_limit]").val("0");
+                    $("input[name=day_limit]").val("0");
+                    $("input[name=balance]").val("9999999999");
+                } else {
+
+                }
+
+                card_type.change(function () {
+                    if (card_type.val() === '1') {
+                        $("input[name=balance_limit]").val("9999999999");
+                        $("input[name=day_limit]").val("9999999999");
+                        $("input[name=balance]").val("0");
+                    } else if (card_type.val() === '2') {
+                        $("input[name=balance_limit]").val("0");
+                        $("input[name=day_limit]").val("0");
+                        $("input[name=balance]").val("9999999999");
+                    } else {
+
+                    }
+                });
+
+                let date = new Date();
+                $("[name='card_num']").val(date.yyyymmdd());
+//                $("[name='bank_id'] option:last").attr('selected', true);
+//                $("[name='bank_id']").change();
+//                $("[name='usage']").val(2);
+
+//                bank_id_var.change();
+            }
+
+            bank_id_var.change(function () {
+                let currentBankName = bank_id_var.find("option:selected").text();
+
+                if (bank_id_var.val() > 100) {
+                    if (currentBankName.indexOf('支付宝') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("ZFB_WAP");
+                        } else {
+                            $("input[name=netway]").val("ZFB");
+                        }
+                    } else if (currentBankName.indexOf('微信') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("WX_WAP");
+                        } else {
+                            $("input[name=netway]").val("WX");
+                        }
+                    } else if (currentBankName.indexOf('QQ') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("QQ_WAP");
+                        } else {
+                            $("input[name=netway]").val("QQ");
+                        }
+                    } else if (currentBankName.indexOf('百度') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("BD_WAP");
+                        } else {
+                            $("input[name=netway]").val("BD");
+                        }
+                    } else if (currentBankName.indexOf('京东') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("JD_WAP");
+                        } else {
+                            $("input[name=netway]").val("JD");
+                        }
+                    } else if (currentBankName.indexOf('财付通') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("CFT_WAP");
+                        } else {
+                            $("input[name=netway]").val("CFT");
+                        }
+                    } else if (currentBankName.indexOf('网银') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("WY_WAP");
+                        } else {
+                            $("input[name=netway]").val("WY");
+                        }
+                    } else if (currentBankName.indexOf('快捷') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("KJ_WAP");
+                        } else {
+                            $("input[name=netway]").val("KJ");
+                        }
+                    } else if (currentBankName.indexOf('银联') > -1) {
+                        if (currentBankName.indexOf('WAP') > -1) {
+                            $("input[name=netway]").val("YL_WAP");
+                        } else {
+                            $("input[name=netway]").val("YL");
+                        }
+                    }
+                }
+
+                /****************** 显示折扣 start********************************/
+                //>>隐藏折扣相关信息
+                $('#discount_tr').hide();
+                $('#discount_tr').find('input[name=discount]').attr({disabled: true});
+                /****************** 显示折扣 end********************************/
+                if ($(this).val() < 100) {
+
+                    $("#shop_url_title").text("银行网址：");
+                    $("#shop_url_important_text").text("填写银行的网址，格式为 http://www.xxx.com");
+                    $("#remark_important_text").text("备注");
+
+                    $("#area_tr").show();
+                    $("#bind_email_tr").show();
+                    $("#shop_url_tr").show();
+                    $("#subbranch_tr").show();
+
+                    $("#netway_tr").hide();
+                    $("#mer_no_tr").hide();
+                    $("#card_pass_tr").hide();
+                    $("#ukeypwd_tr").hide();
+                    $("#mer_key_tr").hide();
+                    $("#login_name_tr").hide();
+                    $("#not_zero_tr").hide();
+                    $("#not_integer_tr").hide();
+                } else {
+                    /****************** 显示折扣 start********************************/
+                    $('#discount_tr').show();
+                    $('#discount_tr').find('input[name=discount]').attr({disabled: false});
+                    /****************** 显示折扣 end********************************/
+
+                    /****************** 显示支付类名 start********************************/
+                    $('#obj_name_tr').show();
+                    $('#obj_name_tr').find('input[name=obj_name]').attr({disabled: false});
+                    /****************** 显示支付类名 end********************************/
+                    $("#remark_important_text").text("可在此填写金额限制的提示");
+
+                    $("#login_name_tr").show();
+
+                    if ($(this).val() === "118" || $(this).val() === '98' || $(this).val() === '99') {
+                        $("#netway_title").text("二维码地址：");
+                        $("#netway_important_text").text("上传二维码图片大小500K以内。图片尺寸请商户根据自己实际需求规格上传，确保清晰。填写固定二维码的地址，格式为 填写银行的网址，格式为 http://www.xxx.com/xxx.png");
+
+                        $("#netway_tr").show();
+
+                        $("#shop_url_tr").hide();
+                        $("#mer_no_tr").hide();
+                        $("#card_pass_tr").hide();
+                        $("#ukeypwd_tr").hide();
+                        $("#mer_key_tr").hide();
+                    } else {
+                        $("#shop_url_title").text("第三方支付域名：");
+                        $("#shop_url_important_text").text("格式为 http://www.xxx.com，第三方没有提供就无需填写");
+                        $("#netway_title").text("支付方式：");
+                        $("#netway_important_text").text("支付宝填 ZFB，微信填 WX，QQ 填 QQ，网银填 WY，支付宝 App 填 ZFB_WAP，微信 App 填 WX_WAP，QQ App 填 QQ_WAP");
+
+                        $("#netway_tr").hide();
+
+                        $("#shop_url_tr").show();
+                        $("#mer_no_tr").show();
+                        $("#card_pass_tr").show();
+                        $("#ukeypwd_tr").show();
+                        $("#mer_key_tr").show();
+                    }
+
+                    $("#area_tr").hide();
+                    $("#bind_email_tr").hide();
+                    $("#subbranch_tr").hide();
+                    $("#not_zero_tr").show();
+                    $("#not_integer_tr").show();
+                }
+            });
+
+            $('input[name=edit_important_info]').click(function () {
+                console.log('点击修改');
+                let card_id = $('input[name=card_id]').val();
+
+                $.ajax({
+                    type: 'post',
+                    url: '?c=card&a=editCardImportInfo',
+                    data: {card_id: card_id},
+                    async: true,
+                    dataType: 'json',
+                    success: function (m, status, xhr) {
+                        try {
+                            if (m.errCode !== 0) {
+                                alert(m.errMsg);
+                            } else {
+                                $('input[name=mer_no]').val(m.mer_no);
+                                $('textarea[name=card_pass]').val(m.card_pass);
+                                $('textarea[name=ukeypwd]').val(m.ukeypwd);
+                                $('textarea[name=mer_key]').val(m.mer_key);
+                            }
+                        } catch (e) {
+
+                        }
+                    },
+                    error: function (xhr, status, error) {
+
+                    }
+                });
+            })
+        });
+
+        $(function () {
+            $('#form1').on('click', function () {
+                let trade_type_string = '';
+
+                $('input[name="card_groups_checkbox"]').each(function () {
+
+                    //>>author snow 修改.使用prop 使用attr 判断有可能会出错.
+                    if ($(this).prop('checked') === true) {
+                        if (trade_type_string != '') {
+                            trade_type_string += ",";
+                        }
+
+                        trade_type_string += $(this).val();
+                    }
+                });
+                $('input[name="ref_group_id"]').val(trade_type_string);
+            });
+
+        })
+    </script>
+
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <link rel="stylesheet" href="/js/jquery-select/bootstrop-select.css">
+
+    <script src="/js/jquery-select/bootstrop.min.js"></script>
+    <script src="/js/jquery-select/bootstrop-select.js"></script>
+    <!------------------author snow 引入搜索相关文件--------------------------->
+    <div class="list-div add-main" id="addDiv">
+        <form name="form1" class="form-top" id="form1" action="./?c=card&a=<?php echo ACTION; ?>" method="post"
+              onsubmit="return checkStatus(this)" enctype="multipart/form-data">
+            <?php if (isset($arrTmp)): ?>
+                <input type="hidden" name="ref_group_id" value="<?php echo $card['ref_group_id'] ?>">
+            <?php else: ?>
+                <input type="hidden" name="ref_group_id">
+            <?php endif; ?>
+
+            <table class="table table-responsive table-bordered " cellpadding="0" cellspacing="0" style="width: 100%;">
+                <tr>
+                    <td class="fb" width="15%">户名:</td>
+                    <td><input title="card_name" class="input-md form-control" name="card_name"/></td>
+                </tr>
+                <tr id="card_num_tr">
+                    <td class="fb">卡号:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="card_num" class="input-md form-control" name="card_num" maxlength="19"/>
+                            <span class="important-text">第三方支付如果无特殊需要无需修改，银行卡填写银行卡号</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="pay_small_input_tr">
+                    <td class="fb">最小额度:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="bind_email" class="input-md form-control" name="pay_small_input"/>
+                            <span class="important-text">此卡单笔充值时的最小充值额度</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="pay_max_input_tr">
+                    <td class="fb">最大额度:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="bind_email" class="input-md form-control" name="pay_max_input"/>
+                            <span class="important-text">此卡单笔充值时的最大充值额度</span>
+                        </div>
+                    </td>
+                </tr>
+                <!-------------------- snow 添加折扣字段----------------------------------->
+                <tr id="discount_tr">
+                    <td class="fb">折扣:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input class="input-md form-control" name="discount" value="10"/>
+                            <span class="important-text">折扣值介于0-10之间,默认为10 表示没有折扣. 格式:9.68</span>
+                            <!--                        <input type="text" class="single-slider" value="10.00" />-->
+                        </div>
+                    </td>
+                </tr>
+                <!-------------------- snow 添加折扣字段----------------------------------->
+                <!-------------------- snow 添加支付类名字段----------------------------------->
+                <tr id="obj_name_tr">
+                    <td class="fb">支付类名:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input class="input-md form-control" name="obj_name" value="" placeholder="请输入支付类名"/>
+                            <span class="important-text">支付类名只能是英文字母,且不能大于64个字符小于3个字符.遵循小驼峰命名规则.如:yueBao</span>
+                            <!--                        <input type="text" class="single-slider" value="10.00" />-->
+                        </div>
+                    </td>
+                </tr>
+                <!-------------------- snow 添加支付类名字段----------------------------------->
+                <tr id="obj_name_tr">
+                    <td class="fb">支付使用场景:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input type="checkbox" <?php if ((isset($card['use_place']) && ($card['use_place'] & 1) == 1) || empty($card)) echo 'checked="checked"' ?>
+                                   class="input-md form-control use_place" name="use_place[]" value="1"
+                                   id="use_place_1"/> <label for="use_place_1">WEB端</label>&nbsp;&nbsp;
+                            <input type="checkbox" <?php if (isset($card['use_place']) && ($card['use_place'] & 2) == 2) echo 'checked="checked"' ?>
+                                   class="input-md form-control use_place" name="use_place[]" value="2"
+                                   id="use_place_2"/> <label for="use_place_2">WAP端</label>&nbsp;&nbsp;
+                            <input type="checkbox" <?php if (isset($card['use_place']) && ($card['use_place'] & 4) == 4) echo 'checked="checked"' ?>
+                                   class="input-md form-control use_place" name="use_place[]" value="4"
+                                   id="use_place_4"/> <label for="use_place_4">APP端</label>&nbsp;&nbsp;
+                            <!--                            <span class="important-text">当前支付可使用的场景</span>-->
+                            <!--                        <input type="text" class="single-slider" value="10.00" />-->
+                        </div>
+                    </td>
+                </tr>
+                <tr id="pay_id_input_tr">
+                    <td class="fb">是否填写支付账号:</td>
+                    <td>
+                        <!--                        snow  添加 判断 是否是添加 还是编辑-->
+
+
+                        是&nbsp;<input type="radio" name="pay_id_input" value="1"/>
+
+                        否&nbsp;<input type="radio" name="pay_id_input" value="0"/>
+
+
+                    </td>
+                </tr>
+                <tr id="area_tr">
+                    <td class="fb">地区:</td>
+                    <td>
+                        <select title="province" name="province" class="input_bk_D2D2D2" id="province"
+                                onChange="SelChgCity('city' , document.getElementById('province').options[document.getElementById('province').selectedIndex].value , arrProvince , arrCity , 'country');"></select>
+                        <select title="city" name="city" class="input_bk_D2D2D2" id="city"></select>
+                    </td>
+                </tr>
+                <tr id="type_tr">
+                    <td class="fb">类型:</td>
+                    <td>
+                        <div class="form-inline">
+                            <select title="type" class="input-md form-control" name="type">
+                                <option value="1">收款</option>
+                                <option value="2">付款</option>
+                                <option value="3">备用</option>
+                            </select>
+                            <span style="color: #FF0000">该选项不可再更改</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="bank_id_tr">
+                    <td class="fb">所属银行:</td>
+                    <td>
+                        <select class="selectpicker deposit_bank_id" name="bank_id" id="bank_id" data-live-search="true"
+                                title="请选择 ...">
+                            <option value="">请选择…</option>
+                            <?php foreach ($bankList as $k => $v): ?>
+                                <option value="<?php echo $k; ?>"><?php echo $v['name'] . '-' . $v['firstCharter']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="subbranch_tr">
+                    <td class="fb">支行:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="subbranch" class="input-md form-control" name="subbranch"/>
+                            <span class="important-text">支行信息，没有需要就不用填写</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="ref_group_tr">
+                    <td class="fb">卡组:</td>
+                    <td>
+                        <!--                        snow  添加 判断 是否是添加 还是编辑-->
+                        <?php if (isset($arrTmp)): ?>
+                            <?php foreach ($groups as $k => $v): ?>
+                                <?php if (in_array($v['ref_group_id'], $arrTmp)): ?>
+                                    <?php echo $v['name']; ?>&nbsp;<input type="checkbox" name="card_groups_checkbox"
+                                                                          checked="checked"
+                                                                          value="<?php echo $v['ref_group_id']; ?>"/>
+                                <?php else: ?>
+                                    <?php echo $v['name']; ?>&nbsp;<input type="checkbox" name="card_groups_checkbox"
+                                                                          value="<?php echo $v['ref_group_id']; ?>"/>
+
+                                <?php endif;; ?>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <?php foreach ($groups as $k => $v): ?>
+                                <?php echo $v['name']; ?>&nbsp;<input type="checkbox" name="card_groups_checkbox"
+                                                                      value="<?php echo $v['ref_group_id']; ?>"/>
+
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+
+
+                    </td>
+                </tr>
+                <tr id="status_tr">
+                    <td class="fb">状态:</td>
+                    <td>
+                        <div class="form-inline">
+                            <select title="status" class="input-md form-control" name="status">
+                                <option value="-1">请选择</option>
+                                <!-- <option value="1">启用</option> -->
+                                <option value="2">使用中</option>
+                                <option value="3">收款超额下线</option>
+                                <option value="4">付款余额不足下线</option>
+                                <option value="5">超过当日支付上限下线</option>
+                                <option value="0" selected>禁用</option>
+                            </select>
+                            <span></span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="balance_tr">
+                    <td class="fb">余额:</td>
+                    <td>
+                        <input title="" class="input-md form-control" name="balance"/>
+                    </td>
+                </tr>
+                <tr id="usage_tr">
+                    <td class="fb">收付方式:</td>
+                    <td>
+                        <div class="form-inline">
+                            <select title="usage" class="input-md form-control" name="usage">
+                                <?php foreach ($GLOBALS['cfg']['tradeTypes'] as $key => $value) : ?>
+                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <span class="important-text">前台显示的位置</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="login_name_tr">
+                    <td class="fb">前台显示名称:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="login_name" class="input-md form-control" name="login_name"/>
+                            <span class="important-text">例如支付宝、微信、QQ、网银等</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="not_zero_tr" style="display: none;">
+                    <td class="fb">存款金额个位不能为 0:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input type="checkbox" title="not_zero" name="not_zero"/>
+                            <span class="important-text">开启后，如果存款金额个位为 0，会随机扣减 1-4 元</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="not_integer_tr" style="display: none;">
+                    <td class="fb">存款金额必须带小数点:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input type="checkbox" title="not_integer" name="not_integer"/>
+                            <span class="important-text">开启后，如果存款金额没有小数，会随机扣减 0.01-0.99 元</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="balance_limit_tr">
+                    <td class="fb">总收款限制:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="balance_limit" class="input-md form-control" name="balance_limit"/>
+                            <span class="important-text">总收款大于这个值就自动下线</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="day_limit_tr">
+                    <td class="fb">日收款限制:</td>
+                    <td>
+                        <div class="form-inline">
+                            <input title="day_limit" class="input-md form-control" name="day_limit"/>
+                            <span class="important-text">日收款大于这个值就自动下线</span>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="netway_tr">
+                    <td id="netway_title" class="fb">支付方式:</td>
+                    <td>
+                        <div class="form-inline">
+                            <span id="qrcode_image_span">
+                                <span class="btn btn-primary fileinput-button">
+                                    <span>上传二维码图片</span>
+                                    <input class="input-sm form-control" name="qrcode_image" type="file"/>
+                                </span>
+                            或</span>
+                            <input title="netway" class="input-md form-control" name="netway"/>
+                            <div>
+                                <span id="netway_important_text" class="important-text">支付宝填 ZFB，微信填 WX，QQ 填 QQ，网银填 WY，支付宝 App 填 ZFB_WAP，微信 App 填 WX_WAP，QQ App 填 QQ_WAP</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="remark_tr">
+                    <td class="fb">备注:</td>
+                    <td>
+                        <div class="form-inline">
+                            <textarea title="remark" class="input-md form-control key" name="remark"></textarea>
+                            <span id="remark_important_text" class="important-text">可在此填写金额限制的提示</span>
+                        </div>
+                    </td>
+                </tr>
+                <?php if (isset($isCanEditImportInfo) && $isCanEditImportInfo): ?>
+                    <tr id="shop_url_tr">
+                        <td id="shop_url_title" class="fb">第三方支付域名:</td>
+                        <td>
+                            <div class="form-inline">
+                                <input title="shop_url" class="input-md form-control" name="shop_url"/>
+                                <span id="shop_url_important_text" class="important-text">格式为 http://www.xxx.com 第三方没有提供就无需填写</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="shop_url_wap_tr">
+                        <td class="fb">支付地址（手机端）:</td>
+                        <td>
+                            <div class="form-inline">
+                                <input title="shop_url_wap" class="input-md form-control" name="shop_url_wap"/>
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="call_back_url_tr">
+                        <td class="fb">异步回调地址:</td>
+                        <td>
+                            <div class="form-inline">
+                                <input title="call_back_url" class="input-md form-control" name="call_back_url"/>
+                                <span>（支付成功后的异步回调地址）</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="return_url_tr">
+                        <td class="fb">同步跳转地址:</td>
+                        <td>
+                            <div class="form-inline">
+                                <input title="return_url" class="input-md form-control" name="return_url"/>
+                                <span>（支付成功后的同步跳转地址）</span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr id="mer_no_tr">
+                        <td class="fb">第三方商户号:</td>
+                        <td>
+                            <div class="form-inline">
+                                <input title="mer_no" class="input-md form-control" name="mer_no"
+                                       value="<?php if (isset($card['mer_no'])) echo $card['mer_no']; ?>"/>
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="card_pass_tr">
+                        <td class="fb">第三方平台公钥:</td>
+                        <td>
+                            <div class="form-inline">
+                            <textarea title="平台公钥" class="input-md form-control key"
+                                      name="card_pass"><?php if (isset($card['card_pass'])) echo $card['card_pass']; ?></textarea>
+                                <span class="important-text">第三方没有提供就无需填写</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="ukeypwd_tr">
+                        <td class="fb">第三方商户公钥:</td>
+                        <td>
+                            <div class="form-inline">
+                            <textarea title="商户公钥" class="input-md form-control key"
+                                      name="ukeypwd"><?php if (isset($card['ukeypwd'])) echo $card['ukeypwd']; ?></textarea>
+                                <span class="important-text">第三方没有提供就无需填写</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr id="mer_key_tr">
+                        <td class="fb">第三方商户密钥:</td>
+                        <td>
+                            <div class="form-inline">
+                            <textarea title="商户密钥" class="input-md form-control key"
+                                      name="mer_key"><?php if (isset($card['mer_key'])) echo $card['mer_key']; ?></textarea>
+                                <span></span>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif;; ?>
+                <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <div style="width:40%;margin:0 auto;">
+                            <input class="btn btn-info" style="width: 60px;" type="submit" name="submit"
+                                   value="<?php if (ACTION == "addCard"): ?>提交<?php else: ?>更新<?php endif; ?>"/>
+                            <input class="btn  btn-info ml30" style="width: 60px;" type="button"
+                                   onclick="<?php if ($editBack == 1): ?>javascrtpt:history.go(-3)<?php else: ?>javascrtpt:history.go(-1)<?php endif; ?>"
+                                   value="返回"/>
+                            <input type="hidden" name="card_id" value=""/>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <script language="javascript">
+        InitArea("province", "city", "country", arrProvince, arrCity, arrCountry, "", "", "");
+        var province_var = $("#province");
+        province_var.find('option:first').next().attr('selected', 'selected');
+        province_var.trigger('change');
+        var city_var = $("#city");
+        city_var.find('option:first').next().attr('selected', 'selected');
+        city_var.trigger('change');
+    </script>
+
+<?php $this->import("foot"); ?>

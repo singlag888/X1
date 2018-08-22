@@ -1,0 +1,50 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+    });
+</script>
+<form name="form1" id="form1" action="" method="GET">
+    活动时间<input name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate"/>到
+    <input name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate"/>
+    <input type="hidden" name="c" value="market"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="submit" class="submit" value="查询"/>
+</form>
+<h4> <b>注：日统计按照当日的00:00:00到23:59:59为准</b>  </h4>
+<h4> <input type="button" table=".mainList" excelFile="2014国庆乐翻天" class="excel" value="导出Excel"/></h4>  
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>期号</td>
+                <td>用户</td>
+                <td>金额</td>
+                <td>抽奖号码</td>
+                <td>开奖号码</td>
+                <td>是否参与</td>
+                <td>是否中奖</td>
+            </tr>
+        </thead>
+        <?php if ($activitys): ?>
+            <?php foreach ($activitys as $v): ?>
+                <tr>
+                    <td><?php echo $v['date']; ?></td>
+                    <td><?php echo $v['username']; ?></td>
+                    <td><?php echo $v['amount']; ?></td>
+                    <td><?php echo $v['prize_num']; ?></td>
+                    <td><?php echo $v['check_num']; ?></td>
+                    <td><?php echo ($v['is_joined'] == 0 ? '否' : '是'); ?></td>
+                    <td><?php echo ($v['level'] == '' ? '否' : $v['level'] ); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="8" class="no-records">没有数据！</td>
+            </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php $this->import("foot"); ?>

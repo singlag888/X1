@@ -1,0 +1,43 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jqueryUI/jquery-ui-1.8.20.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/js/jqueryUI/jquery-ui-1.8.20.custom.css" type="text/css" />
+<script>
+function checkSiblings(obj) {
+    $(":checkbox", $(obj).parent().nextAll()).attr("checked", $(obj).prop("checked"));
+}
+</script>
+
+<h4>1.一个域名一般只分配给一个总代，但目前也不限制分给更多总代使用；</h4>
+<h4>2.将先删除再添加，因此域名不选中的将会被清理掉；</h4>
+<form name="form1" action="?c=domain&a=allocDomain" method="post"">
+<div class="list-div" id="listDiv">
+<table class="mainList">
+    <thead>
+    <tr>
+    	<td></td>
+        <td>域名</td>
+        <td>总代列表</td>
+    </tr>
+    </thead>
+    <?php foreach ($domains as $v): ?>
+    <tr>
+        <td><input type="checkbox" onclick="checkSiblings(this)"/></td>
+    	<td><?php echo $v['name']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?><input type="hidden" name="domainIds[]" value="<?php echo $v['domain_id']; ?>"/></td>
+        <td>
+            <?php foreach ($tops as $vv): ?>
+            <div style="width: 120px; float: left; padding: 5px;">
+                <label title="" for="topIds_<?php echo $v['domain_id']; ?>_<?php echo $vv['user_id']; ?>">
+                    <input type="checkbox" value="<?php echo $v['domain_id']; ?>,<?php echo $vv['user_id']; ?>" id="topIds_<?php echo $v['domain_id']; ?>_<?php echo $vv['user_id']; ?>" name="deleteItems[]" <?php if (isset($userDomains[$vv['user_id']][$v['domain_id']])): ?>checked<?php endif; ?>><?php echo $vv['username']; ?>
+                    <?php if ($vv['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                </label>
+            </div>
+            <?php endforeach; ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</div>
+    <input type="hidden" name="sa" value="alloc"/>
+    <input type="submit" name="button" class="submit" value="分配"/><input type="reset" name="reset" class="submit" value="重置"/>
+</form>
+<?php $this->import("foot"); ?>

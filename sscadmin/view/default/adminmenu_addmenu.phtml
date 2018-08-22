@@ -1,0 +1,107 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+   if (action == 'editMenu') {
+       $("input[name=menu_id]").val("<?php echo $menu['menu_id']; ?>");
+       $("select[name=parent_id]").val("<?php echo $menu['parent_id']; ?>");
+       $("input[name=title]").val("<?php echo $menu['title']; ?>");
+       $("textarea[name=description]").val("<?php echo $menu['description']; ?>");
+       $("input[name=control]").val("<?php echo $menu['control']; ?>");
+       $("input[name=action]").val("<?php echo $menu['action']; ?>");
+       $("input[name=is_menu]").attr("checked", <?php if($menu['is_menu']): ?>true<?php else: ?>false<?php endif; ?>);
+       $("input[name=is_link]").attr("checked", <?php if($menu['is_link']): ?>true<?php else: ?>false<?php endif; ?>);
+       $("input[name=is_log]").attr("checked", <?php if($menu['is_log']): ?>true<?php else: ?>false<?php endif; ?>);
+       $("input[name=sort]").val("<?php echo $menu['sort']; ?>");
+       $("input[name=is_enabled][value=<?php echo $menu['is_enabled']; ?>]").attr("checked", true);
+       $("input[name=prev_id]").val("<?php echo $prev_id; ?>");
+   }
+   else {
+       $("select[name=parent_id]").val("<?php echo $parent_id; ?>");
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.title.value == "") {
+        msg = "请输入名称";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+
+<div class="list-div add-main form-top" id="addDiv">
+<form name="form1" id="form1" action="./?c=adminMenu&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 50%;">
+    <tr>
+        <td class="rowTitle" colspan="2">
+            <b>增加权限</b>
+        </td>
+    </tr>
+    <tr>
+        <td width="25%">所属上级</td>
+        <td><select class="input-md form-control" name="parent_id">
+                <option value="0">作为顶级</option>
+                <?php foreach ($firstSecondParents as $v): ?>
+                    <option value="<?php echo $v['menu_id']; ?>" style="color:blue;">&nbsp;&nbsp;<?php echo $v['title']; ?></option>
+                        <?php foreach ($v['childs'] as $vv): ?>
+                        <option value="<?php echo $vv['menu_id']; ?>" style="color:black;">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $vv['title']; ?></option>
+                        <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>菜单名称</td>
+        <td><input class="input-md form-control" name="title" maxlength="19"/></td>
+    </tr>
+    <tr>
+        <td>描述</td>
+        <td><textarea class="input-md form-control" name="description"/></textarea></td>
+    </tr>
+    <tr>
+        <td>控制器</td>
+        <td><input class="input-md form-control" name="control"/></td>
+    </tr>
+    <tr>
+        <td>动作</td>
+        <td><input class="input-md form-control" name="action"/></td>
+    </tr>
+    <tr>
+        <td>表现形式</td>
+        <td><label for="is_menu"><input type="checkbox" name="is_menu" id="is_menu" value="1" />显示为菜单</label> &nbsp; <label for="is_link"><input type="checkbox" name="is_link" id="is_link" value="1" />显示为链接</label></td>
+    </tr>
+    <tr>
+        <td>是否记录日志</td>
+        <td><input class="input-md form-control" type="checkbox" name="is_log" value="1" /></td>
+    </tr>
+    <tr>
+        <td>排序（越小越靠前）</td>
+        <td><input class="input-md form-control" name="sort" value="100"/></td>
+    </tr>
+    <tr>
+        <td>启用？</td>
+        <td><input type="checkbox" name="is_enabled" value="1" checked/></td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+          <div style="width: 50%;margin:0 auto;text-align: center;">
+              <input class="btn btn-info submit" type="submit" style="width: 60px;" name="submit" value="<?php if (ACTION == "addMenu"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+              <input class="btn btn-info submit" type="button" style="width: 60px;"  onclick="javascript:history.go(-1);" value="返回"/>
+              <input type="hidden" name="menu_id" value="" /> <input type="hidden" name="prev_id" value="" />
+          </div>
+        </td>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

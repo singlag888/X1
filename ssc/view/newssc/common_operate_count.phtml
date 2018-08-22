@@ -1,0 +1,18 @@
+<!-- 页面统计 -->
+<div class="bet_count_layer">
+        <ul class="bet_count_thispage">
+            <li class="rose_red_font bet_count_oneitem">本页合计：</li>
+            <li class="bet_count_twoitem">订单个数&nbsp;&nbsp;<span class="rose_red_font"><?php if($packages){echo count($packages);}else{echo count($traces);} ?></span></li>
+            <li class="bet_count_threeitem">投注金额：<?php echo number_format($totalAmount, 4); ?></li>
+            <li class="bet_count_fouritem">中奖金额：<?php echo number_format($totalPrize, 4); ?></li>
+            <li class="float_right bet_count_fiveitem">盈亏：<span class="rose_red_font"><?php echo number_format($totalProfit, 4); ?></span></li>
+        </ul>
+        <ul>
+            <li class="rose_red_font bet_count_oneitem">总计：</li>
+            <li class="bet_count_twoitem">订单个数&nbsp;&nbsp;<span class="rose_red_font"><?php if($packagesNumber){echo $packagesNumber; }elseif($tracesNumber){ echo $tracesNumber;}else{echo 0;}; ?></span></li>
+            <li class="bet_count_threeitem">投注金额：<?php echo number_format($packagesTotal['total_amount'], 4); ?></li>
+            <li class="bet_count_fouritem">中奖金额：<?php echo number_format($packagesTotal['total_prize'], 4); ?></li>
+            <li class="float_right bet_count_fiveitem">盈亏：<span class="green_font"><?php echo number_format($packagesTotal['total_profit'], 4); ?></span></li>
+        </ul>
+</div>
+<div class="common_pages ten_height">&nbsp;</div>

@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>左侧菜单</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!--<link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />-->
+<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/public.css">
+<script language="javascript" type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+<script language="JavaScript">
+    <!--
+    var noHelp   = "<p align='center' style='color: #666'>暂时还没有该部分内容</p>";
+    //-->
+</script>
+<style type="text/css">
+body {
+    width:100%;
+    color:#000;
+    height:100%;
+
+}
+.menuList{
+    width: 200px;
+    height:100%;
+    padding-top:30px;
+   /* background: url(../images/menuList_bg.png) no-repeat top center;*/
+    margin-left:1px;
+}
+.tab_titl{
+    height:50px;
+    line-height:50px;
+    background: #5ac2fa;
+    color:#fff;
+    text-align: center;
+    font-size: 18px;
+    font-weight:bold;
+
+}
+a:visited {color: #000;text-decoration: none;}
+a:link { color: #000;text-decoration: none;}
+a:hover { color: #FF3333;text-decoration: none;}
+a:active { color: #666666;text-decoration: none;}
+
+#tabbar-div {
+    padding-left: 10px;
+    padding-top: 0px;
+    /*height:22px;*/
+}
+.tab-front {
+    display: block;
+    height:35px;
+    line-height: 35px;
+    font-weight: bold;
+    margin-top:5px;
+    border: 0px solid #f00;
+    cursor: pointer;
+    margin-left:10px;
+    color: #fff;
+    font-weight: normal;
+}
+#toggleImg{
+    margin-right:10px;
+}
+
+.tab-back,.tab-hover { color: #F4FAFB; line-height: 20px; padding: 4px 15px 4px 18px; cursor: hand; cursor: pointer;}
+.tab-hover { background: #2F9DB5; }
+#top-div { padding: 3px 0 2px; background: #BBDDE5; margin: 5px; text-align: center; }
+#menu-list { padding: 0; margin: 0;}
+#menu-list ul { padding: 0; margin: 0; list-style-type: none;padding-bottom:3px;}
+#menu-list li { display:block;cursor: pointer;margin-top:2px;}
+#menu-list li.menu-item:hover{background: rgba(255,255,255,.5);}
+#menu-list .menu-item a{margin-left:40px;}
+#menu-list span{display: block;height:35px;line-height: 35px;color:#fff;font-size: 14px;font-family:"microsoft yahei";font-weight: normal;padding-left:42px;}
+#menu-list .menuSpan:hover{background: rgba(255,255,255,.5);padding-left:42px;}
+#main-div a:visited, #menu-list a:link, #menu-list a:hover {text-decoration:none;}
+#menu-list a:active { color: #000;}
+.explode { background: url(./images/menu_minus.gif) no-repeat 27px 10px;}
+.collapse { background: url(./images/menu_plus.gif) no-repeat 27px 10px;}
+/*.menu-item { background: url(./images/menu_minus.gif) no-repeat 0px 3px; font-weight: normal;height:30px;line-height: 17px;}*/
+.menu-item a{color: #fff;display: inline-block;height:28px;line-height:28px;padding-left:8px;}
+#help-title { font-size: 14px; color: #000080; margin: 5px 0; padding: 0px;}
+#help-content { margin: 0; padding: 0;}
+.tips { color: #CC0000;}
+.link { color: #000099;}
+#main-div{margin-bottom:200px;}
+/*滚动条*/
+/*::-webkit-scrollbar{width:15px;overflow-y:scroll;}
+::-webkit-scrollbar-track{background-color:rgba(0,0,0,0.2);}
+::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,0.2);}
+::-webkit-scrollbar-thumb:hover {background-color:rgba(0,0,0,0.2);}
+::-webkit-scrollbar-thumb:active {background-color:rgba(0,0,0,0.2);}*/
+</style>
+</head>
+    <body>                            
+        <div class="menuList" style="height:100%;">
+            <span title="EXPAND ALL" class="tab-front" id="menu-tab" >
+                <img id="toggleImg" src="./images/menu_plus.gif" width="9" height="9" border="0" />EXPAND ALL
+            </span>
+            <div id="main-div">
+                <div id="menu-list">
+                    <ul>
+                        <?php foreach ($menus as $menuId => $menu): ?>
+                        <li class="explode" key="menu_<?php echo $menu['menu_id']; ?>" id="menu_<?php echo $menu['menu_id']; ?>" name="menu">
+                            <span prop="menu"><?php echo $menu['title']; ?></span>
+                            <ul>
+                                <?php foreach ($menu['submenu'] as $menuId2 => $v): ?>
+                                    <li class="menu-item">
+                                        <a href="./?c=<?php echo $v['control']; ?>&a=<?php echo $v['action']; ?>" target="mainFrame"><?php echo $v['title']; ?></a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <div id="help-div" style="display:none">
+                    <h1 id="help-title"></h1>
+                    <div id="help-content"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script language="JavaScript">
+            $("#menu-tab").click(function(){
+                if( $("#toggleImg").attr("src") == "./images/menu_minus.gif" ){
+                    $(this).attr("title","EXPAND ALL");
+                    $("#toggleImg").attr("src","./images/menu_plus.gif").attr("title","EXPAND ALL");
+                    $("li[name='menu']").attr("class","collapse").children("ul").slideUp("slower");
+
+                }else{
+                    $(this).attr("title","COLLAPSE ALL");
+                    $("#toggleImg").attr("src","./images/menu_minus.gif").attr("title","COLLAPSE ALL");
+                    $("li[name='menu']").attr("class","explode").children("ul").slideDown("slower");
+                }
+            });
+             $("span[prop=menu]").click(function(){
+                if( $(this).parent().attr("class") == "explode" ){
+                    $(this).parent().attr("class","collapse").children("ul").slideUp("100");
+                }else{
+                    $(this).parent().attr("class","explode").children("ul").slideDown("100");
+                }
+            });
+            $("span[prop=menu]").click();
+
+            function setCurrentLinkBackground() {
+                $('a').each(function(k,v){
+                    $(this).click(function(){
+                        $('a').css('color', '#fff').css('background-color','');
+                        $(this).css('color', '#000').css('background-color', '#fff').css('width','150px');
+                    });
+                });
+            }
+            //当前链接加背景以示区别
+            setCurrentLinkBackground();
+            //给menu-item加背景颜色
+            //
+            var originTitle = window.parent.document.title;
+            $('a').click(function(){
+                window.parent.document.title = originTitle;
+            });
+        </script>
+</html>

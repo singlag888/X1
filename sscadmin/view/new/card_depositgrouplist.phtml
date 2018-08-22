@@ -1,0 +1,44 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div form-top mt20" id="listDiv">
+    <table class="table table-responsive  table-bordered mainList" width="80%">
+        <thead>
+            <tr>
+                <td>cdg_id</td>
+                <td>充值类别名称</td>
+                <td>优惠比率</td>
+                <td>卡组的优先级</td>
+                <td>是否启用 0禁用 1启动</td>
+                <td>操作</td>
+            </tr>
+        </thead>
+        <?php foreach ($list as &$v): ?>
+        <tr>
+            <td><?php echo $v['cdg_id']; ?></td>
+            <td><?php echo $v['group_name']; ?></td>
+            <td><?php echo $v['fee_rate']; ?></td>
+            <td><?php echo $v['sort']; ?></td>
+            <td>
+                <?php
+                    if($v['status'] == 0) {
+                        echo '禁用';
+                    } else if($v['status'] == 1) {
+                        echo '启用';
+                    } else {
+                        echo '异常';
+                    }
+                ?>
+            </td>
+            <td>
+                <a class="btn btn-mini btn-info" href="./?c=card&a=depositGroupUpdate&cdg_id=<?php echo $v['cdg_id']; ?>">修改</a>
+<!--                <a class="btn btn-mini btn-info" href="./?c=card&a=depositGroupDelete&cdg_id=--><?php //echo $v['cdg_id']; ?><!--" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>-->
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div style="width:100%;margin:0 auto;text-align:center;">
+<!--    <a class="btn btn-info" href="?c=card&a=depositGroupAdd">新建类别</a>-->
+</div>
+
+<?php $this->import("foot"); ?>

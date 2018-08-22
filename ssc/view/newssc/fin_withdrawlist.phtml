@@ -1,0 +1,207 @@
+<!DOCTYPE HTML>   <!--  团队提现明细 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+    <!--/****************************** 添加 js事件,实现跳转***************************************/-->
+    <script type="text/javascript">
+        $(function(){
+            //>>设置跳转
+            var html = '<div class="snow-page-div" style="  float: left;margin-top: 8px; margin-right: 10px;">第<input type="text" name="upPage" value="1" style=" width: 45px; height: 20px; display: inline; margin-left: 8px; margin-bottom: 4px; border: 1em; border: solid 1px #B8B8B8; border-radius: 2px; vertical-align: baseline; line-height: 24px; background-color: #e9e9e9; text-align: center;"  class="snow-input "/> 页<input class="btn-sm  btn-info upPage"  style="         margin-bottom: 3px;  margin-left: 5px;  font-size: 13px;  line-height: 1.5;  border-radius: 3px;  color: #fff;  background-color: #D22018;  border-color: #46b8da;  cursor: pointer;" type="button" value=">>确定<<"/></div>';
+            var pageList = $('.user-page-boxs').html();
+            pageList = pageList + html;
+            $('.user-page-boxs').html(pageList);
+            //>>设置分页条换行
+            $('.user-page-boxs').closest('li').css({"float" : 'right',"margin-left" : "19px", "margin-top" : '15px','width' : '100%'})
+            $('.user-page-boxs').css({'margin' :'0 auto',})
+            $('#pageList').css({'float' : 'left'})
+
+            //>>设置当前跳转框的默认值
+            //>>获取跳转地址
+            //>>获取最大值
+            var maxStr = $('#pageList label').html();
+            maxStr = maxStr.substring(1,maxStr.lastIndexOf(']'));
+            var maxPage = parseInt(maxStr.substring(parseInt(maxStr.indexOf('/')) + 1));
+            var nowPage = parseInt(maxStr.substring(0,parseInt(maxStr.indexOf('/'))));
+            $('input[name=upPage]').val(nowPage);
+            $('.upPage').on('click',function(){
+
+                //>>如果有输出就使用输出
+                <?php if(isset($maxPge)) : ?>
+                maxPage = '<?php echo $maxPage ?>' == '' ? 1 : '<?php echo $maxPage ?>';
+                <?php endif ?>
+                if(parseInt($('.snow-input').val()) > parseInt(maxPage)){
+                    //>>更改为最大值,并提示
+                    $('.snow-input').val(maxPage);
+                    try{
+                        layer.alert('超过了最大页码值');
+                    }catch(e){
+                        alert('超过了最大页码值')
+                    }
+
+                    return false;
+                }else{
+                    if (parseInt($('.snow-input').val()) < 1)
+                    {
+                        $('input[name=upPage]').val(1);
+                        try{
+                            layer.alert('不能输入小于1的页码值');
+                        }catch(e){
+                            alert('不能输入小于1的页码值')
+                        }
+                        return false;
+                    }
+                    //>>没有超过最大页码值, 跳转到相应页码
+                    var url = window.location.href;
+                    var page = $('input[name=upPage]').val();
+                    //>>不知道到底用哪个
+                    url += '&upPage=' + page + '&curPage=' + page;
+                    window.location.href = url;
+                    window.event.returnValue=false;  //>解决跳转失效问题
+                }
+            })
+        })
+    </script>
+    <!--/****************************** 添加 js事件,实现跳转***************************************/-->
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <div class="default_record_search">
+            <form name="form" id="subform" action="" method="get">
+                <ul>
+                    <li>
+                        <label class="search_record_datelab">时间：</label>
+                        <div class="record_date_range">
+                            <input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                            <em>到</em>
+                            <input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                        </div>
+                    </li>
+                    <li>
+                        <label  class="margin_left_ten">状态：</label>
+                        <select name="status" class="default_common_input" >
+                            <option value="-1">请选择</option>
+                            <?php foreach ($withdrawStatus as $k => $v): ?>
+                                <option value="<?php echo $k; ?>" <?php if($k==$status) echo 'selected'; ?>><?php echo $v; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="margin_left_ten">用户名：</label>
+                        <input type="text" name="username" value="<?php echo $username; ?>" SIZE="10" class="default_common_input"/>
+                    </li>
+                    <li>
+                        <label class="margin_left_ten">范围：</label>
+                        <select name="include_childs" class="default_common_input">
+                            <option value="0">指定会员</option>
+                            <option value="1">指定会员及下级</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="hidden" name="c" value="fin"/>
+                        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                        <input type="hidden" id="sortKey"  name="sortKey" value="<?php echo $sortKey; ?>" >
+                        <input type="hidden" id="sortDirection" name="sortDirection" value="<?php echo $sortDirection ?>"/>
+                        <input type="submit" name="go" value="搜索" class="default_record_searchbtn">
+                    </li>
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="15%">账户</th>
+                <th width="15%">提现编号</th>
+                <th width="15%">申请提现时间</th>
+                <th width="15%" onclick="javascript:switch_sort('amount');"><span class="Orderby">提现金额<i class="<?php if ($sortKey == 'amount' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'amount' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <th width="15%">状态</th>
+                <th width="25%">备注</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <?php
+            $pageAmount = 0;
+            if($newWithdraws):
+                foreach ($newWithdraws as $v):
+                    $pageAmount += $v['amount'];
+                    ?>
+                    <tr>
+                        <td>
+                            <?php echo $v['username']; ?>
+                        </td>
+                        <td><?php echo $v['wrap_id']; ?></td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php echo $v['amount']; ?></td>
+                        <td>
+                            <?php if ($v['status'] < 8): ?>正在处理
+                            <?php elseif ($v['status'] == 8): ?>结算成功
+                            <?php elseif ($v['status'] == 9): ?>结算失败
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo $v['remark']; ?></td>
+                    </tr>
+                    <?php
+                endforeach;
+            else:
+                ?>
+                <tr><th class="text_center" colspan="8">没有符合条件的记录，请更改查询条件</th></tr>
+            <?php endif;?>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bet_count_layer">
+        <ul class="bet_count_thispage">
+            <li class="rose_red_font bet_count_oneitem">本页合计：</li>
+            <li class="bet_count_twoitem">订单个数&nbsp;&nbsp;<span class="rose_red_font"><?php echo count($newWithdraws); ?></span></li>
+            <li class="bet_count_threeitem">充值金额：<?php echo number_format($pageAmount,2); ?></li>
+        </ul>
+        <ul>
+            <li class="rose_red_font bet_count_oneitem">总计：</li>
+            <li class="bet_count_twoitem">订单个数&nbsp;&nbsp;<span class="rose_red_font"><?php echo $trafficInfo['count']; ?></span></li>
+            <li class="bet_count_threeitem">投注金额：<?php echo number_format($trafficInfo['total_amount'],2); ?></li>
+        </ul>
+    </div>
+    <div class="common_pages ten_height">&nbsp;</div>
+
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+        $('#subform').submit();
+    }
+    $(function() {
+        //设置默认值
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+        $('select[name=include_childs]').val('<?php echo $include_childs; ?>').change();
+
+    });
+</script>
+</body>
+</html>

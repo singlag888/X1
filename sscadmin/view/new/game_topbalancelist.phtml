@@ -1,0 +1,108 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jquery-1.7.2.min.js?id=10007"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script src="<?php echo $imgCdnUrl ?>/js/jquery.tablesorter.js?id=10007"></script>
+
+<link href="<?php echo $imgCdnUrl ?>/css/tablesorter.css" rel="stylesheet" type="text/css" />
+<style>
+<!--
+.tablesorter .tablesorter-header {
+	background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+	background-position: center right;
+	background-repeat: no-repeat;
+	cursor: pointer;
+	white-space: normal;
+}
+.tablesorter thead .headerSortUp,
+.tablesorter thead .tablesorter-headerSortUp,
+.tablesorter thead .tablesorter-headerAsc {
+	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+	border-bottom: #000 2px solid;
+}
+.tablesorter thead .headerSortDown,
+.tablesorter thead .tablesorter-headerSortDown,
+.tablesorter thead .tablesorter-headerDesc {
+	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+	border-bottom: #000 2px solid;
+}
+.tablesorter thead .sorter-false {
+	background-image: none;
+	cursor: default;
+	padding: 4px;
+}
+-->
+</style>
+<script>
+$(function(){
+    //设置默认值
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $('select[name=status]').val('<?php echo $status; ?>');
+    $('select[name=is_test]').val('<?php echo $is_test; ?>');
+
+    $("#myTable").tablesorter({ sortList: [[3,1]] });
+
+});
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="GET">
+    <div class="form-inline mt20">
+        <label>用户名</label>
+        <input class="input-md form-control" name="username" />
+        <label class="ml10">状态</label>
+        <select class="input-md form-control"  name="status">
+            <option value="-1">请选择</option>
+            <option value="0">已删除</option>
+            <option value="1">冻结</option>
+            <option value="8">正常</option>
+        </select>
+        <label class="ml10">帐号类型</label>
+        <select class="input-md form-control" name="is_test">
+                <option value="-1">请选择</option>
+                <option value="0">正式帐号</option>
+                <option value="1">测试帐号</option>
+            </select>
+        <input type="hidden" name="c" value="game"/>
+        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit ml10" type="submit" style="width: 60px;" name="submit"  value="提交"/>
+        <hr>
+    </div>
+</form>
+
+<div class="list-div mt15" id="listDiv">
+<table id='myTable' class="table table-responsive table-bordered mainList tablesorter">
+    <thead>
+    <tr>
+        <td>user_id</td>
+        <td>用户名</td>
+        <td>所属组</td>
+        <td>团队余额</td>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if ($username): ?>
+        <tr>
+            <td><?php echo $result['user_id']; ?></td>
+            <td><?php echo $result['username']; ?></td>
+            <td>总代</td>
+            <td><?php echo number_format($result['total_balance'], 4); ?></td>
+        </tr>
+    <?php else: ?>
+        <?php foreach ($tops as $v): ?>
+        <tr>
+            <td><?php echo $v['user_id']; ?></td>
+            <td><?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></td>
+            <td>总代</td>
+            <td><?php echo number_format($result[$v['user_id']]['total_balance'], 4); ?></td>
+        </tr>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3">小计</td>
+        <td><?php echo number_format($totalInfo['balance'], 4); ?></td>
+    </tr>
+    </tfoot>
+</table>
+</div>
+
+<?php $this->import("foot"); ?>

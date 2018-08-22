@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SSS 1.0 <?php if (RUN_ENV == 1): ?>[本地环境]<?php elseif (RUN_ENV == 2): ?>[测试环境]<?php else: ?>[生产环境]<?php endif;?></title>
+    <!--<link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />-->
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/public.css">
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/bootstrap/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/bootstrap/bootstrap.min.js"></script>
+    <!--<link href="<?php echo $imgCdnUrl ?>/js/jqueryUI/dialog/css/jquery.dialog.blue.css" rel="stylesheet" type="text/css"/>-->
+    <script>
+        $(document).ready(function(){
+//            $("#mainbox").height( $(document).height()-$("#topbox").height() );
+//            $("#leftbox").height( $("#mainbox").height() );
+//            $(window).resize(function(){
+//                $("#mainbox").height( $(document).height()-$("#topbox").height() );
+//                $("#leftbox").height( $("#mainbox").height() );
+//            });
+            $("#dragbox").click(function(){
+                if( $(this).attr("src") == "./images/arrow_left.gif" ){
+                    $("#leftbox").css({width:"160px"}).show();
+                    $(this).attr("src","./images/arrow_right.gif");
+                }else{
+                    $("#leftbox").css({width:"0px"}).hide();
+                    $(this).attr("src","./images/arrow_left.gif");
+                }
+            });
+        });
+    </script>
+<style>
+body {
+    overflow:hidden;
+}
+tr,td {
+	font-size:11px;
+	border:1px solid #fff;
+    padding:0px;
+}
+ #topFrame{width: 100%;border:none;}
+ #leftFrame{ position:absolute; width:14%; height:100%; top:81px; left:0;background: url(../images/menuList_bg.png) no-repeat; }
+ #mainFrame{ position:absolute; width:86%; height:92%; top:81px; right:0; bottom:0;background: #f9f9f9;}
+ .layui-layer-content{line-height: 25px;padding:10px;}
+ .layui-layer-title{background: #333!important;text-align: center;}
+
+</style>
+</head>
+    <body>
+        <table class="table table-responsive" style="padding:0px!important;">
+            <tr>
+                <td colspan="3" style="height:80px; padding:0;" id="topbox">
+                    <iframe src="?a=top" name="topFrame" id="topFrame"  width="100%" height="100%"></iframe>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:150px; background: #eee;" valign="top" id="leftbox">
+                    <!--左侧菜单-->
+                    <iframe name="leftFrame" id="leftFrame" frameborder="0" width="100%" height="100%"    src="./?a=usermenu"></iframe>
+                    <!--左侧菜单结束-->
+               </td>
+
+                <td style="width:3px; background:#ccc;cursor:pointer;border:0px solid #f00;" valign="middle" id="dragbox"></td>
+
+                <td id="mainbox" valign="top">
+                    <!--内容主窗口-->
+                    <iframe name="mainFrame" id="mainFrame" frameborder="0" width="100%" height="100%" scrolling="auto" src="./?a=welcome"></iframe></td>
+            </tr>
+        </table>
+    </body>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+    <script type="text/javascript">
+        var contents = `
+<p>1、接入艾尚支付，易宝通网银，雅付接入APP</p>
+<p>2、出款管理中稽核修改为用户主动点击稽核</p>
+<p>3、注册时的QQ项修改为增加前端校验</p>
+<p>4、添加优惠活动,增加,删除,修改更新缓存</p>
+<p>5、银行卡改为公司入款，增加支付宝转账和微信转账方式</p>
+<p>6、资金密码修改增加旧资金密码校验</p>
+<p>7、会员管理列表添加提款项</p>
+<p>8、优化出款管理</p>
+<p>9、修复已知BUG</p>
+`;
+        layer.open({
+            type: 1,
+            title:'系统更新通知(2018-01-03)',
+            area: ['580px', '400px'], //宽高
+            content: contents
+        });
+    </script>
+</html>

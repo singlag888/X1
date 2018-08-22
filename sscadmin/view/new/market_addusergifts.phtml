@@ -1,0 +1,131 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    #addDiv .form-control{width: 35%;text-align: left;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(document).ready(function() {
+<?php if (ACTION == 'editDomain'): ?>
+            $("input[name=domain_id]").val("<?php echo $domain['domain_id']; ?>");
+            $("select[name=parent_id]").val("<?php echo $domain['parent_id']; ?>");
+            $("input[name=title]").val("<?php echo $domain['title']; ?>");
+            $("textarea[name=description]").val("<?php echo $domain['description']; ?>");
+            $("input[name=cfg_key]").val("<?php echo $domain['cfg_key']; ?>");
+            $("input[name=cfg_value]").val("<?php echo $domain['cfg_value']; ?>");
+<?php endif; ?>
+    });
+</script>
+<div class="list-div mt20" id="addDiv">
+    <form name="form1" id="form1" action="./?c=market&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width: 60%;">
+            <tr>
+                <td class="rowTitle" colspan="2">
+                    <b>增加礼品券</b>
+                </td>
+            </tr>
+            <tr>
+                <td>活动名称</td>
+                <td>
+                    <input class="input-md form-control" name="title" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td>类型</td>
+                <td>
+                    <select class="input-md form-control" name="type">
+                        <option value="0">完成任务发放</option>
+                        <option value="1">限制提款</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>用户</td>
+                <td>
+                    <div class="form-inline">
+                        <textarea class="input-md form-control"  name="usernames" cols="25" rows="10"/></textarea>
+                        <span>（可批量添加，每行一个用户）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>金额</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" name="gift" value=""/>
+                        <span>（金钱，数字）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>失败返回金额</td>
+                <td>
+                    <div class="forminline">
+                        <input class="input-md form-control" name="failed_gift" value=""/>
+                        <span>（金钱，数字）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>起始时间</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control Wdate" style="height: 34px;" name="from_time" id="from_time" my97mark="false" value="<?php echo date('Y-m-d H:i:s'); ?>" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" />
+                    <span>(默认当前时间)</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>结束时间</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control Wdate" style="height: 34px;"  name="to_time" id="to_time" my97mark="false" value="2050-01-01 00:0:00:00" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate"/>
+                        <span>(设置一个较大的值表示没有期限)</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>每日流水要求</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" name="min_day_water" value="0"/>
+                        <span>（金钱，数字,0表示没有限制）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>总流水要求</td>
+                <td>
+                    <div class="form-inline">
+                        <input class="input-md form-control" name="min_total_water" value="0"/>
+                        <span>（金钱，数字,0表示没有限制）</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>流水包含子用户</td>
+                <td>
+                    <select class="input-md form-control" name="is_include_child">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td>
+                    <input class="input-md form-control" name="remark" value=""/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: left;vertical-align: middle;" colspan="2">
+                    <div style="width: 60%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-info submit" type="submit"  name="submit" value="提交" />
+                        <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="ug_id" value="" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<?php $this->import("foot"); ?>

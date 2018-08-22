@@ -1,0 +1,52 @@
+<?php $this->import("head"); ?>
+
+<script>
+$(function(){
+    //设置默认值
+    $('#startDate').val('<?php echo $startDate; ?>');
+    $('#endDate').val('<?php echo $endDate; ?>');
+});
+</script>
+
+<ul class="title"><li>真人报表</li></ul>
+<div class="recordsBox">
+    <div class="recordsBox2">
+
+        <ul class="recordsInput noUnderLine">
+              <form name="form1" id="form1" action="" method="GET">
+              <li><span>选择日期：</span><span><input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/>
+                  </span><span>到</span><span><input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate"/></span>
+                    <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                    <input type="submit" name="submit" class="btnOne" value="查询"/>
+              </li>
+              </form>
+           </ul>
+
+        <ul class="recordsTop">
+            <li class="Rline W189px">日期</li>
+            <li class="Rline W234px">会员流水</li>
+            <li class="Rline W234px">会员输赢</li>
+            <li class="W234px">游戏类别</li>
+        </ul>
+        <?php foreach ($liveWaters as $v): ?>
+            <ul class="recordsContent">
+                <li class="Rline W189px"><?php echo $v['belong_date']; ?></li>
+                <li class="Rline W234px"><?php echo $v['water']; ?></li>
+                <li class="Rline W234px"><?php echo $v['amount']; ?></li>
+                <li class="W234px"><?php if ($v['platform'] == 1): ?>EA<?php elseif ($v['platform'] == 2): ?>真人游戏<?php endif; ?></li>
+            </ul>
+        <?php endforeach; ?>
+
+        <div class="nextPage">
+            <?php echo $pageList; ?>
+            <div class="subTotalDIV">本页合计：总流水 <b><?php echo number_format($pageWater, 2);?></b>，总输赢 <b><?php echo number_format($pageAmount, 2); ?></b> &nbsp;
+                总计：总流水 <b><?php echo number_format($trafficInfo['total_water'], 2); ?></b>，总输赢 <b><?php echo number_format($trafficInfo['total_amount'], 2); ?></b></div>
+        </div>
+
+        <div class="listTip">注一：由于美东时差12小时，每天中午1点以后才能查看前一天的数据。</div>
+        <div class="listTip">注二：按惯例，输赢值为负表示用户亏损，为正表示用户盈利。</div>
+        <div class="listTip">注三：最多可查询30天内的数据。</div>
+    </div>
+</div>
+
+<?php $this->import("foot"); ?>

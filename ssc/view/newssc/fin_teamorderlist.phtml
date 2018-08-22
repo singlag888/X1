@@ -1,0 +1,138 @@
+<!DOCTYPE HTML> <!-- 团队帐变明细 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+    <div class="common_pages default_big_pageheight">
+        <div class="default_record_search">
+            <form method="GET" action="" id="form1" name="form1">
+                <ul>
+                    <li>
+                        <label class="search_record_gamelab">游戏：</label>
+                        <select name="lotteryId" class="default_common_input" >
+                            <option value="0">所有游戏</option>
+                            <?php foreach ($lotteries as $k => $v): ?>
+                                <option value="<?php echo $v['lottery_id']; ?>" <?php if($lotteryId == $v['lottery_id']) echo 'selected';?>><?php echo $v['cname']; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="search_record_datelab">时间：</label>
+                        <div class="record_date_range">
+                            <input size="15" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                            <em>到</em>
+                            <input size="15" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="default_common_input datepicker85"/>
+                        </div>
+                    </li>
+                    <li>
+                        <label class="margin_left_five">下级账号：</label>
+                        <input type="text" name="username" value="<?php echo $username; ?>" SIZE="10" class="default_common_input"/>
+                    </li>
+                    <li>
+                        <label class="margin_left_five">账变类型：</label>
+                        <select name="orderType" class="default_common_input" >
+                            <option value="0">请选择</option>
+                            <?php foreach ($orderTypes as $k => $v): ?>
+                                <option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="hidden" name="c" value="fin"/>
+                        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                        <input type="submit" value="搜索" class="margin_left_ten default_record_searchbtn" name="submit">
+                    </li>
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th >用户名</th>
+                <th >订单编号</th>
+                <th >游戏</th>
+                <th >期号</th>
+                <th >账变时间</th>
+                <th >类型</th>
+                <th >账变金额</th>
+                <th >余额</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if ($orders): ?>
+                <?php foreach ($orders as $v): ?>
+                    <tr class="recordsContent">
+                        <td><?php echo $v['from_username']; ?></td>
+                        <td>
+                            <?php if (!empty($v['wrap_id'])): ?>
+                                <a class="orderNumberBtn blue_font_href" href="javascript:showPackageDetail('<?php echo $v['wrap_id']; ?>');"><?php echo $v['wrap_id']; ?></a>
+                            <?php else: ?>
+                                -
+                            <?php endif; ?>
+                        </td>
+                        <td><?php if(isset($lotteries[$v['lottery_id']]['cname'])) echo $lotteries[$v['lottery_id']]['cname'];else echo '-'; ?></td>
+                        <td><?php if($v['issue']) echo $v['issue'];else echo '-'; ?></td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php echo $orderTypes[$v['type']]; ?></td>
+                        <td><?php echo $v['amount']; ?></td>
+                        <td><?php echo $v['balance']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <th colspan="8"><div class="bottom_info">注：只能查询7天以内的数据</div></th>
+                </tr>
+            <?php else: ?>
+                <tr>
+                    <th colspan="8" class="text_center">暂无数据显示</th>
+                </tr>
+            <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('select[name=orderType]').val('<?php echo $orderType; ?>');
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+    });
+
+    function showPackageDetail(wrapId) {
+        var str_award = '普通玩法';
+        parent.layer.open({
+            type: 2,
+            shadeClose: true,
+            title: str_award+'&nbsp;&nbsp;订单编号：'+wrapId,
+            closeBtn: 0,
+            shade: [0.3, '#000'],
+            border: [0],
+            area: ['824px','560px'],
+            content: ['index.jsp?c=game&a=packageDetail&wrap_id='+wrapId]
+        });
+        $('div.xubox_title').addClass('layui-layer-title');
+    }
+</script>
+</body>
+</html>

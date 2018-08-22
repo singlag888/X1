@@ -1,0 +1,60 @@
+<?php $this->import("head"); ?>
+<script>
+    $(function () {
+        //设置默认值
+        $('input[name=amount]').val('<?php echo $amount; ?>');
+        $('input[name=days]').val('<?php echo $days; ?>');
+    });
+</script>
+<form name="form1" class="form-top" id="form1" action="" method="get" >
+    <div class="form-inline mt15">
+        <label>清理会员条件：余额少于</label>
+        <label><input class="input-md form-control" type="text" name="amount" /></label> &nbsp;&nbsp;&nbsp;&nbsp;
+        <label>超过</label>
+        <input class="input-md form-control" type="text" name="days"  />天没登录
+        <input type="hidden" name="type" value="findUser"/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="hidden" name="c" value="data"/><input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info submit" type="submit" name="submit"  value=" 查询用户 "/>
+    </div>
+</form>
+<b>查询结果：</b>
+<div class="list-div" id="listDiv">
+    <form name='action'  method="post" action="" id="action">
+        <table class="table table-responsive table-bordered mainList mt20" >
+            <thead>
+                <tr>
+                    <td>user_id</td>
+                    <td>用户名</td>
+                    <td>当前余额</td>
+                    <td>最后登录时间</td>
+                    <td>
+                        <label  for="ye"><input type="checkbox" name="ye" id="ye" onclick="checkAll('ye')" />反选</label>
+                    </td>
+                </tr>
+            </thead>
+            <?php if ($illegalUsers): ?>
+                <?php foreach ($illegalUsers as $v): ?>
+                    <tr>
+                        <td><?php echo $v['user_id']; ?></td>
+                        <td>
+                            <?php echo $v['username']; ?>
+                            <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                        </td>
+                        <td> <?php echo $v['balance']; ?></td>
+                        <td> <?php echo $v['last_time']; ?></td>
+                        <td>
+                            <input type="checkbox" id="idArr" name="uids[]" value="<?php echo $v['user_id']; ?>">
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="6">没有可更新的记录</td>
+                </tr>
+            <?php endif; ?>
+        </table>
+    </form>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

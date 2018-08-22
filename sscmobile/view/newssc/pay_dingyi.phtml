@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+    <script src="<?php echo $imgCdnUrl ?>/js/jquery.js" type="text/javascript"></script>
+</head>
+<body>
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+    <input type="hidden" name="parter"		  value="<?php echo $postFields['parter'] ?>" />
+    <input type="hidden" name="type" value="<?php echo $postFields['type'] ?>" />
+    <input type="hidden" name="value"     value="<?php echo $postFields['value'] ?>"/>
+    <input type="hidden" name="orderid"  value="<?php echo $postFields['orderid'] ?>"/>
+    <input type="hidden" name="callbackurl" value="<?php echo $postFields['callbackurl'] ?>"/>
+    <input type="hidden" name="url" value="<?php echo $postFields['url']; ?>" />
+    <input type="button" name="pay" value="启动 微信/支付宝/QQ 支付" />
+    <script>
+        $(document).ready(function(){
+            $("input[name=pay]").click(function(){
+                var url = $('[name=url]').val();
+                url += '?sign=' + $('[name=sign]').val();
+                url += '&parter=' + $('[name=parter]').val();
+                url += '&type=' + $('[name=type]').val();
+                url += '&value=' + $('[name=value]').val();
+                url += '&orderid=' + $('[name=orderid]').val();
+                url += '&callbackurl=' + $('[name=callbackurl]').val();
+
+                window.open(url, "_blank");
+            });
+        });
+    </script>
+</body>
+</html>
+
+

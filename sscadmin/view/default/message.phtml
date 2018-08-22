@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>系统消息</title>
+<!--<LINK href="<?php echo $imgCdnUrl ?>/css/blue2.css" rel="stylesheet" type="text/css" />-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.js"></script>
+</head>
+<body>
+<style type="text/css">
+body {
+    font-size:12px;
+    margin-left:100px;
+}
+a:visited {
+  color: blue;
+  text-decoration: underline;
+}
+
+a:link {
+  color: blue;
+  text-decoration: underline;
+}
+
+a:hover,a:active {
+  color: #EB8A3D;
+  text-decoration: underline;
+}
+
+#listDiv{
+    width:600px;
+    margin:0px auto;
+}
+#listDiv th {
+    color:#21366D;
+    text-align:left;
+    background:#c0e0c0;
+    height:25px;
+    font-size:12px;
+    font-weight:normal;
+    border:0px;
+    border-bottom:1px solid #D1E5FE;
+}
+#listDiv table {
+    border-color:#888C40;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+#listDiv td {
+    border-color:#E8ECA0;
+}
+</style>
+<div id="listDiv">
+<table class="list-table" width="60%" border="1">
+	<tr align="center">
+    	<th align="left" height="30">
+        	<?php if ($msg_type == 1): ?>系统消息
+            <?php elseif ($msg_type == 2): ?><span style="color:#FF0000"><strong>提示</strong></span>
+            <?php elseif ($msg_type == 2): ?><span style="color:#006699">询问消息？</span>
+            <?php else: ?>系统消息
+            <?php endif; ?>
+        </th>
+    </tr>
+    <tr align="center">
+        <td align="center" height="50">
+            提示： &nbsp;<?php if ($msg_type == 2): ?><span style="color:#FF0000"><b><?php echo $msg_detail; ?></b></span>
+            <?php else: ?><?php echo $msg_detail; ?>！
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr align="center">
+    	<td height="100">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <?php foreach ($links as $link): ?>
+                <tr align="center"><td height="20">&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo $link['url']; ?>" target="_<?php echo $link['target']; ?>"><?php echo $link['title']; ?></a></td></tr>
+                <?php endforeach; ?>
+
+                <tr align="center"><td height="30"> &nbsp;</td></tr>
+                <tr align="center"><td height="20"><?php echo $auto_redirection; ?></td></tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</div>
+<script language="JavaScript">
+<!--
+var seconds = document.getElementById('spanSeconds').innerHTML;
+var defaultUrl = "<?php echo $default_url; ?>";
+var timeInterval = null;
+
+onload = function()
+{
+ timeInterval = window.setInterval(redirection, 1000);
+    document.getElementById('spanSeconds').innerHTML = seconds;
+}
+
+function redirection()
+{
+  seconds--;
+
+  if (seconds <= 0)
+  {
+   clearInterval(timeInterval);
+      window.location.href= defaultUrl;
+  }
+  else
+  {
+      document.getElementById('spanSeconds').innerHTML = seconds;
+  }
+}
+//-->
+</script>
+</body>
+</html>

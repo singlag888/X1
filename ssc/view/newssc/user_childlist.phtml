@@ -1,0 +1,292 @@
+<!DOCTYPE HTML><!-- 会员管理 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<!-- End 顶部导航条 -->
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <div class="default_record_search">
+            <form name="form2" id="form2" action="" method="GET">
+                <ul>
+                    <li>
+                        <label class="search_record_gamelab">用户名：</label>
+                        <input name="username" class="default_common_input" type="text"/>
+                    </li>
+                    <li>
+                        <label class="margin_left_ten">范围：</label>
+                        <select name="range" class="default_common_input">
+                            <option value="0">指定会员及直接下级</option>
+                            <option value="1">所有会员</option>
+                        </select>
+                        </span>
+                        <input type="hidden" name="c" value="user"/>
+                        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                        <input type="hidden" id="sortKey"  name="sortKey" value="<?php echo $sortKey; ?>" >
+                        <input type="hidden" id="sortDirection" name="sortDirection" value="<?php echo $sortDirection ?>"/>
+                    </li>
+                    <li>
+                        <label class="margin_left_ten">在线：</label>
+                        <select name="online" class="default_common_input">
+                            <option value="-1">不限</option>
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </li>
+                    <li>
+                        <label class="margin_left_ten">排序：</label>
+                        <select name="sort" class="default_common_input">
+                            <option value="0">不限</option>
+                            <option value="1" <?php if($sort==1) echo 'selected="selected"'?> >注册时间升序</option>
+                            <option value="2" <?php if($sort==2) echo 'selected="selected"'?> >注册时间降序</option>
+                            <option value="3" <?php if($sort==3) echo 'selected="selected"'?> >会员级别升序</option>
+                            <option value="4" <?php if($sort==4) echo 'selected="selected"'?> >会员级别降序</option>
+                        </select>
+                    </li>
+                    <li>
+                        <input type="submit" value="搜索" class="default_record_searchbtn">
+                    </li>
+
+                    <li>
+                        <label class="margin_left_thirty"><?php echo $userLevelName; ?></label>
+                    </li>
+
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="13%">账户</th>
+                <th width="3%">在线</th>
+                <th width="12%">奖金/返点</th>
+                <th width="10%" onclick="javascript:switch_sort('balance');">
+                    <span class="Orderby">余额
+                        <i class="<?php if ($sortKey == 'balance' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'balance' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i>
+                    </span>
+                </th>
+                <th width="14%"  onclick="javascript:switch_sort('reg_time');">
+                    <span class="Orderby" style="position: relative">注册时间
+<!--                        --><?php //if ($sortKey == 'reg_time' && $sortDirection == 1): ?>
+<!--                            <img src="--><?php //echo $imgCdnUrl?><!--/images/sort03.png" alt="重庆秒秒彩">-->
+<!--                        --><?php //elseif ($sortKey == 'reg_time' && $sortDirection == -1): ?>
+<!--                            <img src="--><?php //echo $imgCdnUrl?><!--/images/sort01.png" alt="重庆秒秒彩">-->
+<!--                        --><?php //else: ?>
+<!--                            <img src="--><?php //echo $imgCdnUrl?><!--/images/sort02.png" alt="重庆秒秒彩">-->
+<!--                        --><?php //endif; ?>
+                        <i class="<?php if ($sortKey == 'reg_time' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'reg_time' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i>
+                    </span>
+                </th>
+                <th width="14%"  onclick="javascript:switch_sort('last_time');">
+                    <span class="Orderby">最近登录
+                        <i class="<?php if ($sortKey == 'last_time' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'last_time' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i>
+                    </span></th>
+                <th width="27%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php if ($flag): ?>
+                <?php foreach ($users as $k=>$v): ?>
+                    <tr>
+                        <td>
+                        <?php if ($v['user_id']!=$user['user_id']): ?>
+                            <a href="index.jsp?c=user&a=<?php echo ACTION; ?>&username=<?php echo $v['username']; ?>&range=<?php echo $range; ?>" >
+                                <?php
+                                $number = $v['level'];
+                                if($number ==0 )
+                                {
+                                    echo $v['username'] . "(总代)";
+                                }elseif ($number ==100){
+                                    echo $v['username'] . "(会员)";
+                                } else {
+                                    echo $v['username'] . "({$number}代)";
+                                }
+                                ?>
+                            </a>
+                        <?php else: ?>
+                            <?php
+                            echo $v['username'].'(自己)';
+                            ?>
+                        <?php endif; ?>
+                        </td>
+                        <td><?php if($v['online']): ?><span style="color:#f00;">是</span><?php else: ?><span>否</span><?php endif; ?></td>
+                        <td><?php echo $v['prize_mode'] . '/'. $v['rebate']; ?></td>
+                        <td><?php echo number_format($v['balance'], 2); ?></td>
+                        <td><?php echo $v['reg_time']; ?></td>
+                        <td><?php echo $v['last_time']; ?></td>
+                        <td>
+                            <?php if ($v['user_id'] != $self_user_id && $v['status'] == 8): ?>
+
+                                <a class="operation" href="index.jsp?c=fin&a=teamOrderList&username=<?php echo $v['username']; ?>">帐变</a>
+                                <a class="operation" href="index.jsp?c=user&a=teamWinReport&username=<?php echo $v['username']; ?>">报表</a>
+
+                                <?php if($v['parent_id'] == $loginUser['user_id']): ?>
+
+                                    <a class="fandianBtn" href="javascript:;" user_id="<?php echo $v['user_id']; ?>">返点</a>
+
+                                    <?php if ($v['level'] - $nowLevel == 1 && $v['level'] <=3 && $transfer_forbidden == 0) : ?>
+                                        <a class="daiChongBtn" href="javascript:;" user_id="<?php echo $v['user_id']; ?>">代充</a>
+                                    <?php endif; ?>
+
+                                    <a class="quotaBtn" href="javascript:;" user_id="<?php echo $v['user_id']; ?>">配额</a>
+
+                                    <a class="operation" href="index.jsp?c=user&a=sendMsg&user_id=<?php echo $v['user_id']; ?>">发消息</a>
+                                    <a class="recoverBtn" href="javascript:;" user_id="<?php echo $v['user_id']; ?>">回收</a>
+
+                                <?php endif; ?>
+
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <th colspan="7" class="bom">您无权查看此用户或此用户不存在！</th>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bet_count_layer">
+        <ul class="bet_count_thispage">
+            <li class="rose_red_font bet_count_oneitem">本页合计：</li>
+            <li class="bet_count_twoitem">会员数量&nbsp;&nbsp;<span class="rose_red_font"><?php echo count($users); ?></span></li>
+            <li class="bet_count_threeitem">团队余额：<?php echo number_format(array_sum(array_column($users, 'balance')),2); ?></li>
+        </ul>
+        <ul>
+            <li class="rose_red_font bet_count_oneitem">总计：</li>
+            <li class="bet_count_twoitem">会员数量&nbsp;&nbsp;<span class="rose_red_font"><?php echo $teamTotal; ?></span></li>
+            <li class="bet_count_threeitem">团队余额：<?php echo number_format($teamBalance,2); ?></li>
+            <li class="bet_count_twoitem">今日注册：<span class="rose_red_font"><?php echo $todayRegCount; ?></span></li>
+            <li class="bet_count_twoitem">在线数：<span class="rose_red_font"><?php echo $countOfOnline; ?></span></li>
+        </ul>
+    </div>
+    <div class="common_pages ten_height">&nbsp;</div>
+
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('select[name=range]').val('<?php echo $range; ?>');
+        $('select[name=online]').val('<?php echo $online; ?>');
+
+        $.ajaxSetup({
+            async : false
+        });
+
+        $('a.fandianBtn').on('click', function(){       // 返点按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '设置返点',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','380px'],
+                content: ['index.jsp?c=user&a=setRebate&user_id='+user_id]
+            });
+            $('div.xubox_title').addClass('layui-layer-title');
+        });
+
+        $('a.daiChongBtn').on('click', function(){       // 代充按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '为下级充值',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','480px'],
+                content: ['index.jsp?c=user&a=transferMoney&user_id='+user_id]
+            });
+            $('div.xubox_title').addClass('layui-layer-title');
+        });
+
+        $('a.quotaBtn').on('click', function(){       //  配额按钮点击事件
+            var user_id = $(this).attr('user_id');
+
+            var show_layer = true;
+            $.get(
+                'index.jsp?c=user&a=sendOutQuota',
+                {
+                    'user_id': user_id,
+                    'check': 1,
+                },
+                function(response){
+                    if(response.errno　!= 0){
+                        show_layer = false;
+                        parent.layer.alert(response.errstr,{icon:7});
+                    }
+                }, 'json');
+
+            if(!show_layer) return false;
+
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '下级配额管理',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','380px'],
+                content: ['index.jsp?c=user&a=sendOutQuota&user_id='+user_id]
+            });
+            $('div.xubox_title').addClass('layui-layer-title');
+        });
+
+        $('a.recoverBtn').on('click', function(){       //  回收按钮点击事件
+            var user_id = $(this).attr('user_id');
+            parent.layer.open({
+                type: 2,
+                shadeClose: true,
+                title: '回收帐号',
+                closeBtn: false,
+                shade: [0.3, '#000'],
+                border: [0],
+                area: ['824px','480px'],
+                content: ['index.jsp?c=user&a=recycle&user_id='+user_id]
+            });
+            $('div.xubox_title').addClass('layui-layer-title');
+        });
+
+    });
+
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+
+        //submit
+        $('#form2').submit();
+    }
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div mt20" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=processRecycle" method="post">
+<table class="table table-responsive  table-bordered" style="width:50%;">
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">用户id</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">目前用户名</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['username']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">余额</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['balance']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">真实姓名</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['real_name']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">昵称</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['nick_name']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">email</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['email']; ?></td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">注册时间</td>
+        <td style="vertical-align:middle;"><?php echo $target_user['reg_time']; ?></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">绑定卡列表</td>
+        <td style="vertical-align:middle;">
+            <?php if ($bindCards): ?>
+            <table class="table table-responsive table-bordered">
+                <tr>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">银行</td>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">卡号</td>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">省份</td>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">城市</td>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">绑定时间</td>
+                    <td style="font-weight:bold;text-align:left;vertical-align:middle;">状态</td>
+                </tr>
+                <?php foreach ($bindCards as $v): ?>
+                    <tr>
+                        <td style="vertical-align: middle;"><?php echo $bankList[$v['bank_id']]; ?></td>
+                        <td style="vertical-align: middle;"><?php echo $v['card_num']; ?></td>
+                        <td style="vertical-align: middle;"><?php echo $v['province']; ?></td>
+                        <td style="vertical-align: middle;"><?php echo $v['city']; ?></td>
+                        <td style="vertical-align: middle;"><?php echo $v['create_time']; ?></td>
+                        <td style="vertical-align: middle;">
+                            <?php if ($v['status'] == 0): ?>已解除
+                            <?php elseif ($v['status'] == 1): ?>正常
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+            <?php else: ?>
+                无
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">目前状态</td>
+        <td>
+            <?php if ($target_user['status'] == 0): ?>已删除
+            <?php elseif ($target_user['status'] == 1): ?>冻结
+            <?php elseif ($target_user['status'] == 5): ?>已回收
+            <?php elseif ($target_user['status'] == 8): ?>正常
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">改用户名</td>
+        <td>
+            <div class="form-inline">
+                <input class="input-md form-control"  name="new_username" value="" />（如填写将改用户名）
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-weight:bold;text-align:left;vertical-align:middle;">回收原因</td>
+        <td>
+            <textarea class="input-md form-control" name="reason" value="" rows=6 cols=50><?php echo $recycle['remark']; ?></textarea>
+            </td>
+    </tr>
+</table>
+    <div style="width: 50%;margin:0 auto;text-align:center;">
+        <input type="hidden" name="recycle_id" value="<?php echo $recycle_id; ?>" />
+        <input type="hidden" name="op" value="doProcessRecycle" />
+        <input class="btn btn-info submit" type="button"  name="submitBtn" value="确认回收" onclick="if(confirm('回收将清除该用户帐户资料，且不可登录，确定要回收该用户吗？')) {this.form.submit();}"/>
+        <input class="btn btn-info submit" type="button"  name="submitBtn" value="拒绝受理" onclick="if(confirm('确定不处理吗？')) {this.form.op.value='refuseProcessRecycle';this.form.submit();}"/>
+    </div>
+</form>
+</div>
+<?php $this->import("foot"); ?>

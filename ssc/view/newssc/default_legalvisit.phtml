@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript">
+          $(function(){
+            $('.cl').click(function(){
+                    $.ajax({
+                          type : 'post',
+                          dataType : 'json',
+                          url : '?a=legalVisit',
+                          data : {visit: 1},
+                          success : function(response){
+                              if (response.errno == 0) {
+                                  location.href = response.errstr;
+                              }
+                              else {
+                                  layer.alert(response.errstr + '!');
+                              }
+                          },
+                          error : function(data){
+                                  console.log(data);
+                          }
+                      });
+            });
+          });
+        </script>
+    </head>
+    <style type="text/css">
+.cl{    width: 8em;line-height: 1.5em;color: #2a72d3;margin: 30px auto;display: block;text-align: center;border-bottom: 1px solid #2a72d3;cursor: pointer;}
+</style>
+    <body>
+      <h3><botton class='cl'>请点击进入网站</botton></h3>
+    </body>
+</html>

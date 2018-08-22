@@ -1,0 +1,53 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <META http-equiv="Pragma" content="no-cache" />
+        <link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.min.css">
+        <style type="text/css">
+            .easyPack thead td{
+                font-weight: bold;
+                text-align: center;
+                vertical-align: middle;
+            }
+            .easyPack{
+                text-align: center;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <table class="table table-responsive table-bordered  easyPack" cellpadding="0" cellspacing="0" width="100%" style="word-break:break-all;word-wrap:break-word;" >
+            <thead>
+                <tr>
+                    <td width="12%">玩法</td>
+                    <td width="35%">投注号码</td>
+                    <td width="10">投注注数</td>
+                    <td width="12%">投注金额</td>
+                    <!------------ snow 添加赔率返点 start----------------->
+                    <td width="19%">赔率返点</td>
+                    <!------------ snow 添加赔率返点 end------------------->
+                    <td width="12%">实际奖金</td>
+                </tr>
+            </thead>
+        <?php foreach ($projects as $v): ?>
+            <tbody>
+                <tr>
+                    <td width="12%"><?php echo $methods[$v['method_id']]['cname']; ?></td>
+                    <td width="35%"><?php echo $v['code']; ?></td>
+                    <td width="10%"><?php echo $v['single_num']; ?></td>
+                    <td width="12%"><?php echo $v['amount']; ?></td>
+                    <!------------ snow 添加赔率返点 start----------------->
+                    <td width="19%"><?php echo $v['prize_rebate']; ?></td>
+                    <!------------ snow 添加赔率返点 end------------------->
+<!--                    <td width="12%">--><?php //echo $v['multiple'] . '-' . $v['will_prize']; ?><!--</td>-->
+                    <td width="12%"><?php echo $v['prize']; ?></td>
+                </tr>
+            </tbody>
+        <?php endforeach; ?>
+        </table>
+    </div>
+    </body>
+</html>
+

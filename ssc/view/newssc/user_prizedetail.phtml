@@ -1,0 +1,1194 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>账户管理</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href="index.jsp?c=user&a=editProfile">基本资料</a></li>
+                            <li><a href="index.jsp?c=user&a=editSecurity">安全资料</a></li>
+                            <li><a href="index.jsp?c=user&a=editPwd">修改登陆密码</a></li>
+                            <li><a href="index.jsp?c=user&a=editSecPwd">修改资金密码</a></li>
+                            <li><a href="index.jsp?c=user&a=editSafePwd">修改安全码</a></li>
+                            <li><a href="index.jsp?c=fin&a=bindCard">卡号绑定</a></li>
+                            <li><a href="index.jsp?c=fin&a=orderList">个人帐变</a></li>
+                            <li><a class="subcur" href="index.jsp?c=user&a=prizeDetail">玩法奖金查询</a></li>
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <div class="CashChangeBar">
+                                <div class="nav">
+                                    <ul>
+                                        <li><a href="javascript:void(0)" class="lotteryLI Change-point cur" id="lottery_1" property="1">时时彩</a></li>
+                                        <li><a href="javascript:void(0)" class="lotteryLI" id="lottery_11" property="3">快3</a></li> 
+                                        <li><a href="javascript:void(0)" class="lotteryLI" id="lottery_14" property="7">快乐扑克</a></li> 
+                                        <li><a href="javascript:void(0)" class="lotteryLI Change-point" id="lottery_2" property="2">11选5</a></li>
+                                        <li><a href="javascript:void(0)" class="lotteryLI" id="lottery_9" property="2">福彩3D</a></li>
+                                        <li><a href="javascript:void(0)" class="lotteryLI" id="lottery_10" property="2">体彩P3P5</a></li>
+                                    </ul>
+                                </div>
+                                <div class="clear"></div>
+                                <!-- 时时彩 -->
+                                <div class="sub-con cur-sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em id="rebateLevel"><?php echo ($userRebate[1]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[1]['min'] . '~' . $prizeModes[1]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02"> 
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="18%" align="center" valign="middle">一星</td>
+                                                    <td width="69%" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="13%" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后一直选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，在个位上，选择一个数字组成一注，所选号码与开奖号码一致且位置相符，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：5，即中奖。</p></td>
+                                                    <td align="center" valign="middle">17.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>五星定位：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，百位、十位，个位，各选择一个数字组成五注，开奖号码与所选号码的位置及数字相符，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，4，5，万位，千位，百位，十位，个位，所选号码及位置与开奖号码一致，即5注全中。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，4，4，万位，千位，百位，十位，所选号码及位置与开奖号码一致，即4注中奖。</p></td>
+                                                    <td align="center" valign="middle">17.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">二星</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">前（后）二星直选：</td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位（十位、个位），各选择一个数字组成一注，所选号码与开奖号码一致且位置相符，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2（4，5），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二连选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，各选择一个号码组成两注，号码组合为一星与二星直选两种组合，所选号码与开奖号码一致且顺序一致，即中奖。（所选号码与开奖号码全部相符且位置一致即中一等奖，所选号码与开奖号码仅万位相符，即中二等奖，所选号码与开奖号码仅千位一致，即不中奖。）&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，即中得一等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，3，即中得二等奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">一等奖</p>
+                                                        <p align="center">170.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p align="center">二等奖</p>
+                                                        17.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二连选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据十位，个位，各选择一个号码组成两注，号码组合为一星与二星直选两种组合，所选号码与开奖号码一致且顺序一致，即中奖。（所选号码与开奖号码全部相符且位置一致即中一等奖，所选号码与开奖号码仅个位相符，即中二等奖，所选号码与开奖号码仅十位一致，即不中奖。）&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：4，5，即中得一等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：6，5，即中得二等奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">一等奖</p>
+                                                        <p align="center">170.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p>二等奖</p>
+                                                        <p>17.0000</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）二包点：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-18的数字中，选择一个或多个号码进行投注，万位，千位（十位，个位）中以组选的方式直接投注某一和值点位。等于把某一个点位所对应的组选号码一次性全部投注。所投注的和值与当期开奖号码万位，千位（十位，个位）和值相符，即为中奖。当期开出两个数字相同的号码时，则中对子；两个数字不相同时，则中非对子。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，1，3，4，4，所选号码：2（8），即中对子奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：3（9），即中非对子奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">包点对子</p>
+                                                        <p align="center">170.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        包点非对子85.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">三星</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）三直选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，百位（百位，十位，个位），各选择一个号码组成一注，所选号码与开奖号码一致且位置相符，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3（3，4，5），即中奖。</p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">前（后）三组三：</td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，选择两个号码组成两注，开奖号码与所选号码一致，且开奖号码中包含两个相同的号码，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，4，所选号码：3,4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">566.6667</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）三组六：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，选择三个号码组成一注，顺序不限，且开奖号码中对应的三位号码各不相同，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：5，3，4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">283.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后三连选：</p></td>
+                                                    <td align="left" valign="middle">
+                                                        <p>
+                                                            从0-9的数字中，根据百位，十位，个位选择三个号码组成三注，投注号码与开奖号码相同且顺序一致则为中奖。<br/> 
+                                                            所选号码与开奖号码全部相符且位置一致即中一等奖； <br/> 
+                                                            所选号码与开奖号码仅个位，十位相符，即中二等奖； <br/> 
+                                                            所选号码与开奖号码仅个位相符，即中三等奖； <br/> 
+                                                            开奖号码：1，2，3，4，5， <br/> 
+                                                            所选号码：3，4，5，即中得一等奖。 <br/> 
+                                                            所选号码：2，4，5，即中得二等奖。 <br/> 
+                                                            所选号码：1，3，5，即中得三等奖。<br/> 
+                                                        </p>
+                                                    </td>
+                                                    <td align="center" valign="middle"><p align="center">一等奖</p>
+                                                        <p align="center">1700.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p align="center">二等奖</p>
+                                                        <p align="center">170.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p>三等奖</p>
+                                                        <p>17.0000</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前三连选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，百位选择三个号码组成三注，则有万千百位，千百位，百位三种组合，所选号码与开奖号码相同且顺序一致即中一等奖。若千位、百位数字相同则中二等奖，仅百位数字相同中三等奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，即中得一等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：0，2，3，即中得二等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：0，0，3，即中得三等奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">一等奖1700.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p align="center">二等奖170.0000</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        三等奖	17.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）三包点：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-27的数字中，选择一个或多个号码进行投注，开奖号码前（后）三位数字之和与所选号码一致，即为中奖。三个数相同为豹子，按直选派奖；两个数相同的为组三，按组三派奖；三个数各不相同的为组六，按组六派奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：6，6，6，6，6，所选号码：18，即中直选奖金。&nbsp;<br>
+                                                            开奖号码：6，6，5，6，6，所选号码：17，即中组三奖金。&nbsp;<br>
+                                                            开奖号码：6，5，4，5，6，所选号码：15，即中组六奖金。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">豹子1700.0000</p>
+                                                        <p align="center"><br>
+                                                            组三566.6667</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        组六283.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>中三直选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据千位，百位，十位，各选择一个号码组成一注，所选号码与开奖号码一致且位置相符，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：2，3，4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>中三组三：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，选择两个号码组成两注，开奖号码与所选号码一致，且开奖号码中包含两个相同的号码，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，3，5，所选号码：2,3，即中奖。</p></td>
+                                                    <td align="center" valign="middle">566.6667</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">中三组六：</td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，选择三个号码组成一注，顺序不限，且开奖号码中对应的三位号码各不相同，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：4，2，3，即中奖。</p></td>
+                                                    <td align="center" valign="middle">283.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>中三连选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据千位，百位，十位选择三个号码组成三注，则有千百十位，百十位，十位三种组合，所选号码与开奖号码相同且顺序一致即中一等奖。若百位、十位数字相同则中二等奖，仅十位数字相同中三等奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：2，3，4，即中得一等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：0，3，4，即中得二等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：0，0，4，即中得三等奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center"> 一等奖1700.0000</p>
+                                                        <p align="center">二等奖170.0000</p>
+                                                        <p>三等奖17.0000</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>中三包点：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-27的数字中，选择一个或多个号码进行投注，开奖号码千位，百位，十位，数字之和与所选号码一致，即为中奖。</p><p>三个数相同的为豹子，按直选派奖；</p><p>两个数相同的为组三，按组三派奖；</p><p>三个数各不相同的为组六，按组六派奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：6，6，6，6，6，所选号码：18，即中豹子奖金。&nbsp;<br>
+                                                            开奖号码：6，6，5，6，6，所选号码：17，即中组三奖金。&nbsp;<br>
+                                                            开奖号码：6，5，4，5，6，所选号码：14，即中组六奖金。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">豹子1700.0000</p>
+                                                        <p align="center">组三566.6667</p>
+                                                        <p>组六283.3333</p></td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">四星</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）四星直选：</p></td>
+                                                    <td align="left" valign="middle"><p>前（后）四星直选：&nbsp;<br>
+                                                            从0-9的数字中，根据万位，千位，百位，十位（千位，百位，十位，个位），各选择一个号码组成一注，所选号码与开奖号码数字及位置一致，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，4，前四直选即中奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：2，3，4，5，后四直选即中奖。</p></td>
+                                                    <td align="center" valign="middle">17000.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后四组选24：</p></td>
+                                                    <td align="left" valign="middle"><p>后四组选24：&nbsp;<br>
+                                                            从0—9这十号码中至少选择四个号码投注，竞猜开奖号码的后四位；投注号码与开奖号码一致，位置不限，即为中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5。&nbsp;<br>
+                                                            所选号码：1，2，3，4，5 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">708.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后四组选12：</p></td>
+                                                    <td align="left" valign="middle"><p>后四组选12：&nbsp;<br>
+                                                            从0—9这十号码中至少选择1个二重号码和2个单号号码组成一注，竞猜开奖号码的后四位。投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，5，5 （5为二重号，2、3为单号）。&nbsp;<br>
+                                                            所选号码：1，2，3，5，5 （位置不限）。</p></td>
+                                                    <td align="center" valign="middle">1416.6667</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后四组选6：</p></td>
+                                                    <td align="left" valign="middle"><p>后四组选6：&nbsp;<br>
+                                                             从0—9这十号码中至少选择2个二重号码组成一注，竞猜开奖号码的后四位,投注号码与开奖号码一致，位置不限，即为中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，4，4，5，5 （4、5为二重号）。&nbsp;<br>
+                                                            所选号码：1，4，4，5，5  （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">2833.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后四组选4：</p></td>
+                                                    <td align="left" valign="middle"><p>后四组选4：&nbsp;<br>
+                                                            从0—9这十号码中至少选择1个三重号码和一个单号号码组成一注，竞 猜开奖号码的后四位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，5，5，5 （5为三重号）。&nbsp;<br>
+                                                            所选号码：1，2，5，5，5 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">4250</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">五星</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>五星直选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，百位，十位，个位，各选择一个号码组成一注，所选号码与开奖号码数字及位置一致，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，4，5，即中奖。</p></td>
+                                                    <td align="center" valign="middle">170000.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>五星连选：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据万位，千位，百位，十位，个位选择五个号码组成四注，则有万位，千位，百位，十位，个位四种组合，投注号码与开奖号码相同且顺序一致则为中奖。（所选号码与开奖号码全部相符位置一致即中一等奖，所选号码与开奖号码仅个位，十位，百位相符，即中二等奖，所选号码与开奖号码仅个位，十位，相符，即中三等奖，所选号码与开奖号码仅个位相符，即中四等奖。所选号码与开奖号码个位数字及位置不符，即不中奖。）&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，4，5，即中得一等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，3，3，4，5，即中得二等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，4，4，5，即中得三等奖。&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码：1，2，3，5，5，即中得四等奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">一等奖170000.0000</p>
+                                                        <p align="center">二等奖1700.0000</p>
+                                                        <p align="center">三等奖170.0000</p>
+                                                        <p>四等奖17.0000</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选120：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择五个号码投注，竞猜开奖号码的全部五位，投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：3，2，5，6，4</p>
+                                                            所选号码：2，3，4，5，6 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">1416.6666</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选60：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个二重号码和3个单号号码组成一注，竞猜开奖号码的全部五位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：2，4，5，3，3 （3为二重号，2、4、5为单号）</p>
+                                                            所选号码：3，3，2，4，5 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">2833.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选30：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择2个二重号码和1个单号号码组成一注，竞猜开奖号码的全部五位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：5，5，4，3，3 （3、5为二重号，4为单号）</p>
+                                                            所选号码：5，5，4，3，3 （位置不限）。</p></td>
+                                                    <td align="center" valign="middle">5666.6666</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选20：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个三重号码和2个单号号码组成一注，竞猜开奖号码的全部五位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：0，2，8，8，8 （8为三重号，0、2为单号）</p>
+                                                            所选号码：0，2，8，8，8 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">8500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选10：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个三重号码和1个二重号组成一注，竞猜开奖号码的全部五位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：2，2，8，8，8 （8为三重号，2为二重号）</p>
+                                                            所选号码：2，2，8，8，8 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">17000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选5：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个四重号码和1个单号组成一注，竞猜开奖号码的全部五位,投注号码与开奖号码一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：8，0，0，0，0 （0为四重号，8为单号）</p>
+                                                            所选号码：8，0，0，0，0 （位置不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">34000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">合值</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）三和值：</p></td>
+                                                    <td align="left" valign="middle"><p>在0-27的数字钟，选择一个或多个号码，对百位，千位，万位或（百位，十位，个位）进行投注，所选号码与开奖号码前（后）三位号码之和一致，即为中奖。奖金与三星直选奖金相同。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码6（12），即中奖。</p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前（后）二和值：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-18的数字中，千位和万位（十位和个位）进行投注，所选号码与开奖号码前（后）两位之和一致，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码3（9），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">不定位胆</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后三一码不定位：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，任意选择一个号码组成一注，开奖号码百位，十位，个位只要包含所选号码即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码3；4；5均为中奖。</p></td>
+                                                    <td align="center" valign="middle">6.2730</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后三二码不定位：</p></td>
+                                                    <td align="left" valign="middle"><p>从0-9的数字中，根据胆一、胆二的位置，各选择一个号码组成一注，开奖号码百位，十位，个位，包含两个所选号码，即为中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选号码3,4；3,5；4,5；4,3；5,3；5,4，均为中奖。</p></td>
+                                                    <td align="center" valign="middle">31.4814</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><p>大小单双</p></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>二星大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在十位和个位进行投注。&nbsp;<br>
+                                                            大：5-9<br>
+                                                            小：0-4<br>
+                                                            单：1,3,5,7,9<br>
+                                                            双：0,2,4,6,8<br>
+                                                            在十位与个位对开奖号码大、小、单、双进行投注，开奖号码与所选区间（大小）或单双状态相符，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选区间或单双：双大，双单，小单，小大，均为中奖。</p></td>
+                                                    <td align="center" valign="middle">6.8000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三星大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在百位，十位和个位进行投注。&nbsp;<br>
+                                                            大：5-9<br>
+                                                            小：0-4<br>
+                                                            单：1,3,5,7,9<br>
+                                                            双：0,2,4,6,8<br>
+                                                            在百位，十位，个位对开奖号码大、小、单、双进行投注，开奖号码与所选区间（大小）或单双状态相符，即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5，所选区间或单双：单双单，单双大，单小单，单小大，小双大，小小大，小双单，均为中奖。</p></td>
+                                                    <td align="center" valign="middle">13.6000</td>
+                                                </tr>
+
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><p>任选</p></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任二：</p></td>
+                                                    <td align="left" valign="middle"><p>在万，千，百，十，个，任意2个位数中最少各选择1个数即形成一注。<br>
+                                                            单注对于任意两个位数投注，号码与当期中奖号码的位置与号码相符，即中奖。<br>
+                                                            开奖号码：2，3，4，5，6<br>
+                                                            所选号码：2，-，-，-，6 （位置相同）</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">17</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任三：</p></td>
+                                                    <td align="left" valign="middle"><p>在万，千，百，十，个，任意3个位数中最少各选择1个数即形成一注。<br>
+                                                            单注对于任意三个位数投注，号码与当期中奖号码的位置与号码相符，即中奖。<br>
+                                                            开奖号码：2，3，4，5，6<br>
+                                                            所选号码：2，-，4，-，6 （位置相同）</p></td>
+                                                    <td align="center" valign="middle">170</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">趣味玩法</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>一帆风顺：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个号码组成一注，竞猜开奖号码中包含这个号码即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3，4，5</br>
+                                                            所选号码：1  （位置不限） 即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">4.1513</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>好事成双：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个号码组成一注，竞猜开奖号码中包含这个号码并出现两次以上即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，3，3，4，5  </br>
+                                                            所选号码：3  （位置不限）即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">20.8691</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三星报喜：</p></td>
+                                                    <td align="left" valign="middle"><p> 从0—9这十号码中至少选择1个号码组成一注，竞猜开奖号码中包含这个号码并出现三次以上即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，3，3，3，5  </br>
+                                                            所选号码：3  （位置不限）即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">198.3664</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>四季发财：</p></td>
+                                                    <td align="left" valign="middle"><p>从0—9这十号码中至少选择1个号码组成一注，竞猜开奖号码中包含这个号码并出现四次以上即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，3，3，3，3</br>
+                                                            所选号码：3  （位置不限）即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">3695.6522</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- 快3 -->
+                                <div class="sub-con cur-sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em id="rebateLevel"><?php echo ($userRebate[3]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[3]['min'] . '~' . $prizeModes[3]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02"> 
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="18%" align="center" valign="middle">玩法种类</td>
+                                                    <td width="69%" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="13%" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三同号单选：</p></td>
+                                                    <td align="left" valign="middle"><p>选择一注以上 三同号 即：111，222，333，444，555，666。开出所选之指定三同号即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择333，开出333即中奖。</p></td>
+                                                    <td align="center" valign="middle">302.4000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三同号通选：</p></td>
+                                                    <td align="left" valign="middle"><p>此注包含（111,222,333,444,555,666），开出任意三同号皆中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择 三同号通选，开出111即中奖。</p>
+                                                    </td>                                                           
+                                                    <td align="center" valign="middle">50.4000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三连号通选：</p></td>
+                                                    <td align="left" valign="middle"><p>此注包含（123,234,345,456），开出任意连号即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择 三连号通选，开出234（顺序不限）即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">12.6000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>三不同号：</p></td>
+                                                    <td align="left" valign="middle"><p>至少选择三个号,所选择之号码皆开出即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择126，开出126（顺序不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">50.4000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>两同号复选：</p></td>
+                                                    <td align="left" valign="middle"><p>二同号即：11，22，33，44，55，66 （无顺序；即112或121...），开出所选之同号即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择33x，开出334（顺序不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">20.1000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>两同号单选：</p></td>
+                                                    <td align="left" valign="middle"><p>选择1对相同号码和1个不同号码投注,所选择的同号与不同号不能为同一个数。开出所选择之号码即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择335，开出335（顺序不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">100.8000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>两不同号：</p></td>
+                                                    <td align="left" valign="middle"><p>至少选择两个号码，开出选择之号码即中奖&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择2,6，开出236（顺序不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">10.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>和值：</p></td>
+                                                    <td align="left" valign="middle"><p>和值范围 3 - 18 根据每个数的中奖概率不一样 奖金不一样；3-18选择一个值，若开出来的三个号码相加的和值与所选择的相等则中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择和值13，开出355（顺序不限）即中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        302.4000(3,18)<br>
+                                                        100.8000(4,17)<br>
+                                                        50.4000(5,16)<br>
+                                                        30.2000(6,15)<br>
+                                                        20.1000(7,14)<br>
+                                                        14.4000(8,13)<br>
+                                                        12.0000(9,12)<br>
+                                                        11.2000(10,11)<br>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- 扑克 -->
+                                <div class="sub-con cur-sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em id="rebateLevel"><?php echo ($userRebate[4]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[4]['min'] . '~' . $prizeModes[4]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02"> 
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="18%" align="center" valign="middle">玩法种类</td>
+                                                    <td width="69%" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="13%" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>包选：</p></td>
+                                                    <td align="left" valign="middle"><p>至少选择一种形态进行投注(一注可包选此形态)，所包形态和当期开奖号码形态一致即中奖。&nbsp;<br>
+                                                            同花包选例：&nbsp;<br>
+                                                            示例：选择 同花包选，开出♥3，♥5，♥9 ,即中奖。</p>
+                                                            顺子包选例：&nbsp;<br>
+                                                            示例：选择顺子包选，开出♥3，♣4，♠5，即中奖。</p>
+                                                            同花顺包选例：&nbsp;<br>
+                                                            示例：选择同花顺包选，开出♠2，♠3，♠4,即中奖。</p>
+                                                            豹子包选例：&nbsp;<br>
+                                                            示例：选择豹子包选，开出♠10，♥10，♣10，即中奖</p>
+                                                            对子包选例：&nbsp;<br>
+                                                            示例：选择对子包选，开出♥5，♣5,♠7,即中奖。</p>
+
+                                                    </td>
+                                                    <td align="center" valign="middle">
+                                                            一等奖(同花顺包选)644.5833</p>
+                                                            二等奖(豹子包选)595</p>
+                                                            三等奖(顺子包选)40.2865</p>
+                                                            四等奖(同花包选)27.0455</p>
+                                                            五等奖(对子包选)8.2639</p>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>同花：</p></td>
+                                                    <td align="left" valign="middle"><p>此注包含所选花色的所有同花，凡开奖号开出所选花色同花即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择 ♥同花，开出♥2，♥4，♥8,即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">108.1818</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>顺子：</p></td>
+                                                    <td align="left" valign="middle"><p>凡开奖开出所选之顺子号码，不限花色即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择指定顺子 5,6,7，开出号码♠5，♣6,♥7，即中奖。</p>
+                                                    </td>
+                                                    <td align="center" valign="middle">483.4375</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>同花顺：</p></td>
+                                                    <td align="left" valign="middle"><p>此注包含所选花色的所有同花顺，凡开奖号码开出所选之花色同花顺即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择♠顺子，开出♠3，♠4，♠5,即中奖。</p></td>
+                                                    <td align="center" valign="middle">2578.3333</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>豹子：</p></td>
+                                                    <td align="left" valign="middle"><p>开奖号码出现任意豹子，即三个同号，且与所选号码相同即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择A豹子，开出♥A,♦A,♣A,即中奖。</p></td>
+                                                    <td align="center" valign="middle">7735</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>对子：</p></td>
+                                                    <td align="left" valign="middle"><p>开奖号码出现两个以上相同的数字，且与所选号码相同即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择6对子，开出♣5,♥6，♦6,即中奖。</p></td>
+                                                    <td align="center" valign="middle">107.4306</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任一：</p></td>
+                                                    <td align="left" valign="middle"><p>任选一个数字，凡任一个开奖号码与所选号码相同即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择 4<br>
+                                                            开出♥4，♦5，♣J，即中奖。<br>
+                                                            开出♥4，♦4，♣J，即中奖。<br>
+                                                            开出♥4，♦4，♣4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">6.4405</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任二：</p></td>
+                                                    <td align="left" valign="middle"><p>任选两个不相同数字，凡任二个开奖号码与所选号码相同即中奖（豹子不算）。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择4,6<br>
+                                                            开出♥4，♦6，♣7，即中奖。<br>
+                                                            开出♥4，♦4，♣6，即中奖。<br>
+                                                            开出♥4，♦4，♣4，不中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        41.1436<br>
+                                                    </td>
+                                                </tr><tr>
+                                                    <td align="center" valign="middle"><p>任三：</p></td>
+                                                    <td align="left" valign="middle"><p>任选三个不相同的数字，凡开奖号码只出现所选号码即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择4,6,7,<br>
+                                                            开出♥4，♦6，♣7，即中奖。<br>
+                                                            开出♥4，♦4，♣6，即中奖。<br>
+                                                            开出♥4，♦4，♣4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        140.6364<br>
+                                                    </td>
+                                                </tr><tr>
+                                                    <td align="center" valign="middle"><p>任四：</p></td>
+                                                    <td align="left" valign="middle"><p>任选四个不相同的数字，凡开奖号码只出现所选数字即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择4,6,7,J,<br>
+                                                            开出♥4，♦6，♣J，即中奖。<br>
+                                                            开出♥4，♦7，♣7，即中奖。<br>
+                                                            开出♥4，♦4，♣4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        55.25<br>
+                                                    </td>
+                                                </tr><tr>
+                                                    <td align="center" valign="middle"><p>任五：</p></td>
+                                                    <td align="left" valign="middle"><p>任选五个不相同的数字，凡开奖号码只出现所选号码即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择4,6,7,J,Q,<br>
+                                                            开出♥4，♦6，♣7，即中奖。<br>
+                                                            开出♥4，♦4，♣6，即中奖。<br>
+                                                            开出♥4，♦4，♣4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        27.1404<br>
+                                                    </td>
+                                                </tr><tr>
+                                                    <td align="center" valign="middle"><p>任六：</p></td>
+                                                    <td align="left" valign="middle"><p>任选六个不相同的数字，凡开奖号码只出现所选号码即中奖。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            选择4,6,7,J,Q,K,<br>
+                                                            开出♥4，♦6，♣7，即中奖。<br>
+                                                            开出♥4，♦4，♣6，即中奖。<br>
+                                                            开出♥4，♦4，♣4，即中奖。</p></td>
+                                                    <td align="center" valign="middle">
+                                                        15.2866<br>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- 11选5 -->
+                                <div class="sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em><?php echo ($userRebate[2]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[2]['min'] . '~' . $prizeModes[2]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02">
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="205" align="center" valign="middle">三星</td>
+                                                    <td width="1109" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="130" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前三直选：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的数字中，在第一位、第二位、第三位上，各选择一个数字组成一注，所选号码与开奖号码前三位一致且位置相符，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码：01，02，03，即中奖。</td>
+                                                    <td align="center" valign="middle">1683.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前三组选：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择三个号码组成一注，所选号码与开奖号码前三位相同，顺序不限，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码：02，03，01，即中奖。</td>
+                                                    <td align="center" valign="middle">280.5000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">二星</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">前二直选：</td>
+                                                    <td align="left" valign="middle"><p>从01-11的数字中，在第一位、第二位上，各选择一个数字组成一注，所选号码与开奖号码前两位一致且位置相符，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码：01，02，即中奖。</td>
+                                                    <td align="center" valign="middle">187.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二组选：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择两个号码组成一注，所选号码与开奖号码前两位相同，顺序不限，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码：02， 01，即中奖。</td>
+                                                    <td align="center" valign="middle">93.5000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><strong>任选</strong></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选一中一：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择一个号码组成一注，所选号码与开奖号码任意数位的一个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，即中奖。</td>
+                                                    <td align="center" valign="middle">3.7400</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">任选二中二：</td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择两个号码组成一注，所选号码与开奖号码任意数位的两个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，即中奖。</td>
+                                                    <td align="center" valign="middle">9.3500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选三中三：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择三个号码组成一注，所选号码与开奖号码任意数位的三个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码：01，02，03，即中奖。</td>
+                                                    <td align="center" valign="middle">28.0500</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选四中四：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择四个号码组成一注，所选号码与开奖号码任意数位的四个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，04即中奖。</td>
+                                                    <td align="center" valign="middle">112.2000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选五中五：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择五个号码组成一注，所选号码与开奖号码任意数位的五个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，04，05，即中奖。</td>
+                                                    <td align="center" valign="middle">785.4000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选六中五：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择六个号码组成一注，所选号码与开奖号码任意数位的五个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，04，05，06，即中奖。</td>
+                                                    <td align="center" valign="middle">130.9000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选七中五：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择七个号码组成一注，所选号码与开奖号码任意数位的五个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，04，05，06，07，即中奖。</td>
+                                                    <td align="center" valign="middle">37.4000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>任选八中五：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择八个号码组成一注，所选号码与开奖号码任意数位的五个号码一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，04，05，06，07，08，即中奖。</td>
+                                                    <td align="center" valign="middle">14.0250</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><strong>不定位胆</strong></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前三不定位胆：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，选择一个号码组成一注，所选号码与开奖号码第一、第二、第三位数字一致，位置不限，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 02，01，03，即中奖。</td>
+                                                    <td align="center" valign="middle"><p align="center">6.2333</p></td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><strong>定位胆</strong></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前三定位胆：</p></td>
+                                                    <td align="left" valign="middle"><p>从01-11的号码中，在第一、第二、第三位上，各选择一个号码组成一注，所选号码与开奖号码前三位数字及位置相同，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选号码： 01，02，03，即中奖。</td>
+                                                    <td align="center" valign="middle"><p align="center">第一位 18.7000</p>
+                                                        <br>
+                                                        <p align="center">第二位 18.7000</p>
+                                                        <br>
+                                                        <p>第三位 18.7000</p></td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><strong>定单双</strong></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>定单双：</p></td>
+                                                    <td align="left" valign="middle"><p>01、03、05、07、09、11为单数；&nbsp;<br>
+                                                            02、04、06、08、10&nbsp;&nbsp;&nbsp;&nbsp; 为双数；&nbsp;<br>
+                                                            选择对应的单、双号码数量，进行投注，开奖号码与所选单双数一致，即为中奖。&nbsp;<br>
+                                                            例：</p>
+                                                        开奖号码：01，02，03，04，05，所选单双数量： 3单2双，即中奖。</td>
+                                                    <td align="center" valign="middle"><p>0单5双:785.4000</p>
+                                                        <br>
+                                                        <p>5单0双:130.9000</p>
+                                                        <br>
+                                                        <p>1单4双:26.1800</p>
+                                                        <br>
+                                                        <p>4单1双:10.4720</p>
+                                                        <br>
+                                                        <p>2单3双:5.2360</p>
+                                                        <br>
+                                                        <p>3单2双:3.9270</p></td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle"><p><strong>猜中位</strong></p></td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>&nbsp;</p></td>
+                                                    <td align="left" valign="middle"><p>从03-09的号码中，选择一个号码组成一注，开奖号码根据大小顺序排列后，第三位号码与所选号码一致，即为中奖。&nbsp;<br>
+                                                            例子：&nbsp;<br>
+                                                            开奖号码：06，07，04，03，11，所选号码：06，即中奖。</p>
+                                                        注：开奖号码根据大小排列为：11，07，06，04，03，第三位号码为06。</td>
+                                                    <td align="center" valign="middle"><p>猜中位(3,9)28.0500</p>
+                                                        <br>
+                                                        <p>猜中位(4,8)12.4667</p>
+                                                        <br>
+                                                        <p>猜中位(5,7)8.7267</p>
+                                                        <br>
+                                                        <p>猜中位(6)7.8540</p></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- 福彩3D -->
+                                <div class="sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em><?php echo ($userRebate[2]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[2]['min'] . '~' . $prizeModes[2]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02">
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="151" align="center" valign="middle">直选</td>
+                                                    <td width="858" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="92" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>直选：</p></td>
+                                                    <td align="left" valign="middle"><p>任意选择后三个数，位置和数字正确即为中奖。<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3 所选号码：1,2,3，即中奖。</p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>直选和值：</p></td>
+                                                    <td align="left" valign="middle"><p>三位之和，按排列全展开，和直选奖金相同。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3 所选号码：6 . 百位，十位，个位，和值为6，即为中奖。&nbsp;<br>
+                                                        </p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">组选</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">组三：</td>
+                                                    <td align="left" valign="middle"><p>选号码，即或百位、十位和个位，顺序不限，且开奖号码中有重叠并且对应的三位号码有任意两位。即为中奖 。<br>
+                                                        </p></td>
+                                                    <td align="center" valign="middle">566.6667</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组六：</p></td>
+                                                    <td align="left" valign="middle"><p>所选号码，即或百位、十位和个位，顺序不限，且开奖号码中对应的三位号码各不相同。即为中奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">283.3333</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>混合组选：</p></td>
+                                                    <td align="left" valign="middle"><p>组三组六态号码混合录入，组三号码按组三派奖，组六号码按组六派奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">组三</p>
+                                                        <p align="center">566.6667</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p>组六</p>
+                                                        <p>283.3333</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选和值：</p></td>
+                                                    <td align="left" valign="middle"><p>所选数值等于后三位之和，豹子号除外，组三态按组三派奖，组六态按组六派奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">组三</p>
+                                                        <p align="center">566.6667</p>
+                                                        <p align="center">组六283.3333</p></td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">不定位</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>一码不定位：</p></td>
+                                                    <td align="left" valign="middle"><p>在百位，十位和个位的位置上任意投注，只要出现即为中奖。</p></td>
+                                                    <td align="center" valign="middle">6.2730</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">二码不定位：</td>
+                                                    <td align="left" valign="middle"><p>在百位，十位和个位的位置上任意投注3个号码，包含2个所选号码即为中奖。</p></td>
+                                                    <td align="center" valign="middle">31.4814</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">前二</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二直选：</p></td>
+                                                    <td align="left" valign="middle"><p>单注投注号码与当期中奖号码的连续前两位号码按位相符（百位+十位），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二组选：</p></td>
+                                                    <td align="left" valign="middle"><p>从号码0—9中任选两个数字对百位和十位进行投注，所选号码与开奖号码前两位一致，顺序不限，即为中奖</p></td>
+                                                    <td align="center" valign="middle">85.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">后二</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二直选：</p></td>
+                                                    <td align="left" valign="middle"><p>单注投注号码与当期中奖号码的连续后两位号码按位相符(十位+个位），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二组选：</p></td>
+                                                    <td align="left" valign="middle"><p>对十位和个位进行投注，所选号码与开奖号码后两位一致，顺序不限，即为中奖。</p></td>
+                                                    <td align="center" valign="middle">85.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">大小单双</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在百位和十位进行投注。大：5-9小：0-4单：1,3,5,7,9双：0,2,4,6,8</p></td>
+                                                    <td align="center" valign="middle">6.8000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在十位和个位进行投注。大：5-9小：0-4单：1,3,5,7,9双：0,2,4,6,8</p></td>
+                                                    <td align="center" valign="middle">6.8000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">定位胆</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>定位胆：</p></td>
+                                                    <td align="left" valign="middle"><p>从百位、十位、个位分别选择任意的1个或多个号码投注。</p></td>
+                                                    <td align="center" valign="middle">17.0000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- 体彩P3P5 -->
+                                <div class="sub-con">
+                                    <div class="gametips_tabCont">
+                                        <div class="gameBonus">会员返点级别:<em><?php echo ($userRebate[2]['rebate'] * 100) . '%'; ?></em>可调奖金范围:<em id="prizeRange"><?php echo $prizeModes[2]['min'] . '~' . $prizeModes[2]['max']; ?></em></div>
+                                        <table border="0" cellpadding="0" cellspacing="0" class="tab02">
+                                            <tbody>
+                                                <tr class="thTip">
+                                                    <td width="15%" align="center" valign="middle">P3直选</td>
+                                                    <td width="75%" align="center" valign="middle">玩法介绍</td>
+                                                    <td width="10%" align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>直选：</p></td>
+                                                    <td align="left" valign="middle"><p>任意选择后三个数，位置和数字正确即为中奖。<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3 所选号码：1,2,3，即中奖。</p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>直选和值：</p></td>
+                                                    <td align="left" valign="middle"><p>三位之和，按排列全展开，和直选奖金相同。&nbsp;<br>
+                                                            例：&nbsp;<br>
+                                                            开奖号码：1，2，3 所选号码：6 . 百位，十位，个位，和值为6，即为中奖。&nbsp;<br>
+                                                        </p></td>
+                                                    <td align="center" valign="middle">1700.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">P3组选</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">组三：</td>
+                                                    <td align="left" valign="middle"><p>选号码，即或百位、十位和个位，顺序不限，且开奖号码中有重叠并且对应的三位号码有任意两位。即为中奖。<br>
+                                                        </p></td>
+                                                    <td align="center" valign="middle">566.6667</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组六：</p></td>
+                                                    <td align="left" valign="middle"><p>所选号码，即万千百前三位，顺序不限，且开奖号码中对应的三位号码各不相同。即为中奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">283.3333</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>混合组选：</p></td>
+                                                    <td align="left" valign="middle"><p>组三组六态号码混合录入，组三号码按组三派奖，组六号码按组六派奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">组三</p>
+                                                        <p align="center">566.6667</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        <p>组六</p>
+                                                        <p>283.3333</p></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>组选和值：</p></td>
+                                                    <td align="left" valign="middle"><p>所选数值等于后三位之和，豹子号除外，组三态按组三派奖，组六态按组六派奖。</p></td>
+                                                    <td align="center" valign="middle"><p align="center">组三</p>
+                                                        <p align="center">566.6667</p>
+                                                        <p align="center">&nbsp;</p>
+                                                        组六283.3333</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">P3不定位</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>一码不定位：</p></td>
+                                                    <td align="left" valign="middle"><p>在万千百位的位置上任意投注，只要出现即为中奖。</p></td>
+                                                    <td align="center" valign="middle">6.2730</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle">二码不定位：</td>
+                                                    <td align="left" valign="middle"><p>在万千百位的位置上任意投注2个号码，开奖号码包含2个所选号码即为中奖。</p></td>
+                                                    <td align="center" valign="middle">31.4814</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">前二</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二直选：</p></td>
+                                                    <td align="left" valign="middle"><p>单注投注号码与当期中奖号码的连续前两位号码按位相符（万位+千位），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二组选：</p></td>
+                                                    <td align="left" valign="middle"><p>从号码0—9中任选两个数字对万位和千位进行投注，所选号码与开奖号码前两位一致，顺序不限，即为中奖。</p></td>
+                                                    <td align="center" valign="middle">85.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">后二</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二直选：</p></td>
+                                                    <td align="left" valign="middle"><p>单注投注号码与当期中奖号码的连续后两位号码按位相符(十位+个位），即中奖。</p></td>
+                                                    <td align="center" valign="middle">170.0000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二组选：</p></td>
+                                                    <td align="left" valign="middle"><p>对十位和个位进行投注，所选号码与开奖号码后两位一致，顺序不限，即为中奖。</p></td>
+                                                    <td align="center" valign="middle">85.0000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">大小单双</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>前二大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在百位和十位进行投注。大：5-9小：0-4单：1,3,5,7,9双：0,2,4,6,8</p></td>
+                                                    <td align="center" valign="middle">6.8000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>后二大小单双：</p></td>
+                                                    <td align="left" valign="middle"><p>仅限在十位和个位进行投注。大：5-9小：0-4单：1,3,5,7,9双：0,2,4,6,8</p></td>
+                                                    <td align="center" valign="middle">6.8000</td>
+                                                </tr>
+                                                <tr class="thTip">
+                                                    <td align="center" valign="middle">定位胆</td>
+                                                    <td align="center" valign="middle">玩法介绍</td>
+                                                    <td align="center" valign="middle">奖金模式</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" valign="middle"><p>定位胆：</p></td>
+                                                    <td align="left" valign="middle"><p>从百位、十位、个位分别选择任意的1个或多个号码投注。</p></td>
+                                                    <td align="center" valign="middle">17.0000</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/common.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script>
+            $(function() {
+                var json_userRebate = <?php echo $json_userRebate; ?>;
+                var json_prizeModes = <?php echo $json_prizeModes; ?>;
+                $('.lotteryLI').click(function() {
+                    $(this).addClass('Change-point').siblings().removeClass('Change-point');
+                    var index = $(this).attr('property');
+                    var ops = $(this).attr('id').split("_");
+                    $('.lotteryContent_' + ops[1]).show().siblings().hide();
+                    $('#rebateLevel').text(round(json_userRebate[$(this).attr('property')].rebate * 100, 3) + "%");
+                    $('#prizeRange').text(json_prizeModes[$(this).attr('property')].min + '~' + json_prizeModes[$(this).attr('property')].max);
+                });
+                $('.lotteryLI:first').click();
+            });
+
+        </script>
+    </body>
+</html>

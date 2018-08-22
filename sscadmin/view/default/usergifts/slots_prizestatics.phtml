@@ -1,0 +1,65 @@
+<?php $this->import("head"); ?>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('input[name=start_time]').val('<?php echo $startTime; ?>');
+        $('input[name=end_time]').val('<?php echo $endTime; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<div class="left leftContainer">
+    <ul>
+    <?php foreach ($promoList AS $key => $list): ?>
+    <li><a href="/?c=market&a=promoList&giftType=<?php echo $key; ?>"><?php echo $list->cnTitle; ?></a></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<div class="rightContainer">
+    <form name="form1" id="form1" action="" method="get">
+    统计时间<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+    至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="hidden" name="c" value="market"/>
+    <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+    <input type="submit" name="sub"  style="width:90px" value="查询"/>
+    </form>
+
+    <h4> </h4>
+    <div class="list-div" id="listDiv">
+        <table class="mainList">
+            <thead>
+                <tr>
+                    <td>奖品名称</td>
+                    <td>累计派奖数量</td>
+                    <td>累计派奖金额</td>
+                    <td>累计获奖人数（去掉重复）</td>
+                </tr>
+            </thead>
+            <?php if ($awardsConfig) : ?>
+            <?php foreach($awardsConfig as $award_id => $v):?>
+            <tr class="plansList">
+                <td><?php echo $v['title'];  ?></td>
+                <td><?php echo $prizeStaistics['prize'][$award_id]['count'] > 0 ? $prizeStaistics['prize'][$award_id]['count'] : 0;  ?></td>
+                <td><?php echo $prizeStaistics['prize'][$award_id]['count'] > 0 ? number_format($prizeStaistics['prize'][$award_id]['count'] * $v['prize'], 2) : 0;  ?></td>
+                <td><?php echo $prizeStaistics['user'][$award_id]['count'] > 0 ? $prizeStaistics['user'][$award_id]['count'] : 0 ; ?></td>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td>总计</td>
+                <td><?php echo $totalCount;  ?></td>
+                <td><?php echo $totalPrize;  ?></td>
+                <td><?php echo $distinctUser; ?></td>
+            </tr>
+            <?php else: ?>
+            <tr class="noneData">
+                <td colspan="6">暂无数据！</td>
+            </tr>
+            <?php endif; ?>
+        </table>
+    </div>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

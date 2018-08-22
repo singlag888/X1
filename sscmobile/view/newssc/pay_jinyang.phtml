@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title></title>
+</head>
+<body>
+<form name='diy' id="diy" action='<?php echo $postFields['url']; ?>' target="_blank"  method='post'>
+    <input type='hidden' name='p1_mchtid' value='<?php echo $postFields['p1_mchtid']; ?>'>
+    <input type='hidden' name='p2_paytype' value='<?php echo $postFields['p2_paytype']; ?>'>
+    <input type='hidden' name='p3_paymoney' value='<?php echo  $postFields['p3_paymoney']; ?>'>
+    <input type='hidden' name='p4_orderno' value='<?php echo  $postFields['p4_orderno']; ?>'>
+    <input type='hidden' name='p5_callbackurl' value='<?php echo $postFields['p5_callbackurl']; ?>'>
+    <input type='hidden' name='p6_notifyurl' value='<?php echo $postFields['p6_notifyurl']; ?>'>
+    <input type='hidden' name='p7_version' value='<?php echo $postFields['p7_version']; ?>'>
+    <input type='hidden' name='p8_signtype' value='<?php echo $postFields['p8_signtype']; ?>'>
+    <input type='hidden' name='p9_attach' value='<?php echo $postFields['p9_attach']; ?>'>
+    <input type='hidden' name='p10_appname' value='<?php echo $postFields['p10_appname']; ?>'>
+    <input type='hidden' name='p11_isshow' value='<?php echo $postFields['p11_isshow']; ?>'>
+    <input type='hidden' name='p12_orderip' value='<?php echo $postFields['p12_orderip']; ?>'>
+    <input type='hidden' name='sign' value='<?php echo $postFields['sign']; ?>'>
+    <input name="pay" type="submit" value="启动 QQ/微信/支付宝 支付" />
+</form>
+</body>
+</html>

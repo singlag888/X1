@@ -1,0 +1,346 @@
+<!-- 页头 -->
+<?php $this->import("default_top"); ?>
+<script>
+	layui.use('element', function(){
+	  var element = layui.element;
+	});
+</script>
+<div class="layui-layout layui-layout-admin">
+
+  <div id="dc_head_personal_info" class="custom-defind-common" style="display: none;">
+    <img id="dc_head_personal_info_img" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/personal_pic.png"/>
+    <span>User Name</span>
+    <hr class="dc-head-personal-info-line" />
+    <div id="head_person_modify" class="custom-defind-common" >
+      <div id="head_person_change_info"><span>修改资料</span></div>
+      <div id="head_person_change_pic"><span>修改头像</span></div>
+    </div>
+  </div>
+  
+  <!-- Body左部 -->
+  <div id="dc_body_left" class="custom-defind-common">
+    <div id="body_left" >
+      <div id="dc_body_left_myuser" class="custom-defind-common label" >
+        <div id="body_left_myuser_lc"></div>
+        <div id="body_left_myuser" class="text" style="visibility: visible;">
+          <p><span>我的用户</span></p>
+        </div>
+      </div>
+      <div id="dc_body_left_line" class="custom-defind-common line">
+        <img id="body_left_line_img" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/long_line.png"/>
+        <div id="body_left_line_hid" class="text" style="display: none; visibility: hidden">
+          <p><span></span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_left_ref" class="custom-defind-common" onclick="refTodayDetail()" >
+      <img id="body_left_ref_png" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/refresh.png"/>
+      
+      <div id="dc_body_left_ref_text" class="custom-defind-common label">
+        <div id="dc_body_left_ref_text_lc" class=""></div>
+        <div id="body_left_ref_text" class="text" style="visibility: visible;">
+          <p><span>刷新</span></p>
+        </div>
+      </div>
+      </div>
+      
+      <div id="dc_body_left_usertools" class="custom-defind-common " onclick="javascripy: window.location.href='?a=userManagementTools&c=user'">
+        <div id="dc_body_left_usertools_lc" class="layui-btn layui-btn-normal" tabindex="0" style="outline: none;" ></div>
+        <div id="body_left_usertools_text" class="primary_button text" style="visibility: visible;">
+          <p><span>用户管理工具</span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_left_users_today" class="custom-defind-common ">
+      	<img src="<?php echo $imgCdnUrl ?>/view/new/img/right.png" style="visibility: hidden;">
+        <p style="font-size:20px;">&nbsp;<span id="today_users" style="font-family:'Arial Negreta', 'Arial Normal', 'Arial';font-weight:700;">999</span></p>
+        <p style="font-size:14px;"><span style="font-family:'Arial Normal', 'Arial';font-weight:400;color:#A1A1A1;">今日用户数</span></p>
+      </div>
+      <div id="dc_body_left_users_added" class="custom-defind-common ">
+        <img src="<?php echo $imgCdnUrl ?>/view/new/img/right.png" style="visibility: hidden;">
+        <p style="font-size:20px;">&nbsp;<span id="today_new_users" style="font-family:'Arial Negreta', 'Arial Normal', 'Arial';font-weight:700;">999</span></p>
+        <p style="font-size:14px;"><span style="font-family:'Arial Normal', 'Arial';font-weight:400;color:#A1A1A1;">今日新增用户数</span></p>
+      </div>
+      <div id="dc_body_left_users_online" class="custom-defind-common ">
+        <img src="<?php echo $imgCdnUrl ?>/view/new/img/right.png" style="visibility: hidden;">
+        <p style="font-size:20px;">&nbsp;<span id="online_users" style="font-family:'Arial Negreta', 'Arial Normal', 'Arial';font-weight:700;">999</span></p>
+        <p style="font-size:14px;"><span style="font-family:'Arial Normal', 'Arial';font-weight:400;color:#A1A1A1;">在线人数</span></p>
+      </div>
+      
+      
+      <div id="dc_body_left_tools_line" class="custom-defind-common line">
+        <img id="body_left_tools_line_img" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/line.png"/>
+        <div id="u270" class="text" style="display: none; visibility: hidden">
+          <p><span></span></p>
+        </div>
+       </div>
+      
+      <div id="dc_body_left_myapp" class="custom-defind-common label" >
+        <div id="body_left_myapp_lc"></div>
+        <div id="body_left_myapp" class="text" style="visibility: visible;">
+          <p><span>我的应用</span></p>
+        </div>
+      </div>
+     
+     <div id="dc_body_left_more_app" class="custom-defind-common label">
+      <p><span>更多应用</span></p>
+      <div id="body_left_more_app_img" ><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png"></div>
+     </div>
+     
+     <div id="dc_body_left_line2" class="custom-defind-common line">
+        <img id="body_left_line2_img" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/long_line.png"/>
+        <div id="body_left_line2_hid" class="text" style="display: none; visibility: hidden">
+          <p><span></span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_left_invoce" class="body_left_mid_div_ custom-defind-common ">
+        <div id="dc_body_left_invoce_lc" class="body_left_mid_div layui-btn layui-btn-normal"></div>
+        <div class="body_left_mid_button primary_button text" style="visibility: visible;">
+          <p><span>财务管理工具</span></p>
+        </div>
+      </div>
+      <div id="dc_body_left_report" class="body_left_mid_div_ custom-defind-common ">
+        <div id="dc_body_left_report_lc" class="body_left_mid_div layui-btn layui-btn-normal"></div>
+        <div class="body_left_mid_button primary_button text" style="visibility: visible;">
+          <p><span>报表管理工具</span></p>
+        </div>
+      </div>
+      <div id="dc_body_left_bet_class" class="body_left_mid_div_ custom-defind-common ">
+        <div id="body_left_bet_class_lc" class="body_left_mid_div layui-btn layui-btn-normal"></div>
+        <div class="body_left_mid_button primary_button text" style="visibility: visible;">
+          <p><span>彩种管理工具</span></p>
+        </div>
+      </div>
+      <div id="dc_body_left_market_tool" class="body_left_mid_div_ custom-defind-common ">
+        <div id="body_left_market_tool_lc" class="body_left_mid_div layui-btn layui-btn-normal"></div>
+        <div class="body_left_mid_button primary_button text" style="visibility: visible;">
+          <p><span>市场管理工具</span></p>
+        </div>
+      </div>
+      <div id="dc_body_left_data_read" class="body_left_mid_div_ custom-defind-common ">
+        <div id="body_left_data_read_lc" class="body_left_mid_div layui-btn layui-btn-normal"></div>
+        <div class="body_left_mid_button primary_button text" style="visibility: visible;">
+          <p><span>报表管理工具</span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_left_news_title" class="custom-defind-common label" >
+        <div id="body_left_news_lc_title"></div>
+        <div id="body_left_news_title" class="text" style="visibility: visible;">
+          <p><span>最新公告</span></p>
+        </div>
+        
+        <div id="body_left_news_more" class="text" style="visibility: visible;">
+          <p><span>更多</span></p>
+          <div id="body_left_news_more_img" ><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png"></div>
+        </div>
+        
+      </div>
+      
+	 <div id="dc_body_left_news" class="custom-defind-common">
+	   <ul class="dc_body_left_ul">
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	     <li>
+	       <div style="position: relative;">
+	         <span>- Dc智能管理系统全新改版</span>
+	         <span style="position: relative;left: 55px;">2017-12-25 00:00:00</span>
+	       </div>
+	     </li>
+	   </ul>
+	 </div>    
+       
+     <div id="dc_body_left_download_tl" class="custom-defind-common label" >
+      <div id="body_left_download_lc_title"></div>
+      <div id="body_left_download_title" class="text" style="visibility: visible;">
+        <p><span>资料下载</span></p>
+     </div>
+       
+       <div id="body_left_news_more" class="text" style="visibility: visible;">
+         <p><span>更多</span></p>
+         <div id="body_left_news_more_img" ><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png"></div>
+       </div>
+     </div>
+     
+     <div id="dc_body_left_download" class="custom-defind-common" >
+       <ul class="dc_body_left_ul">
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+         <li>
+           <div style="position: relative;">
+             <span>- Dc智能管理系统使用手册</span> 
+             <img src="<?php echo $imgCdnUrl ?>/view/new/img/download.png" class="dc-left-body-download-img"/>
+           </div>
+         </li>
+       </ul>
+     </div>
+       
+    </div>
+  </div>
+  
+  <!-- Body右部 -->
+  <div id="dc_body_right" class="custom-defind-common">
+	<div id="body_right">
+	
+	
+	  <div id="dc_body_right_person_info" class="custom-defind-common">
+        <img id="dc_body_right_person_img" class="img " src="<?php echo $imgCdnUrl ?>/view/new/img/personal_pic.png"/>
+        <div id="dc_body_right_username" class="custom-defind-common text" >
+          <p><span>User name</span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_right_last_login" class="custom-defind-common">
+        <div id="right_last_login_time_addr_tl" class="custom-defind-common" >
+        	<p><span>最后登录时间及地址:</span></p>
+        </div>
+        <div id="right_last_login_time_addr" class="custom-defind-common" >
+        	<p><span>2017-12-09 / 112.22.333.11</span></p>
+        </div>
+      </div>
+      
+      <div id="dc_body_right_manager_list" class="custom-defind-common primary_button">
+      <div id="dc_body_right_manager_list_lc" class="layui-btn layui-btn-normal"></div>
+      	<div id="body_right_manager_list_text" class="text">
+      	  <p><span>管理员列表</span></p>
+      	</div>
+      </div>
+      <div id="dc_body_right_manager_log" class="custom-defind-common primary_button">
+      <div id="dc_body_right_manager_log_lc" class="layui-btn layui-btn-normal"></div>
+      	<div id="body_right_manager_log_text" class="text">
+      	  <p><span>管理员日志</span></p>
+      	</div>
+      </div>
+      
+      <div id="dc_body_right_lucky_bill" class="custom-defind-common">
+      	<div id="body_right_lucky_bill_text" >
+      	  <p><span>幸运彩票</span></p>
+      	</div>
+      	<div id="body_right_lucky_bill_ref" onclick="refreshFinanceToday()" >
+      	  <div id="body_right_lucky_ref_img"><img src="<?php echo $imgCdnUrl ?>/view/new/img/refresh.png" /></div>
+      	  <div id="body_right_lucky_ref_text"><p><span>刷新</span></p></div>
+      	</div>
+      </div>
+      
+      <div id="dc_body_right_short_line" class="custom-defind-common">
+      	<img src="<?php echo $imgCdnUrl ?>/view/new/img/short_line.png" />
+      </div>
+      
+      <div id="dc_body_right_detail_in" class="custom-defind-common dc-body-right-detail-invoice label">
+        <div class="_detail_text" ><p>今日入款：<span id="today_money_in" >8888.88</span><span class="money-unit" >元</span></p></div>
+        <div class="_detail_img" ><p><span>详情</span></p><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png" /></div>
+      </div>
+      <div id="dc_body_right_detail_out" class="custom-defind-common dc-body-right-detail-invoice label">
+        <div class="_detail_text" ><p>今日出款：<span id="today_money_out" >8888.88</span><span class="money-unit" >元</span></p></div>
+        <div class="_detail_img" ><p><span>详情</span></p><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png" /></div>
+      </div>
+      
+      <div id="dc_body_right_total_bet" class="custom-defind-common">
+        <div id="body_right_total_bet_text" class="_bet_text" ><p><span class="_total" >总投注：</span><span id="betting_total" >8888.88</span><span class="money-unit" >元</span></p></div>
+        <div id="dc_body_right_bet_img" class="_win_img" ><p><span>详情</span></p><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png" /></div>
+        
+        <div id="body_right_total_win_text" class="_bet_text" ><p><span class="_total" >总中奖：</span><span id="winning_total" >8888.88</span><span class="money-unit" >元</span></p></div>
+        <div id="dc_body_right_win_img" class="_win_img" ><p><span>详情</span></p><img src="<?php echo $imgCdnUrl ?>/view/new/img/more_go.png" /></div>
+      </div>
+      
+      <div id="dc_body_right_change_pswd" class="custom-defind-common">
+        <div class=" layui-btn layui-btn-normal" style="background-color: #949494;"><p><span>修改密码</span></p></div>
+      </div>
+      
+      <div id="dc_body_right_master_tool" class="custom-defind-common">
+        <div class=" layui-btn layui-btn-normal" style="background-color: #949494;"><p><span>站长工具</span></p></div>
+      </div>
+      
+	</div>  
+  </div>
+</div>
+<style>
+    .dc-main-today-style {
+        border-bottom: 3px solid;
+        border-color: blue;
+        background-color: rgba(242, 242, 242, 1);
+    }
+</style>
+<script type="text/javascript">
+	$("#dc_body_left_users_today").bind('mouseover', function(){
+		$("#dc_body_left_users_today img").attr("style", "visibility: visible;");
+		$(this).addClass("dc-main-today-style");
+	}).bind('mouseout', function(){
+		$("#dc_body_left_users_today img").attr("style", "visibility: hidden;");
+		$(this).removeClass("dc-main-today-style");
+	});
+	
+	$("#dc_body_left_users_added").bind('mouseover', function(){
+		$("#dc_body_left_users_added img").attr("style", "visibility: visible;");
+		$(this).addClass("dc-main-today-style");
+	}).bind('mouseout', function(){
+		$("#dc_body_left_users_added img").attr("style", "visibility: hidden;");
+		$(this).removeClass("dc-main-today-style");
+	});
+	
+	$("#dc_body_left_users_online").bind('mouseover', function(){
+		$("#dc_body_left_users_online img").attr("style", "visibility: visible;");
+		$(this).addClass("dc-main-today-style");
+	}).bind('mouseout', function(){
+		$("#dc_body_left_users_online img").attr("style", "visibility: hidden;");
+		$(this).removeClass("dc-main-today-style");
+	});
+
+</script>

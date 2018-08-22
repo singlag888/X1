@@ -1,0 +1,78 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   if ("<?php echo ACTION; ?>" == "editPwd") {
+       $("input[name=user_id]").val("<?php echo $user['user_id']; ?>");
+   }
+});
+function checkform(ob) {
+    var msg = "";
+    if (ob.pwd.value == "" && ob.secpwd.value == "" && ob.safepwd.value=="") {
+        msg = "请输入密码";
+    }
+//    else if (ob.usage[0].checked == false && ob.usage[1].checked == false) {
+//        msg = "请选择用途";
+//    }
+
+    if (msg != "") {
+        alert(msg);
+        return false;
+    }
+    return true;
+}
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=user&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table class="table table-responsive table-bordered" cellpadding="0" cellspacing="0" style="width:50%;">
+    <tr>
+        <td colspan="2" class="rowTitle">
+            <b>修改登录密码</b>
+        </td>
+    </tr>
+    <tr>
+        <td>用户帐号</td>
+        <td><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td>昵称</td>
+        <td><?php echo $user['nickname']; ?></td>
+    </tr>
+    <tr>
+        <td>登录密码</td>
+        <td><input class="input-sm form-control" type="password" name="pwd"/></td>
+    </tr>
+    <tr>
+        <td>登录密码确认</td>
+        <td><input class="input-sm form-control" type="password" name="pwd2"/></td>
+    </tr>
+    <tr>
+        <td colspan="2" class="rowTitle">
+            <b>修改资金密码</b>
+        </td>
+    </tr>
+    <tr>
+        <td>资金密码</td>
+        <td><input class="input-sm form-control" type="password" name="secpwd"/></td>
+    </tr>
+    <tr>
+        <td>资金密码确认</td>
+        <td><input class="input-sm form-control" type="password" name="secpwd2"/></td>
+    </tr>
+    <tr>
+        <td>修改密码原因：</td>
+        <td><textarea class="input-sm form-control" name="reason"></textarea></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div style="margin:0 auto;text-align:center;">
+                <input class="btn btn-info submit" type="submit"  name="submit" value="<?php if (substr(ACTION, 0, 4) == "edit"): ?>更新<?php else: ?>提交<?php endif; ?>" />
+                <input class="btn btn-info submit" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                <input type="hidden" name="user_id" value="" />
+            </div>
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,67 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('select[name=card_id]').val('<?php echo $cardId; ?>');
+        $('input[name=start_time]').val('<?php echo $startTime; ?>');
+        $('input[name=end_time]').val('<?php echo $endTime; ?>');
+        $('input[name=username]').val('<?php echo $username; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="get">
+    <div class="form-inline mt15">
+        <label style="font-weight: normal;">奖品名称</label>
+        <select class="input-md form-inline" name="card_id">
+            <option value="" selected="selected">不限</option>
+            <?php foreach ($cardsConfig as $k => $v): ?>
+            <option value=<?php echo $k; ?> ><?php echo $v['title']; ?></option>
+            <?php endforeach; ?>
+        </select>
+        <label style="font-weight: normal;">抽奖时间</label>
+        <input class="input-md form-control Wdate" style="height: 34px;" name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})"  value=""/>
+        <label style="font-weight: normal;">至</label>
+        <input class="input-md form-control Wdate" style="height: 34px;" name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})"  value=""/>
+        <label style="font-weight: normal;">会员账号</label>
+        <input class="input-md form-control" type="text" value="" name="username">
+        <input type="hidden" name="c" value="market"/>
+        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+        <input class="btn btn-info " type="submit" name="sub"  style="width:90px" value="查询"/>
+    </div>
+</form>
+<h4> </h4>
+<div class="list-div mt15" id="listDiv">
+    <table class="table table-responsive table-bordered table-hover mainList">
+        <thead>
+            <tr>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">ID</td>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">会员账号</td>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">奖品名称</td>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">奖品价值</td>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">抽奖时间</td>
+                <td style="font-weight: bold;font-size: 16px;text-align: center;vertical-align: middle;">是否已变现</td>
+            </tr>
+        </thead>
+        <?php if ($cards) : ?>
+        <?php foreach($cards as $v):?>
+        <tr class="plansList">
+            <td style="text-align: center;vertical-align: middle;"><?php echo $v['ugc_id'];  ?></td>
+            <td style="text-align: center;vertical-align: middle;"><?php echo $v['username'];  ?></td>
+            <td style="text-align: center;vertical-align: middle;"><?php echo $cardsConfig[$v['card_id']]['title'];  ?></td>
+            <td style="text-align: center;vertical-align: middle;"><?php echo $cardsConfig[$v['card_id']]['prize'];  ?></td>
+            <td style="text-align: center;vertical-align: middle;"><?php echo $v['create_time'] ; ?></td>
+            <td style="text-align: center;vertical-align: middle;"><?php echo $v['status'] == 0 ? '否' : '是'; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tr class="noneData">
+            <td colspan="6">暂无数据！</td>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

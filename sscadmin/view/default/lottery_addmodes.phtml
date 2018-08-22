@@ -1,0 +1,60 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+
+</script>
+<div class="list-div add-main" id="addDiv">
+    <h3 style="display: inline-block">提示:</h3><span style="color: blue">暂时只用于app和新版wap</span>
+    <?php $modes_area=isset($mode['modes_area'])?$mode['modes_area']:(isset($modes_area)?$modes_area:'');?>
+    <form name="form1" id="form1" class="form-top" action="./?c=lottery&a=<?php echo ACTION; ?>" method="post">
+        <table class="table table-responsive table-bordered" style="width: 80%;">
+            <tr>
+                <td class="fb" style="width: 15%;">模式名称:</td>
+                <td><input class="input-md form-control" type="text" name="modes_name" value="<?php echo isset($mode['modes_name'])?$mode['modes_name']:''?>"/></td>
+            </tr>
+            <tr>
+                <td class="fb">模式值:</td>
+                <td><input class="input-md form-control" type="text" name="modes_value" value="<?php echo isset($mode['modes_value'])?$mode['modes_value']:''?>"/></td>
+            </tr>
+            <tr>
+                <td class="fb">模式位:</td>
+                <td><input class="input-md form-control" type="text" name="modes_area"  readonly = "readonly"value="<?php echo $modes_area;?>"/></td>
+            </tr>
+            <?php if(!isset($mode)):?>
+            <tr>
+                <td class="fb">是否用于所有彩种:</td>
+                <td>
+                <div class="form-inline">
+                    <input  type="radio" name="use" value="1" checked="checked"/><span style="vertical-align: middle;">是</span>
+                    <input type="radio" name="use" value="0" /><span style="vertical-align: middle">否</span>
+                </div>
+                </td>
+            </tr>
+            <?php endif;?>
+            <?php if(!isset($mode)):?>
+            <tr>
+                <td class="fb">状态:</td>
+                <td>
+                    <div class="form-inline">
+
+                        <input  type="radio" name="status" value="1" checked="checked"/><span style="vertical-align: middle;">启用</span>
+                        <input type="radio" name="status" value="0"/><span style="vertical-align: middle">禁用</span>
+                    </div>
+                </td>
+            </tr>
+            <?php endif;?>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%;margin: 0 auto;text-align: center;">
+                        <input class="btn btn-md btn-info submit" style="width: 60px;" type="submit"  name="submit" value="<?php if (ACTION == "addModes"): ?>提交<?php else: ?>更新<?php endif; ?>" />
+                        <input class="btn btn-md btn-info submit ml30" style="width: 60px;" type="button"  onclick="javascript:history.go(-1);" value="返回"/>
+                        <input type="hidden" name="lottery_id" value="" />
+                    </div>
+                </td>
+                    
+            </tr>
+        </table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

@@ -1,0 +1,50 @@
+<?php $this->import("head"); ?>
+
+    <div class="list-div mt10" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered  mainList" width="100%">
+                <thead>
+                <tr>
+                    <td>version_id</td>
+                    <td>ios版本号</td>
+                    <td>ios是否强制更新</td>
+                    <td>安卓版本号</td>
+                    <td>安卓是否强制更新</td>
+                    <td>ios版本描述</td>
+                    <td>安卓版本描述</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <?php foreach ($versions as $v):?>
+                    <tr>
+                        <td><?php  echo $v['id']; ?></td>
+                        <td><?php echo $v['ios_version']; ?></td>
+                        <td><?php echo $v['ios_update']==1?'是':'否'; ?></td>
+                        <td><?php echo $v['andr_version']; ?></td>
+                        <td><?php echo $v['andr_update']==1?'是':'否'; ?></td>
+                        <td><?php echo $v['ios_describe']; ?></td>
+                        <td><?php echo $v['andr_describe']; ?></td>
+                        <td>
+                            <?php if ($canEdit): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=app&a=editVersion&id=<?php echo $v['id']; ?>">编辑</a>
+                            <?php endif; ?>
+                            <?php if ($canDelete): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=app&a=deleteVersion&id=<?php echo $v['id']; ?>"
+                                   onclick="return confirm('真的要标记删除？');">删除</a>
+                            <?php endif; ?>
+                            <?php if ($canPush): ?>
+                                <a class="btn btn-mini btn-info"
+                                   href="./?c=app&a=pushVersion&id=<?php echo $v['id']; ?>">版本更新推送</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+        <div class="pageTal"><?php echo $pageList; ?></div>
+        <div class="tip"></div>
+    </div>
+
+<?php $this->import("foot"); ?>

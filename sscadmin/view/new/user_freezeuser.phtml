@@ -1,0 +1,74 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=freezeUser" method="post">
+    <table class="table table-responsive table-bordered " style="width:50%;">
+        <tr>
+            <td class="rowTitle" colspan="2">
+                <b>冻结用户</b>
+            </td>
+        </tr>
+        <tr>
+            <td width="25%;">用户id</td>
+            <td><?php echo $user['user_id']; ?></td>
+        </tr>
+        <tr>
+            <td>用户名</td>
+            <td><?php echo $user['username']; ?></td>
+        </tr>
+        <tr>
+            <td>目前状态</td>
+            <td>
+                <?php if ($user['status'] == 0): ?>已删除
+                <?php elseif ($user['status'] == 1): ?>冻结
+                <?php elseif ($user['status'] == 8): ?>正常
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
+            <td>冻结类型</td>
+            <td>
+                <select class="input-md form-control" name="freezeType">
+                    <option value="1">冻结不可登录</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>冻结原因</td>
+            <td><textarea class="input-md form-control"  name="reason" value=""></textarea></td>
+        </tr>
+        <tr>
+            <td>是否连带冻结其下级？</td>
+            <td><input type="checkbox" name="includeChild" value="1" /></td>
+        </tr>
+        <tr>
+            <td>同时冻结其绑定银行卡</td>
+            <td>
+                <input type="checkbox" name="freezeCard" onclick="tishi(this)" value="1" />
+                <span id="rem"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div style="text-align: center;margin:0 auto;">
+                    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" /><input type="hidden" name="parent_id" value="<?php echo $parent_id; ?>" />
+                    <input type="hidden" name="op" value="doFreezeUser" />
+                    <input class="btn btn-info submit" type="button"  name="submitBtn" value="确认操作" onclick="if(confirm('确定要冻结该用户吗？')) {this.form.submit();}"/>
+                </div>
+            </td>
+        </tr>
+    </table>
+    
+</form>
+</div>
+    <script>
+        function tishi(obj) {
+           if($(obj).is(':checked') == true)
+           {
+               $('#rem').html("<span style='color: red'> 注意: 冻结银行卡之后就不可再次绑定</span>");
+           }else{
+               $('#rem').html("<span style='color: red'></span>");
+           }
+        }
+    </script>
+<?php $this->import("foot"); ?>

@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    </head>
+    <body>
+        <!-- 中间选择游戏部分 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="sub_public">
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <div class="passwordNeir">
+                                <form id="form1">
+                                    <table class="moneyBank">
+                                        <tr>
+                                            <th  width="16%">开户姓名：</th>
+                                            <td  width="30%"><?php echo $userBindCard['bank_username']; ?></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>钱包金额：</th>
+                                            <td>
+                                                <strong><?php echo $user['balance']; ?></strong><em>元</em>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="op" value="doWithdraw"/>
+                                                <input type="hidden" name="bind_card_id" value="0"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>银行名称：</th>
+                                            <td>
+                                                <?php echo $withdrawBankList[ $userBindCard['bank_id'] ]; ?>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>卡/折号：</th>
+                                            <td colspan="2" class="card_default">
+                                                <span><?php echo $userBindCard['card_num']; ?></span>
+                                            </td>
+                                        </tr>
+  <!--                                      <tr>
+                                            <th>所在地区：</th>
+                                            <td class="bankADD">
+                                                <select name="province" id="province" onChange="SelChgCity('city', document.getElementById('province').options[document.getElementById('province').selectedIndex].value, arrProvince, arrCity, 'country');" disabled='true'></select>
+                                                <select name="city" id="city" disabled='true'></select>
+                                            </td>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <th>开户网点全称：</th>
+                                            <td>
+                                                <input class="textBank" name="branch_name" type="text" disabled='true' />
+                                            </td>
+                                            <td class="tisBg">**银行**分行**支行**分理处(储蓄)</td>
+                                        </tr>-->
+                                        <tr>
+                                            <th>提款金额：</th>
+                                            <td>
+                                                <input class="textBank" name="withdraw_amount" type="text" id="withdraw_amount" />
+                                            </td>
+<!--                                            修改方案 ,snow 2017-09-29-->
+                                            <td class="tisBg">提款下限：<?php echo $min ?>元/次,单笔上限<?php echo $max ?>元：单日限额<?php echo $dayMax ?>元</td>
+<!--                                            修改方案 ,snow 2017-09-29-->
+                                        </tr>
+                                        <tr>
+                                            <th width="460">资金密码：</th>
+                                            <td>
+                                                <input class="textBank" type="password" name="secpassword" id="secpassword">
+                                            </td>
+                                            <td width="781">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <td>
+                                                <div class="doubleBankBtn">
+                                                    <input class="bankBtn" type="button" id="submitBtn" value="确认提交" name="submitBtn" >
+                                                    <input class="grewbankBtn bankBtn" type="reset" value="重置" name="重置">
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="Notice">
+                                <h4>*如有出现以下情况请勿继续操作*</h4>
+                                <p>1. 通过客服重置了资金密码；</p>
+                                <p>2. 修改了真实姓名；</p>
+                                <p>3. 绑定了新的银行卡，并用新银行卡进行提款。</p>
+                            </div>
+                            <div class="bankoutBtn">
+                                <i></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script src="<?php echo $imgCdnUrl ?>/js/area/area.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('input[name=secpassword]').val('');
+            });
+            function checkform(ob) {
+                msg = '';
+                if (!/^[1-9]\d*(\.\d{1,2})*$/.test(parseFloat(ob.withdraw_amount.value))) {
+                    msg = "请输入正确的金额,保留两位小数";
+                }
+
+                if(ob.secpassword.value == "" ){
+                    msg += msg == '' ?  '资金密码不能为空'  :  ",资金密码不能为空";
+                }
+                /******************** 修改 判断条件 单笔限额 ********************************/
+
+                 if (ob.withdraw_amount.value < 10) {
+                    msg += msg == ""  ? '提款金额不能小于10'  :  ",提款金额不能小于100元";
+                }
+
+                 if (ob.withdraw_amount.value > 1000000) {
+                    msg += msg == "" ?  '提款金额不能大于1000000元'  :  ",提款金额不能大于1000000元";
+                }
+                /******************** 修改 判断条件 单笔限额 ********************************/
+                if (msg != "") {
+                    top.layer.alert(msg + "！",{icon:7});
+                    return false;
+                }
+
+                return true;
+            }
+             var Flag=0;
+            $("#submitBtn").click(function(){
+                var msg = '';
+                var amount = $("#withdraw_amount").val();
+                var pwd = $("#secpassword").val();
+				var min = <?php echo $min ;?>;
+				var max = <?php echo $max ;?>;
+                if (!/^[1-9]\d*(\.\d{1,2})*$/.test(parseFloat(amount))) {
+                    msg = "请输入正确的金额,保留两位小数";
+                }
+                 if( pwd == "" ){
+                    msg += msg == ""  ? '资金密码不能为空' :  ",资金密码不能为空";
+                }
+                /******************** 修改 判断条件 单笔限额 ********************************/
+                 if (amount < min) {
+                    msg += msg == "" ? "提款金额不能小于<?php echo $min ;?>元" :  ",提款金额不能小于<?php echo $min ;?>元";
+                }
+                 if (amount > max) {
+                    msg += msg == '' ?  "提款金额不能大于<?php echo $max ;?>元"  :  ",提款金额不能大于<?php echo $max ;?>元";
+                }
+                /******************** 修改 判断条件 单笔限额 ********************************/
+                if (msg != "") {
+                    top.layer.alert(msg + "！",{icon:7});
+                    return false;
+                }
+
+                Flag+=1;
+		            if(Flag==1){
+                $.ajax({
+                        url: "?c=fin&a=withdraw",
+                        type: "POST",
+                        data: {
+                            "op": "doWithdraw",
+                            "bind_card_id" : 0,
+                            "withdraw_amount" : amount,
+                            "secpassword" : pwd,
+                            "flag" : 'ajax'
+                        },
+                        cache: false,
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.errno == 0) {
+                                top.layer.alert('提款金额：' + amount + ','+response.errstr,{icon:1});
+                                var btn = $(window.top.document).find(".xubox_yes").get(0);
+                                $(btn).live('click',function(){
+                                    top.layer.closeAll();
+                                });
+                                $.post('?c=fin&a=withdraw',{flag:"ip_chk",op:"doWithdraw"},function(){});
+                            } else {
+                                top.layer.alert("错误号:"+response.errno+","+response.errstr,{icon:7});
+                                if(response.errno == 10){
+                                    $.post('?c=fin&a=withdraw',{flag:"ip_chk",op:"doWithdraw"},function(){});
+                                }
+                                return false;
+                            }
+                        }
+                    })
+                    var disonckick=setInterval(function(){
+                    				Flag=0;
+                    				if(Flag==0){
+                    					clearInterval(disonckick);
+                    				}
+                    			},3000)
+                  }
+                });
+        </script>
+     <!--   <script language="javascript">
+            InitArea("province", "city", "country", arrProvince, arrCity, arrCountry, "", "", "");
+        </script>-->
+    </body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE HTML>    <!-- 团队即时报表 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages default_operate_pageheight">
+        <div class="default_record_search">
+            <form name="form1" id="form1" action="" method="GET">
+                <ul>
+                    <li>
+                        <label class="margin_left_fortyone">用户名：</label>
+                        <input name="username" class="default_common_input" type="text"/>
+                    </li>
+                    <li>
+                        <input type="hidden" name="c" value="user"/>
+                        <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                        <input type="hidden" id="sortKey"  name="sortKey" value="<?php echo $sortKey; ?>" >
+                        <input type="hidden" id="sortDirection" name="sortDirection" value="<?php echo $sortDirection ?>"/>
+                        <input type="submit" value="搜索" class="default_record_searchbtn">
+                    </li>
+                    <li>
+                        <label class="margin_left_thirty"><?php echo $userLevelName; ?></label>
+                    </li>
+                    <li class="float_right">
+                        <div class="user-page-boxs">
+                            <?php echo $pageList; ?>
+                        </div>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+        <table class="defoperate_record_tablist">
+            <thead>
+            <tr class="defoperate_record_tabtitle">
+                <th width="7%">账户</th>
+                <th width="8%" onclick="javascript:switch_sort('total_deposit');"><span class="Orderby">充值总额<i class="<?php if ($sortKey == 'total_deposit' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_deposit' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <th width="8%" onclick="javascript:switch_sort('total_withdraw');"><span class="Orderby">提现总额<i class="<?php if ($sortKey == 'total_withdraw' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_withdraw' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <th width="8%" onclick="javascript:switch_sort('total_amount');"><span class="Orderby">彩票投注<i class="<?php if ($sortKey == 'total_amount' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_amount' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <th width="8%" onclick="javascript:switch_sort('total_prize');"><span class="Orderby">彩票返奖<i class="<?php if ($sortKey == 'total_prize' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_prize' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <th width="8%" onclick="javascript:switch_sort('total_rebate');"><span class="Orderby">彩票返点<i class="<?php if ($sortKey == 'total_rebate' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_rebate' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                <!--<th width="8%" onclick="javascript:switch_sort('total_promo_active');"><span class="Orderby">平台活动<i class="<?php if ($sortKey == 'total_promo_active' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_promo_active' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>-->
+                <th width="8%" onclick="javascript:switch_sort('total_win');"><span class="Orderby">彩票盈亏<i class="<?php if ($sortKey == 'total_win' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_win' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <?php
+                // 定义小数位数
+                $decimals = 3;
+            ?>
+
+            <?php if ($flag): ?>
+                <tr>
+                    <td>
+                        <?php if ($self['level'] != 10): ?>
+                            <?php echo $self['username']; ?>(自己)
+                        <?php else: ?>
+                            <?php echo $self['username']; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo number_format($self['total_deposit'], $decimals); ?></td>
+                    <td><?php echo number_format($self['total_withdraw'], $decimals); ?></td>
+                    <td><?php echo number_format($self['total_amount'], $decimals); ?></td>
+                    <td><?php echo number_format($self['total_prize'], $decimals); ?></td>
+                    <td><?php echo number_format($self['total_rebate'], $decimals); ?></td>
+                    <!--<td><?php echo number_format($self['total_promo_active'], $decimals); ?></td>-->
+                    <td><?php echo number_format($self['total_win'], $decimals); ?></td>
+                </tr>
+                <?php foreach ($curPageTeamReport as $v): ?>
+                    <tr>
+                        <td>
+                            <?php if ($v['level'] != 10): ?>
+                                <a href="/?c=user&a=<?php echo ACTION; ?>&username=<?php echo $v['username']; ?>"><?php echo $v['username']; ?></a>
+                            <?php else: ?>
+                                <?php echo $v['username']; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td><?php echo number_format($v['total_deposit'], $decimals); ?></td>
+                        <td><?php echo number_format($v['total_withdraw'], $decimals); ?></td>
+                        <td><?php echo number_format($v['total_amount'], $decimals); ?></td>
+                        <td><?php echo number_format($v['total_prize'], $decimals); ?></td>
+                        <td><?php echo number_format($v['total_rebate'], $decimals); ?></td>
+                        <!--<td><?php echo number_format($v['total_promo_active'], $decimals); ?></td>-->
+                        <td><?php echo number_format($v['total_win'], $decimals); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+
+            <?php else: ?>
+                <th colspan="9" class="text_center">您无权查看此用户或此用户不存在！</th>
+            <?php endif; ?>
+
+            </tbody>
+        </table>
+    </div>
+
+    <table class="bet_count_layer">
+        <tbody>
+        <tr class="bet_count_thispage defoperate_record_tablist">
+            <td width="7%" class="count_first_line rose_red_font">本页合计：</td>
+            <td width="8%"><?php echo number_format($pageData['page_deposit'], $decimals); ?></td>
+            <td width="8%"><?php echo number_format($pageData['page_withdraw'], $decimals); ?></td>
+            <td width="8%"><?php echo number_format($pageData['page_amount'], $decimals); ?></td>
+            <td width="8%"><?php echo number_format($pageData['page_prize'], $decimals); ?></td>
+            <td width="8%"><?php echo number_format($pageData['page_rebate'], $decimals); ?></td>
+            <!--<td width="8%"><?php echo number_format($pageData['page_promo_active'], $decimals); ?></td>-->
+            <td width="8%"><?php echo number_format($pageData['page_win'], $decimals); ?></td>
+        </tr>
+        <tr class="defoperate_record_tablist">
+            <td class="count_first_line rose_red_font">总计：</td>
+            <td><?php echo number_format($teamTotal['team_total_deposit'], $decimals); ?></td>
+            <td><?php echo number_format($teamTotal['team_total_withdraw'], $decimals); ?></td>
+            <td><?php echo number_format($teamTotal['team_total_amount'], $decimals); ?></td>
+            <td><?php echo number_format($teamTotal['team_total_prize'], $decimals); ?></td>
+            <td><?php echo number_format($teamTotal['team_total_rebate'], $decimals); ?></td>
+            <!--<td><?php echo number_format($teamTotal['team_total_promo_active'], $decimals); ?></td>-->
+            <td><?php echo number_format($teamTotal['team_total_win'], $decimals); ?></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="common_pages ten_height">&nbsp;</div>
+
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $(function() {
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('#regStartDate').val('<?php echo $regStartDate; ?>');
+        $('#regEndDate').val('<?php echo $regEndDate; ?>');
+        $('select[name=range]').val('<?php echo $range; ?>');
+
+    });
+
+    function switch_sort(key) {
+        var old_key = $('#sortKey').val();
+        if (key == old_key) {
+            $('#sortDirection').val(-1 * $('#sortDirection').val());
+        } else {
+            $('#sortDirection').val(-1);
+            $('#sortKey').val(key);
+        }
+        //submit
+        $('#form1').submit();
+    }
+</script>
+</body>
+</html>

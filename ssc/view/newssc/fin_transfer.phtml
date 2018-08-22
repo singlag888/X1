@@ -1,0 +1,71 @@
+<?php $this->import("head"); ?>
+<script>
+    //显示真人游戏余额
+    function showBBINBalance() {
+        $('#bbinBalance').html('<img src="<?php echo $imgCdnUrl ?>/images/loader4.gif" width=16 height=16 align=absmiddle>');
+        $.post(
+        'index.jsp?c=user&a=showBBINBalance',
+        {'key1':'value1'},
+        function(result){
+            //console.info(result);
+            eval("data="+result+";");
+            if (data.balance >= 0) {
+                $('#bbinBalance').html(data.balance);
+            }
+            else {
+                if (data.balance == -2) {
+                    $('#bbinBalance').html('您尚未激活真人游戏帐户,请<a href="index.jsp?c=game&a=playBBIN">点击此处</a>激活');
+                }
+                else if (data.balance == -44444) {
+                    $('#bbinBalance').html("例行维护中，请稍候再试");
+                }
+                else {
+                    $('#bbinBalance').html("系统繁忙，请稍候再试");
+                }
+            }
+        });
+    }
+
+    $(function(){
+        <?php if ($user['bbin_username']): ?>
+            $('#bbinBalance').html('<span onclick="showBBINBalance();" style="cursor:pointer;">点此刷新</span>')
+        <?php else: ?>
+            $('#bbinBalance').html('您尚未激活真人游戏帐户,请<a href="index.jsp?c=game&a=playBBIN">点击此处</a>激活');
+        <?php endif; ?>
+    });
+</script>
+
+<!--content开始-->
+<ul class="title">
+    <li>户内转帐</li>
+</ul>
+<form method="post" action="index.jsp?c=fin&a=transfer" id="form1" name="form1">
+    <div class="recordsBox" style="height:604px;">
+        <div style="height:600px;" class="Transfer">
+            <div class="passwordTitle">
+                <ul>
+                    <p id="rebateLevel">转帐平台选择</p>
+                </ul>
+            </div>
+            <ul class="passwordNeir">
+                <li><span class="width_title ">真人帐户余额:</span> <span class="width_Money" id="bbinBalance"></span></li>
+                <li><span class="width_title">用户转帐选择:</span> <span class="width_span">
+                        <select name="direction" class="Transfer">
+                            <option value="3">转入真人游戏帐户</option>
+                            <option value="4">从真人游戏帐户转出</option>
+                        </select>
+                    </span> <span class="tisBg"></span></li>
+                <li><span class="width_title">转帐金额:</span> <span class="width_span">
+                        <input type="number" name="amount">
+                    </span><span class="tisBg">*&nbsp;必须是整数</span></li>
+                <li class="button_Transfer">
+                    <input type="hidden" name="op" value="doTransfer"/><input type="submit" name="submit" value="确认" class="btnTow"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+</form>
+
+<!--content结束-->
+
+<?php $this->import("foot"); ?>

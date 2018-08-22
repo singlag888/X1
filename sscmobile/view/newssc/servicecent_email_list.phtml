@@ -1,0 +1,38 @@
+<div class="servicecent_middle_part">
+
+  <form name="form1" id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+       <!-- <div class="email_title service_defmiddle_title">这是一封邮件~<span class="email_arrow">&gt;</span></div> -->
+       <ul class="margin_top_ten email_title_list">
+          <?php if ($messages): ?>
+            <?php foreach ($messages as $v): ?>
+              <li <?php if ($v['has_read'] != '1'): ?>style="font-weight: bold;"<?php endif; ?>>
+                <input style="width: 0.8rem; height: 0.8rem;" type="checkbox" value="<?php echo $v['mt_id']; ?>" id="idArr" name="deleteItems[]">
+                <a href="index.jsp?c=user&a=viewMsg&msg_id=<?php echo $v['msg_id']; ?>&msgType=receive" onclick="show(this);return false;"><label><?php echo htmlspecialchars($v['title']); ?></label><span><?php echo date('Y-m-d',strtotime($v['create_time'])); ?></span></a>
+                <i>&gt;</i>
+              </li>
+            <?php endforeach; ?>
+          <?php else: ?>
+            <li style="text-align:center;">暂无数据显示</li>
+          <?php endif; ?>
+       </ul>
+       <input type="hidden" name="op" value="delete"/>
+       <div class="TextAlignC">
+       <input type="submit" value="删除" class="listdetBtn" onclick="return submitCheck()" />
+       </div>
+    </form>
+    <script type="text/javascript">
+    function submitCheck() {
+      if ($(':checkbox:checked[id!=\'ca\']').length == 0) {
+          top.layer.alert('请选择要删除的条目');
+          return false;
+        }
+    }
+    function show(e) {
+        var url = $(e).attr("href");
+        $("#showMailIframe").attr("src",url);
+        $(e).parent('li').click(function(){
+          $(".email_content_layer").addClass("DisplayBlock");
+        })
+    }
+    </script>
+</div>

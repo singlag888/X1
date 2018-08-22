@@ -1,0 +1,74 @@
+<!DOCTYPE HTML> <!-- 服务中心发件箱 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css?v=<?php echo time(); ?>" />
+         <?php $this->import('public_cssjs') ?>
+</head>
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+
+        <div class="email_content_sendbox">
+              <form name="form1" id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+                  <!-- 列表数据 -->
+                  <div class="email_table">
+                     <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tab01">
+                      <colgroup>
+                          <col width="6%" />
+                          <col width="19%" />
+                          <col width="55%" />
+                          <col />
+                      </colgroup>
+                      <tr>
+                          <th><input type="checkbox" onclick="checkAll('ca')" id="ca" name="ca"></th>
+                          <th>收件人</th>
+                          <th>标题</th>
+                          <th>时间</th>
+                      </tr>
+                      <?php if ($messages): ?>
+                          <?php foreach ($messages as $v): ?>
+                              <tr <?php if ($v['has_read'] != '1'): ?>style="font-weight: bold;"<?php endif; ?>>
+                                  <td><input type="checkbox" value="<?php echo $v['msg_id']; ?>" id="idArr" name="deleteItems[]"></td>
+                                  <td><?php foreach ($v['targets'] as $vv): ?><?php if ($vv['to_user_id']) echo $users[$vv['to_user_id']]['username'];else echo "系统管理员"; ?>,<?php endforeach; ?></td>
+                                  <td><a class="mail_tit" href="index.jsp?c=user&a=viewMsg&msg_id=<?php echo $v['msg_id']; ?>&msgType=send" onclick="show(this);return false;"><?php echo htmlspecialchars($v['title']); ?></a></td>
+                                  <td><?php echo $v['create_time']; ?></td>
+                              </tr>
+                          <?php endforeach; ?>
+                      <?php else: ?>
+                          <tr>
+                              <th colspan="4" class="bom">暂无数据显示</th>
+                          </tr>
+                      <?php endif; ?>
+                  </table>
+                  </div>
+                 <div>
+                    <input type="hidden" name="op" value="delete"/>
+                  <!-- 操作 -->
+                  <input type="submit" value="删除" class="default_navyblue_btn msgsend_btn" onclick="if ($(':checkbox:checked[id!=\'ca\']').length == 0) {
+                        top.layer.alert('请选择要删除的条目');
+                        return false
+                    }" />
+                 </div>                 
+              </form>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript">
+    function show(e) {
+        $('.email_content_sendbox').html('<iframe id="showMailIframe" src="javascript:void(0);" width="100%" height="538" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" border="0" scrolling="no"></iframe>')
+        var url = $(e).attr("href");
+        $("#showMailIframe").attr("src",url);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.UfuPay.submit();">
+<form name='UfuPay' id="diy" action='<?php echo $postFields['url']; ?>' method='post'>
+    <input type="hidden" name="merchantId"		  value="<?php echo $postFields['merchantId'] ?>" />
+    <input type="hidden" name="notifyUrl" value="<?php echo $postFields['notifyUrl'] ?>" />
+    <input type="hidden" name="outOrderId"     value="<?php echo $postFields['outOrderId'] ?>"/>
+    <input type="hidden" name="subject"      value="<?php echo $postFields['subject'] ?>"/>
+    <input type="hidden" name="transAmt"  value="<?php echo $postFields['transAmt'] ?>"/>
+    <input type="hidden" name="sign" value="<?php echo $postFields['sign'] ?>"/>
+    <input type="hidden" name="returnUrl" value="<?php echo $postFields['returnUrl'] ?>"/>
+    <input type="hidden" name="body" value="<?php echo $postFields['body'] ?>"/>
+    <input type="hidden" name="defaultBank" value="<?php echo $postFields['defaultBank'] ?>"/>
+    <input type="hidden" name="channel" value="<?php echo $postFields['channel'] ?>"/>
+    <input type="hidden" name="cardAttr" value="<?php echo $postFields['cardAttr'] ?>"/>
+</form>
+</body>
+</html>

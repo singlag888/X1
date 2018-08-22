@@ -1,0 +1,45 @@
+<?php $this->import("head"); ?>
+    <script>
+        $('.leftSpan').html('<a href="./" target="_top">管理中心</a> ->层级人员列表')
+    </script>
+<div id="query">
+</div>
+
+<div class="list-div mt20" id="listDiv">
+    <table class="table table-responsive table-bordered mainList" >
+        <thead>
+        <tr>
+            <td>user_id</td>
+            <td>登陆名</td>
+            <td>级别</td>
+            <td>真实姓名</td>
+            <td>昵称</td>
+            <td>用户余额</td>
+        </tr>
+        </thead>
+        <?php foreach ($userList as $v): ?>
+        <tr>
+            <td><?php echo $v['user_id'];?></td>
+            <td><?php echo $v['username'];?></td>
+            <td>
+                <?php
+                if($v['level'] === 0)
+                {
+                    echo '总代';
+                } elseif($v['level'] === 100)
+                {
+                    echo '会员';
+                }else{
+                    echo $v['level'].'代';
+                }
+                ?>
+            </td>
+            <td><?php echo $v['real_name'];?></td>
+            <td><?php echo $v['nick_name'];?></td>
+            <td><?php echo $v['balance'];?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?>
+<?php $this->import("foot"); ?>

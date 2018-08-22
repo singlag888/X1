@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>   <!-- 服务中心下银行卡相关 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <div class="help_center_content">
+           <div class="latestnew_cont_title help_center_title">银行卡相关</div>
+           <div class="help_center_txt">
+              <span class="help_center_subtitle">1、绑定银行卡：</span>
+              <p>一个账号只可绑定一张卡，同一张卡同时只能绑定在一个平台账号上，不能在其他账号上再次绑定该银行卡。</p>
+              <p>客户在前台无法看到本人绑定的银行卡账户名和开户行地址，绑定完成后修改银行卡3个小时后才能提款。</p>
+              <p>解绑或者删除银行卡都需要输入安全码信息。</p>
+              <span class="help_center_subtitle">2、锁定银行卡：</span>
+              <p>当用户绑卡成功后，系统将会自动锁定，锁定3小时候即可正常提款，锁定后可通过安全码解绑并修改银行卡号信息（活动期间除外）。</p>
+              <span class="help_center_subtitle">3、注意事项：</span>
+              <p>（1）请务必正确填写开户行和银行卡号码、匹配姓名。匹配姓名作为取款、重置密码等凭证，用户不能自行修改。</p>
+              <p>（2）银行卡资料仅作取款用，在注册时可以不填，不过在提款之前请务必填写详细。姓名必须与银行卡户名相同，否则提款将不成功。</p>
+           </div>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

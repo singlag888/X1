@@ -1,0 +1,50 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+    <script>
+        //预设查询值
+        $(document).ready(function(){
+
+        });
+    </script>
+    <div class="list-div mt10" id="listDiv">
+        <form class="form-top">
+            <table class="table table-responsive table-bordered mainList" width="100%">
+                <thead>
+                <tr>
+                    <td>article_id</td>
+                    <td>标题</td>
+                    <td>所属分类</td>
+                    <td>建立时间</td>
+                    <td>状态</td>
+                    <td>操作</td>
+                </tr>
+                </thead>
+                <?php foreach ($articles as $v): ?>
+                    <tr>
+                        <td><?php echo $v['article_id']; ?></td>
+                        <td><?php echo $v['title']; ?></td>
+                        <td><?php echo $v['category_name']; ?></td>
+                        <td><?php echo $v['create_time']; ?></td>
+                        <td><?php if($v['status'] == 1): ?>正常<?php else: ?><font color="red">标记删除</font><?php endif; ?></td>
+                        <td>
+                            <?php if ($canEdit): ?>
+                                <a class="btn btn-mini btn-info" href="./?c=article&a=editArticle&article_id=<?php echo $v['article_id']; ?>">编辑</a>
+                            <?php endif; ?>
+                            <?php if ($canDelete): ?>
+                                <a class="btn btn-mini btn-info" href="./?c=article&a=deleteArticle&article_id=<?php echo $v['article_id']; ?>" onclick="return confirm('真的要删除？');">删除</a>
+                            <?php endif; ?>
+                            <?php if($v['is_stick'] == 1): ?>
+                                <a class="btn btn-mini btn-info" href="./?c=article&a=topArticle&is_stick=0&article_id=<?php echo $v['article_id']; ?>">解除置顶</a>
+                            <?php else: ?><a class="btn btn-mini btn-info" href="./?c=article&a=topArticle&is_stick=1&article_id=<?php echo $v['article_id']; ?>">置顶</a>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+    </div>
+    <div class="pageTal"><?php echo $pageList; ?></div>
+    <div class="tip">
+    </div>
+
+<?php $this->import("foot"); ?>

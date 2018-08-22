@@ -1,0 +1,57 @@
+<?php $this->import("head"); ?>
+<div class="list-div add-main" id="addDiv">
+<form name="form1" id="form1" action="?c=user&a=editRebate" method="post">
+<table class="table table-responsive table-bordered" style="width:50%;">
+    <tr>
+        <td colspan="2" class="rowTitle">
+             <b>修改返点</b>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb" width="20%">用户id</td>
+        <td><?php echo $user['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">用户名</td>
+        <td><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">用户类型</td>
+        <td>
+            <?php if ($user['level'] == 0): ?>总代
+            <?php elseif ($user['level'] == 1): ?>一代
+            <?php elseif ($user['level'] < 10): ?>代理
+            <?php else: ?>会员
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">返点</td>
+        <td>
+            <select class="input-md form-control" name="prize_group">
+                <?php foreach ($aPrizeMode as $prize_mode=>$rebate): ?>
+                <option value="<?php echo $prize_mode; ?>" <?php if ($prize_mode == $userPrizeMode) echo 'selected'; ?>><?php echo $prize_mode.'/'.$rebate; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+    </tr>
+<!--    <tr>
+        <td>修改下属团队</td>
+        <td><input type="checkbox"  name="editchildrent" value="1"/></td>
+    </tr>-->
+    <tr>
+        <td colspan="2">
+           <div style="width:100%;margin:0 auto;text-align:center;">
+                <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>" />
+                <input type="hidden" name="op" value="doEditRebate" />
+                <input class="btn btn-info submit" style="width: 100px;" type="button"  name="submitBtn" value="修改" onclick="if(confirm('确定要修改该用户的返点吗？')) {this.form.submit();}"/>
+            </div> 
+        </td>
+    </tr>
+
+</table>
+
+
+</form>
+</div>
+<?php $this->import("foot"); ?>

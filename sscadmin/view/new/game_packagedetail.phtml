@@ -1,0 +1,120 @@
+<?php $this->import("head"); ?>
+<div class="list-div" id="addDiv" style="width: 60%;">
+    <h3 class="rowTitle"><?php echo $package['xgame'] ? '(信)' : ''; ?>订单编号：<?php echo $package['wrap_id']; ?></h3>
+    <table  class="table table-responsive  table-bordered table-hover" cellpadding="0" cellspacing="0" >
+    <tr>
+        <td>投注用户</td>
+        <td>
+            <?php echo $user['username']; ?>
+            <?php if ($user['status'] == 0): ?><font color="red"><b>[已删除]</b></font>
+            <?php elseif ($user['status'] == 1): ?><font color="red"><b>[已冻结]</b></font>
+            <?php endif; ?>
+        </td>
+        <td>游戏</td>
+        <td><?php echo $lottery['cname']; ?> 第 <?php echo $package['issue']; ?> 期</td>
+    </tr>
+    <tr>
+        <td>单倍注数</td>
+        <td><?php echo $package['single_num']; ?></td>
+        <td>投注倍数</td>
+        <td><?php echo $package['multiple']; ?></td>
+    </tr>
+    <tr>
+        <td>模式</td>
+        <td><?php echo $GLOBALS['cfg']['modes'][strval(floatval($package['modes']))]; ?>模式</td>
+        <td>是否追号</td>
+        <td><?php if ($package['trace_id'] > 0): ?>是<?php else: ?>否<?php endif; ?></td>
+    </tr>
+    <tr>
+        <td>总金额</td>
+        <td><?php echo $package['amount']; ?></td>
+        <td>奖金系列</td>
+        <td><?php echo $prizeMode; ?>系列</td>
+    </tr>
+    <tr>
+        <td>投注时间</td>
+        <td><?php echo $package['create_time']; ?></td>
+        <td>开奖号码</td>
+        <td><?php if (!$openCode) echo '未开奖'; else echo $openCode; ?></td>
+    </tr>
+     <tr>
+        <td>截止时间</td>
+        <td><?php echo $lotteryIssues[$package['issue']]['end_sale_time']; ?></td>
+        <td>订单状态</td>
+        <td>
+            <?php if ($package['cancel_status'] == 0): ?>
+                <?php if ($package['check_prize_status'] == 1): ?>已中奖
+                <?php elseif ($package['check_prize_status'] == 2): ?>未中奖
+                <?php else: ?>等待开奖
+                <?php endif; ?>
+            <?php else: ?>
+                <b>
+                    <?php if ($package['cancel_status'] == 1): ?>个人撤单
+                    <?php elseif ($package['cancel_status'] == 2): ?>追中撤单
+                    <?php elseif ($package['cancel_status'] == 3): ?>出号撤单
+                    <?php elseif ($package['cancel_status'] == 4): ?>未开撤单
+                    <?php elseif ($package['cancel_status'] == 9): ?>系统撤单
+                    <?php endif; ?>
+                </b>
+                <br/>本订单已由 <?php echo $admins[$package['cancel_admin_id']]['username']; ?> 于 <?php echo $package['cancel_time']; ?> 进行撤单。
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td>记录最后更新时间</td>
+        <td><?php echo $package['ts']; ?></td>
+        <td>中奖金额</td>
+        <td><?php echo $package['prize']; ?></td>
+    </tr>
+</table>
+
+    <h4>中奖金额计算公式：当前系列/1700*基准奖金*元角分模式*倍数</h4>
+    <h4>如某订单是1920系列，后二组选，角模式，买4倍，则最终奖金是 1920/1700*85*0.1*4=38.4 元</h4>
+
+    <h3 class="rowTitle">订单明细</h3>
+    <table class="table table-responsive table-bordered table-hover" cellpadding="0" cellspacing="0" style="word-break:break-all;word-wrap:break-word;">
+        <form name="form1" id="form1" action="?c=game&a=cacelPackage" method="post">
+    <tr>
+        <td>玩法</td>
+        <td width="50%">投注号码</td>
+        <td>投注注数</td>
+        <td>投注金额</td>
+        <td>可能奖金</td>
+        <td>实际奖金</td>
+    </tr>
+    <?php foreach ($projects as $v): ?>
+    <tr>
+        <td><?php echo $methods[$v['method_id']]['cname']; ?></td>
+        <td><?php
+        if($methods[$v['method_id']]['name'] == 'JSSTTX'){
+            echo '111_222_333_444_555_666';
+        } elseif($methods[$v['method_id']]['name'] == 'JSSLTX'){
+            echo '123_234_345_456';
+        } else {
+            echo $v['code'];
+        }
+        ?></td>
+        <td><?php echo $v['single_num']; ?></td>
+        <td><?php echo $v['amount']; ?></td>
+        <td><?php echo $v['will_prize']; ?></td>
+        <td><?php echo $v['prize']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td></td>
+        <td colspan="5">
+            <div style="width: 60%;margin:0 auto;text-align: center;">
+                <input class="btn btn-info  submit" type="button" class="submit" onclick="javascript:window.close();" value="关闭"/>
+            <?php if ($package['cancel_status'] == 0): ?>
+            <input class="btn btn-info submit" type="button"  name="button" value="撤单" onclick="if(confirm('真的要撤单吗？')) {this.form.submit();}"/>
+            <?php endif; ?>
+            <input type="hidden" name="package_id" value="<?php echo $package['package_id']; ?>" />
+            <input type="hidden" name="user_id" value="<?php echo $package['user_id']; ?>" />
+            </div>
+        </td>
+    </tr>
+    </form>
+    </table>
+
+</div>
+<?php $this->import("foot"); ?>

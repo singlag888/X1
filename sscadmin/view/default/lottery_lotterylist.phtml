@@ -1,0 +1,125 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div mt20" id="listDiv">
+    <form class="form-top">
+        <table class="table table-responsive table-bordered">
+        <thead>
+                <tr>
+                    <td>lottery_id</td>
+                    <td>名称</td>
+                    <td>显示名称</td>
+                    <td>类型</td>
+                    <td>单期周期</td>
+                    <td>允许录号时间</td>
+                    <td>奖期规则</td>
+                    <td>排序</td>
+                    <td>状态</td>
+                    <td>操作</td>
+                </tr>
+        </thead>
+        <?php foreach ($lotterys as $v): ?>
+                <tr>
+                    <td><?php echo $v['lottery_id']; ?></td>
+                    <td><?php echo $v['name']; ?></td>
+                    <td><?php echo $v['cname']; ?></td>
+                    <td>
+                        <?php if ($v['lottery_type'] == 1): ?>数字类型
+                        <?php elseif ($v['lottery_type'] == 2): ?>乐透同区型
+                        <?php elseif ($v['lottery_type'] == 3): ?>乐透分区型(蓝红球)
+                        <?php elseif ($v['lottery_type'] == 4): ?>低频3D
+                        <?php elseif ($v['lottery_type'] == 5): ?>基诺型
+                        <?php elseif ($v['lottery_type'] == 6): ?>快三型
+                        <?php elseif ($v['lottery_type'] == 7): ?>快乐扑克型
+                        <?php elseif ($v['lottery_type'] == 8): ?>pk拾
+                        <?php elseif ($v['lottery_type'] == 9): ?>六合彩
+                        <?php elseif ($v['lottery_type'] == 10): ?>PC蛋蛋
+                        <?php endif; ?>
+                    </td>
+                    <td><?php foreach ($v['settings'] as $vv): ?>
+                        <?php echo $vv['cycle']; ?>&nbsp;
+                        <?php endforeach; ?>
+                    </td>
+                    <td><?php foreach ($v['settings'] as $vv): ?>
+                        <?php echo $vv['code_time']; ?>&nbsp;
+                        <?php endforeach; ?>
+                    </td>
+                    <td><?php echo $v['issue_rule']; ?></td>
+                    <td><?php echo $v['sort']; ?></td>
+                    <td>
+                        <?php if ($v['status'] == 8): ?>使用中
+                        <?php else: ?>禁用
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <a class="btn btn-mini btn-info" href="./?c=lottery&a=editLottery&lottery_id=<?php echo $v['lottery_id']; ?>">修改</a>&nbsp;
+                        <a class="btn btn-mini btn-info" href="./?c=method&a=groupList&lottery_id=<?php echo $v['lottery_id']; ?>">玩法组</a>&nbsp;
+                        <a class="btn btn-mini btn-info" href="./?c=prize&a=groupList&lottery_id=<?php echo $v['lottery_id']; ?>">奖金组</a>&nbsp;
+                        <a class="btn  btn-mini btn-info" href="./?c=lottery&a=issueList&lottery_id=<?php echo $v['lottery_id']; ?>">奖期</a>&nbsp;
+                        <!--<a href="./?c=lottery&a=deleteLottery&lottery_id=<?php echo $v['lottery_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>&nbsp; -->
+                    </td>
+                </tr>
+        <?php endforeach; ?>
+    </table>
+    </form>
+<!--<table class="mainList" width="100%">
+    <thead>
+    <tr>
+    	<td>lottery_id</td>
+        <td>名称</td>
+        <td>显示名称</td>
+        <td>类型</td>
+        <td>单期周期</td>
+        <td>允许录号时间</td>
+        <td>奖期规则</td>
+        <td>排序</td>
+        <td>状态</td>
+        <td>操作</td>
+    </tr>
+    </thead>
+    <?php foreach ($lotterys as $v): ?>
+    <tr>
+    	<td><?php echo $v['lottery_id']; ?></td>
+        <td><?php echo $v['name']; ?></td>
+        <td><?php echo $v['cname']; ?></td>
+        <td>
+            <?php if ($v['lottery_type'] == 1): ?>数字类型
+            <?php elseif ($v['lottery_type'] == 2): ?>乐透同区型
+            <?php elseif ($v['lottery_type'] == 3): ?>乐透分区型(蓝红球)
+            <?php elseif ($v['lottery_type'] == 4): ?>低频3D
+            <?php elseif ($v['lottery_type'] == 5): ?>基诺型
+            <?php elseif ($v['lottery_type'] == 6): ?>快三型
+            <?php elseif ($v['lottery_type'] == 7): ?>快乐扑克型
+            <?php elseif ($v['lottery_type'] == 8): ?>pk拾
+            <?php elseif ($v['lottery_type'] == 9): ?>六合彩
+            <?php elseif ($v['lottery_type'] == 10): ?>PC蛋蛋
+            <?php endif; ?>
+        </td>
+        <td><?php foreach ($v['settings'] as $vv): ?>
+            <?php echo $vv['cycle']; ?>&nbsp;
+            <?php endforeach; ?>
+        </td>
+        <td><?php foreach ($v['settings'] as $vv): ?>
+            <?php echo $vv['code_time']; ?>&nbsp;
+            <?php endforeach; ?>
+        </td>
+        <td><?php echo $v['issue_rule']; ?></td>
+        <td><?php echo $v['sort']; ?></td>
+        <td>
+            <?php if ($v['status'] == 8): ?>使用中
+            <?php else: ?>禁用
+            <?php endif; ?>
+        </td>
+        <td>
+            <a href="./?c=lottery&a=editLottery&lottery_id=<?php echo $v['lottery_id']; ?>">修改</a>&nbsp;
+            <a href="./?c=method&a=groupList&lottery_id=<?php echo $v['lottery_id']; ?>">玩法组</a>&nbsp;
+            <a href="./?c=prize&a=groupList&lottery_id=<?php echo $v['lottery_id']; ?>">奖金组</a>&nbsp;
+            <a href="./?c=lottery&a=issueList&lottery_id=<?php echo $v['lottery_id']; ?>">奖期</a>&nbsp;
+            <a href="./?c=lottery&a=deleteLottery&lottery_id=<?php echo $v['lottery_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>&nbsp; -->
+        <!--</td>
+    </tr>
+    <?php endforeach; ?>
+
+</table>-->
+</div>
+
+<?php $this->import("foot"); ?>

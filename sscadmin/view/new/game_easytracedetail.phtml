@@ -1,0 +1,67 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <META http-equiv="Pragma" content="no-cache" />
+        <link href="<?php echo $imgCdnUrl ?>/css/default.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/bootstrap/css/bootstrap.min.css">
+        <style type="text/css">
+            .easyTrace td{
+                text-align: center;vertical-align: middle;
+            }
+        </style>
+    </head>
+<body>
+    <h3 class="rowTitle">订单明细</h3>
+    <table class="table table-bordered table-responsive easyTrace" cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tr>
+        <td width="25%">玩法名称</td>
+        <td width="50%">投注内容</td>
+        <td width="25%">单倍注数</td>
+    </tr>
+    <?php foreach ($projects as $v): ?>
+    <tr>
+        <td width="25%"><?php echo $methods[$v['method_id']]['cname']; ?></td>
+        <td width="50%"><?php echo $v['code']; ?></td>
+        <td width="25%"><?php echo $v['single_num']; ?></td>
+
+    </tr>
+    <?php endforeach; ?>
+    </table>
+
+    <h3 class="rowTitle">各期追号详情</h3>
+      <table class="table table-bordered table-responsive easyTrace" cellpadding="0" cellspacing="0" width="100%" border="0">
+        <tr>
+            <td width="15%">追号期号</td>
+            <td width="15%">开奖号码</td>
+            <td width="15%">当期倍数</td>
+            <td width="15%">投注金额</td>
+            <td width="15%">中奖金额</td>
+            <td width="15%">订单状态</td>
+        </tr>
+        <?php foreach ($packages as $v): ?>
+            <tr>
+                <td width="15%"><?php echo $v['issue']; ?></td>
+                <td width="15%"><?php if (isset($openCodes[$v['issue']])): ?><?php echo $openCodes[$v['issue']]; ?><?php else: ?> &nbsp; <?php endif; ?></td>
+                <td width="15%"><?php echo $v['multiple']; ?></td>
+                <td width="15%"><?php echo $v['amount']; ?></td>
+                <td width="15%"><?php echo $v['prize']; ?></td>
+                <td width="15%"><?php if ($v['cancel_status'] > 0): ?>
+                            <?php if ($v['cancel_status'] == 1): ?>个人撤单
+                            <?php elseif ($v['cancel_status'] == 2): ?>追中撤单
+                            <?php elseif ($v['cancel_status'] == 3): ?>出号撤单
+                            <?php elseif ($v['cancel_status'] == 4): ?>未开撤单
+                            <?php elseif ($v['cancel_status'] == 9): ?>管理员撤单
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <?php if ($v['check_prize_status'] == 0): ?>未开奖
+                            <?php elseif ($v['check_prize_status'] == 1): ?>已中奖
+                            <?php else: ?>未中奖
+                            <?php endif; ?>
+                        <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+      </table>
+    </body>
+</html>

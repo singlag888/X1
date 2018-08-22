@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>代理管理</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href='index.jsp?c=user&a=childList' >会员管理</a></li>
+                            <li><a  href="index.jsp?c=user&a=childReport"  class="subcur">会员报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamNowReport">团队即时报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamDayReport">团队日结报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamWinReport">团队盈亏报表</a></li>
+                            <li><a href="index.jsp?c=fin&a=withdrawList">团队提现记录</a></li>
+                            <li><a href="index.jsp?c=fin&a=depositList">团队充值记录</a></li>
+                            <li><a href="index.jsp?c=fin&a=teamOrderList">团队帐变记录</a></li>
+                            <li><a href="index.jsp?c=user&a=regChild">注册下级</a></li>
+                            <li><a href="index.jsp?c=user&a=childPackageList">下级订单查询</a></li>
+                            <li><a href="index.jsp?c=user&a=teamPromos">优惠列表</a></li>
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <!-- 搜索栏 -->
+                            <div class="SearchBar">
+                                <form name="form1" id="form1" action="" method="GET">
+                                    <ul>
+                                        <li>
+                                            <label>用户名：</label>
+                                            <input name="username" class="txtStyle" type="text"/>
+                                        </li>
+                                        <li>
+                                            <label>游戏时间：</label>
+                                            <div class="MutiTxt">
+                                                <input size="12" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                                <em>到</em>
+                                                <input size="12" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <input type="hidden" name="c" value="user"/>
+                                            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                                            <input type="hidden" id="sortKey"  name="sortKey" value=""/>
+                                            <input type="hidden" id="sortDirection" name="sortDirection" value="1"/>
+                                            <input type="submit" value="查询" class="btnStyle m010">
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <div class="TabMutiScroll scrollbar">
+                            <table id="dataTable" style="width:1100px;" class="tab01 mutith"  border="0" cellspacing="0" cellpadding="0">
+            	<tr id='th_01'>
+                  <th rowspan="2" onclick="javascript:switch_sort('username');"><span class="Orderby">帐号<i class="<?php if ($sortKey == 'username' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'username' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th rowspan="2">快捷方式</th>
+                  <th rowspan="2" onclick="javascript:switch_sort('user_inactive_days');"><span class="Orderby">不活跃天数<i class="<?php if ($sortKey == 'user_inactive_days' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'user_inactive_days' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th rowspan="2" onclick="javascript:switch_sort('user_balance');"><span class="Orderby">余额<i class="<?php if ($sortKey == 'user_balance' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'user_balance' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th rowspan="2" onclick="javascript:switch_sort('total_deposit');"><span class="Orderby">充值量<i class="<?php if ($sortKey == 'total_deposit' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_deposit' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th rowspan="2" onclick="javascript:switch_sort('total_withdraw');"><span class="Orderby">提款量<i class="<?php if ($sortKey == 'total_withdraw' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_withdraw' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th colspan="5">彩票</th>
+             <!--     <th colspan="3">休闲游戏</th>-->
+                </tr>
+                <tr id='th_02'>
+                  <th  onclick="javascript:switch_sort('total_amount');"><span class="Orderby">团队购买量<i class="<?php if ($sortKey == 'total_amount' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_amount' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('total_rebate');"><span class="Orderby">返点<i class="<?php if ($sortKey == 'total_rebate' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_rebate' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('total_contribute_rebate');"><span class="Orderby">下级佣金量<i class="<?php if ($sortKey == 'total_contribute_rebate' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_contribute_rebate' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('total_prize');"><span class="Orderby">中奖金额<i class="<?php if ($sortKey == 'total_prize' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'total_prize' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('profit_and_lost');"><span class="Orderby">投注盈亏<i class="<?php if ($sortKey == 'profit_and_lost' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'profit_and_lost' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('pt_buy_amount');"><span class="Orderby">团队购买量<i class="<?php if ($sortKey == 'pt_buy_amount' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'pt_buy_amount' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('pt_prize');"><span class="Orderby">中奖金额<i class="<?php if ($sortKey == 'pt_prize' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'pt_prize' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                  <th  onclick="javascript:switch_sort('pt_game_win');"><span class="Orderby">游戏盈亏<i class="<?php if ($sortKey == 'pt_game_win' && $sortDirection == 1): ?>OrderbyUp<?php elseif ($sortKey == 'pt_game_win' && $sortDirection == -1): ?>OrderbyDown<?php else: ?>OrderbyBoth<?php endif; ?>"></i></span></th>
+                </tr>
+                                <?php if ($flag): ?>
+                                    <?php foreach ($childReport as $v): ?>
+                                        <tr title="<?php if ($v['username'] != $username): ?>直接下级<?php else: ?><?php echo $v['username']; ?>自己<?php endif; ?><?php if ($v['level'] < 10): ?>[代理]<?php else: ?>[会员]<?php endif; ?>">
+                                            <td>
+                                                <?php if ($v['username'] != $username): ?>
+                                                    <a href="index.jsp?c=user&a=<?php echo ACTION; ?>&username=<?php echo $v['username']; ?>&startDate=<?php echo $startDate; ?>&endDate=<?php echo $endDate; ?>"><?php echo $v['username']; ?></a>
+                                                <?php else: ?>
+                                                    <?php echo $v['username']; ?>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td><?php if ($v['username'] != $selfUsername): ?>
+                                                    <a href="index.jsp?c=user&a=showTeam&user_id=<?php echo $v['user_id']; ?>">团队</a> <a href="index.jsp?c=user&a=childPackageList&username=<?php echo $v['username']; ?>&include_childs=1&start_time=<?php echo $startDate; ?>&end_time=<?php echo $endDate; ?>">订单</a>
+                                                <?php endif; ?></td>
+                                            <td><?php echo $v['user_inactive_days']; ?></td>
+                                            <td><?php echo $teamBalance[$v['user_id']]['total_balance']; ?></td>
+                                            <td><?php echo number_format($teamDeposit[$v['user_id']]['total_deposit'], 2); ?></td>
+                                            <td><?php echo number_format($teamWithdraw[$v['user_id']]['total_withdraw'], 2); ?></td>
+                                            <td><?php echo number_format($v['total_amount'], 2); ?></td>
+                                            <td><?php echo number_format($v['total_rebate'], 4); ?></td>
+                                            <td><?php if ($v['username'] != $username): ?>
+                                                    <?php echo number_format($v['total_contribute_rebate'], 4); ?>
+                                                <?php else: ?>
+                                                    -
+                                                <?php endif; ?></td>
+                                            <td><?php echo number_format($v['total_prize'], 2); ?></td>
+                                            <td><?php echo number_format($v['total_rebate'] + $v['total_prize'] - $v['total_amount'], 2); ?></td>
+                                            <td><?php echo number_format(empty($v['pt_buy_amount'])?'0':$v['pt_buy_amount'], 2); ?></td>
+                                            <td><?php echo number_format(empty($v['pt_prize'])?'0':$v['pt_prize'], 2); ?></td>
+                                            <td><?php echo number_format(empty($v['pt_game_win'])?'0':$v['pt_game_win'], 2); ?></td>
+                                        </tr>
+
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>合计</td>
+                                        <td><?php echo number_format($totalInfo['balance'], 4); ?></td>
+                                        <td><?php echo number_format($totalInfo['deposit'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['withdraw'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['amount'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['rebate'], 4); ?></td>
+                                        <td><?php echo number_format($totalInfo['contribute_rebate'], 4); ?></td>
+                                        <td><?php echo number_format($totalInfo['prize'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['final'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['pt_buy_amount'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['pt_prize'], 2); ?></td>
+                                        <td><?php echo number_format($totalInfo['pt_game_win'], 2); ?></td>
+                                    </tr>
+                                <?php else: ?>
+                                    <th colspan="12" class="bom">您无权查看此用户的信息或此用户不存在！</th>
+                                <?php endif; ?>
+                            </table>
+                            </div>
+                            <!-- 分页 -->
+                            <div class="listTip">注：可以查询35天以内的数据</div>
+                            <!-- 分页end -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script> 
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+        <script>
+                                    $(function() {
+
+                                        //设置默认值
+                                        $('input[name=username]').val('<?php echo $username; ?>');
+                                        $('#startDate').val('<?php echo $startDate; ?>');
+                                        $('#endDate').val('<?php echo $endDate; ?>');
+                                        $('#sortDirection').val('<?php echo $sortDirection ?>');
+
+                                        $('thi').has('div.caret_point').hover(function() {
+                                            $(this).find('p:eq(0)').addClass('caret_up');
+                                            $(this).find('p:eq(1)').addClass('caret_down');
+                                        }, function() {
+                                            $(this).find('p:eq(0)').removeClass('caret_up');
+                                            $(this).find('p:eq(1)').removeClass('caret_down');
+                                        });
+                                        <?php if ($sortKey): ?>
+                                            $('#sortKey').val('<?php echo $sortKey; ?>');
+                                        <?php endif; ?>
+                                    });
+                                    function switch_sort(key) {
+                                        var old_key = $('#sortKey').val();
+                                        if (key == old_key) {
+                                            $('#sortDirection').val(-1 * $('#sortDirection').val());
+                                        } else {
+                                            $('#sortDirection').val(-1);
+                                            $('#sortKey').val(key);
+                                        }
+                                        //submit
+                                        $('#form1').submit();
+                                    }
+        </script>
+
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<?php $this->import("head"); ?>
+    <script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+    <script src="<?php echo $imgCdnUrl ?>/js/layer-v2.4/layer.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("input[name=username]").val("<?php echo $username; ?>");
+        });
+    </script>
+    <form name="form1" id="form1" class="form-top" action="./" method="GET">
+        <div class="form-inline mt15">
+            <label for="radio2">用户名</label>
+            <input title="username" class="input-md form-control" name="username" size="10" />
+            <input type="hidden" name="c" value="egame"/>
+            <input type="hidden" name="a" value="balance"/>
+            <input type="hidden" title="action" class="input-md form-control" name="action" value="get_balance" />
+            <input class="btn btn-info submit" type="submit" name="submit" value="查询" style="width:90px"/>
+        </div>
+    </form>
+    <div class="list-div mt15" id="listDiv">
+        <table class="table table-responsive table-bordered mainList">
+            <thead>
+            <tr>
+                <td>用户</td>
+                <td>余额</td>
+            </tr>
+            </thead>
+            <tr>
+                <td><?php echo $username; ?></td>
+                <td><?php echo $balance; ?></td>
+            </tr>
+        </table>
+    </div>
+<?php $this->import('foot'); ?>

@@ -1,0 +1,51 @@
+<?php $this->import("head"); ?>
+<span class="mt10" style="display:inline-block;height:55px;line-height:22px;">
+    <b>注：支持3级人事等级</b><br/>
+    <b>允许的ip列表以逗号分割 ',' 如： 192.168.1.1,192.168.1.2 留空表示不限制</b>
+</span>
+<div class="list-div" id="listDiv">
+        <form name="form1" id="form1" class="form-top" action="" method="POST">
+        <input type="hidden" name="sa" value=""/>
+        <table class=" table table-responsive   table-bordered mainList" width="80%">
+            <thead>
+                <tr>
+                    <td>组名称</td>
+                    <td>说明</td>
+                    <td>排序</td>
+                    <td>是否启用</td>
+                    <td>权限</td>
+                    <td>允许的ip列表</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <?php foreach ($groups as $v): ?>
+                <tr>
+                    <td><?php echo $v['name']; ?></td>
+                    <td><?php echo $v['description']; ?></td>
+                    <td><input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['group_id']; ?>]" value="<?php echo $v['sort']; ?>" size="3"/></td>
+                    <td><?php if ($v['is_enabled'] == 1): ?>是<?php else: ?>否<?php endif; ?></td>
+                    <td><a href="./?c=adminGroup&a=editPriv&group_id=<?php echo $v['group_id']; ?>">分配权限</a></td>
+                    <td> <input class="input-md form-control tl" name="allowIps[<?php echo $v['group_id']; ?>]" maxlength="2000" value="<?php echo $v['allow_ips']; ?>" /> </td>
+                    <td>
+                        <a class="btn btn-mini btn-info" href="./?c=adminGroup&a=editGroup&group_id=<?php echo $v['group_id']; ?>">修改</a>
+                        <a class="btn btn-mini btn-info" href="./?c=adminGroup&a=deleteGroup&group_id=<?php echo $v['group_id']; ?>" onclick="return confirm('真的删除？该操作不可恢复！');">删除</a>
+                    </td>
+                </tr>
+
+            <?php endforeach; ?>
+            <tr>
+                <td ></td>
+                <td ></td>
+                <td > <input class="btn btn-default submit" type="submit"  name="submit" value="保存" onclick="this.form.sa.value='saveSort';this.form.submit();" /></td>
+                <td ></td>
+                <td ></td>
+                <td > <input class="btn btn-default submit" type="submit"  name="submit" value="保存" onclick="this.form.sa.value='saveIp';this.form.submit();" /></td>
+                <td ></td>
+            </tr>
+        </table>
+    </form> 
+    </div>
+  
+</div>
+
+<?php $this->import("foot"); ?>

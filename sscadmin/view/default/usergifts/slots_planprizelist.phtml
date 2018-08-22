@@ -1,0 +1,52 @@
+<?php $this->import("head"); ?>
+<script src="js/My97DatePicker/WdatePicker.js"></script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<div class="left leftContainer">
+    <ul>
+    <?php foreach ($promoList AS $key => $list): ?>
+    <li><a href="/?c=market&a=promoList&giftType=<?php echo $key; ?>"><?php echo $list->cnTitle; ?></a></li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+<div class="rightContainer">
+    <h4> </h4>
+    <div class="list-div" id="listDiv">
+        <table class="mainList">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>奖品名称</td>
+                    <td>中奖客户</td>
+                    <td>设置时间</td>
+                    <td>设置人</td>
+                    <td>是否已中奖</td>
+                    <td>中奖时间</td>
+                    <td>操作</td>
+                </tr>
+            </thead>
+            <?php if ($planPrizeList) : ?>
+            <?php foreach($planPrizeList as $v):?>
+            <tr class="plansList">
+                <td><?php echo $v['ugs_id'];  ?></td>
+                <td><?php echo $awardsConfig[$v['award_id']]['title']; ?></td>
+                <td><?php echo $v['username'];  ?></td>
+                <td><?php echo $v['create_time'] ; ?></td>
+                <td>colin</td>
+                <td><?php echo $v['status'] == 8 ? '是' : '否' ?></td>
+                <td><?php echo $v['prize_time'] ; ?></td>
+                <td><?php if ($v['status'] == 0): ?><a onclick="return confirm('真的删除？该操作不可恢复！');" href = "/?c=market&a=promoControl&giftType=slots&option=deletePlanPrize&id=<?php echo $v['ugs_id']; ?>">删除</a><?php endif; ?></td>
+            </tr>
+            <?php endforeach; ?>
+            <?php else: ?>
+            <tr class="noneData">
+                <td colspan="8">暂无数据！</td>
+            </tr>
+            <?php endif; ?>
+        </table>
+    </div>
+    <?php echo $pageList; ?>
+</div>
+<?php $this->import("foot"); ?>

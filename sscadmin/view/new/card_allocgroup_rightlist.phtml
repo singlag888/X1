@@ -1,0 +1,87 @@
+<?php $this->import("head"); ?>
+<script>
+$(function(){
+    $('#form1').submit(function(){
+        if ($('select[name^="ref_group_ids"]').length == 0) {
+            alert('没有要提交的数据');
+            return false;
+        }
+
+        return true;
+    });
+
+    $('#batchSetBtn').click(function(){
+        var pt = $(this).siblings('select');
+        $.each($(this).parent().parent().nextAll(), function(k,v){
+            $(this).find('select').val(pt.val());
+        });
+    });
+});
+</script>
+<div class="list-div mt20" id="listDiv">
+    <form name="form1" id="form1" class="form-top" action="./?c=card&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+        <table class="table table-responsive  table-bordered  mainList" width="100%">
+            <thead>
+            <tr>
+            	<td>user_id</td>
+                <td>用户名</td>
+                <td>类型</td>
+                <!--<td>所属总代</td>-->
+                <td>已分配卡组</td>
+                <td>属性</td>
+                <td>设定卡组（对所有孩子起作用）</td>
+            </tr>
+            </thead>
+            <?php $i = 0; foreach ($users as $v): ?>
+            <tr>
+            	<td><?php echo $v['user_id']; ?></td>
+                <td><?php echo $v['username']; ?>
+                    <?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?>
+                </td>
+                <td>
+                    <?php if ($v['level'] == 0): ?>总代
+                    <?php elseif ($v['level'] == 1): ?>一代
+                    <?php elseif ($v['level'] < 10): ?>代理
+                    <?php else: ?>会员
+                    <?php endif; ?>
+                </td>
+                <td><?php if ($v['ref_group_id']): ?><label title="ref_group_id=<?php echo $v['ref_group_id']; ?>"><?php echo $cardGroups[$v['ref_group_id']]['name']; ?></label>
+                    <?php elseif ($inherited_group_id): ?><?php echo $cardGroups[$inherited_group_id]['name']; ?>
+                    <?php else: ?>没有分配
+                    <?php endif; ?>
+                </td>
+                <td><?php if ($v['ref_group_id']): ?><b>特别指定</b>
+                    <?php elseif ($inherited_group_id): ?>继承上级（默认）
+                    <?php else: ?>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    <div class="form-inline">
+                        <select class="input-sm form-control" name="ref_group_ids[<?php echo $v['user_id']; ?>]">
+                        <option value="-1">请选择</option>
+                        <option value="0" <?php if ($v['ref_group_id'] == 0): ?>selected<?php endif; ?>>继承上级（默认）</option>
+                    <?php foreach ($cardGroups as $vv): ?>
+                        <option value="<?php echo $vv['ref_group_id']; ?>" <?php if ($v['ref_group_id'] == $vv['ref_group_id']): ?>selected<?php endif; ?>><?php echo $vv['name']; ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                    <?php if ($i++ == 0): ?>
+                    <input class="btn btn-sm btn-info" type="button" id="batchSetBtn" value="批量设置"/>
+                    <?php endif; ?>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td></td>
+                <td colspan="6">
+                    <div style="width:100%;margin:0 auto;text-align: center;">
+                        <input class="btn btn-info submit" style="width: 60px;" type="submit" name="submit"  value="提交"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

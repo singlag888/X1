@@ -1,0 +1,135 @@
+<!DOCTYPE HTML> <!-- 投注记录订单详情页面 -->
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+    </head>
+
+    <body>
+      <div id="orderDetailsLayer" class="order_details_layer">
+       <table class="order_summary_cont">
+           <caption>订单摘要</caption>
+           <colgroup>
+              <col width="60px">
+              <col width="412px">
+              <col>
+           </colgroup>
+           <tbody>
+               <tr class="five_height">
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>投注用户：<?php echo $user['username'];?></td>
+                   <td>奖期：<?php echo $lottery['cname']; ?> 第 <?php echo $package['issue']; ?> 期</td>
+               </tr>
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>单倍注数：<?php echo $package['single_num']; ?></td>
+                   <td>投注倍数：<?php echo $package['multiple']; ?></td>
+               </tr>
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>投注模式：<?php echo $GLOBALS['cfg']['modes'][strval(floatval($package['modes']))]; ?></td>
+                   <td>总金额：<?php echo $package['amount']; ?></td>
+               </tr>
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>是否追号：<?php if ($package['trace_id'] > 0): ?>是<?php else: ?>否<?php endif; ?></td>
+                    <td>开奖号码：<span class="orange_font"><?php if (isset($openCode)) echo $openCode; ?></span></td>
+               </tr>
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>投注时间：<?php echo $package['create_time']; ?></td>
+                   <td>中奖金额：<?php echo $package['prize']; ?></td>
+               </tr>
+               <tr>
+                   <td>&nbsp;</td>
+                   <td>订单状态：
+                       <?php if ($package['cancel_status'] == 0): ?>
+                           <?php if ($package['check_prize_status'] == 0): ?>未开奖
+                           <?php elseif ($package['check_prize_status'] == 1): ?>已中奖
+                           <?php else: ?>未中奖
+                           <?php endif; ?>
+                       <?php else: ?>
+                           <b>
+                               <?php if ($package['cancel_status'] == 1): ?>个人撤单
+                               <?php elseif ($package['cancel_status'] == 2): ?>追中撤单
+                               <?php elseif ($package['cancel_status'] == 3): ?>出号撤单
+                               <?php elseif ($package['cancel_status'] == 4): ?>未开撤单
+                               <?php elseif ($package['cancel_status'] == 9): ?>系统撤单
+                               <?php endif; ?>
+                           </b>
+                       <?php endif; ?>
+                   </td>
+                   <td><?php if(!!config::getConfig('rebate_toself',1)): ?>
+                      返点：<?php echo number_format($package['cur_rebate']*$package['amount'],4); ?>
+                     <?php else: ?>
+                     订单盈亏：<span class="orange_font"><?php if ($package['cancel_status'] == 0){echo number_format($package['prize']-$package['amount'],4);}else{echo 0.0000;} ?></span>
+                      <?php endif; ?>
+                    </td>
+               </tr>
+               <?php if(!!config::getConfig('rebate_toself',1)): ?>
+                  <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>订单盈亏：<span class="orange_font"><?php if ($package['cancel_status'] == 0){echo number_format($package['cur_rebate']*$package['amount']+$package['prize']-$package['amount'],4);}else{echo 0.0000;} ?></span></td>
+                  </tr>
+                <?php endif; ?>
+
+
+                <tr class="five_height">
+                    <td colspan="3">&nbsp;</td>
+                </tr>
+           </tbody>
+       </table>
+       <table class="order_details_cont">
+               <caption>订单明细</caption>
+                <thead>
+                    <tr>
+                        <th width="16%">玩法名称</th>
+                        <th width="26%">投注内容</th>
+                        <th width="19%">投注注数</th>
+                        <th width="20%">投注金额</th>
+                        <th width="21%">奖金</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($projects as $v): ?>
+                    <tr>
+                        <td><?php echo $methods[$v['method_id']]['cname']; ?></td>
+                        <td><label class="textarea"><?php echo str_replace('|', ' ', $v['code']); ?></label></td>
+                        <td><?php echo $v['single_num']; ?></td>
+                        <td><span class="orange_font"><?php echo $v['amount']; ?></span></td>
+                        <td><?php echo $v['prize']; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+       </table>
+       <div class="close_order_layer">
+            <a href="javascript:;" class="default_blue_btn closeDialogBtn">返回</a>
+       </div>
+</div>
+
+   <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script>
+    $(function() {
+      if($('.textarea').text().length >= 30){
+        $('.textarea').addClass('are');
+      }else{
+        $('.textarea').removeClass('are');
+      }
+      $('a.closeDialogBtn').on('click', function(){
+            var index = parent.layer.getFrameIndex(window.name);      //获取当前窗口索引
+            parent.layer.close(index);
+        });
+    });
+</script>
+    </body>
+</html>

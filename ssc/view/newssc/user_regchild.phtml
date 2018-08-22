@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>   <!-- 新增会员 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="css/common_operate.css" />
+    <?php $this->import('public_cssjs') ?>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.qrcode.min.js"></script>
+    <style>
+        .erweima{
+            clear:both ;
+        }
+    </style>
+</head>
+
+<body>
+<?php $this->import('public_header') ?>
+<div class="operate_middle_page">
+    <?php $this->import("public_usermenu"); ?>
+
+    <div class="common_pages add_menbers_page" style="padding: 10px 0 0 62px;min-height: 800px">
+        <form name="form1"  id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+            <div class="defadd_menber_title">
+                <span>代理开户</span>
+            </div>
+            <div class="addmenber_userinfo">
+                <div class="form_group">
+                    <label for="username" class="control_label">用户名：</label>
+                    <div class="col_sm_10">
+                        <input class="form_control two_hundred_width" type="text" name="username" id="username">
+                    </div>
+                    <span class="help_block">用户名长度为6-12个字母或数字，且必须以字母开头</span>
+                </div>
+                <div class="form_group">
+                    <label for="password" class="control_label">密码：</label>
+                    <div class="col_sm_10">
+                        <input class="form_control two_hundred_width" type="password" name="password" id="password" >
+                    </div>
+                    <span class="help_block">密码可以区分大小写</span>
+                </div>
+                <div class="form_group">
+                    <label for="password2" class="control_label">确认密码：</label>
+                    <div class="col_sm_10">
+                        <input class="form_control two_hundred_width" type="password" name="password2" id="password2"  >
+                    </div>
+                    <span class="help_block">再次确认密码</span>
+                </div>
+                <div class="form_group">
+                    <label for="userFandian" class="control_label">用户返点：</label>
+                    <div class="col_sm_10">
+                        <select class="form_control two_hundred_width" name="rebate">
+                            <?php foreach ($aPrizeMode as $prizeMode=>$rebate): ?>
+                                <option placeholder="<?php echo $prizeMode ?>" value="<?php echo $rebate;?>"><?php echo $rebate;?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form_group">
+                    <label for="bonus" class="control_label">奖金/赔率：</label>
+                    <div class="col_sm_10">
+                        <input class="form_control two_hundred_width" type="text" name="prize_mode_alias" placeholder="" readonly>
+                        <input type="hidden" type="text" name="prize_mode" value="<?php echo $key;?>">
+                    </div>
+                </div>
+                <div class="form_group msgsend_btn_layer">
+                    <input type="submit" name="submit" class="default_navyblue_btn two_hundred_width modify_btn" value="确定开户">
+                </div>
+            </div>
+
+           <hr/>
+
+            <div class="defadd_menber_title">
+                <span>会员注册链接</span>
+            </div>
+            <input  type="hidden" name="tgtype" value="4">
+            <div class="fandian_layer">
+            <span class="fandian_txt">推广类型：</span>
+            <input id="tgtype_pc" type="radio" name="flag" value=1 checked="checked">电脑
+            <input type="radio" name="flag" value=2>手机
+<!--            --><?php //if($user['type']): ?><!--<input type="radio" name="flag" value=3>微信--><?php //endif; ?>
+
+            </div>
+
+            <div class="fandian_layer" id="coo">
+                <span class="fandian_txt">返点选择：</span>
+                <select class="form_control fandian_sel"  name="prizemode" id="prizemode">
+                    <?php foreach ($aLinkPrizeMode as $prizeMode=>$rebate): ?>
+                        <option value="<?php echo $prizeMode;?>"><?php echo $prizeMode;?>/<?php echo $rebate;?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="fandian_layer" id="coo2">
+                <span class="fandian_txt">推广码：</span>
+                <input class="form_control" style="width: 120px; " id="market_code" type="text" name="market_code" placeholder="" value="<?php echo isset($marketLinkInfo['market_code'])?$marketLinkInfo['market_code']:'';?>">
+                <label style="float: right;margin-right: 710px;margin-top: -19px;color: red">* 3-10位数字与字母组成</label>
+                <div style="float: left;margin-left: 56px;margin-top: 25px; margin-bottom: 15px">
+                <a href="javascript:void(0)" class="default_common_btn create_link_btn" id="create">生成链接</a>
+                    <label id="result"><?php echo isset($marketLinkInfo['link'])?$marketLinkInfo['link']:''?></label>
+                </div>
+
+            </div>
+            <div class="erweima" id="qrcode_layer" style="display: none;">
+                <label class="fandian_txt">微信二维码：</label> <a href="javascript:void(0)" id="generate_qrcode_btn" class="default_common_btn copy_save_btn" style="display: none;">生成微信二维码</a>
+                <div id="qrcode" class="addmenber_qrcode" style="float: left;margin-left: -139px;margin-top: 36px;"></div>
+            </div>
+        </form>
+    </div>
+</div>
+<?php $this->import('public_foot') ?>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+
+<script>
+    $(function() {
+/*        $('input[name=username]').change(function() {
+            var checkName = /[A-Z]+/;
+            if (checkName.test($(this).val())) {
+                parent.layer.alert("用户名不可以大写");
+                $(this).val('');
+            }
+        });*/
+        $("#coo2").on('keyup','#market_code',function () {
+           var vo = $(this).val();
+           if(vo.length > 10)
+           {
+               $(this).val(vo.substring(0,10))
+           }
+        })
+
+        $("#create").click(function() {
+            var market_code =$("input[name='market_code']").val();
+            var prize_mode=$('#prizemode').find("option:selected").val();
+               if(market_code === '')
+               {
+                   layer.msg('请先填写邀请码!',{icon:2,time:2000});
+                   return false;
+               }else if(prize_mode == 'undefined' || prize_mode =='')
+               {
+                   layer.msg('出现异常,请联系开发人员!',{icon:2,time:2000});
+                   return false;
+               }
+               var reg = /^[0-9a-zA-Z]{3,10}$/
+               if(!reg.test(market_code))
+               {
+                   layer.msg('推广码格式不正确!',{icon:2,time:2000});
+                   return false;
+               }
+
+
+            $.post(
+                '?c=user&a=regChild',
+                {'market_code':market_code,'op': "createCode","prize_mode":prize_mode},
+                function(json_data) {
+                    if (json_data['errno'] == 0) {
+                        $('#result').text('');
+                        $('#result').text(json_data['url']);
+                        $("#qrcode").empty();
+                    }
+                    else {
+                        parent.layer.alert(json_data.errstr);
+                    }
+
+                }, 'json');
+
+
+        });
+
+        $("select[name=rebate]").change(function(){
+            var prize_mode = $(this).children('option:selected').attr('placeholder');
+            $("input[name=prize_mode_alias]").val(prize_mode + '/' + prize_mode/2);
+            $("input[name=prize_mode]").val(prize_mode);
+        });
+
+
+
+
+        $('#copy_save_btn').mouseover(function() {
+            move_swf(this, $('.linkurl_txt').val());
+            curBtn = this;
+        });
+
+
+        $('[name=flag]').click(function(){
+           if($('#tgtype_pc').attr('checked') == 'checked') {
+                $('#generate_qrcode_btn').hide();
+                $('#qrcode_layer').hide();
+           } else {
+                $('#generate_qrcode_btn').show();
+                $('#qrcode_layer').show();
+           }
+        });
+
+        $('#coo').on('change','#prizemode',function () {
+            $('#qrcode').empty();
+            var id = $(this).find('option:selected').val();
+            var url="?c=user&a=getMarketCodeAjax";
+            $.post(url,{"id":id},function (response) {
+                var data = eval('('+response+')');
+                if(data.code === 0)
+                {
+                    layer.msg('参数错误!',{icon:2,time:1500});
+                }
+                if(data.code === 400)
+                {
+                    $("input[name='market_code']").val('');
+                    $('#result').text('');
+                    $('#coo2').css({"display":"block"});
+                }
+
+                if(data.code === 200)
+                {
+                    $("input[name='market_code']").val(data.data.market_code);
+                    $("input[name='market_code_old']").val(data.data.market_code);
+                    $('#result').text(data.data.link);
+                    $('#coo2').css({"display":"block"})
+                }
+            });
+        })
+
+    });
+ function regChild(obj) {
+     $('#qrcode').empty();
+
+     $.post('?c=user&a=regChild',{
+             'op': "createCode",
+             'tgtype': $('input[name=tgtype]').val(),
+             'prizemode':  $('#prizemode option:selected').val(),
+             'flag':$('input:radio[name="flag"]:checked').val()
+         },
+         function(json_data) {
+             if (json_data['errno'] == 0) {
+                 $('#qrcode').qrcode({
+                     width: 177,
+                     height: 177,
+                     text: json_data['url']
+                 });
+
+                 var canvas = $('#qrcode canvas');
+                 var img = canvas[0].toDataURL("image/png");
+                 $('#qrcode').html("<img style=\"width:177px; height:177px\" src='" + img + "'>");
+                 $('#result').val(json_data['url']);
+             }
+             else {
+                 parent.layer.alert(json_data.errstr);
+             }
+         }, 'json');
+ }
+
+
+    $("#generate_qrcode_btn").click(function() {
+        $('#qrcode').empty();
+        if($('#market_code').val() =='')
+        {
+            layer.msg('请输入推广码!',{icon:2,time:2000});
+            return false;
+        }
+        var link = $('#result').text();
+        if(link == '')
+        {
+            layer.msg('请生成链接!',{icon:2,time:2000});
+            return false;
+        }
+        $.post('?c=user&a=regChild',{
+                'op': "createWeixinCode",
+                'link': link,
+                'flag':$('input:radio[name="flag"]:checked').val()
+            },
+            function(json_data) {
+                if (json_data['errno'] == 0) {
+                    $('#qrcode').qrcode({
+                        width: 177,
+                        height: 177,
+                        text: json_data['url']
+                    });
+
+                    var canvas = $('#qrcode canvas');
+                    var img = canvas[0].toDataURL("image/png");
+                    $('#qrcode').html("<img style=\"width:177px; height:177px\" src='" + img + "'>");
+                }
+                else {
+                    parent.layer.alert(json_data.errstr);
+                }
+            }, 'json');
+    });
+</script>
+
+</body>
+</html>

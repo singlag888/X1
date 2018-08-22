@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="<?php echo $imgCdnUrl ?>/view/new/css/home.css" />
+<div id="dc_user_tools_left" class="dc-body-common-div custom-defind-common">
+  <div class="layui-tab ">
+    <ul id="dc_user_tab_ul">
+      <li>
+        <div id="user_tab_title"><span>用户管理工具</span></div>
+        <dl id="dc_user_tab_dl">
+          <dd id="dc_left_nav_userTools" onclick="javascript:window.location.href='?a=userManagementTools&c=user';">
+            <div>用户管理</div>
+            <img src="<?php echo $imgCdnUrl ?>/view/new/img/arrow.png"/>
+          </dd>
+          <dd id="dc_left_nav_domain" onclick="javascript:window.location.href='?c=domain&a=domainList';" >
+            <div>域名管理</div>
+            <img src="<?php echo $imgCdnUrl ?>/view/new/img/arrow.png"/>
+          </dd>
+          <dd id="dc_left_nav_level" onclick="javascript:window.location.href='?c=user&a=levelAdjustList';" >
+            <div>层级管理</div>
+            <img src="<?php echo $imgCdnUrl ?>/view/new/img/arrow.png"/>
+          </dd>
+          <dd id="dc_left_nav_log" onclick="javascript:window.location.href='?c=user&a=logList';" >
+            <div>登陆日志</div>
+            <img src="<?php echo $imgCdnUrl ?>/view/new/img/arrow.png"/>
+          </dd>
+        </dl>
+      </li>
+    </ul>  
+  </div>
+</div>
+<div id="dc_left_more" class="dc-body-common-div"></div>
+ 
+<script type="text/javascript">
+// 	$("#dc_user_tab_dl dd").bind('onmouseover', function(){
+// 		$(this).find("span").attr("style", "color: #FFFFFF;");
+// 	}).bind('onmouseout', function(){
+// 		$(this).find("span").removeAttr("style");
+// 	});
+
+	/** 因为头部导航和左部导航都是点击加载，所以每次加载完之后需要渲染 */
+	var c=window.location.href;
+	if(c.indexOf('a=userManagementTools') != -1){
+		$("#dc_left_nav_userTools").addClass("dc-nav-selected-style");
+		$("#dc_left_nav_userTools div").addClass("dc-nav-selected-div");
+		
+		$("#dc_left_nav_domain").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_domain div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_level").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_level div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_log").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_log div").removeClass("dc-nav-selected-div");
+
+		$("#dc_left_nav_userTools img").show();
+		$("#dc_left_nav_domain img").hide();
+		$("#dc_left_nav_level img").hide();
+		$("#dc_left_nav_log img").hide();
+		
+	}else if(c.indexOf('a=domainList') != -1){
+		$("#dc_left_nav_domain").addClass("dc-nav-selected-style");
+		$("#dc_left_nav_domain div").addClass("dc-nav-selected-div");
+		
+		$("#dc_left_nav_userTools").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_userTools div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_level").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_level div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_log").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_log div").removeClass("dc-nav-selected-div");
+
+		$("#dc_left_nav_domain img").show();
+		$("#dc_left_nav_userTools img").hide();
+		$("#dc_left_nav_level img").hide();
+		$("#dc_left_nav_log img").hide();
+		
+	}else if(c.indexOf('a=levelAdjustList') != -1){
+		$("#dc_left_nav_level").addClass("dc-nav-selected-style");
+		$("#dc_left_nav_level div").addClass("dc-nav-selected-div");
+		
+		$("#dc_left_nav_userTools").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_userTools div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_domain").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_domain div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_log").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_log div").removeClass("dc-nav-selected-div");
+
+		$("#dc_left_nav_level img").show();
+		$("#dc_left_nav_userTools img").hide();
+		$("#dc_left_nav_domain img").hide();
+		$("#dc_left_nav_log img").hide();
+		
+	}else if(c.indexOf('a=logList') != -1){
+		$("#dc_left_nav_log").addClass("dc-nav-selected-style");
+		$("#dc_left_nav_log div").addClass("dc-nav-selected-div");
+		
+		$("#dc_left_nav_userTools").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_userTools div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_domain").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_domain div").removeClass("dc-nav-selected-div");
+		$("#dc_left_nav_level").removeClass("dc-nav-selected-style");
+		$("#dc_left_nav_level div").removeClass("dc-nav-selected-div");
+
+		$("#dc_left_nav_log img").show();
+		$("#dc_left_nav_userTools img").hide();
+		$("#dc_left_nav_domain img").hide();
+		$("#dc_left_nav_level img").hide();
+		
+	}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

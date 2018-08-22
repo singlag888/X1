@@ -1,0 +1,199 @@
+<div class="topQuickBar">
+    <div class="topQuickBar_center">
+        <div class="topQuickBar_L">
+            <a href="index.jsp?&a=main" class="topHome" title="首页">首页</a>
+        </div>
+        <div class="topQuickBar_R">
+            <div class="welcome">
+                <!-- 用户信息 -->
+                <!-- <span class="UserIcon"></span> -->
+                <span class="User">
+                    <em class="name ShowTipsUserInfo">您好，<?php echo $GLOBALS['SESSION']['nick_name']; ?><?php if ($GLOBALS['SESSION']['is_test']): ?><?php echo "<b>[测试]</b>"; ?><?php endif; ?></em>
+                    <label>可用：</label>
+                    <em class="ShowTipsMoney" id="nowBalance"><?php echo $GLOBALS['SESSION']['balance']; ?></em>
+                    <!-- 用户信息弹出层 -->
+                    <div class="UserPopLayer hide"> <a href="javascript:void(0);" class="CloseUser"></a>
+                        <div class="UserInfoBox">
+                            <ul>
+                                <li>
+                                    <label class="user_Label">昵称：</label>
+                                    <span class="user_info"><?php echo $user[$GLOBALS['SESSION']['nick_name']]; ?></span></li>
+                                <li>
+                                    <label class="user_Label">登录IP：</label>
+                                    <span class="user_info"><?php echo $GLOBALS['SESSION']['last_ip']; ?></span></li>
+                                <li>
+                                    <label class="user_Label">最后登录：</label>
+                                    <span class="user_info"><?php echo $GLOBALS['SESSION']['last_time']; ?></span></li>
+                            </ul>
+                        </div>
+                        <div class="shadowLayer"></div>
+                    </div>
+                    <!-- 用户信息弹出end -->
+                </span>
+                <a href="?c=fin&a=deposit" target="MainIframe" class="pay" title="充值">充值</a>
+                <b class="vertical"></b>
+                <a href="javascript:void(0);" class="topLinkBtn" id="tranMoney">提现</a>
+                <b class="vertical"></b>
+                <a href="javascript:void(0);" class="topLinkBtn" id="logoutBtn" style="margin-right:30px;">退出</a>
+                <a href="index.jsp?c=game&a=packageList" class="topLinkBlankBtn" title="个人中心"></a>
+            </div>
+            <!-- <a href="javascript:void(0);"  title="客户端下载" class="TopDownloadBtn" name="default_download">
+                                <span class="downloadIcon"></span>
+                                <em class="Icon_khd">客户端下载</em>
+                            </a>
+
+                            <?php   //活动：生成TopButton
+            echo $gift_topbutton;
+            ?>
+
+                            <a href="javascript:void(0);" class="topLinkBtn GiftLayerShow" title="查看获得的红包"><em class="Icon_redGift"></em><em class="iconNO" id="RedEnvelopeCount">0</em><span class="lb20"></span></a>
+                            <a href="?c=user&a=receiveBox" target="MainIframe" id="Mailbox" class="topLinkBtn  TopMailBtn" title="<?php if ($notReadMsg > 0) : ?>您有<?php echo $notReadMsg; ?>封新邮件请查看<?php endif; ?>"><em class="Icon_Mail"></em><em class="iconNO"><?php echo $notReadMsg; ?></em><span class="lb20"></span></a>
+                            <a target="_blank" href="/upload/jinyazhou_setup.msi" title="客户端下载" class="topLinkBtn">客户端下载</a>
+                            <a href="javascript:void(0);" id="logoutBtn" class="topLinkBtn Quit">退出</a> -->
+        </div>
+    </div>
+</div>
+
+<!-- 休闲游戏余额转账 -->
+<div class="layer_SlotMoney hide">
+    <div class="FormTab">
+        <div class="gs">尊敬的客户，您的资金可在 <strong>主钱包</strong> <!--和 <strong>休闲游戏</strong>--> 互相转移，在【帐户管理】-【资金明细】中查看详细记录。</div>
+        <form name="top_form" id="top_form" method="POST" onsubmit="return checkform(this);" style=" display: block;">
+            <ul>
+                <li><label>转移从：</label>
+                    <div class="must">*</div>
+                    <select class="SelectStyle2 w85px" id="tranFrom">
+                        <option value="0">主钱包</option>
+                   <!--     <option value="1">休闲游戏</option>-->
+                    </select><label>转移至：</label>
+                    <select class="SelectStyle2 w85px" id="tranTo">
+                    <!--    <option value="1">休闲游戏</option>-->
+                        <option value="0">主钱包</option>
+                    </select>
+                </li>
+                <li><label>余额：</label>
+                    <div class="must">&nbsp;</div>
+                    <span class="fl w85px"><strong class="org" id="tranFromBalance">获取中</strong></span>
+                    <label>余额：</label>
+                    <span class="fl w85px"><strong class="org" id="tranToBalance">获取中</strong></span>
+                </li>
+                <li>
+                    <label>转入资金：</label>
+                    <div class="must">*</div>
+                    <input type="text" value="10" class="txtStyle2 w220px" tip="转入资金不得低于10元" id="tranAmount"/><span>必须是正整数，转入资金不得低于10元</span>
+                </li>
+                <li>
+                    <label>资金密码：</label>
+                    <div class="must">*</div>
+                    <input type="password" value="" class="txtStyle2 w220px" tip="请输入您的提款密码"  id="tranPass"/><span>请输入您的提款密码</span>
+                </li>
+
+                <li>
+                    <label>&nbsp;</label>
+                    <div class="must">&nbsp;</div>
+                    <input type="button" value="转移资金" class="btnStyle4" id="tranSubmit"/>
+                    <input type="button" value="取消" class="btnStyle" id="cancelTran"/>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+    $("#tranMoney").click(function() {
+
+        $.ajax({
+            type: "POST",
+            url: "index.jsp?c=fin&a=tranMoney",
+            data: {op: 'show'},
+            dataType: "json", //返回0和1
+            success: function(data) {
+                if (data['errno'] != 0) {
+                    layer.alert(data['errstr']);
+                    return;
+                }
+                var i = $.layer({
+                    type: 1,
+                    title: '资金转移',
+                    offset: ['100px', ''],
+                    //border: [0],
+                    area: ['610px', 'auto'],
+                    page: {dom: '.layer_SlotMoney'}
+
+                });
+
+                $('#cancelTran').unbind('click').click(function() {
+                    layer.close(i);
+                });
+
+                $('#tranSubmit').unbind('click').click(function() {
+                    $.ajax({
+                        type: "POST",
+                        url: "index.jsp?c=fin&a=tranMoney",
+                        data: {'op': 'tran', 'tranFrom': $('#tranFrom').val(), 'tranTo': $('#tranTo').val(), 'tranAmount': $('#tranAmount').val(), 'tranPass': $('#tranPass').val()},
+                        dataType: "json", //返回0和1
+                        success: function(data) {
+                            if (data['errno'] != 0) {
+                                layer.alert(data['errstr']);
+                                return;
+                            }
+                            layer.close(i);
+                            layer.alert("转帐成功", 1);
+                        },
+                        error: function() {
+                            layer.alert("获取信息异常");
+                        }});
+                    $('#tranPass').val('');
+
+                });
+
+                $('#tranFrom').unbind('change').change(function() {
+                    $('#tranFromBalance').text(data.balances[$('#tranFrom').val()]);
+                });
+
+                $('#tranFrom').change();
+                $('#tranTo').unbind('change').change(function() {
+                    $('#tranToBalance').text(data.balances[$('#tranTo').val()]);
+                });
+
+                $('#tranTo').change();
+
+            },
+            error: function() {
+                layer.alert("获取信息异常");
+            }
+        });
+    });
+
+    $('#logoutBtn').click(function() {
+        location.href = 'index.jsp?a=logout';
+    });
+
+    //点击刷新金额
+    $('#nowBalance').click(function() {
+        checkBalance();
+    });
+    //要求定时刷新余额
+    // window.setInterval(function() {
+    //     $('#nowBalance').click();
+    // }, 20000);
+
+    function checkBalance() {
+        var wnd = parent || self;
+        $('#nowBalance', wnd.document).text(' loading... ');
+        $.post(
+            'index.jsp?c=user&a=showBalance',
+            {},
+            function(response) {
+                if (response.balance >= 0) {
+                    $('#nowBalance', wnd.document).text('￥' + response.balance);
+                }
+                else {
+                    alert('系统繁忙，请稍候再试');
+                }
+            }, 'json');
+    }
+
+</script>

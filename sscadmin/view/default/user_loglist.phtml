@@ -1,0 +1,109 @@
+<?php $this->import("head"); ?>
+<style type="text/css">
+    .jedatehms{display: none!important;}
+</style>
+<script src="<?php echo $imgCdnUrl ?>/js/jedate/jedate.js"></script>
+<script>
+//预设查询值
+$(document).ready(function(){
+    $("#control").change(function(){
+        str = "<option value=''>请选择</option>";
+        $("#action").html(str);
+        <?php foreach ($allMenus as $k => $v): ?>
+        if ($("#control").val() == "<?php echo $k; ?>") {
+            <?php foreach ($v['submenu'] as $kk => $vv): ?>
+                str = str + "<option value=<?php echo $vv['action']; ?>><?php echo $vv['title']; ?></option>";
+            <?php endforeach; ?>
+            $("#action").html(str);
+        }
+        <?php endforeach; ?>
+    });
+
+    //预选中值
+    $('input[name=username]').val('<?php echo $username; ?>');
+    $("#control").val('<?php echo $control; ?>').change();
+    $('#action').val('<?php echo $action; ?>');
+    $('input[name=ip]').val('<?php echo $ip; ?>');
+    $('input[name=startDate]').val('<?php echo $startDate; ?>');
+    $('input[name=endDate]').val('<?php echo $endDate; ?>');
+});
+</script>
+<div class="list-div mt20" id="listDiv">
+
+<div id="query">
+    <form name="form1" action="./" method="get">
+        <div class="form-inline">
+            <div class="form-group has-default has-feedback">
+                <label>操作时间：</label>
+                <input class="input-md form-control tl "  type="text" name="startDate" onclick="jeDate({dateCell:'#startDate',isTime:true,format:'YYYY-MM-DD'})"  id="startDate" value="" size="13"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <div class="form-group has-default has-feedback">
+                <label>到</label>
+                <input class="input-md form-control tl"  type="text" name="endDate" onclick="jeDate({dateCell:'#endDate',isTime:true,format:'YYYY-MM-DD'})"  id="endDate" value="" size="13"/>
+                <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
+            </div>
+            <label>用户名：</label>
+            <input class="input-md form-control" name="username" size="12"/>
+            <label class="ml10">权限名：</label>
+            <select class="input-md form-control" name="control" id="control">
+                <option value="">请选择</option>
+                <?php foreach ($allMenus as $k => $v): ?>
+                <option value="<?php echo $v['menu_id']; ?>"><?php echo $v['title']; ?></option>
+                <?php endforeach; ?>
+            </select>
+            <select class="input-md form-control" name="action" id="action"></select>
+            <label class="ml10">IP:</label>
+            <input class="input-md form-control" name="ip" size="15"/>
+            <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="logList"/>
+         　　<input class="btn btn-info" type="submit" name="submit" value=">> 查 询 <<"/>
+
+        </div>
+    <!--用户名<input name="username" size="12"/>
+    权限名<select name="control" id="control">
+        <option value="">请选择</option>
+        <?php foreach ($allMenus as $k => $v): ?>
+            <option value="<?php echo $v['menu_id']; ?>"><?php echo $v['title']; ?></option>
+        <?php endforeach; ?>
+    </select>
+    <select name="action" id="action">
+    </select>
+    IP：<input name="ip" size="15"/>
+    操作时间：<input type="text" name="startDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" id="startDate" value="" size="13"/>
+        到<input type="text" name="endDate" my97mark="false" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" id="endDate" value="" size="13"/>
+        <input type="hidden" name="c" value="user"/><input type="hidden" name="a" value="logList"/>
+         　　<input type="submit" name="submit" value=">> 查 询 <<"/>-->
+    </form>
+</div>
+
+<table class="table table-responsive table-bordered  mt20 mainList">
+    <thead>
+    <tr>
+        <td>log_id</td>
+        <td>用户名</td>
+        <td>控制器</td>
+        <td>动作</td>
+        <td>1表示成功</td>
+        <td>操作日期</td>
+        <td>客户IP</td>
+        <td>所用域名</td>
+        <td>备注</td>
+    </tr>
+    </thead>
+    <?php foreach ($userLogs as $v): ?>
+    <tr>
+        <td><?php echo $v['log_id']; ?></td>
+    	<td><?php echo $v['username']; ?><?php if ($v['type'] == 1): ?><b style="color:red">[推广]</b><?php endif; ?></td>
+        <td><?php echo $v['control']; ?></td>
+        <td><?php echo $v['action']; ?></td>
+        <td><?php if ($v['is_success'] == 1): ?><?php echo $v['is_success'];?><?php else: ?><font color="red"><b><?php echo $v['is_success']; ?></b></font><?php endif; ?></td>
+        <td><?php echo $v['ts']; ?></td>
+        <td><?php echo ip::loc($v['client_ip']); ?></td>
+        <td><?php echo $v['domain']; ?></td>
+        <td><?php echo $v['remark']; ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
+</div>
+<div class="pageTal"><?php echo $pageList; ?></div>
+<?php $this->import("foot"); ?>

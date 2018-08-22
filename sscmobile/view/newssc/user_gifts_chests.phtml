@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+	<meta charset="UTF-8">
+	<title><?php echo config::getConfig('site_title'); ?></title>
+	<link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/forChests.css" />
+</head>
+<body>
+	<div class="content">
+		<div class="bannerBg">
+			<div class="fuhua">
+				<div class="dl01"></div>
+				<div class="dl02"></div>
+			</div>
+			<div class="banner">
+				<p><strong>活动时间：</strong><?php echo date('Y年m月d日', strtotime($promoStartTime)); ?> 至 <?php echo date('Y年m月d日', strtotime($promoEndTime)); ?></p>
+			</div>
+		</div>
+		<div class="cont">
+			<div class="lkbox">
+				<div class="lkbmian">
+					<div class="lkbBox">
+						<div class="turebox">
+							<div class="tureboxmain">
+								<div class="tbox off">
+									<p class="time">距离活动开始还有<strong>8</strong>天</p>
+									<img class="tb_solid" src="<?php echo $imgCdnUrl ?>/images/light_blue/chests/turebox_solid.png">
+									<ul class="tipcont">
+										<li><strong>活动内容：</strong>活动期间每日您达到一定的投注流水, 即可开启一个宝箱，每日最多可以开启八个宝箱.越高等级的宝箱开出来的奖金越高哦! <span style="color: #baa936">注意:您的投注流水会在当日23:59:59清空,不会累计至下一日</span>
+										</li>
+									</ul>
+									<p class="tip">温馨提示：流水到了不能打开宝箱？请按F5试试。</p>
+									<div class="tb_box">
+										<div class="tb_B">
+											<b>距下一级还差<span></span></b>
+										</div>
+									</div>
+									<div class="atbox">
+										<ul>
+                                            <?php foreach ($awardsConfig AS $key => $config): ?>
+											<li class="lv<?php echo $key; ?>">流水<span><?php echo $config['water'] ;?></span><b></b></li>
+                                            <?php endforeach; ?>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="luckdeta">
+				<table>
+					<colgroup>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col width="12.5%"/>
+						<col/>
+					</colgroup>
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<span class="bLv1"></span>
+								<p>LV.1</p>
+								<p>流水388 奖金0.1~1</p>
+							</td>
+							<td colspan="2">
+								<span class="bLv2"></span>
+								<p>LV.2</p>
+								<p>流水1588 奖金2~6</p>
+							</td>
+							<td colspan="2">
+								<span class="bLv3"></span>
+								<p>LV.3</p>
+								<p>流水3888 奖金10~18</p>
+							</td>
+							<td colspan="2">
+								<span class="bLv4"></span>
+								<p>LV.4</p>
+								<p>流水8888 奖金22~38</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<span class="bLv5"></span>
+								<p>LV.5</p>
+								<p>流水18888 奖金50~130</p>
+							</td>
+							<td colspan="2">
+								<span class="bLv6"></span>
+								<p>LV.6</p>
+								<p>流水38888 奖金150~280</p>
+							</td>
+							<td colspan="3">
+								<span class="bLv7"></span>
+								<p>LV.7</p>
+								<p>流水108888 奖金300~620</p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="8">
+								<span class="bLv8"></span>
+								<p>LV.8</p>
+								<p>流水288888 奖金880~1680</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="foot">
+			<div class="footbg">
+				<div class="lkexplain">
+					<h3>游戏说明：</h3>
+					<p>1. 客户可以在活动页面查看活动进度等情况。</p>
+					<p>2. 所有彩种投注流水皆可参与本次活动。</p>
+					<p>3. 同一账户，同一姓名，同一银行卡，同一IP地址不可重复参加。</p>
+					<p>4. 用户于活动期间内，用户的玩法注单投注不得超过该玩法全包注数的70%，即定位胆必须小于等于7注，二码必须小于等于70注，三码必须小于等于700注，四星必须小于等于7000注，五星必须小于等于70000注。如发现违规投注情况，均视作放弃本次活动。</p>
+					<p>5. 对利用活动规则恶意套利的客户，平台有权收回奖金及冻结账号。</p>
+				</div>
+				<div class="footsbtm"></div>
+			</div>
+		</div>
+		<div class="tanchu">
+			<div class="tcBg"></div>
+			<div class="tcmain">
+				<div class="tcBox">
+					<b class=""></b>
+				</div>
+				<div class="tcP">
+				</div>
+				<a href="javascript:void(0);">我收下了</a>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" language="javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer/layer.min.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            //灯笼随鼠标移动
+            $(".content").mousemove(function(e){
+                var offset = $(this).offset();
+                var x = (e.pageX - offset.left);
+                var y = (e.pageY - offset.top);
+                $(".dl01").css("left",49+x/955+'%');
+                $(".dl02").css("right",49+x/955+'%');
+            });
+
+            $(".tcBg").height($(document).height());//背景遮罩层
+            $(".tcmain a").click(function(){
+                $(".tanchu").fadeOut(300);
+            });//隐藏弹出层
+
+            //活动预热隐藏
+            $(".tbox").addClass("off");
+            $(".tb_solid,.tb_box,.atbox").hide();
+            $(".time").show();
+
+            // 活动倒计时
+            if (init.promoStartTime <= init.nowTime) {
+                $(".tbox").removeClass("off");
+                $(".tb_solid,.tb_box,.atbox").show();
+                $(".time").hide();
+
+                setTimeout(function(){luckBox();},500);
+            }
+            else {
+                var day = Math.floor((init.promoStartTime - init.nowTime) / 3600 / 24);
+                $(".tbox.off .time strong").text(day);
+                if(day == 0){
+                    $(".tbox.off .time").html("活动即将开始");
+                };
+            }
+
+            $(".atbox ul li").click(function() {
+                //进行判断是否抽奖完毕
+                if ($(this).hasClass('on')) {
+                    return false;
+                }
+
+                // 判断流水是否足够
+                if (init.totalWater < parseInt($(this).children('span').html())) {
+                    return false;
+                }
+
+                // 判断活动是否开始
+                if (init.nowTime < init.promoStartTime || init.nowTime > init.promoEndTime ) {
+                    parent.layer.alert(init.tips[403].msg);
+                    return false;
+                }
+                $('.tanchu .tcmain').removeClass('on');
+                $(".tanchu .tcmain .tcBox b").removeClass();
+                $(".tanchu .tcmain .tcP").html("");
+
+                lottery($(this).index() + 1);
+            });
+
+        });
+
+        function round2(number,fractiondigits){
+            return Math.round(number*Math.pow(10,fractiondigits))/Math.pow(10,fractiondigits);
+        }
+
+        var init = {
+            nowTime: <?php echo time();?>,
+            promoStartTime: <?php echo strtotime($promoStartTime); ?>,
+            promoEndTime: <?php echo strtotime($promoEndTime); ?>,
+            tips: <?php echo $tips; ?>,
+            totalWater: <?php echo $userWater['totalWater']; ?>, // 用户总共的流水
+            openChests: <?php echo !empty($openChests) ? $openChests : ''; ?>, //已经打开的宝箱
+            lotteryUrl: '/?c=user&a=userGifts&giftType=chests',
+            waterLimit: [0, 388, 1588, 3888, 8888, 18888, 38888, 108888, 288888],
+            waterDistance: [0, 14, 30, 40, 51, 62, 82, 89, 100],
+            award: '',
+            msg: '',
+        };
+
+        var luckBox = function() {
+            var index, totalWater = init.totalWater >= init.waterLimit[8] ? init.waterLimit[8] : init.totalWater;
+            var n = 0;
+            //流水差距
+            $(init.waterLimit).each(function(i){
+                if (totalWater <= init.waterLimit[i]) {
+                    index = i;
+                    return false;
+                }
+            });
+        	if(init.waterLimit[index]-totalWater == 0){
+        		n = index+1;
+        	}else {
+            	n = index;
+        	}
+//             $(".tb_box .tb_B b span").text((init.waterLimit[index] - totalWater).toFixed(2));
+
+            var zore = round2(init.waterLimit[index]-totalWater,2);
+        	if(totalWater < init.waterLimit[8] & zore != 0){
+        		$(".tb_box .tb_B b span").text(zore);
+        	};
+        	if(totalWater != init.waterLimit[8] & zore == 0){
+        		$(".tb_box .tb_B b span").text(init.waterLimit[(index+1)]-init.waterLimit[index]);
+        	};
+        	if(totalWater >= init.waterLimit[8]){
+        		$(".tb_box .tb_B b span").text("0");
+        	};
+
+            // 开宝箱
+            for (var j = 0; j < n-1; j++) {
+                if (init.openChests[j+1] == 1) {
+                    $(".atbox ul li").eq(j).addClass("on").html("已领取");
+                }
+                else {
+                    $(".atbox ul li").eq(j).addClass("lq");
+                }
+            }
+
+            //进度条
+            var test = 0, stopIndex = index;
+            $(init.waterDistance).each(function(index){
+                if(stopIndex == index){
+                    return false;
+                }
+                test += init.waterDistance[index];
+            });
+
+            $(".tb_box .tb_B").width((totalWater / init.waterLimit[index]) * init.waterDistance[index] + test);
+        }
+
+        var lottery = function(id) {
+            $.ajax({
+                type: "POST",
+                url: init.lotteryUrl,
+                data: {'sa': 'lottery', 'id' : id},
+                dataType: "json", //返回错误号和用户流水
+                cache : false,
+                async : true,
+                timeout : 5000,   //超时10S
+                success: function(data){
+                    if (data.errno > 0) {
+                        init.award = '';
+                        parent.layer.alert(data.msg);
+                        return false;
+                    }
+                    else {
+                        init.award = data.award;
+                        init.totalWater = data.totalWater;
+                        $(".atbox ul li").eq(id-1).addClass("on").html("已领取");
+                        $(".tanchu .tcmain .tcBox b").addClass(data.award.bigClass);
+                        $(".tanchu").fadeIn(300);
+                        setTimeout(function() {
+                            $('.tanchu .tcmain').addClass('on');
+                            $(".tanchu .tcmain .tcP").html('<p>恭喜您获得了</p><p><span>' + data.prize + '</span>元</p>');
+                        }, 1000);
+                        return true;
+                    }
+                },
+                error: function() {
+                    parent.layer.alert('网络错误，请刷新页面');
+                    return false;
+                }
+            });
+        }
+    </script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

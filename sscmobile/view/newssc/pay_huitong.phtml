@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.frmSubmit.submit();">
+<form id="frmSubmit" name="frmSubmit" action="<?php echo $parameter['pay_url'];?>" method="post">
+
+    <input name="notify_url" type="hidden" value="<?php echo $parameter['notify_url'];?>"/>
+    <input name="return_url" type="hidden" value="<?php echo $parameter['return_url'];?>"/>
+    <input name="pay_type" type="hidden" value="<?php echo $parameter['pay_type'];?>"/>
+    <input name="bank_code" type="hidden" value="<?php echo $parameter['bank_code'];?>"/>
+    <input name="merchant_code" type="hidden" value="<?php echo $parameter['merchant_code']?>"/>
+    <input name="order_no" type="hidden" value="<?php echo $parameter['order_no'];?>"/>
+    <input name="order_amount" type="hidden" value="<?php echo $parameter['order_amount'];?>"/>
+    <input name="order_time" type="hidden" value="<?php echo $parameter['order_time'];?>"/>
+    <input name="req_referer" type="hidden" value="<?php echo $parameter['req_referer'];?>"/>
+    <input name="customer_ip" type="hidden" value="<?php echo $parameter['customer_ip'];?>"/>
+    <input name="return_params" type="hidden" value="<?php echo $parameter['return_params'];?>"/>
+    <input name="sign" type="hidden" value="<?php echo $parameter['sign'];?>"/>
+
+</form>
+
+</body>
+</html>

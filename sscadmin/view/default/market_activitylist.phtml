@@ -1,0 +1,71 @@
+<?php $this->import("head"); ?>
+
+<div class="list-div mt10" id="listDiv">
+        <form class="form-top"  name="form2"  action="?c=market&a=activityList" method="post">
+            <table class="table table-responsive table-bordered  mainList" width="100%">
+            <thead>
+            <tr>
+                <td>活动ID</td>
+                <td>标题</td>
+                <td>活动轮播</td>
+                <td>活动简图</td>
+                <td>活动图</td>
+                <td>手机轮播</td>
+                <td>手机简图</td>
+                <td>手机图</td>
+                <td>排序</td>
+                <td>开始时间</td>
+                <td>到期时间</td>
+                <td>状态</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <?php foreach($activities as $v): ?>
+            <tr>
+                <td><?php echo $v['id'] ?></td>
+                <td><?php echo $v['title'] ?></td>
+                <td><img src="<?php echo $v['banner_img_thumb'] ?>"></td>
+                <td><img src="<?php echo $v['thumb_img_thumb'] ?>"></td>
+                <td><img src="<?php echo $v['main_img_thumb'] ?>"></td>
+                <td><img src="<?php echo $v['m_banner_img_thumb'] ?>"></td>
+                <td><img src="<?php echo $v['m_thumb_img_thumb'] ?>"></td>
+                <td><img src="<?php echo $v['m_main_img_thumb'] ?>"></td>
+                <td><input class="input-sm form-control" type="text" name="sort_ids[<?php echo $v['id']; ?>]" value="<?php echo $v['sort'] ?>" size="3"></td>
+                <td><?php echo $v['start_time'] ?></td>
+                <td><?php echo $v['end_time'] ?></td>
+                <td><?php echo strtotime($v['end_time']) < time() ? '<font color="red">过期</font>' : '正常' ; ?></td>
+                <td>
+                    <a class="btn btn-mini btn-info" href="./?c=market&a=editActivity&id=<?php echo $v['id']; ?>">编辑</a>
+                    <a class="btn btn-mini btn-info" href="./?c=market&a=deleteActivity&id=<?php echo $v['id']; ?>">删除</a>
+                    <?php if ($canPush && !empty($v['m_thumb_img']) && !empty($v['m_main_img'])): ?>
+                        <a class="btn btn-mini btn-info"
+                           href="./?c=market&a=pushActivity&id=<?php echo $v['id']; ?>">消息推送</a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <input  type="hidden" name="sa" value="saveSort"/>
+                        <input class="btn btn-default" type="submit" name="submit" value="保存 "/>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+        </table>
+        </form>
+        <?php echo $pageList; ?>
+        <div class="tip"></div>
+</div>
+
+<?php $this->import("foot"); ?>

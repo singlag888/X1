@@ -1,0 +1,42 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+function checkform(ob) {
+    if($("input[name=username]").val() === ''){
+        alert("用户名不能为空");
+        return false;
+    }
+    return true;
+}
+</script>
+
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=market&a=<?php echo ACTION; ?>" method="post" onsubmit="return checkform(this)">
+<table cellpadding="0" cellspacing="0" width="40%" border="0">
+        <tr>
+        <td>用户名</td>
+        <td><input name="username" maxlength="19"/></td>
+    </tr>
+    <tr>
+        <td>奖品</td>
+        <td><select name="prizeLevel">
+    <?php foreach ($prizeLevels as $k => $v): ?>
+        <option value=<?php
+        echo $k;
+        ?>><?php echo $v; ?></option>
+     <?php endforeach; ?>
+</select>
+        </td>
+    </tr>
+    <tr>
+    <td>中奖日期</td>
+    <td><input name="plan_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value="<?php echo date("Y-m-d H:i:s"); ?>"/></td>
+     </tr>
+    <tr>
+        <td colspan="2"><input type="submit" class="submit" name="submit" value="提交" />
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

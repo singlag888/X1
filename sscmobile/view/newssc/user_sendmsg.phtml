@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>  <!-- 服务中心下写信 -->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <form name="form1" id="form1" action="index.jsp?c=user&a=<?php echo ACTION; ?>" method="post">
+            <?php if ($msg_id == 0): ?>
+            <div class="servicecent_middle_part sendmsg_middle_part">
+                <?php if ($user['level'] == 0): ?>
+                    <div class="service_defmiddle_title sendmsg_middle_title"><input type="radio" name="target" value="child"/><span>直属下级</span></div>
+                <?php elseif ($user['level'] < 10): ?>
+                    <div class="service_defmiddle_title sendmsg_middle_title"><input type="radio" name="target" value="parent"/>上级代理</div>
+                <?php if ($childs): ?>
+                    <div class="service_defmiddle_title sendmsg_middle_title"><input type="radio" name="target" value="child" />直属下级</div>
+                <?php endif; ?>
+                <?php else: ?>
+                    <div class="radioBox"><input type="radio" name="target" value="parent"/><span>上级代理</span></div>
+                <?php endif; ?>
+                <ul class="margin_top_ten" id="directChild" style="display:none;">
+                    <li>
+                        <input type="checkbox" name="all" id='all' class="check"/>
+                        <span for="all">全选</span>
+                    </li>
+                    <?php foreach ($childs as $v): ?>
+                        <li><input type="checkbox" class="selectChild check" id="selectChild[<?php echo $v['user_id']; ?>]" name="selectChild[<?php echo $v['user_id']; ?>]" value="<?php echo $v['user_id']; ?>" />
+                            <span for="selectChild[<?php echo $v['user_id']; ?>]"><?php echo $v['username']; ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php endif; ?>
+            <div class="sendmsg_content">
+                <div class="form_group margin_bottom_eight">
+                    <label for="sendTitle" class="control_label">主题：</label>
+                    <div class="col_sm_10">
+                        <input type="text" reg="^.+$" class="form_control" name="title" id="sendTitle" placeholder="请输入邮件标题" value="<?php if ($message['title']): ?>Re:<?php echo htmlspecialchars($message['title']); ?><?php endif; ?>" maxlength="30"/>
+                    </div>
+                    <span class="help_block">主题长度不得超过30个字符</span>
+                </div>
+                <div class="form_group">
+                    <label for="sendBody" class="control_label">正文：</label>
+                    <div class="sendmsg_body">
+                        <textarea id="sendBody" class="form_control smsg_body" placeholder="请输入邮件内容" reg="^[\s\S]+$" name="content" maxlength="300"><?php if ($message['content']): ?><?php echo htmlspecialchars($message['content']) . "\r\n------" . date('Y-m-d H:i:s') . "回复------"; ?><?php endif; ?></textarea>
+                        <span class="help_block_body">注意：正文长度不得超过300个字符</span>
+                    </div>
+                </div>
+                <div class="form_group msgsend_btn_layer">
+                    <input type="hidden" name="msg_id" id="msg_id" value="<?php echo $msg_id; ?>" />
+                    <input type="submit" name="submit" value="发送" class="default_navyblue_btn msgsend_btn" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/layer/layer.min.js"></script> <!-- 调用弹出层 -->
+<script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/common.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#form1').submit(function() {
+            if ($('#msg_id').val() == 0 && $('input[name=target]:checked').val() == undefined) {
+                layer.alert('请选择发送目标');
+                return false;
+            }
+            if ($('input[name=target]:checked').val() == 'child' && $(':checkbox:checked').val() == undefined) {
+                layer.alert('请选择至少一个下级');
+                return false;
+            }
+
+            return true;
+        });
+        $('input[name=target]').filter('[value=child]').click(function() {
+            $('#directChild').slideDown('fast');
+        });
+        $('input[name=target]').filter('[value!=child]').click(function() {
+            $('#directChild').slideUp('fast');
+        });
+<?php if ($to_user_id > 0): ?>
+            $('input[name=target]').filter('[value=child]').click();
+            $('.selectChild[value=<?php echo $to_user_id; ?>]').attr('checked', true);
+<?php endif; ?>
+        $("#all").click(function() {
+            if ($(this).prop("checked") == true) {
+                $(".selectChild").attr("checked", true);
+            } else {
+                $(".selectChild").attr("checked", false);
+            }
+        });
+    });
+</script>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

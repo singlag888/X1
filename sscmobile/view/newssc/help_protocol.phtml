@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>   <!-- 服务中心下用户协议-->
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title><?php echo config::getConfig('site_title'); ?></title>
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/global_reset.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css?v=<?php echo time(); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/common_operate.css" />
+</head>
+
+<body>
+<div class="operate_middle_page">
+    <?php $this->import("_usermenu"); ?>
+    <div class="common_pages service_center_pageheight padding_top_eight">
+        <?php $this->import("servicecent_common_operate"); ?>
+        <div class="help_center_content">
+           <div class="latestnew_cont_title help_center_title">用户协议</div>
+           <div class="help_center_txt">
+             <span class="help_center_subtitle">1、如时时彩官方某一期未开奖，平台将如何处理？</span>
+             <p>假设出现时时彩官方未有开奖号码信息的话，我们将在下一期封单时间之后进行撤单。</p>
+             <p>例：官方第100期有没有开奖，平台将在101期的投注封单截止时间，进行100期的撤单。</p>
+            <span class="help_center_subtitle">2、平台的各个彩种最高中奖限额是多少？</span>
+             <p>本平台单个账户高频彩种订单最高奖金限额300000.00元，低频彩种每期最高奖金限额100000.00元，超出按100000.00元计算，超出的奖金无效并清0。如果有多个账户恶意投注同一号码行为，平台有权取消其所有注单。（低频彩为 福彩3D ，体彩P3/5；其余彩种皆为高频彩票）</p>
+
+             <p>例：后三直选投注500注，单注200倍，单注金额400元，总投注金额200000元，假设中奖其奖金已超过订单奖金限额，投注后将提示投注失败，超过奖金限额。</p>
+          <span class="help_center_subtitle">3、平台的单挑限额是如何判定和计算的？</span>
+           <p>本平台任何彩种每期单挑奖金限额20000.00元，超出按20000.00元计算，超出的奖金无效并清0。如果有多
+    个账户恶意投注同一号码行为，平台有权取消其所有注单。</p>
+           <p>单挑模式说明：彩种和玩法通过换算后属于单挑规定之内的，中奖概率低于1% 的均为单挑模式。
+    建议会员投注时注意自己的投注以及中奖金额，如超过奖金限制，平台概不负责。如有争议，以本平台处理为准。</p>
+         <span class="help_center_subtitle">4、平台提款时间以及提款需要的投注流水限制为多少呢？</span>
+    <p>平台取款时间为上午10:00-凌晨2:00，次数不限，每次最低100元,最高100000.00元，对于日量较大的客户，根据自身情况可向平台申请绿色VIP通道，增加提款额度。为了防止有人恶意洗钱，会员提款必须要消费充值的30%方可进行（活动期间需根据实际情况而定），否则财务不予受理。</p>
+
+
+           </div>
+        </div>
+    </div>
+</div>
+<?php $this->import('public_tongji') ?>
+</body>
+</html>

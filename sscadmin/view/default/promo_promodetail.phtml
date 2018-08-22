@@ -1,0 +1,117 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+$(document).ready(function(){
+   var action="<?php echo ACTION; ?>";
+});
+function doCheck()
+{
+    $('#reasonDiv').css('display', 'block');
+    if ($('textarea[name=reason]').val() == '' ||　$('textarea[name=remark]').val() == '请输入取消原因！') {
+        $('textarea[name=reason]').val('请输入取消原因！');
+        return false;
+    }
+
+    return true;
+}
+</script>
+<div class="list-div" id="addDiv">
+<form name="form1" id="form1" action="./?c=site&a=<?php echo ACTION; ?>" method="post" onsubmit="return true;">
+<table class="table table-responsive table-bordered table-hover" cellpadding="0" cellspacing="0" style="width: 50%;">
+    <tr>
+        <td  class="fb">promo_id</td>
+        <td>
+            <?php echo $promo['promo_id']; ?>
+        </td>
+    </tr>
+    <tr>
+        <td class="fb">用户id</td>
+        <td><?php echo $promo['user_id']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">用户名</td>
+        <td><?php echo $user['username']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">优惠类型</td>
+        <td><?php echo $promoTypes[$promo['type']]; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">优惠金额</td>
+        <td><?php echo $promo['amount']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">建立时间</td>
+        <td><?php echo $promo['create_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">状态</td>
+        <td><?php if ($promo['status'] == 0): ?>未处理
+            <?php elseif ($promo['status'] == 1): ?><b>批量上传未处理</b>
+            <?php elseif ($promo['status'] == 2): ?>已审核
+            <?php elseif ($promo['status'] == 8): ?>已执行
+            <?php elseif ($promo['status'] == 9): ?><font color="red">已取消</font>
+            <?php endif;?>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="fb">创建人</td>
+        <td><?php if ($promo['admin_id']): ?><?php echo $admins[$promo['admin_id']]['username']; ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">创建时间</td>
+        <td><?php echo $promo['create_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">审批人</td>
+        <td><?php if ($promo['verify_admin_id']): ?><?php echo $admins[$promo['verify_admin_id']]['username']; ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">审批时间</td>
+        <td><?php echo $promo['verify_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">执行人</td>
+        <td><?php if ($promo['finish_admin_id']): ?><?php echo $admins[$promo['finish_admin_id']]['username']; ?><?php endif; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">执行时间</td>
+        <td><?php echo $promo['finish_time']; ?></td>
+    </tr>
+    <tr>
+        <td class="fb">备注</td>
+        <td><?php echo $promo['remark']; ?></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <div id="reasonDiv" style="display:none;">
+                <textarea class="input-md form-control" name="reason"></textarea></div>
+                <!-- <input type="button" class="submit" name="submit" value="审核" onclick="this.form.action='./?c=site&a=verify';this.form.submit();"/>&nbsp;-->
+            <?php if ($promo['status'] == 0 || $promo['status'] == 1): ?>
+                <input class="btn btn-info submit" type="button"  name="button" value="审核" onclick="this.form.action='./?c=promo&a=verify';this.form.submit();"/>
+            <?php elseif ($promo['status'] == 2): ?>
+                <b>已审核！</b>如果确认无误请点“执行”，如有必要可以填写备注。<br/>
+                备注：<input class="input-md form-control" name="remark" size="15" value="已执行"/>
+                <input class="btn btn-info submit" type="button"  name="button" value="执行" onclick="this.form.action='./?c=promo&a=execute';this.form.submit();"/>
+            <?php elseif ($promo['status'] == 3): ?>
+                <b>已执行充值！</b>
+            <?php elseif ($promo['status'] == 4): ?>
+                <b color="red">已取消！</b>
+            <?php endif; ?>
+
+            <?php if ($promo['status'] < 3): ?>
+                <input type="button" class="submit" name="button" value="取消提案" onclick="this.form.action='./?c=promo&a=cancel';if (doCheck()) {this.form.submit();}"/>
+            <?php endif; ?>
+
+            <div style="width: 50%;margin:0 auto;text-align: center;">
+                <input class="btn btn-info submit" type="button"  onclick="window.location.href='?c=promo&a=promoList';" value="返回"/>
+                <input type="hidden" name="promo_id" value="<?php echo $promo['promo_id']; ?>" />
+            </div>
+        </td>
+    </tr>
+</table>
+    </form>
+</div>
+
+<?php $this->import("foot"); ?>

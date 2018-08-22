@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="webkit" name="renderer">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>跳转中</title>
+</head>
+<body onLoad="document.dingyiPay.submit();">
+<form name='dingyiPay' id="diy" action='<?php echo $postData['url']; ?>' method='post'>
+    <input type="hidden" name="signData" value="<?php echo $postData['signData'] ?>"/>
+    <input type="hidden" name="versionId" value="<?php echo $postData['versionId'] ?>"/>
+    <input type="hidden" name="orderAmount" value="<?php echo $postData['orderAmount'] ?>"/>
+    <input type="hidden" name="orderDate" value="<?php echo $postData['orderDate'] ?>"/>
+    <input type="hidden" name="currency" value="<?php echo $postData['currency'] ?>"/>
+    <input type="hidden" name="transType" value="<?php echo $postData['transType'] ?>"/>
+    <input type="hidden" name="asynNotifyUrl" value="<?php echo $postData['asynNotifyUrl'] ?>"/>
+    <input type="hidden" name="synNotifyUrl" value="<?php echo $postData['synNotifyUrl'] ?>"/>
+    <input type="hidden" name="signType" value="<?php echo $postData['signType'] ?>"/>
+    <input type="hidden" name="merId" value="<?php echo $postData['merId'] ?>"/>
+    <input type="hidden" name="prdOrdNo" value="<?php echo $postData['prdOrdNo'] ?>"/>
+    <input type="hidden" name="payMode" value="<?php echo $postData['payMode'] ?>"/>
+    <input type="hidden" name="tranChannel" value="<?php echo $postData['tranChannel'] ?>"/>
+    <input type="hidden" name="accountType" value="<?php echo $postData['accountType'] ?>"/>
+    <input type="hidden" name="receivableType" value="<?php echo $postData['receivableType'] ?>"/>
+    <input type="hidden" name="prdName" value="<?php echo $postData['prdName'] ?>"/>
+    <input type="hidden" name="prdDesc" value="<?php echo $postData['prdDesc'] ?>"/>
+    <input type="hidden" name="pnum" value="<?php echo $postData['pnum'] ?>"/>
+</form>
+</body>
+</html>
+

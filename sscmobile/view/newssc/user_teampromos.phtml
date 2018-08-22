@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="webkit" name="renderer">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo config::getConfig('site_title'); ?></title>
+        <link rel="stylesheet" type="text/css" href="<?php echo $imgCdnUrl ?>/css/all_LightBlue.css" />
+    </head>
+
+    <body>
+        <!-- 内页公用板块 -->
+        <div class="GameBoxall SubGamePlatePadding">
+            <div class="Gamepart">
+                <div class="subTopBar">
+                    <div class="SubTit">
+                        <h3>代理管理</h3>
+                    </div>
+                    <div class="crumbs"></div>
+                </div>
+                <div class="clear"></div>
+                <div class="sub_public">
+                    <div class="sub_nav">
+                        <div class="clear"></div>
+                        <ul>
+                            <li><a href='index.jsp?c=user&a=childList'>会员管理</a></li>
+                            <li><a  href="index.jsp?c=user&a=childReport">会员报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamNowReport">团队即时报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamDayReport">团队日结报表</a></li>
+                            <li><a  href="index.jsp?c=user&a=teamWinReport">团队盈亏报表</a></li>
+                            <li><a href="index.jsp?c=fin&a=withdrawList">团队提现记录</a></li>
+                            <li><a href="index.jsp?c=fin&a=depositList">团队充值记录</a></li>
+                            <li><a href="index.jsp?c=fin&a=teamOrderList">团队帐变记录</a></li>
+                            <li><a href="index.jsp?c=user&a=regChild">注册下级</a></li>
+                            <li><a href="index.jsp?c=user&a=childPackageList">下级订单查询</a></li>
+                            <li><a href="index.jsp?c=user&a=teamPromos" class="subcur">优惠列表</a></li>
+
+                        </ul>
+                    </div>
+                    <div class="sub_ContBox">
+                        <div class="subContCent">
+                            <!-- 搜索栏 -->
+                            <div class="SearchBar">
+                                <form name="form1" id="form1" action="" method="GET">
+                                    <ul>
+                                        <li>
+                                            <label>用户名：</label>
+                                            <input name="username" class="txtStyle" type="text"/>
+                                        </li>
+                                        <li>
+                                            <label>优惠时段：</label>
+                                            <div class="MutiTxt">
+                                                <input size="12" name="startDate" id="startDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                                <em>到</em>
+                                                <input size="12" name="endDate" id="endDate" my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd'})" class="Wdate txtStyle w85px datepicker85"/>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <input type="hidden" name="c" value="user"/>
+                                            <input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+                                            <input type="submit" value="查询" class="btnStyle m010">
+                                        </li>
+                                    </ul>
+                                </form>
+                            </div>
+                            <!-- 列表数据 -->
+                            <div class="clear"></div>
+                            <table width="73%" border="0" cellpadding="0" cellspacing="0" class="tab01">
+                                <tr>
+                                    <th width="20%">账号</th>
+                                    <th width="10%">类型</th>
+                                    <th width="30%">优惠额汇总</th>
+                                    <th width="10%">操作</th>
+                                    <th width="30%">优惠时段 (最长可查40天)</th>
+                                </tr>
+                                <?php if ($error_str == ''): ?>
+                                    <?php foreach ($result as $v): ?>
+                                        <tr>
+                                            <td><?php if ($username == $v['username']): ?><?php echo $v['username']; ?><?php else: ?>
+                                            	<a href="index.jsp?c=user&a=<?php echo ACTION; ?>&username=<?php echo $v['username']; ?>&startDate=<?php echo $startDate; ?>&endDate=<?php echo $endDate; ?>"><?php echo $v['username']; ?></a>
+                                            <?php endif; ?>
+                                            </td>
+                                            <td>
+                                               <?php echo $v['user_type']; ?>
+                                            </td>
+                                            <td style="text-align:left;padding-left:90px;"><?php echo $v['total_amount']; ?>&nbsp;&nbsp;<?php if ($username == $v['username']): ?>(个人)<?php else: ?>(团队)<?php endif; ?></td>
+											<td>
+                                            	<a target='_blank' class="operation" 
+                                            		href="index.jsp?c=user&a=teamPromosList&username=<?php echo $v['username']; ?>&startDate=<?php echo $startDate; ?>&endDate=<?php echo $endDate; ?>&include_childs=<?php echo $v['include_childs']; ?>">查看详单</a>
+                                            </td>
+                                            <td><?php echo substr($startDate, 0, 10) . ' ～ ' . substr($endDate, 0, 10); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+
+                                    <tr><td colspan="5"  class="bom" style="text-align:left;padding-left:20px;"><?php echo $username; ?>团队优惠金额汇总：<?php echo $team_total; ?></td></tr>
+                                <?php else: ?>
+                                    <th colspan="5" class="bom"><?php echo $error_str; ?></th>
+                                <?php endif; ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery-1.8.3.min.js"></script> 
+        <script type="text/javascript" src="<?php echo $imgCdnUrl ?>/js/jquery.plugin.js"></script><!--jquery小插件-->
+       <script>
+    $(function() {
+        //设置默认值
+        $('input[name=username]').val('<?php echo $username; ?>');
+        $('#startDate').val('<?php echo $startDate; ?>');
+        $('#endDate').val('<?php echo $endDate; ?>');
+    });
+</script>
+
+
+    <?php $this->import('public_tongji') ?>
+</body>
+</html>

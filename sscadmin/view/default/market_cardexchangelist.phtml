@@ -1,0 +1,70 @@
+<?php $this->import("head"); ?>
+<script src="<?php echo $imgCdnUrl ?>/js/My97DatePicker/WdatePicker.js"></script>
+<script>
+    $("document").ready(function () {
+        $('select[name=card_id]').val('<?php echo $cardId; ?>');
+        $('input[name=start_time]').val('<?php echo $startTime; ?>');
+        $('input[name=end_time]').val('<?php echo $endTime; ?>');
+        $('input[name=username]').val('<?php echo $username; ?>');
+    });
+</script>
+<style>
+    .del{color: red}
+    .del:hover{cursor:pointer}
+</style>
+<form name="form1" id="form1" action="" method="get">
+奖品名称<select name="card_id">
+    <option value="" selected="selected">不限</option>
+    <?php foreach ($cardsConfig as $k => $v): ?>
+        <option value=<?php echo $k; ?> ><?php echo $v['title']; ?></option>
+    <?php endforeach; ?>
+</select>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+变现时间<input name="start_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+至<input name="end_time"  my97mark="false" onfocus="WdatePicker({dateFmt: 'yyyy-MM-dd HH:mm:ss'})" class="Wdate" value=""/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+会员账号<input type="text" value="" name="username">
+<input type="hidden" name="c" value="market"/>
+<input type="hidden" name="a" value="<?php echo ACTION; ?>"/>
+<input type="submit" name="sub"  style="width:90px" value="查询"/>
+</form>
+
+<h4> </h4>
+<div class="list-div" id="listDiv">
+    <table class="mainList">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>活动名称</td>
+                <td>会员账号</td>
+                <td>奖品名称</td>
+                <td>奖品类型</td>
+                <td>奖品价值</td>
+                <td>变现金额</td>
+                <td>变现时间</td>
+                <td>审核方式</td>
+            </tr>
+        </thead>
+        <?php if ($cards) : ?>
+        <?php foreach($cards as $k => $v):?>
+        <tr class="plansList">
+            <td><?php echo $k+1;  ?></td>
+            <td>幸运卡牌</td>
+            <td><?php echo $v['username'];  ?></td>
+            <td><?php echo $cardsConfig[$v['card_id']]['title'];  ?></td>
+            <td>虚拟物品</td>
+            <td><?php echo $cardsConfig[$v['card_id']]['prize'];  ?></td>
+            <td><?php echo $cardsConfig[$v['card_id']]['prize'];  ?></td>
+            <td><?php echo $v['prize_time'] ; ?></td>
+            <td>程序审核</td>
+        </tr>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <tr class="noneData">
+            <td colspan="9">暂无数据！</td>
+        </tr>
+        <?php endif; ?>
+    </table>
+</div>
+<?php echo $pageList; ?>
+<?php $this->import("foot"); ?>
